@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Making Baking</title>
+  <style>
+    * {
+      font-family: sans-serif;
+      margin:0; padding:0;
+      box-sizing: border-box;
+      outline: none; 
+      border:none;
+      text-decoration: none;
+    }
+    #container {
+      width: 1200px; margin: 0 auto;
+      
+
+    }
+    
+    #high-nav>#qna-button {
+      width: 130px; height: 50px;
+      display: inline-block;
+      font-size: 18px; font-weight: bold; 
+      color: white; 
+      background-color: #8B0000;
+    }
+    #high-nav>#event-button, #high-nav>#notice-button {
+      width: 130px; height: 50px;
+      display: inline-block;
+      font-size: 18px; font-weight: bold; 
+      color: black; 
+      background-color: #fff;
+      border: 1px solid #8B0000;
+    }
+    #main-container {
+      width: 100%; height: fit-content;
+      background-color: #FFFAF0;
+      padding: 30px;
+    }
+    #oft-qna-title {
+      margin-bottom: 15px;
+    }
+    #oft-qna-container {
+      width: 100%; height: 280px;
+      background-color: #fff;
+      border: 1px solid #8B0000;
+    }
+    .oft-qna {
+      display: inline-block;
+      width: 347px;
+      height: 240px;
+      border: 1px solid black;
+      margin: 20px 10px 20px 10px;
+      padding: 10px;
+    }
+    .oft-qna:first-child {
+      display: inline-block;
+      width: 347px;
+      height: 240px;
+      border: 1px solid black;
+      margin: 20px 10px 20px 20px;
+    }
+    .oft-qna:last-child {
+      display: inline-block;
+      width: 348px;
+      height: 240px;
+      border: 1px solid black;
+      margin: 20px 20px 20px 10px;
+    }
+    .oft-qna-q {
+      font-size: 15px;
+      height: 105px;
+      margin-left: 0 10px;
+
+    }
+    .oft-qna-a {
+      font-size: 15px;
+      height: 105px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="high-nav">
+      <button id="qna-button">
+        Q&A
+      </button>
+      <button id="notice-button">
+        공지사항
+      </button>
+      <button id="event-button">
+        이벤트
+      </button>
+    </div>
+    <div id="main-container">
+      <h3 id="oft-qna-title">자주 묻는 질문</h3>
+      <div id="oft-qna-container">
+        <div class="oft-qna">
+          <div class="oft-qna-q">
+            Q. 오늘 주문한 상품은 언제 배송되나요?
+          </div>
+          <div class="oft-qna-a">
+            A. 영업일 기준 2~3일 내로 배송됩니다.
+          </div>
+        </div>
+        <div class="oft-qna">
+          <div class="oft-qna-q">
+            Q. 오늘 주문한 상품은 언제 배송되나요?
+          </div>
+          <div class="oft-qna-a">
+            A. 영업일 기준 2~3일 내로 배송됩니다.
+          </div>
+        </div>
+        <div class="oft-qna">
+          <div class="oft-qna-q">
+            Q. 오늘 주문한 상품은 언제 배송되나요?
+          </div>
+          <div class="oft-qna-a">
+            A. 영업일 기준 2~3일 내로 배송됩니다.
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</body>
+</html>
