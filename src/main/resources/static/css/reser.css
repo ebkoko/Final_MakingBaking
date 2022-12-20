@@ -1,0 +1,163 @@
+#reser_title {
+    font-size: 40px;
+}
+#process {
+    float: right;
+    font-size: 20px;
+}
+#process>span {
+    margin: 2px 5px;
+}
+.process1, .processPointer1 {
+    font-weight: bold;
+}
+#top {
+    clear: both;
+    margin-top: 90px;
+}
+#top .class_check {
+    margin-top: 90px;
+    margin-bottom: 0px;
+    font-size: 22px;
+}
+#list_title {
+    font-size: 0.9em;
+}
+#list_title .classInfo {
+    margin-left: 100px;
+}
+#list_title .classSum {
+    margin-left: 550px;
+}
+#list_title .classQuantity {
+    margin-left: 120px;
+}
+#list_title .sumPrice {
+    margin-left: 140px;
+}
+#img1 {
+    margin-left: 80px;
+}
+#detail1 {
+    display: inline-block;
+    width: 58%;
+}
+#name1 {
+    display: inline-block;
+    margin-left: 10px;
+}
+#price1 {
+    display: inline-block;
+    width: 10%;
+    text-align: right;
+}
+#cnt1 {
+    display: inline-block;
+    width: 11%;
+    text-align: right;
+}
+#sumprice1 {
+    display: inline-block;
+    width: 19%;
+    text-align: right;
+}
+#totalPrice {
+    float: right;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+}
+#totalPrice+hr {
+    clear: both;
+}
+#reservation {
+    margin-top: 100px;
+}
+#reservation .reserInfo {
+    margin-bottom: 0px;
+    font-size: 22px;
+}
+.orderTitle {
+    margin-left: 10px;
+}
+.reserTitle {
+    margin-left: 480px;
+}
+#sameUser {
+    margin-left: 270px;
+}
+.table-wrap {
+    display: flex;
+}
+table {
+    border-spacing: 3px 13px;
+    text-align: left;
+}
+table td {
+    padding-left: 10px;
+}
+#reservation #T1 {
+    display: inline-block;
+    margin-left: 20px;
+}
+#orderer {
+    width: 120px;
+    height: 20px;
+}
+#orderTel1, #orderTel2, #orderTel3 {
+    width: 50px;
+    height: 18px;
+}
+#reservation #T2 {
+    display: inline-block;
+    margin-left: 300px;
+}
+#participant {
+    width: 120px;
+    height: 20px;
+}
+#reciTel1, #reciTel2, #reciTel3 {
+    width: 50px;
+    height: 18px;
+}
+#reservation+hr {
+    clear: both;
+}
+#payment_title {
+    margin-top: 100px;
+    margin-bottom: 0px;
+    font-size: 22px;
+}
+#btns {
+    margin: 10px 0 20px 40px;
+}
+#bankTransfer, #creditCard {
+    width: 100px;
+    height: 30px;
+}
+#bankPayment {
+    margin-left: 40px;
+}
+#bank {
+    vertical-align: middle;
+}
+#accountNo1 {
+    margin-left: 15px;
+    width: 200px;
+    height: 19px;
+    vertical-align: middle;
+}
+#depositorTitle {
+    margin-top: 15px;
+}
+#depositor {
+    width: 150px;
+    height: 19px;
+    vertical-align: middle;
+}
+#btnPayment {
+    margin-top: 40px;
+    margin-left: 460px;
+    width: 270px;
+    height: 40px;
+    font-size: 22px;
+}

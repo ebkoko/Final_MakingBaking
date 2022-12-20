@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+	  
+	<!-- head 영역 시작 -->
+	<!-- 개별적으로 사용할 css, js 링크를 걸기 위해서 남겨둠 -->
+	<head>
+		<th:block layout:fragment="script">
+		<link th:href="@{/css/reser.css}" rel="stylesheet">
+			<script th:inline="javascript">
+				
+			</script>
+		</th:block>
+	</head>
+	<!-- head 영역 끝 -->
+	
+	<body>
+		<div layout:fragment="content">
+			<div id="container">
+	            <h1 id="reser_title">클래스 예약결제</h1>
+	            <div id="process">
+	                <span class="process1">클래스 예약결제</span><span class="processPointer1">&gt;</span><span class="process2">클래스 예약완료</span>
+	            </div>
+	            <div id="top">
+	                <span class="class_check">클래스 확인</span>
+	            </div>
+	            <hr>
+	            <div id="list_title">
+	                <span class="classInfo">클래스 정보</span><span class="classSum">클래스 금액</span><span class="classQuantity">인원 수</span><span class="sumPrice">합계금액</span>
+	            </div>
+	            <hr>
+	            <div id="reser_class">
+	                <div id="item1">
+	                    <div id="detail1">
+	                        <img id="img1" src="클래스대표이미지">
+	                        <div id="name1"><a th:href="클래스 상세페이지" th:text="${className}"></a>클래스명</div>    
+	                    </div>
+	                    <div th:text="${classPrice}" id="price1">원</div>  
+	                    <div th:text="${classCnt}" id="cnt1">2</div>                    
+	                    <div th:text="${classPrice*classCnt}" id="sumprice1">원</div>
+	                </div>            
+	                <hr>
+	                <div id="totalPrice">
+	                    <span>총 결제금액: </span><span th:text="${totalPrice}">원</span>
+	                </div>
+	                <hr>
+	            </div>            
+	            <div id="reservation">
+	                <p class="reserInfo">예약 정보</p>
+	                <hr>
+	                <div id="infoTitle">
+	                    <span class="orderTitle">주문자 정보</span><span class="reserTitle">예약자 정보</span><input type="checkbox" id="sameUser">주문자와 동일
+	                </div>
+	                <div class="table-wrap">
+	                    <table id="T1">
+	                        <tr>
+	                            <th>이름</th>
+	                            <td><input type="text" name="orderer" id="orderer" value="${userName}"></td>
+	                        </tr>
+	                        <tr>
+	                            <th>휴대폰</th>
+	                            <td>
+	                                <select id="orderTel1" style="height: 25px;">
+	                                    <option value="010">010</option>
+	                                    <option value="011">011</option>
+	                                    <option value="016">016</option>
+	                                    <option value="017">017</option>
+	                                    <option value="018">018</option>
+	                                </select> - 
+	                                <input type="text" name="orderTel2" id="orderTel2"> - 
+	                                <input type="text" name="orderTel3" id="orderTel3">
+	                            </td>
+	                        </tr>
+	                    </table>
+	                    <table id="T2">
+	                        <tr>
+	                            <th>예약자</th>
+	                            <td>
+	                                <input type="text" name="participant" id="participant">
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <th>휴대폰</th>
+	                            <td>
+	                                <select id="reciTel1" style="height: 25px;">
+	                                    <option value="010">010</option>
+	                                    <option value="011">011</option>
+	                                    <option value="016">016</option>
+	                                    <option value="017">017</option>
+	                                    <option value="018">018</option>
+	                                </select> - 
+	                                <input type="text" name="reciTel2" id="reciTel2"> - 
+	                                <input type="text" name="reciTel3" id="reciTel3">
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <th>요청사항</th>
+	                            <td>
+	                                <textarea name="request" id="request" cols="50" rows="8" placeholder="요청사항을 입력해주세요."></textarea>
+	                            </td>
+	                        </tr>
+	                    </table>   
+	                </div>             
+	            </div>
+	            <hr>
+	            <div id="paymentOption">
+	                <p id="payment_title">결제방법</p><hr>
+	                <div id="btns">
+	                    <input type="button" name="bankTransfer" id="bankTransfer" value="무통장입금">&emsp;
+	                    <input type="button" name="creditCard" id="creditCard" value="신용카드">
+	                </div>
+	                <div id="bankPayment">
+	                    <select id="bank" style="width: 100px; height: 25px;">
+	                        <option value="입금은행">입금은행</option>
+	                        <option value="국민은행">국민은행</option>
+	                        <option value="신한은행">신한은행</option>
+	                    </select>
+	                    <input type="text" name="accountNo1" id="accountNo1" value="국민은행계좌" readonly>&ensp;
+	                    <span id="accountName">예금주명: 메이킹베이킹</span><br>
+	                    <div id="depositorTitle">입금자명: <input type="text" name="depositor" id="depositor" placeholder="입금자명을 입력하세요."></div>
+	                </div>
+	            </div>
+	            <input type="button" id="btnPayment" value="결제하기" onclick="location.href='viewOrderpage'">
+	        </div>
+		</div>
+	</body>
+</html>

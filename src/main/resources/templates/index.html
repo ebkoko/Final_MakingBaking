@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+	  
+	<!-- head 영역 시작 -->
+	<!-- 개별적으로 사용할 css, js 링크를 걸기 위해서 남겨둠 -->
+	<head>
+		<th:block layout:fragment="script">
+			<script th:inline="javascript">
+				$(function() {
+					window.location.href="/home/main";
+				});
+			</script>
+		</th:block>
+	</head>
+	<!-- head 영역 끝 -->
+	
+	<body>
+	
+	</body>
+</html>

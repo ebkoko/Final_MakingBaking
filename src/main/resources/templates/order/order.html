@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+	  
+	<!-- head 영역 시작 -->
+	<!-- 개별적으로 사용할 css, js 링크를 걸기 위해서 남겨둠 -->
+	<head>
+		<th:block layout:fragment="script">			
+		<link th:href="@{/css/order.css}" rel="stylesheet">
+			<script th:inline="javascript" th:src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+			<script th:inline="javascript">
+				function addr1() {
+		            new daum.Postcode({
+		                oncomplete: function(data) {
+		                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+		
+		                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+		                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+		                    var addr = ''; // 주소 변수
+		                    var extraAddr = ''; // 참고항목 변수
+		
+		                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+		                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+		                        addr = data.roadAddress;
+		                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+		                        addr = data.jibunAddress;
+		                    }
+		
+		                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+		                    if(data.userSelectedType === 'R'){
+		                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+		                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+		                        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+		                            extraAddr += data.bname;
+		                        }
+		                        // 건물명이 있고, 공동주택일 경우 추가한다.
+		                        if(data.buildingName !== '' && data.apartment === 'Y'){
+		                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+		                        }
+		                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+		                        if(extraAddr !== ''){
+		                            extraAddr = ' (' + extraAddr + ')';
+		                        }
+		                        // 조합된 참고항목을 해당 필드에 넣는다.
+		                        document.getElementById("extraAddr").value = extraAddr;
+		                    
+		                    } else {
+		                        document.getElementById("extraAddr").value = '';
+		                    }
+		
+		                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+		                    document.getElementById("addr1").value = data.zonecode;
+		                    document.getElementById("addr2").value = addr;
+		                    // 커서를 상세주소 필드로 이동한다.
+		                    document.getElementById("addr3").focus();
+		                }
+		            }).open();
+		        }
+			</script>
+		</th:block>
+	</head>
+	<!-- head 영역 끝 -->
+	
+	<body>
+		<div layout:fragment="content">
+			<div id="container">
+	            <h1 id="order_title">주문결제</h1>
+	            <div id="process">
+	                <span class="process1">장바구니</span><span class="processPointer1">&gt;</span><span class="process2">주문결제</span><span class="processPointer2">&gt;</span><span class="process3">주문완료</span>
+	            </div>
+	            <div id="top">
+	                <span class="item_check">상품 확인</span><span class="freeDeliMent">3만원 이상 구매시 무료배송</span>
+	            </div>
+	            <hr>
+	            <div id="list_title">
+	                <span class="itemInfo">상품정보</span><span class="itemSum">상품금액</span><span class="itemQuantity">수량</span><span class="sumPrice">합계금액</span>
+	            </div>
+	            <hr>
+	            <div id="order_item">
+	                <div id="item1">
+	                    <div id="detail1">
+	                        <img id="img1" src="상품대표이미지">
+	                        <div id="name1"><a th:href="상품 상세페이지" th:text="${itemName}"></a>상품명</div>    
+	                    </div>
+	                    <div th:text="${itemPrice}" id="price1">원</div>  
+	                    <div th:text="${itemCnt}" id="cnt1">5</div>                    
+	                    <div th:text="${itemPrice*itemCnt}" id="sumprice1">원</div>
+	                </div>            
+	                <hr>
+	                <div id="totalPrice">
+	                    <span>상품 총 금액: </span> <span th:text="${totalPrice}">원</span> <span>&#43;</span> <span>배송비: </span> <span th:text="${orderDeliFee}">원</span> <span>&#61;</span> <span>총 결제금액: </span> <span th:text="${totalPrice+orderDeliFee}">원</span>
+	                </div>
+	                <hr>
+	            </div>            
+	            <div id="delivery">
+	                <p class="deliInfo">배송정보</p>
+	                <hr>
+	                <div class="table-wrap">                    
+	                    <table id="T1">
+	                        <tr>
+	                            <th>배송지</th>
+	                            <td><input type="radio" name="deli1" id="deli1" value="기본배송지" checked>기본배송지&ensp;<input type="radio" name="deli2" id="deli2" value="직접입력">직접입력</td>
+	                        </tr>
+	                        <tr>
+	                            <th>이름</th>
+	                            <td><input type="text" name="recipient" id="recipient" style="size: 5"></td>
+	                        </tr>
+	                        <tr>
+	                            <th>배송주소</th>
+	                            <td>
+	                                <input type="text" name="addr1" id="addr1" placeholder="우편번호"><input type="button" id="btnZipcode" onclick="addr1()" value="우편번호 찾기"><br>
+	                                <input type="text" name="addr2" id="addr2" placeholder="주소"><br>
+	                                <input type="text" name="addr3" id="addr3" placeholder="상세주소">&ensp;<input type="text" name="extraAddr" id="extraAddr" placeholder="참고항목">
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <th>휴대폰</th>
+	                            <td>
+	                                <select id="reciTel1" style="height: 25px;">
+	                                    <option value="010">010</option>
+	                                    <option value="011">011</option>
+	                                    <option value="016">016</option>
+	                                    <option value="017">017</option>
+	                                    <option value="018">018</option>
+	                                </select> - 
+	                                <input type="text" name="reciTel2" id="reciTel2"> - 
+	                                <input type="text" name="reciTel3" id="reciTel3">
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <th>배송메세지</th>
+	                            <td>
+	                                <textarea name="message" id="message" cols="50" rows="8" placeholder="배송메세지를 입력해주세요."></textarea>
+	                            </td>
+	                        </tr>
+	                    </table>
+	                    <table id="T2">
+	                        <caption>주문자 정보</caption>
+	                        <tr>
+	                            <th>이름</th>
+	                            <td><input type="text" name="orderer" id="orderer" value="${userName}"></td>
+	                        </tr>
+	                        <tr>
+	                            <th>휴대폰</th>
+	                            <td>
+	                                <select id="orderTel1" style="height: 25px;">
+	                                    <option value="010">010</option>
+	                                    <option value="011">011</option>
+	                                    <option value="016">016</option>
+	                                    <option value="017">017</option>
+	                                    <option value="018">018</option>
+	                                </select> - 
+	                                <input type="text" name="orderTel2" id="orderTel2"> - 
+	                                <input type="text" name="orderTel3" id="orderTel3">
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <th>이메일</th>
+	                            <td><input type="text" name="orderMail" id="orderMail"></td>
+	                        </tr>
+	                        <tr></tr>
+	                        <tr></tr>
+	                        <tr></tr>
+	                    </table>                   
+	                </div>
+	            </div>
+	            <hr>
+	            <div id="paymentOption">
+	                <p id="payment_title">결제방법</p><hr>
+	                <div id="btns">
+	                    <input type="button" name="bankTransfer" id="bankTransfer" value="무통장입금">&emsp;
+	                    <input type="button" name="creditCard" id="creditCard" value="신용카드">
+	                </div>
+	                <div id="bankPayment">
+	                    <select id="bank" style="width: 100px; height: 25px;">
+	                        <option value="입금은행">입금은행</option>
+	                        <option value="국민은행">국민은행</option>
+	                        <option value="신한은행">신한은행</option>
+	                    </select>
+	                    <input type="text" name="accountNo1" id="accountNo1" value="국민은행계좌" readonly>&ensp;
+	                    <span class="accountName">예금주명: 메이킹베이킹</span><br>
+	                    <div id="depositorTitle">입금자명: <input type="text" name="depositor" id="depositor" placeholder="입금자명을 입력하세요."></div>
+	                </div>
+	            </div>
+	            <input type="button" id="btnPayment" value="결제하기" onclick="location.href='viewOrderpage'">
+	        </div>
+		</div>
+	</body>
+</html>

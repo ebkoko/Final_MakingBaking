@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	  
+	<!-- head 영역 시작 -->
+	<!-- layout으로 잡히는 모든 html의 head 영역을 config.html로 대체 -->
+	<head th:fragment="config">
+		<title>MakingBaking</title>
+		<meta charset="UTF-8"/>
+		
+		<!-- 모든 페이지에서 사용할 공통 css링크 -->
+		<!-- thymeleaf에서 링크를 걸 때는 항상 @{}로 감싸서 작성 -->
+		<link rel="stylesheet" th:href="@{/css/style.css}"/>
+		
+		<!-- 현재 페이지 내에서 개별적으로 사용할 css링크 -->
+		<th:block layout:fragment="css"></th:block>
+		
+		<!-- 모든 페이지에서 사용할 공통 js링크 -->
+		<script th:src="@{/js/jquery-3.6.1.min.js}"></script>
+		
+		<!-- 현재 페이지 내에서 개별적으로 사용할 js링크 -->
+		<th:block layout:fragment="script"></th:block>
+		
+	</head>
+	<!-- head 영역 끝 -->
+</html>

@@ -1,0 +1,91 @@
+#cart_title {
+    font-size: 40px;
+}
+#process {
+    float: right;
+    font-size: 20px;
+}
+#process span {
+    margin: 2px 5px;
+}
+.process1, .processPointer1 {
+    font-weight: bold;
+}
+#selectbox {
+    clear: both;
+    margin-top: 90px;
+}
+#list_title {
+    font-size: 0.9em;
+}
+#list_title .itemInfo {
+    margin-left: 120px;
+}
+#list_title .itemQuantity {
+    margin-left: 600px;
+}
+#list_title .itemSum {
+    margin-left: 120px;
+}
+#list_title .itemOrder {
+    margin-left: 140px;
+}
+#itemSelect {
+    width: 5%; 
+    display: inline-block;
+}
+#select1 {
+    margin-left: 20px;
+}
+#itemView {
+    display: inline-block; 
+    width:58%;
+}
+#img1 {
+    margin-left: 10px;
+}
+#detail1 {
+    display: inline-block;
+    margin-left: 15px;
+}
+#detail1 #detailName {
+    font-size: 0.95em;
+}
+
+#detail1 #detailPrice {
+    font-size: 0.8em;
+}
+#itemAmount {
+    display: inline-block; 
+    width:8%;
+}
+#price1 {
+    display: inline-block;
+    width:11%;
+    text-align: right;
+}
+#itemDel {
+    display: inline-block; 
+    width:15%;
+}
+#btnDel {
+    margin-left: 115px;
+}
+.cart_detail {
+    text-align: center;
+}
+#totalPrice {
+    float: right;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+}
+#totalPrice+hr {
+    clear: both;
+}
+#btnSelectedOrder {
+    margin-top: 40px;
+    margin-left: 570px;
+    width: 70px;
+    height: 40px;
+    font-size: 22px;
+}
