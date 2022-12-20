@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원 관리</title>
+  <style>
+    #container {width: 1200px; margin: 0 auto;}
+
+    #userReviewBtn {
+      width: 80px;
+      height: 20px;
+      margin-left: 30px;
+    }
+    #userQnABtn {
+      width: 80px;
+      height: 20px;
+      margin-left: 25px;
+    }
+    #withdrawal {
+      width: 100px;
+      height: 40px;
+    }
+    #sendMail {
+      width: 100px;
+      height: 40px;
+    }
+    #sendMMS {
+      width: 100px;
+      height: 40px;
+    }
+    .pagination {
+      list-style: none;
+      width: 100%;
+      display: inline-block;
+    }
+    .pagination_button {
+      float: left;
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>회원 목록</h1>
+    <form id="searchForm" action="/user/userList" method="get">
+      <table>
+        <tr>
+          <td align="left">
+            <select name="searchCondition">
+              <option value="ALL" th:selected="${searchCondition == 'ALL'}">전체</option>
+              <option value="USERNAME" th:selected="${searchCondition == 'USERNAME'}">이름</option>
+              <option value="USERID" th:selected="${searchCondition == 'USERID'}">아이디</option>
+            </select>
+            <input type="text" name="searchKeyword" th:value="">
+            <button type="button" id="btnSearch">검색</button>
+          </td>
+        </tr>
+      </table>
+    </form>
+    <br>
+
+    <table border="1" style="width: 1200px; border-collapse: collapse; border-left: hidden; border-right: hidden; border-top:hidden">
+      <tr>
+        <td colspan="6" align="right"><input type="checkbox"> 전체 선택</td>
+      </tr>
+      <tr>
+        <th style="background: lightsteelblue; width: 10%;"></th>
+        <th style="background: lightsteelblue; width: 10%;">No.</th>
+        <th style="background: lightsteelblue; width: 20%;">이름</th>
+        <th style="background: lightsteelblue; width: 20%;">아이디</th>
+        <th style="background: lightsteelblue; width: 20%;">가입일</th>
+        <th style="background: lightsteelblue; width: 20%;">개인 게시판</th>
+      </tr>
+      <tr th:each="user: ${getUserList}">
+        <td><input type="checkbox"></td>
+        <td th:text="${user.userNo"></td>
+        <td th:text="${user.userName}"></td>
+        <td th:text="${user.userId}"></td>
+        <td th:text="${user.userRegdate eq null ? '' : #string.substring(user.userRegdate, 0, 10)}}"></td>
+        <td>
+          <a href="#"><input type="button" value="Review" id="userReviewBtn"></a>
+          <a href="#"><input type="button" value="QnA" id="userQnABtn"></a>
+        </td>
+      </tr>
+    </table>
+
+    <br>
+    <!-- 탈퇴. 메일전송. MMS전송 -->
+    <div style="text-align:right;">
+      <a href="#"><input type="button" value="탈퇴" id="withdrawal"></a>
+      <a href="#"><input type="button" value="메일전송" id="sendMail"></a>
+      <a href="#"><input type="button" value="MMS전송" id="sendMMS"></a>
+    </div>
+    <br>
+    <!-- 페이징 -->
+    <div style="text-align:center;">
+      <ul class="pagination" th:if="${getUserList.totalElements > 0}"
+                  th:with="pageNumber = ${getUserList.pageable.pageNumber},
+                              pageSize = ${getUserList.pageable.pageSize},
+                              totalPages = ${getUserList.totalPages},
+                              startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+                              tempEndPage = ${startPage + pageSize -1 },
+                              endPage =  ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+          <li class="pagination_button" th:if="${pageNumber > 0}">
+            <a th:href="@{/user/userList(
+                    page=${pageNumber - 1},
+                    searchCondition=${searchCondition},
+                    searchKeyword=${searchKeyword})}">이전</a>
+          </li>
+        
+        
+          <li class="pagination_button" th:each="page : ${#numbers.sequence(startPage, endPage)}">
+          <!-- startPage와 endPage에 있는 숫자들을 page에 담아옴. -->
+            <a th:href="@{/user/userList(page=${page - 1},
+                    searchCondition=${searchCondition},
+                    searchKeyword=${searchKeyword})}"
+                    th:text="${page}"></a>
+          </li>
+        
+          <li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+            <a th:href="@{/user/userList(page=${pageNumber + 1},
+                    searchCondition=${searchCondition},
+                    searchKeyword=${searchKeyword})}">다음</a>
+          </li>
+      </ul>
+    </div>
+
+  </div>
+</body>
+</html>
