@@ -3,10 +3,84 @@
 	  xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-	  
+	<head>
+		<th:block layout:fragment="script">
+			<script th:inline="javascript">
+				  document.querySelector('#login-btn').onclick = () =>{
+				      document.querySelector('.login-form-container').classList.toggle('active');
+				    }
+				  
+				    document.querySelector('#close-login-form').onclick = () =>{
+				      document.querySelector('.login-form-container').classList.remove('active');
+				    }
+				
+				    let pswrd = document.querySelector('#pw');
+				    let show = document.querySelector('.show');
+				    show.onclick = function() {
+				      if(pswrd.type === 'password') {
+				        pswrd.setAttribute('type', 'text');
+				        show.classList.add('hide');
+				      }
+				      else {
+				        pswrd.setAttribute('type', 'password');
+				        show.classList.remove('hide');
+				      }
+				    }
+			</script>
+		</th:block>
+	</head>
 	<body>
-		<header th:fragment="header">
-			
-		</header>
+		<header th:fragment="header" class="header">
+		    <div id="login-btn">
+		    <div>
+		    	<button class="btn header-font">login</button>
+		    </div>
+		      
+		    <div>
+		    	<a th:href="@{/user/myPage}" class="btn header-font">mypage</a>
+		    </div>
+		      
+		    </div>
+		    <div><a th:href="@{/}" class="logo"><img th:src="@{/images/logo.png}"></a></div>
+		    <div class="nav-h header-font">
+		      <div class="navbar">
+		        <a th:href="@{/}">원데이클래스</a>
+		        <a th:href="@{/}">제품구매</a>
+		        <a th:href="@{/}">공지사항</a>
+		        <a th:href="@{/}">Q&A</a>
+		        <a th:href="@{/}">이벤트</a>
+		      </div>
+		    </div>
+		    </div>
+		    
+		    <div class="login-form-container">
+		      <span id="close-login-form" class="fas fa-times"></span>
+		  
+		      <form action="">
+		          <h3>login</h3>
+		          <div class="input-group">
+		            <input type="text" id="id" required class="input">
+		            <label for="id" class="input-label">아이디</label>
+		          </div>
+		          <div class="pw-check">
+		            <div class="input-group inputBox">
+		              <input type="password" id="pw" required class="input">
+		              <label for="pw" class="input-label">비밀번호</label>
+		              <div class="show"></div>
+		            </div>
+		          </div>
+		          <input type="submit" value="로그인" class="btn">
+		          <div class="buttons">
+		            <input type="submit" value="카카오톡" class="btn">
+		            <input type="submit" value="Google" class="btn">
+		          </div>
+		          <div class="buttons">
+		            <a th:href="@{/user/findID}" class="btn">아이디 찾기</a>
+		              <a th:href="@{/user/findPW}" class="btn">비밀번호 찾기</a>
+		              <a th:href="@{/user/join}" class="btn">회원가입</a>
+		          </div>
+		      </form>
+		    </div>  
+		  </header>
 	</body>
 </html>

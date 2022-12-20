@@ -3,24 +3,40 @@
 	  xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 	  
-	<!-- head 영역 시작 -->
-	<!-- layout으로 잡히는 모든 html의 head 영역을 config.html로 대체 -->
 	<head th:fragment="config">
 		<title>MakingBaking</title>
 		<meta charset="UTF-8"/>
-		
 		<!-- 모든 페이지에서 사용할 공통 css링크 -->
-		<!-- thymeleaf에서 링크를 걸 때는 항상 @{}로 감싸서 작성 -->
 		<link rel="stylesheet" th:href="@{/css/style.css}"/>
 		
 		<!-- 현재 페이지 내에서 개별적으로 사용할 css링크 -->
 		<th:block layout:fragment="css"></th:block>
+		<link rel="stylesheet" th:href="@{/css/index.css}"/>
+		<link rel="stylesheet" th:href="@{/css/findID.css}"/>
+		<link rel="stylesheet" th:href="@{/css/findPW.css}"/>
+		<link rel="stylesheet" th:href="@{/css/list.css}"/>
+		<link rel="stylesheet" th:href="@{/css/changeInfo.css}"/>
+		<link rel="stylesheet" th:href="@{/css/myPage.css}"/>
 		
 		<!-- 모든 페이지에서 사용할 공통 js링크 -->
 		<script th:src="@{/js/jquery-3.6.1.min.js}"></script>
 		
 		<!-- 현재 페이지 내에서 개별적으로 사용할 js링크 -->
 		<th:block layout:fragment="script"></th:block>
+		<script th:src="@{/js/main.js}"></script>
+		<script th:src="@{/js/login.js}"></script>
+		<!-- 로그인 -->
+		<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css}">
+		
+		<!-- 슬라이더 -->
+		<script th:src="@{https://unpkg.com/swiper@7/swiper-bundle.min.js}"></script>
+		<script th:src="@{https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js}"></script>
+		<link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css}"/>
+		
+		<!-- 주소 -->
+		<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css}">
+		<script th:src="@{https://unpkg.com/swiper@7/swiper-bundle.min.js}"></script>
+		<script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
 		
 	</head>
 	<!-- head 영역 끝 -->
