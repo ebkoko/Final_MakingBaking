@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+	<th:block layout:fragment="script">
+		<script th:inline="javascript">
+			function findAddr(){
+		      new daum.Postcode({
+		        oncomplete: function(data) {
+		          let addr1 = data.roadAddress;
+		          let addr2 = data.jibunAddress;
+		          document.getElementById('post').value = data.zonecode;
+		          if(addr1 !== ''){
+		          document.getElementById("addr").value = addr1;
+		          } else if(addr2 !== '') {
+		            document.getElementById("detail-addr").value = addr2;
+		          }
+		        }
+		      }).open();
+		    }
+		</script>
+	</th:block>
+	
+	<th:block layout:frament="css">
+		<style>
+		
+		</style>
+	</th:block>
+</head>
+
+<body>
+<div layout:fragment="content">
+  <main style="height:100%">
+    <div class="c1">
+      <form action="" class="form">
+        <h3>정보수정</h3>
+        <input type="text" placeholder="readonly" readonly class="box">
+        <div style="display: flex;">
+          <input type="text" placeholder="닉네임" class="box" style=" width: 70%;">
+          <button  class="check">중복체크</button>
+        </div>
+        <input type="password" placeholder="비밀번호" class="box">
+        <input type="password" placeholder="비밀번호 확인" class="box">
+        <input type="text" placeholder="이름" class="box">
+        <input type="text" placeholder="생년월일" class="box">
+        <select class="box">
+          <option value="체크안함">체크안함</option>
+          <option value="남자">남자</option>
+          <option value="여자">여자</option>
+        </select>
+        <input type="text" placeholder="전화번호" class="box">
+        <input type="text" placeholder="이메일" class="box">
+        <input id="post"  type="text" value="우편번호" readonly onclick="findAddr()">
+        <input id="addr" type="text" placeholder="주소" readonly> <br>
+        <input id="detail-addr" type="text" placeholder="상세주소">
+        <div class="buttons">
+          <button class="btn">수정하기</button>
+          <button class="btn">취소</button>
+          <button class="btn">탈퇴</button>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+</body>
+</html>

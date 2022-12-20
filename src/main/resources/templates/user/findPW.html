@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+	<th:block layout:fragment="script">
+		<script th:inline="javascript">
+		
+		</script>
+	</th:block>
+	<th:block layout:frament="css">
+		<style>
+		
+		</style>
+	</th:block>
+</head>
+
+<body>
+	<div layout:fragment="content">
+	<main style="height:100%">
+	    <div class="c1">
+	      <form action="" class="form">
+	        <h3>비밀번호 찾기</h3>
+	        <input type="text" placeholder="아이디" class="box">
+	        <input type="password" placeholder="핸드폰번호" class="box">
+	        <input type="submit" value="확인" class="btn size">
+	        <div class="buttons">
+	          <a href="#" class="btn">로그인</a>
+	          <a href="fingID.html" class="btn">아이디 찾기</a>
+	          <a href="signUp.html" class="btn">회원가입</a>
+	        </div>
+	      </form>
+	    </div>
+	  </main>
+	</div>
+</body>
+</html>

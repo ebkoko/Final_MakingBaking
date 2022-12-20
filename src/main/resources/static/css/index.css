@@ -1,0 +1,62 @@
+.swiper {
+	      width: 100%;
+	      height: 20rem;
+	      margin-top: 10px;
+	    }
+	    .swiper-slide {
+	      text-align: center;
+	      font-size: 18px;
+	      background: #fff;
+	      display: -webkit-box;
+	      display: -ms-flexbox;
+	      display: -webkit-flex;
+	      display: flex;
+	      -webkit-box-pack: center;
+	      -ms-flex-pack: center;
+	      -webkit-justify-content: center;
+	      justify-content: center;
+	      -webkit-box-align: center;
+	      -ms-flex-align: center;
+	      -webkit-align-items: center;
+	      align-items: center;
+	    }
+	    .swiper-slide img {
+	      display: block;
+	      width: 100%;
+	      height: 100%;
+	      object-fit: cover;
+	    }
+	
+	    /* 메인 */
+	    main {
+	      height: 100%;
+	      display: flex;
+	      justify-content: center;
+	      align-items: center;
+	    }
+	    .content {
+	      width: 70%;
+	    }
+	    .content1, .content2{
+	      padding: 10px;
+	      margin: 30px;
+	    }
+	    .content1 img{
+	      float: right;
+	      display: block;
+	      margin-left: 10px;
+	    }
+	    .content2 img{
+	      float: left;
+	      clear: both;
+	      margin-right: 10px;
+	    }
+	    .content .content1 p, .content .content2 p{
+	      margin-top: 15px;
+	    }
+	    .content1-t {
+	      text-align: left;
+	    }
+	    .content2-t {
+	      clear: right;
+	    }

@@ -1,0 +1,87 @@
+/* 메인 */
+.c1 {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.form{
+  /* margin:2rem; */
+  text-align: center;
+  padding:1rem;
+  width:25rem;
+  border-radius: .5rem;
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.1);
+  border:1px solid black;
+  background: #fff;
+}
+
+.buttons{
+  display: flex;
+  gap:1rem;
+  align-items: center;
+}
+.size {
+  font-size: 1.2rem;
+}
+.btn{
+  padding: 0.8rem;
+  display: block;
+  width:100%;
+  margin:.5rem 0;
+  background: lightgray;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.box{
+  margin: 10px 0;
+  width: 100%;
+  font-size: 1rem;
+  color: black;
+  text-transform: none;
+  border: 1px solid black;
+  padding: 0.6rem 0.6rem;
+  border-radius: 0.5rem;
+}
+.check {
+  width: 28%;
+  height: 2.7rem;
+  margin: 0.5rem 0;
+  margin-left: 0.7rem;
+  background: lightgray;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+a{
+  color:black;
+}
+
+h3{
+  padding-bottom:1rem;
+  font-size: 2rem;
+  color:black;
+}
+
+#post, #addr, #detail-addr {
+  margin: 1px auto;
+  width: 100%;
+  font-size: 1rem;
+  border: 1px solid black;
+  padding: 0.6rem 0.6rem;
+  border-radius: 0.5rem;
+}
+#post {
+  font-size: 12px;
+  cursor: pointer;
+  width: 19%;
+  float: left;
+  background: lightgray;
+}

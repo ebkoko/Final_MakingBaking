@@ -3,21 +3,72 @@
 	  xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layouts/layout}">
-	  
-	<!-- head 영역 시작 -->
-	<!-- 개별적으로 사용할 css, js 링크를 걸기 위해서 남겨둠 -->
 	<head>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
-				
+				let swiper = new swiper(".mySwiper", {
+				    navigation: {
+				      nextEl: ".swiper-button-next",
+				      prevEl: ".swiper-button-prev",
+				    },
+				});
 			</script>
 		</th:block>
 	</head>
-	<!-- head 영역 끝 -->
 	
 	<body>
 		<div layout:fragment="content">
-			
+			<div class="swiper mySwiper">
+	    <div class="swiper-wrapper">
+	      <div class="swiper-slide"><img th:src="@{/images/bg.jpg}" alt=""></div>
+	      <div class="swiper-slide">Slide 2</div>
+	      <div class="swiper-slide">Slide 3</div>
+	      <div class="swiper-slide">Slide 4</div>
+	      <div class="swiper-slide">Slide 5</div>
+	      <div class="swiper-slide">Slide 6</div>
+	      <div class="swiper-slide">Slide 7</div>
+	      <div class="swiper-slide">Slide 8</div>
+	      <div class="swiper-slide">Slide 9</div>
+	    </div>
+	    <div class="swiper-button-next"></div>
+	    <div class="swiper-button-prev"></div>
+	  </div>
+	  
+	  <main>
+	    <div class="content">
+	      <div class="content1">
+	        <div><img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg"width="300px"></div>
+	        <p class="content1-t">
+	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque iure quas accusantium, culpa nisi commodi repellat architecto ea quae eius impedit numquam atque mollitia. Eligendi magni repellat aperiam exercitationem laudantium!
+	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis provident obcaecati quasi, quia amet voluptatum tempora, possimus tenetur, assumenda nam nesciunt eius perferendis voluptates suscipit rem quaerat odit quo beatae?
+	          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae ipsum molestiae recusandae, libero alias possimus expedita vero maiores explicabo asperiores vel odit cupiditate ab doloribus omnis consequuntur culpa temporibus dolore.
+	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste perspiciatis impedit quisquam perferendis deleniti, deserunt tempore rerum officiis sint consectetur facilis asperiores fugiat debitis. Eos laborum possimus dolor voluptas id!
+	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore nemo recusandae eveniet. Quo voluptas neque natus sed odio, tempore ut nesciunt, delectus eligendi tenetur enim. Voluptas recusandae fuga magni necessitatibus?
+	        </p>
+	      </div>
+	      <div class="content2">
+	        <div><img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg"width="500px"></div>
+	        <p class="content2-t">
+	          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis esse temporibus blanditiis recusandae sint ut totam labore optio dolores explicabo animi, officiis, nemo soluta est minus, atque quo? Eum, obcaecati.
+	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum iure cum sed quos nulla quas non explicabo reiciendis id, ipsum aperiam libero earum saepe. Ducimus quos molestiae id est quas.
+	          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Accusantium, quidem odit. Non aperiam commodi, corrupti quidem officiis, rem vitae, reiciendis cum asperiores earum labore molestias necessitatibus saepe soluta nesciunt illo?
+	          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora aspernatur dignissimos minus sapiente, nulla nemo, dolor tenetur laborum minima eius at deleniti. Quae maiores tenetur architecto saepe ducimus, fugit atque.
+	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis placeat asperiores ipsam necessitatibus, voluptatum ducimus esse libero aliquid odio officiis in consectetur tenetur dicta quod accusamus aliquam voluptas quo nostrum?
+	          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis excepturi quisquam veniam dolore hic officiis a fuga corporis omnis suscipit! Earum saepe nulla repellat soluta quidem labore, odit veritatis nihil?
+	        </p>
+	      </div>
+	      <div class="content1">
+	        <div><img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg"width="300px"></div>
+	        <p class="content1-t">
+	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque iure quas accusantium, culpa nisi commodi repellat architecto ea quae eius impedit numquam atque mollitia. Eligendi magni repellat aperiam exercitationem laudantium!
+	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis provident obcaecati quasi, quia amet voluptatum tempora, possimus tenetur, assumenda nam nesciunt eius perferendis voluptates suscipit rem quaerat odit quo beatae?
+	          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae ipsum molestiae recusandae, libero alias possimus expedita vero maiores explicabo asperiores vel odit cupiditate ab doloribus omnis consequuntur culpa temporibus dolore.
+	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste perspiciatis impedit quisquam perferendis deleniti, deserunt tempore rerum officiis sint consectetur facilis asperiores fugiat debitis. Eos laborum possimus dolor voluptas id!
+	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore nemo recusandae eveniet. Quo voluptas neque natus sed odio, tempore ut nesciunt, delectus eligendi tenetur enim. Voluptas recusandae fuga magni necessitatibus?
+	        </p>
+	      </div>
+	    </div>
+	  </main>
 		</div>
 	</body>
 </html>
