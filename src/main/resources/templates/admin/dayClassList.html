@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>원데이클래스 관리</title>
+  <style>
+    #container { width: 1200px; margin: 0 auto;}
+    #dayclassMod {
+      width:80px;
+      height: 25px;
+      margin-left: 22px;
+    }
+    #dayclassDelete {
+      width: 100px;
+      height: 40px;
+    }
+    #dayclassRegistration {
+      width: 100px;
+      height: 40px;
+    }
+    .pagination {
+      list-style: none;
+      width: 100%;
+      display: inline-block;
+    }
+
+    .pagination_button {
+      float: left;
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>원데이클래스 관리</h1>
+    <form>
+      <table>
+        <tr>
+          <td align="center">
+            <select name="searchCondition">
+              <option value="ALL" th:selected="${searchCondition == 'ALL'}">전체</option>
+              <option value="DAYCLASSNAME" th:selected="${searchCondition == 'DAYCLASSNAME'}">이름</option>
+              <option value="DAYCLASSPRICE" th:selected="${searchCondition == 'DAYCLASSPRICE'}">가격</option>
+              <option value="DAYCLASSREGDATE" th:selected="${searchCondition == 'DAYCLASSREGDATE'}">등록일</option>
+              <option value="DAYCLASSSTATUS" th:selected="${searchCondition == 'DAYCLASSSTATUS'}">진행여부</option>
+            </select>
+            <input type="text" name="searchKeyword" th:value="">
+            <button type="button" id="btnSearch">검색</button>
+          </td>
+        </tr>
+      </table>
+    </form>
+    <br>
+
+    <table border="1" style="width: 1200px; border-collapse: collapse; border-left: hidden; border-right: hidden; border-top:hidden">
+      <tr>
+        <td colspan="7" align="right"><input type="checkbox"> 전체 선택</td>
+      </tr>
+      <tr>
+        <th style="background: lightsteelblue; width: 5%;"></th>
+        <th style="background: lightsteelblue; width: 5%;">No.</th>
+        <th style="background: lightsteelblue; width: 30%;">클래스 이름</th>
+        <th style="background: lightsteelblue; width: 20%;">클래스 가격</th>
+        <th style="background: lightsteelblue; width: 15%;">클래스 등록일</th>
+        <th style="background: lightsteelblue; width: 15%;">클래스 진행여부</th>
+        <th style="background: lightsteelblue; width: 10%;">클래스 관리</th>
+      </tr>
+      <tr th:each="dayclass: ${getDayclassList}">
+        <td><input type="checkbox"></td>
+        <td th:text="${dayclass.dayclassNo"></td>
+        <td th:text="${dayclass.dayclassName}"></td>
+        <td th:text="${dayclass.dayclassPrice}"></td>
+        <td th:text="${dayclass.dayclassRegdate eq null ? '' : #string.substring(dayclass.dayclassRegdate, 0, 10)}}"></td>
+        <td th:text="${dayclass.dayclassUseYn}"></td>
+        <td><a href="#"><input type="button" value="수정" id="dayclassMod"></a></td>
+      </tr>
+    </table>
+
+    <br>
+    <!-- 삭제/등록버튼 -->
+    <div style="text-align:right;">
+      <a href="#"><input type="button" value="상품삭제" id="dayclassDelete"></a>
+      <a href="#"><input type="button" value="상품등록" id="dayclassRegistration"></a>
+    </div>
+    <br>
+    <!-- 페이징 -->
+    <div style="text-align:center;">
+      <ul class="pagination" th:if="${getDayclassList.totalElements > 0}"
+                  th:with="pageNumber = ${getDayclassList.pageable.pageNumber},
+                              pageSize = ${getDayclassList.pageable.pageSize},
+                              totalPages = ${getDayclassList.totalPages},
+                              startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+                              tempEndPage = ${startPage + pageSize -1 },
+                              endPage =  ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+          <li class="pagination_button" th:if="${pageNumber > 0}">
+            <a th:href="@{/dayclass/dayclassList(
+                    page=${pageNumber - 1},
+                    searchCondition=${searchCondition},
+                    searchKeyword=${searchKeyword})}">이전</a>
+          </li>
+        
+        
+          <li class="pagination_button" th:each="page : ${#numbers.sequence(startPage, endPage)}">
+          <!-- startPage와 endPage에 있는 숫자들을 page에 담아옴. -->
+            <a th:href="@{/dayclass/dayclassList(page=${page - 1},
+                    searchCondition=${searchCondition},
+                    searchKeyword=${searchKeyword})}"
+                    th:text="${page}"></a>
+          </li>
+        
+          <li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+            <a th:href="@{/dayClass/dayClassList(page=${pageNumber + 1},
+                    searchCondition=${searchCondition},
+                    searchKeyword=${searchKeyword})}">다음</a>
+          </li>
+      </ul>
+    </div>
+
+  </div>
+</body>
+</html>
