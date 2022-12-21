@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+	<head>
+	
+		<th:block layout:fragment="script">
+			<!-- 우편 -->
+			<script th:src="@{https://unpkg.com/swiper@7/swiper-bundle.min.js}"></script>
+  			<script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
+			<script th:inline="javascript">
+					$("#pw").on("keyup", function(e) {
+				        let password = document.querySelector('#pw').value;
+				
+				        let strength = Strength(password);
+				        if(strength <= 2) {
+				          $(".pw-check").addClass('weak');
+				          $(".pw-check").removeClass('normal');
+				          $(".pw-check").removeClass('strong');
+				        } else if(strength > 2 && strength < 5 ) {
+				          $(".pw-check").removeClass('weak');
+				          $(".pw-check").addClass('normal');
+				          $(".pw-check").removeClass('strong');
+				        } else {
+				          $(".pw-check").removeClass('weak');
+				          $(".pw-check").removeClass('normal');
+				          $(".pw-check").addClass('strong');
+				        }
+				      })
+					  
+					  $(function() {
+						  let pswrd = document.querySelector('#pw');
+					      let show = document.querySelector('.show');
+					      show.onclick = function() {
+					        if(pswrd.type === 'password') {
+					          pswrd.setAttribute('type', 'text');
+					          show.classList.add('hide');
+					        }
+					        else {
+					          pswrd.setAttribute('type', 'password');
+					          show.classList.remove('hide');
+					        }
+					      }
+					  });
+				      
+				
+				      let pwRecheck = false;
+				      $("#pw2").on("change", function() {
+				        $("#pwRecheck").show();
+				        
+				        if($("#pw").val() == $("#pw2").val()) {
+				          pwRecheck = true;
+				          $("#pwRecheck").css("color", "#0f0");
+				          $("#pwRecheck").text("비밀번호가 일치합니다.");
+				        } else {
+				          pwRecheck = false;
+				          $("#pwRecheck").css("color", "#f00");
+				          $("#pwRecheck").text("비밀번호가 일치하지 않습니다.");
+				        }
+				      });
+
+				    function findAddr(){
+				      new daum.Postcode({
+				        oncomplete: function(data) {
+				          let addr1 = data.roadAddress;
+				          let addr2 = data.jibunAddress;
+				          document.getElementById('post').value = data.zonecode;
+				          if(addr1 !== ''){
+				          document.getElementById("addr").value = addr1;
+				          } else if(addr2 !== '') {
+				            document.getElementById("detail-addr").value = addr2;
+				          }
+				        }
+				      }).open();
+				    }
+				
+				    function Strength(password) {
+				        let i = 0;
+				        if(password.length > 6) {
+				          i++;
+				        }
+				        if(password.length >= 10) {
+				          i++;
+				        }
+				        if(/^(?=.*[a-zA-Z])/.test(password)) {
+				          i++;
+				        }
+				        if(/(?=.*[!@#$%^&*+=-])/.test(password)) {
+				          i++
+				        }
+				        if(/(?=.*[0-9])/.test(password)) {
+				          i++
+				        }
+				        return i;
+				      }
+			</script>
+		</th:block>
+		
+		<th:block layout:fragment="css">
+			<link rel="stylesheet" th:href="@{/css/join.css}"/>
+		</th:block>
+	</head>
+	
+	<body>
+		<div layout:fragment="content" style="height:100%">
+		  <main style="margin-top: 4.5rem;">
+		    <div class="c1">
+		      <form action="" class="form" method="post">
+		        <h3>회원가입</h3>
+		        <div style="display: flex;">
+		          <input type="text" placeholder="아이디" class="box" style=" width: 70%;">
+		          <button class="check">중복체크</button>
+		        </div>
+		        <div style="display: flex;">
+		          <input type="text" placeholder="닉네임" class="box" style=" width: 70%;">
+		          <button  class="check">중복체크</button>
+		        </div>
+		
+		        <div class="pw-check">
+		          <div class="inputBox light">
+		            <input type="password" id="pw" required class="input" placeholder="비밀번호"><label for="pw" class="input-label"></label>
+		            <div class="show"></div>
+		          </div>
+		          <div class="check-light"></div>
+		        </div>
+		
+		        <div class=" check2">
+		          <div class="inputBox light">
+		            <input type="password" id="pw2" required class="input" placeholder="비밀번호확인" style="margin-top: 12px;"><label for="pw2" class="input-label"></label>
+		            <!-- <div class="show"></div> -->
+		          </div>
+		          <div class="check-light"></div>
+		          <p id="pwRecheck" style="font-size: 11px; text-align: left;"></p>
+		        </div>
+		        <!-- <input type="password" placeholder="비밀번호 확인" class="box"> -->
+		
+		
+		        <input type="text" placeholder="이름" class="box">
+		        <input type="text" placeholder="생년월일" class="box">
+		        <select class="box">
+		          <option value="체크안함">체크안함</option>
+		          <option value="남자">남자</option>
+		          <option value="여자">여자</option>
+		        </select>
+		        <input type="text" placeholder="전화번호" class="box">
+		        <input type="text" placeholder="이메일" class="box">
+		        <input id="post"  type="text" value="우편번호" readonly onclick="findAddr()">
+		        <input id="addr" type="text" placeholder="주소" readonly> <br>
+		        <input id="detail-addr" type="text" placeholder="상세주소">
+		        <input type="submit" value="가입하기" class="btn size">
+		      </form>
+		    </div>
+		  </main>
+		</div>
+	</body>
+</html>
