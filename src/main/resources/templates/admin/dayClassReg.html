@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>원데이클래스 등록</title>
+  <style>
+    #container { width: 1200px; margin: 0 auto;}
+    #dayclassReg_T {
+      margin: 0 auto;
+      border-left: hidden; border-right: hidden;
+    }
+    #dayclassReg {
+      width: 150px;
+      height: 40px;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    /*  https://jamesdreaming.tistory.com/211  */
+    $(function() {
+      $("#inputPrice").on("focus", function() {
+        var val = $("#inputPrice").val();
+        if(!isEmpty(val)) {
+          val = val.replace(/,/g,'');
+          $("#inputPrice").val(val);
+        }
+      });
+      $("#inputPrice").on("blur", function() {
+        var val = $("#inputPrice").val();
+        if(!isEmpty(val) && inNumeric(val)) {
+          val = currencyFormatter(val);
+          $("#inputPrice").val(val);
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <div id="container">
+    <h1>원데이클래스 등록</h1>
+    
+    <!-- 원데이클래스 등록내용 -->
+    <div>
+      <table border="1" style="width: 800px; height:300px; border-collapse: collapse;" id="dayclassReg_T">
+        <tr>
+          <th style="background: lightsteelblue;">클래스 진행여부</th>
+          <td>
+            <!-- 원데이클래스상태 선택 -->
+            <div>&ensp;&ensp;
+              <select name="searchCondition">
+                <option value="dayclassIng" th:selected="${searchCondition == 'dayclassIng'}">진행중</option>
+                <option value="dayclassEnd" th:selected="${searchCondition == 'dayclassSchedule'}">진행종료</option>
+              </select>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th style="background: lightsteelblue;">등록일</th>
+          <td th:text="${dayclass.dayclassRegdate eq null ? '' : #strings.substring(dayclass.dayclassRegdate, 0, 10)}">&ensp;&ensp;</td>
+        </tr>
+        <tr>
+          <th style="background: lightsteelblue;">이름</th>
+          <td>&ensp;&ensp;<input type="text"></td>
+        </tr>
+        <tr>
+          <th style="background: lightsteelblue;">설명</th>
+          <td>&ensp;&ensp;<textarea></textarea></td>
+        </tr>
+        <tr>
+          <th style="background: lightsteelblue;">가격</th>
+          <td>&ensp;&ensp;<input type="text" id="inputPrice">원</td>
+        </tr>
+        <tr>
+          <th style="background: lightsteelblue;">첨부파일</th>
+          <td>
+            <div>&ensp;&ensp;
+              <input type="file">
+              <div data-placeholder="파일선택 버튼을 눌러 원데이클래스 첨부파일을 작성하세요."></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th style="background: lightsteelblue;">재고</th>
+          <td>&ensp;&ensp;<input type="number" min="0"></td>
+        </tr>
+        <tr>
+          <th colspan="2" style="border-bottom: hidden;">
+            <div style="text-align:right;">
+              <a href="#"><input type="button" value="원데이클래스 등록" id="dayclassReg"></a>
+            </div>
+          </th>
+        </tr>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
