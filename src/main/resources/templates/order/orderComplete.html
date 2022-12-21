@@ -7,8 +7,66 @@
 	<!-- head 영역 시작 -->
 	<!-- 개별적으로 사용할 css, js 링크를 걸기 위해서 남겨둠 -->
 	<head>
+		<th:block layout:fragment="css">
+			<style>
+				hr {
+					height: 1px;
+					background: black;
+				}
+				#complete_title {
+				    font-size: 40px;
+				}
+				#process {
+				    float: right;
+				    font-size: 20px;
+				    margin-bottom: 20px;
+				}
+				#process span {
+				    margin: 2px 5px;
+				}
+				.process3 {
+				    font-weight: bold;
+				}
+				#process+hr {
+				    clear: both;
+				}
+				#completeMent {
+				    margin: 40px auto;
+				}
+				#completeMent .orderNumber {
+				    text-align: center;
+				    margin: 5px;
+				}
+				#completeMent .orderCompleteMent {
+				    text-align: center;
+				    margin: 5px;
+				    font-size: 25px;
+				}
+				#completeMent #bankPayment {
+				    text-align: center;
+				    margin: 10px;
+				}
+				#completeMent #creditCard {
+				    text-align: center;
+				    margin: 5px;
+				}
+				#completeMent #btns {
+				    margin-top: 30px;
+				    text-align: center;
+				}
+				#btnMypage {
+				    width: 100px;
+				    height: 40px;
+				    font-size: 17px;
+				}
+				#btnMain {
+				    width: 130px;
+				    height: 40px;
+				    font-size: 17px;
+				}
+			</style>
+		</th:block>
 		<th:block layout:fragment="script">
-		<link th:href="@{/css/orderComplete.css}" rel="stylesheet">
 			<script th:inline="javascript">
 				
 			</script>
@@ -29,9 +87,9 @@
 	                <p class="orderCompleteMent">주문 완료되었습니다!</p>
 	                <div id="bankPayment">
 	                    <span>입금계좌: </span>
-	                    <span class="bankName" th:text="${bank}"></span><span class="account" th:text="${account}"></span>
-	                    <span>예금주: 메이킹베이킹</span><span>입금액: </span><span class="totalPrice" th:text="${totalPrice}">원</span>
-	                    <span>입금기한: </span><span class="deadline" th:text="${}"></span><span>오후 11시 59분 59초</span>
+	                    <span class="bankName" th:text="${bank}"></span><span class="account" th:text="${account}"></span>&emsp;
+	                    <span>예금주: 메이킹베이킹</span>&emsp;<span>입금액: </span><span class="totalPrice" >원</span>&emsp;
+	                    <span>입금기한: </span><span class="deadline" ></span><span>오후 11시 59분 59초</span>
 	                </div>
 	                <div id="creditCard">
 	                    <span>신용카드(</span><span class="cardBrand" th:text="${cardBrand}"></span><span>) 결제 &#124; 결제금액: </span><span class="totalPrice" th:text="${totalPrice}">원</span>

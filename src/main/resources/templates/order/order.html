@@ -7,9 +7,238 @@
 	<!-- head 영역 시작 -->
 	<!-- 개별적으로 사용할 css, js 링크를 걸기 위해서 남겨둠 -->
 	<head>
-		<th:block layout:fragment="script">			
-		<link th:href="@{/css/order.css}" rel="stylesheet">
-			<script th:inline="javascript" th:src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+		<th:block layout:fragment="css">
+			<style>
+				input {
+					border: 1px solid #DCDCDC;
+				}
+				select {
+					border: 1px solid #DCDCDC;
+				}
+				hr {
+					height: 1px;
+					background: black;
+				}
+				#order_title {
+				    font-size: 40px;
+				}
+				#process {
+				    float: right;
+				    font-size: 20px;
+				}
+				#process>span {
+				    margin: 2px 5px;
+				}
+				.process2, .processPointer2 {
+				    font-weight: bold;
+				}
+				#top {
+				    clear: both;
+				    margin-top: 90px;
+				}
+				#top+hr {
+					margin-top: 10px;
+				}
+				#top .item_check {
+				    margin-top: 90px;
+				    margin-bottom: 0px;
+				    font-size: 22px;
+				}
+				#top .freeDeliMent {
+				    margin-top: 0px;
+				    margin-left: 890px;
+				}
+				#list_title {
+				    font-size: 0.9em;
+				}
+				#list_title .itemInfo {
+				    margin-left: 100px;
+				}
+				#list_title .itemSum {
+				    margin-left: 600px;
+				}
+				#list_title .itemQuantity {
+				    margin-left: 120px;
+				}
+				#list_title .sumPrice {
+				    margin-left: 140px;
+				}
+				#list_title+hr {
+					margin-bottom: 15px;
+				}
+				#img1 {
+				    margin-left: 80px;
+				}
+				#detail1 {
+				    display: inline-block;
+				    width: 55%;
+				}
+				#name1 {
+				    display: inline-block;
+				    margin-left: 10px;
+				}
+				#price1 {
+				    display: inline-block;
+				    width: 14%;
+				    text-align: right;
+				}
+				#cnt1 {
+				    display: inline-block;
+				    width: 10%;
+				    text-align: right;
+				}
+				#sumprice1 {
+				    display: inline-block;
+				    width: 18%;
+				    text-align: right;
+				}
+				#totalPrice {
+				    float: right;
+				    font-size: 0.9em;
+				    margin-bottom: 8px;
+				    margin-right: 5px;
+				}
+				#totalPrice+hr {
+				    clear: both;
+				}
+				#item1+hr {
+					margin-top: 15px;
+					margin-bottom: 5px;
+				}
+				#delivery {
+				    margin-top: 100px;
+				}
+				.essential {
+					color: dodgerblue;
+					font-weight: bold;
+				}
+				#delivery .deliInfo {
+					display: inline-block;
+				    margin-bottom: 10px;
+				    font-size: 22px;
+				}
+				.essentialMent {
+					font-size: 0.8em;
+					color: red;
+				}
+				.table-wrap {
+				    display: flex;
+				}
+				table {
+				    border-spacing: 3px 13px;
+				    text-align: left;
+				}
+				table td {
+				    padding-left: 10px;
+				}
+				table>caption {
+					margin-top: 10px;
+				    text-align: left;
+				}
+				#delivery #T1 {
+				    display: inline-block;
+				    margin-left: 5px;
+				}
+				#recipient {
+				    width: 120px;
+				    height: 25px;
+				}
+				#addr1 {
+				    width: 70px;
+				    height: 26px;
+				    margin-right: 10px;
+				    margin-bottom: 5px;
+				}
+				#btnZipcode {
+				    height: 26px;
+				    vertical-align: middle;
+				}
+				#addr2 {
+				    margin-bottom: 5px;
+				}
+				#addr2, #addr3 {
+				    width: 400px;
+				    height: 25px;
+				}
+				#extraAddr {
+				    width: 200px;
+				    height: 25px;
+				}
+				#reciTel1, #reciTel2, #reciTel3 {
+				    width: 50px;
+				    height: 25px;
+				}
+				textarea {
+					border: 1px solid #DCDCDC;
+					resize: none;
+				}
+				#delivery #T2 {
+				    display: inline-block;
+				    margin-left: 100px;
+				}
+				#T2 tr {
+				    height: 30px;
+				}
+				#orderer {
+				    width: 120px;
+				    height: 25px;
+				}
+				#orderTel1, #orderTel2, #orderTel3 {
+				    width: 50px;
+				    height: 25px;
+				}
+				#orderMail {
+				    height: 25px;
+				}
+				#delivary+hr {
+				    clear: both;
+				}
+				#payment_title {
+				    margin-top: 100px;
+				    margin-bottom: 10px;
+				    font-size: 22px;
+				}
+				#btns {
+				    margin: 15px 0 20px 40px;
+				}
+				#bankTransfer, #creditCard {
+				    width: 100px;
+				    height: 30px;
+				}
+				#bankPayment {
+				    margin-left: 40px;
+				}
+				#bank {
+					width: 100px;
+					height: 25px;
+				    vertical-align: middle;
+				}
+				#accountNo1 {
+				    margin-left: 15px;
+				    width: 200px;
+				    height: 25px;
+				    vertical-align: middle;
+				}
+				#depositorTitle {
+				    margin-top: 15px;
+				}
+				#depositor {
+				    width: 150px;
+				    height: 25px;
+				    vertical-align: middle;
+				    margin-left: 5px;
+				}
+				#btnPayment {
+				    margin-top: 70px;
+				    margin-left: 460px;
+				    width: 270px;
+				    height: 40px;
+				    font-size: 22px;
+				}
+			</style>
+		</th:block>
+		<th:block layout:fragment="script">		
+			<script th:inline="javascript" th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
 			<script th:inline="javascript">
 				function addr1() {
 		            new daum.Postcode({
@@ -81,44 +310,44 @@
 	            <div id="order_item">
 	                <div id="item1">
 	                    <div id="detail1">
-	                        <img id="img1" src="상품대표이미지">
-	                        <div id="name1"><a th:href="상품 상세페이지" th:text="${itemName}"></a>상품명</div>    
+	                        <img id="img1">
+	                        <div id="name1"><a th:text="${itemName}"></a>상품명</div>    
 	                    </div>
-	                    <div th:text="${itemPrice}" id="price1">원</div>  
-	                    <div th:text="${itemCnt}" id="cnt1">5</div>                    
-	                    <div th:text="${itemPrice*itemCnt}" id="sumprice1">원</div>
+	                    <div id="price1">원</div>  
+	                    <div id="cnt1">5</div>                    
+	                    <div id="sumprice1">원</div>
 	                </div>            
 	                <hr>
 	                <div id="totalPrice">
-	                    <span>상품 총 금액: </span> <span th:text="${totalPrice}">원</span> <span>&#43;</span> <span>배송비: </span> <span th:text="${orderDeliFee}">원</span> <span>&#61;</span> <span>총 결제금액: </span> <span th:text="${totalPrice+orderDeliFee}">원</span>
+	                    <span>상품 총 금액: </span> <span >원</span> <span>&#43;</span> <span>배송비: </span> <span >원</span> <span>&#61;</span> <span>총 결제금액: </span> <span >원</span>
 	                </div>
 	                <hr>
 	            </div>            
 	            <div id="delivery">
-	                <p class="deliInfo">배송정보</p>
+	                <p class="deliInfo">배송정보</p>&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span>
 	                <hr>
 	                <div class="table-wrap">                    
 	                    <table id="T1">
 	                        <tr>
 	                            <th>배송지</th>
-	                            <td><input type="radio" name="deli1" id="deli1" value="기본배송지" checked>기본배송지&ensp;<input type="radio" name="deli2" id="deli2" value="직접입력">직접입력</td>
+	                            <td><input type="radio" name="deli1" id="deli1" value="기본배송지" checked> 기본배송지&emsp;<input type="radio" name="deli2" id="deli2" value="직접입력"> 직접입력</td>
 	                        </tr>
 	                        <tr>
-	                            <th>이름</th>
-	                            <td><input type="text" name="recipient" id="recipient" style="size: 5"></td>
+	                            <th>이름<span class="essential">&#42;</span></th>
+	                            <td><input type="text" name="recipient" id="recipient"></td>
 	                        </tr>
 	                        <tr>
-	                            <th>배송주소</th>
+	                            <th>배송주소<span class="essential">&#42;</span></th>
 	                            <td>
 	                                <input type="text" name="addr1" id="addr1" placeholder="우편번호"><input type="button" id="btnZipcode" onclick="addr1()" value="우편번호 찾기"><br>
 	                                <input type="text" name="addr2" id="addr2" placeholder="주소"><br>
-	                                <input type="text" name="addr3" id="addr3" placeholder="상세주소">&ensp;<input type="text" name="extraAddr" id="extraAddr" placeholder="참고항목">
+	                                <input type="text" name="addr3" id="addr3" placeholder="상세주소">&ensp;<input type="text" name="extraAddr" id="extraAddr">
 	                            </td>
 	                        </tr>
 	                        <tr>
-	                            <th>휴대폰</th>
+	                            <th>휴대폰<span class="essential">&#42;</span></th>
 	                            <td>
-	                                <select id="reciTel1" style="height: 25px;">
+	                                <select id="reciTel1">
 	                                    <option value="010">010</option>
 	                                    <option value="011">011</option>
 	                                    <option value="016">016</option>
@@ -130,7 +359,7 @@
 	                            </td>
 	                        </tr>
 	                        <tr>
-	                            <th>배송메세지</th>
+	                            <th style="vertical-align: top;">배송메세지</th>
 	                            <td>
 	                                <textarea name="message" id="message" cols="50" rows="8" placeholder="배송메세지를 입력해주세요."></textarea>
 	                            </td>
@@ -139,13 +368,13 @@
 	                    <table id="T2">
 	                        <caption>주문자 정보</caption>
 	                        <tr>
-	                            <th>이름</th>
+	                            <th>이름<span class="essential">&#42;</span></th>
 	                            <td><input type="text" name="orderer" id="orderer" value="${userName}"></td>
 	                        </tr>
 	                        <tr>
-	                            <th>휴대폰</th>
+	                            <th>휴대폰<span class="essential">&#42;</span></th>
 	                            <td>
-	                                <select id="orderTel1" style="height: 25px;">
+	                                <select id="orderTel1">
 	                                    <option value="010">010</option>
 	                                    <option value="011">011</option>
 	                                    <option value="016">016</option>
@@ -174,14 +403,14 @@
 	                    <input type="button" name="creditCard" id="creditCard" value="신용카드">
 	                </div>
 	                <div id="bankPayment">
-	                    <select id="bank" style="width: 100px; height: 25px;">
+	                    <select id="bank">
 	                        <option value="입금은행">입금은행</option>
 	                        <option value="국민은행">국민은행</option>
 	                        <option value="신한은행">신한은행</option>
 	                    </select>
 	                    <input type="text" name="accountNo1" id="accountNo1" value="국민은행계좌" readonly>&ensp;
 	                    <span class="accountName">예금주명: 메이킹베이킹</span><br>
-	                    <div id="depositorTitle">입금자명: <input type="text" name="depositor" id="depositor" placeholder="입금자명을 입력하세요."></div>
+	                    <div id="depositorTitle">입금자명<span class="essential">&#42;</span>: <input type="text" name="depositor" id="depositor" placeholder="입금자명을 입력하세요.">&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span></div>
 	                </div>
 	            </div>
 	            <input type="button" id="btnPayment" value="결제하기" onclick="location.href='viewOrderpage'">
