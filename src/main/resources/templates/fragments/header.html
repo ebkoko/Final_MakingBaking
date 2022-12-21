@@ -6,13 +6,22 @@
 	<head>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
-				  document.querySelector('#login-btn').onclick = () =>{
-				      document.querySelector('.login-form-container').classList.toggle('active');
-				    }
+			
+				$(function(){
+					$("#btn-login").on('click', function() {
+						$('.login-form-container').toggleClass('active');
+					});
+					
+					$('#close-login-form').on('click', function() {
+						$('.login-form-container').removeClass('active');
+					});
+					/*$('#login-btn').on('click', () =>{
+						$('.login-form-container').classList.toggle('active');
+					});
 				  
-				    document.querySelector('#close-login-form').onclick = () =>{
-				      document.querySelector('.login-form-container').classList.remove('active');
-				    }
+					$('#close-login-form').on('click', () =>{
+						document.querySelector('.login-form-container').classList.remove('active');
+			    	});
 				
 				    let pswrd = document.querySelector('#pw');
 				    let show = document.querySelector('.show');
@@ -25,15 +34,19 @@
 				        pswrd.setAttribute('type', 'password');
 				        show.classList.remove('hide');
 				      }
-				    }
+				    }*/
+				    });
 			</script>
+		</th:block>
+		<th:block layout:fragment="css">
+			
 		</th:block>
 	</head>
 	<body>
 		<header th:fragment="header" class="header">
 		    <div id="login-btn">
 		    <div>
-		    	<button class="btn header-font">login</button>
+		    	<button type="button" id="btn-login" class="btn header-font">login</button>
 		    </div>
 		      
 		    <div>

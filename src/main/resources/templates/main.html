@@ -4,15 +4,26 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorate="~{layouts/layout}">
 	<head>
+	
 		<th:block layout:fragment="script">
+			<!-- 슬라이더 -->
+			<script th:src="@{https://unpkg.com/swiper@7/swiper-bundle.min.js}"></script>
+			<script th:src="@{https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js}"></script>
+			
 			<script th:inline="javascript">
-				let swiper = new swiper(".mySwiper", {
-				    navigation: {
-				      nextEl: ".swiper-button-next",
-				      prevEl: ".swiper-button-prev",
-				    },
+				$(function() {
+					let aaa = new Swiper(".mySwiper", {
+					    navigation: {
+					      nextEl: ".swiper-button-next",
+					      prevEl: ".swiper-button-prev",
+					    },
+					});
 				});
 			</script>
+		</th:block>
+		<th:block layout:fragment="css">
+			<link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css}"/>
+			<link rel="stylesheet" th:href="@{/css/index.css?ver}"/>
 		</th:block>
 	</head>
 	

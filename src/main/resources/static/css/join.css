@@ -1,0 +1,192 @@
+.c1 {
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+    }
+    .form{
+      text-align: center;
+      padding:1rem;
+      width:25rem;
+      border-radius: .5rem;
+      box-shadow: 0 .5rem 1rem rgba(0,0,0,.1);
+      border:1px solid black;
+      background: #fff;
+    }
+
+    .buttons{
+      display: flex;
+      gap:1rem;
+      align-items: center;
+    }
+    .size {
+      font-size: 1.2rem;
+    }
+    .btn{
+      padding: 0.8rem;
+      display: block;
+      width:100%;
+      margin:.5rem 0;
+      background: lightgray;
+      cursor: pointer;
+      border-radius: 0.5rem
+      
+    }
+
+    .box{
+      margin: 10px 0;
+      width: 100%;
+      font-size: 1rem;
+      color: black;
+      text-transform: none;
+      border: 1px solid black;
+      padding: 0.6rem 0.6rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .check {
+      width: 28%;
+      height: 2.7rem;
+      margin: 0.5rem 0;
+      margin-left: 0.7rem;
+      background: lightgray;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    a{
+      color:black;
+    }
+
+    h3{
+      padding-bottom:1rem;
+      font-size: 2rem;
+      color:black;
+    }
+
+    .pw-check {
+      position: relative;
+      /* display: flex;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px; */
+      margin-bottom: 1rem;
+      margin-top: 10px;
+    }
+    .check2 {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .pw-check .light input, .check2 .light input {
+      position: relative;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      width: 100%;
+      border: 1px solid black;
+    }
+    .pw-check .check-light, .check2 .check-light {
+      position: absolute;
+      bottom: 0;
+      left: -10.7rem;
+      width: 97%;
+      height: 1px;
+    }
+    
+    .pw-check .check-light::before {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 100%;
+      transition: 0.5s;
+      background: #f00;
+    }
+    .pw-check.weak .light input {
+      border: 1px solid #f00;
+      filter:  drop-shadow(0 0 5px #f00);
+    }
+    .pw-check.normal .light input {
+      border: 1px solid #ffa500;
+      filter:  drop-shadow(0 0 5px #ffa500);
+    }
+    .pw-check.strong .light input {
+      border: 1px solid #0f0;
+      filter:  drop-shadow(0 0 5px #0f0);
+    }
+
+    .check2.weak .light input {
+      border: 1px solid #f00;
+      filter:  drop-shadow(0 0 5px #f00);
+    }
+    .pw-check .check-light::after {
+      content: "";
+      position: absolute;
+      top: 7px;
+      left: 11rem;
+      width: 20rem;
+      font-size: 11px;
+      text-align: left;
+      transition: 0.5s;
+    }
+    .pw-check.weak .check-light::after {
+      content: "6~15자 영문 대 소문자, 숫자, 특수문자를 사용하세요.";
+      color: #f00;
+      filter:  drop-shadow(0 0 10px #f00);
+    } 
+    .pw-check.normal .check-light::after {
+      content: "6~15자 영문 대 소문자, 숫자, 특수문자를 사용하세요.";
+      color: #ffa500;
+      filter:  drop-shadow(0 0 10px #ffa500);
+    }
+    .pw-check.strong .check-light::after {
+      content: "사용 가능합니다!";
+      color: #0f0;
+      filter:  drop-shadow(0 0 10px #0f0);
+    }    
+    .show {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 60px;
+      height: 100%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .show::before {
+      content: "Show";
+      font-size: 0.6em;
+      color: black;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .show.hide::before {
+      content: "Hide";
+    }
+
+    /* 우편 */
+    #post, #addr, #detail-addr {
+      margin: 1px auto;
+      width: 100%;
+      font-size: 1rem;
+      border: 1px solid black;
+      padding: 0.6rem 0.6rem;
+      border-radius: 0.5rem;
+    }
+    #post {
+      font-size: 12px;
+      cursor: pointer;
+      width: 19%;
+      float: left;
+      background: lightgray;
+      border-style: none;
+    }

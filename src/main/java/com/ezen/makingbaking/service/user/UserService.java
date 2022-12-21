@@ -1,5 +1,8 @@
 package com.ezen.makingbaking.service.user;
 
-public interface UserService {
+import com.ezen.makingbaking.entity.User;
 
+public interface UserService {
+	void join(User user);
+	
 }
