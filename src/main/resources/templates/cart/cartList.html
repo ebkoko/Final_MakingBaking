@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+	  
+	<!-- head 영역 시작 -->
+	<!-- 개별적으로 사용할 css, js 링크를 걸기 위해서 남겨둠 -->
+	<head>
+		<th:block layout:fragment="css">
+			<style>
+				hr {
+					height: 1px;
+					background: black;
+				}
+				#cart_title {
+				    font-size: 40px;
+				}
+				#process {
+				    float: right;
+				    font-size: 20px;
+				}
+				#process span {
+				    margin: 2px 5px;
+				}
+				.process1, .processPointer1 {
+				    font-weight: bold;
+				}
+				#selectbox {
+				    clear: both;
+				    margin-top: 90px;
+				    margin-bottom: 10px;
+				}
+				#selectAllCancel {
+					margin-left: 10px;
+				}
+				#list_title {
+				    font-size: 0.9em;
+				}
+				#list_title .itemInfo {
+				    margin-left: 120px;
+				}
+				#list_title .itemQuantity {
+				    margin-left: 600px;
+				}
+				#list_title .itemSum {
+				    margin-left: 120px;
+				}
+				#list_title .itemOrder {
+				    margin-left: 140px;
+				}
+				#list_title+hr {
+					margin-bottom: 15px;
+				}
+				#itemSelect {
+				    width: 5%; 
+				    display: inline-block;
+				}
+				#select1 {
+				    margin-left: 20px;
+				}
+				#itemView {
+				    display: inline-block; 
+				    width:58%;
+				}
+				#img1 {
+				    margin-left: 10px;
+				}
+				#detail1 {
+				    display: inline-block;
+				    margin-left: 15px;
+				}
+				#detail1 #detailName {
+				    font-size: 0.95em;
+				}
+				
+				#detail1 #detailPrice {
+				    font-size: 0.8em;
+				}
+				#itemAmount {
+				    display: inline-block; 
+				    width:9%;
+				}
+				#cnt1 {
+					text-align:center;
+				}
+				input[type="number"] {
+					height: 30px;
+					border: 1px solid #DCDCDC;
+				}
+				input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button {
+					opacity: 1;
+					height: 30px;
+				}
+				#price1 {
+				    display: inline-block;
+				    width:10%;
+				    text-align: right;
+				}
+				#itemDel {
+				    display: inline-block; 
+				    width:16%;
+				}
+				#btnDel {
+				    margin-left: 110px;
+				    width: 50px;
+				    height: 25px;
+				    font-size: 15px;
+				    font-weight: 400;
+				    cursor: pointer;
+				}
+				.cart_detail {
+				    text-align: center;
+				}
+				#cart_item+hr {
+					margin-top: 15px;
+					margin-bottom: 5px;
+				}
+				#totalPrice {
+				    float: right;
+				    font-size: 0.9em;
+				    margin-bottom: 8px;
+				}
+				#totalPrice+hr {
+				    clear: both;
+				}
+				#btnSelectedOrder {
+				    margin-top: 40px;
+				    margin-left: 570px;				    
+				    width: 70px;
+				    height: 40px;
+				    font-size: 22px;
+				    cursor: pointer;
+				}
+			</style>
+		</th:block>
+		<th:block layout:fragment="script">
+			<script th:inline="javascript">
+				
+			</script>
+		</th:block>
+	</head>
+	<!-- head 영역 끝 -->
+	
+	<body>
+		<div layout:fragment="content">
+			<div id="container">
+	            <h1 id="cart_title">장바구니</h1>
+	            <div id="process">
+	                <span class="process1">장바구니</span><span class="processPointer1">&gt;</span><span class="process2">주문결제</span><span class="processPointer2">&gt;</span><span class="process3">주문완료</span>
+	            </div>
+	            <div id="selectbox">
+	                <label for="selectAll"><input type="checkbox" name="select" id="selectAll" value="전체선택"> <span>전체선택</span></label>
+	                <label for="selectAllCancel"><input type="checkbox" name="select" id="selectAllCancel" value="전체선택취소"> <span>전체선택취소</span></label>
+	            </div>
+	            <hr>
+	            <div id="list_title">
+	                <span class="itemInfo">상품정보</span><span class="itemQuantity">수량</span><span class="itemSum">상품금액</span><span class="itemOrder">삭제</span>
+	            </div>
+	            <hr>
+	            <div id="cart_item">
+	                <div id="item1">
+	                    <div id="itemSelect">
+	                        <input type="checkbox" name="select1" id="select1">                    
+	                    </div>
+	                    <div id="itemView">
+	                        <img id="img1" src="">
+	                        <div id="detail1">
+	                            <div id="detailName"><a th:href="@{/}" th:text="${itemName}"></a>상품명</div>
+	                            <div id="detailPrice" th:text="${itemPrice}">상품가격</div>
+	                        </div>    
+	                    </div>
+	                    <div id="itemAmount">
+	                        <input type="number" name="itemCnt" id="cnt1" min="1" max="5" value="1">
+	                    </div>                    
+	                    <div id="price1">원</div>  
+	                    <div id="itemDel">
+	                        <input type="button" id="btnDel" value="삭제" onclick="">
+	                    </div>
+	                </div>
+	                <p class="cart_detail">장바구니에 담긴 상품이 없습니다.</p>
+	            </div>
+	            <hr>
+	            <div id="totalPrice">
+	                <span>상품 총 금액: </span> <span >원</span> <span>&#43;</span> <span>배송비: </span> <span >원</span> <span>&#61;</span> <span>총 결제금액: </span> <span >원</span>
+	            </div>
+	            <hr>
+	            <input type="button" id="btnSelectedOrder" value="주문" onclick="location.href='viewOrderpage'">
+	        </div>
+		</div>
+	</body>
+</html>
