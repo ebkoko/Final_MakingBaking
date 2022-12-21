@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상품 주문 내역</title>
+  <style>
+    #container { width: 1200px; margin: 0 auto;}
+    #orderCancel {
+      width: 100px;
+      height: 40px;
+    }
+    #payCancel {
+      width: 100px;
+      height: 40px;
+    }
+    .pagination {
+      list-style: none;
+      width: 100%;
+      display: inline-block;
+    }
+
+    .pagination_button {
+      float: left;
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>주문 및 예약관리</h1>
+    <div>&ensp;&ensp;
+      <a href="#">상품 주문 내역</a>&ensp;&ensp;
+      <a href="#">원데이클래스 예약 내역</a>
+    </div>
+    <br>
+
+    <table border="1" style="width: 1200px; border-collapse: collapse; border-left: hidden; border-right: hidden; border-top:hidden">
+      <tr>
+        <td colspan="8" align="right"><input type="checkbox"> 전체 선택</td>
+      </tr>
+      <tr>
+        <th style="background: lightsteelblue; width: 5%;"></th>
+        <th style="background: lightsteelblue; width: 5%;">No.</th>
+        <th style="background: lightsteelblue; width: 10%;">회원 아이디</th>
+        <th style="background: lightsteelblue; width: 10%;">회원 이름</th>
+        <th style="background: lightsteelblue; width: 20%;">주문 상품</th>
+        <th style="background: lightsteelblue; width: 20%;">주문 총 금액</th>
+        <th style="background: lightsteelblue; width: 15%;">주문 날짜</th>
+        <th style="background: lightsteelblue; width: 15%;">배송현황</th>
+      </tr>
+      <tr th:each="item: ${getItemList}">
+        <td><input type="checkbox"></td>
+        <td th:text="${reservation.reservationNo}"></td>
+        <td th:text="${user.userId}"></td>
+        <td th:text="${user.userName}"></td>
+        <td th:text="${item.item}"></td>
+        <td th:text="${item.item}"></td>
+        <td th:text="${item.price}"></td>
+        <td th:text="${item.item}"></td>
+      </tr>
+    </table>
+    <br>
+
+    <!-- 주문취소/결제취소버튼 -->
+    <div style="text-align:right;">
+      <a href="#"><input type="button" value="주문취소" id="orderCancel"></a>
+      <a href="#"><input type="button" value="결제취소" id="payCancel"></a>
+    </div>
+    <br>
+    <!-- 페이징 -->
+    <div style="text-align:center;">
+      <ul class="pagination" th:if="${getReviewList.totalElements > 0}"
+                  th:with="pageNumber = ${getReviewList.pageable.pageNumber},
+                              pageSize = ${getReviewList.pageable.pageSize},
+                              totalPages = ${getReviewList.totalPages},
+                              startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+                              tempEndPage = ${startPage + pageSize -1 },
+                              endPage =  ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+          <li class="pagination_button" th:if="${pageNumber > 0}">
+            <a th:href="@{/review/reviewList(
+                    page=${pageNumber - 1},
+                    searchCondition=${searchCondition},
+                    searchKeyword=${searchKeyword})}">이전</a>
+          </li>
+        
+        
+          <li class="pagination_button" th:each="page : ${#numbers.sequence(startPage, endPage)}">
+          <!-- startPage와 endPage에 있는 숫자들을 page에 담아옴. -->
+            <a th:href="@{/review/reviewList(page=${page - 1},
+                    searchCondition=${searchCondition},
+                    searchKeyword=${searchKeyword})}"
+                    th:text="${page}"></a>
+          </li>
+        
+          <li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+            <a th:href="@{/review/reviewList(page=${pageNumber + 1},
+                    searchCondition=${searchCondition},
+                    searchKeyword=${searchKeyword})}">다음</a>
+          </li>
+      </ul>
+    </div>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상품 등록</title>
+  <style>
+    #container { width: 1200px; margin: 0 auto;}
+    #itemReg_T {
+      margin: 0 auto;
+      border-left: hidden; border-right: hidden;
+    }
+    #itemReg {
+      width: 100px;
+      height: 40px;
+    }
+  </style>
+  <script>
+    /*  https://jamesdreaming.tistory.com/211  */
+    $(function() {
+      $("#inputPrice").on("focus", function() {
+        var val = $("#inputPrice").val();
+        if(!isEmpty(val)) {
+          val = val.replace(/,/g,'');
+          $("#inputPrice").val(val);
+        }
+      });
+      $("#inputPrice").on("blur", function() {
+        var val = $("#inputPrice").val();
+        if(!isEmpty(val) && inNumeric(val)) {
+          val = currencyFormatter(val);
+          $("#inputPrice").val(val);
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <div id="container">
+    <h1>상품 등록</h1>
+    <!-- 상품등록내용 -->
+    <div>
+      <table border="1" style="width: 800px; height:300px; border-collapse: collapse;" id="itemReg_T">
+        <tr>
+          <th style="background: lightsteelblue;">상품 상태</th>
+          <td>&ensp;&ensp;
+            <select name="searchCondition">
+              <option value="OnSale" th:selected="${searchCondition == 'OnSale'}">판매중</option>
+              <option value="OutOfStock" th:selected="${searchCondition == 'OutOfStock'}">재고없음</option>
+              <option value="EndSale" th:selected="${searchCondition == 'EndSale'}">판매종료</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th style="background: lightsteelblue;">등록일</th>
+          <td th:text="${item.itemRegdate eq null ? '' : #strings.substring(item.itemRegdate, 0, 10)}">&ensp;&ensp;</td>
+        </tr>
+        <tr>
+          <th style="background: lightsteelblue;">이름</th>
+          <td>&ensp;&ensp;<input type="text">&ensp;&ensp;</td>
+        </tr>
+        <tr>
+          <th style="background: lightsteelblue;">설명</th>
+          <td>&ensp;&ensp;<textarea></textarea></td>
+        </tr>
+        <tr>
+          <th style="background: lightsteelblue;">가격</th>
+          <td>&ensp;&ensp;<input type="text" id="inputPrice">원</td>
+        </tr>
+        <tr>
+          <th style="background: lightsteelblue;">영양정보</th>
+          <td>
+            <div>
+              &ensp;&ensp;<input type="file">
+              <div data-placeholder="파일선택 버튼을 눌러 영양정보를 작성하세요."></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th style="background: lightsteelblue;">재고</th>
+          <td>&ensp;&ensp;<input type="number" min="0"></td>
+        </tr>
+        <tr>
+          <th colspan="2" style="border-bottom: hidden;">
+            <div style="text-align:right;">
+              <a href="#"><input type="button" value="상품 등록" id="itemReg"></a>
+            </div>
+          </th>
+        </tr>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
