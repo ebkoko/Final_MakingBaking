@@ -15,7 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="USER")
+@Table(name="T_MB_USER")
 @Data
 @SequenceGenerator(
 		name="UserSequenceGenerator",

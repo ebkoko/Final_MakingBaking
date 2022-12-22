@@ -19,7 +19,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="BOARD")
+@Table(name="T_MB_BOARD")
 @Data
 @SequenceGenerator(
 		name="BoardSequenceGenerator",
@@ -42,6 +42,7 @@ public class Board {	// Q&A(+답변), 공지사항, 이벤트 테이블
 	private int cateCode;	// 카테고리코드(CATEGORY)
 	private String boardTitle;	// 글제목
 	private String boardContent;	// 글내용
+	private String boardWriter;		// 작성자
 	private LocalDateTime boardRegdate = LocalDateTime.now();	// 작성일
 	private int boardCnt;	// 조회수
 	

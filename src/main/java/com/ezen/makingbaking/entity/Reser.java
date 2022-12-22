@@ -17,7 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="Reser")
+@Table(name="T_MB_RESER")
 @Data
 @SequenceGenerator(
 		name="ReserSequenceGenerator",

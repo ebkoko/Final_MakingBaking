@@ -17,7 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="ORDER")
+@Table(name="T_MB_ORDER")
 @Data
 @SequenceGenerator(
 		name="OrderSequenceGenerator",

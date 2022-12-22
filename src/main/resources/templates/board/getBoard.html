@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+	<title>Making Baking</title>  <!-- 회원 Q&A 작성 페이지 -->
+ 	<th:block layout:fragment="css">
+		<style>
+		    * {
+		      font-family: sans-serif;
+		      margin: 0; padding: 0;
+		      box-sizing: border-box;
+		      outline: none; 
+		      border: none;
+		      text-decoration: none;
+		    }
+		    #container {
+		      width: 1200px; height: 100%; 
+		      margin: 0 0 100px 0;
+		    }
+		    #high-nav {
+		      margin-top: 100px;
+		    }
+		    #high-nav:first-child { margin-left: 20px;}
+		    #high-nav>#notice-button {
+		      width: 130px; height: 50px;
+		      display: inline-block;
+		      font-size: 18px; font-weight: bold; 
+		      color: white; 
+		      background-color: #DC143C;
+		    }
+		    #high-nav>#event-button, #high-nav>#qna-button {
+		      width: 130px; height: 50px;
+		      display: inline-block;
+		      font-size: 18px; font-weight: bold; 
+		      color: black; 
+		      background-color: #fff;
+		      border: 1px solid #DC143C;
+		    }
+		    #high-container {
+		      width: 100%; height: fit-content;
+		      background-color: #FFFAF0;
+		      padding: 30px;
+		    }
+		    #mid-container{
+		      width: 100%; height: fit-content;
+		      background-color: #fff;
+		      padding: 30px;
+		    }
+		    #board-title { 
+		      width: 100%; height: 40px;
+		    }
+		    h3 {
+		      font-size: 22px;
+		      margin-right: 20px;
+		      display: inline-block;
+		    }
+		    #board-content {
+		      width: 100%; height: fit-content;
+		      border: 1px solid lightgray;
+		      border-radius: 10px;
+		      font-size: 18px;
+		      padding: 15px;
+		      margin: 10px 0 30px 0;
+		    }
+		    #btn-container {
+		      text-align: center;
+		    }
+		    #listbtn {
+		      width: 100px; height: 40px;
+		      font-size: 15px; font-weight: bold; 
+		      color: white; 
+		      background-color: #696969;
+		      border-radius: 5px;
+		    }
+		    #btn-container:after{
+		      content:'';
+		      display:block;
+		      clear:both;
+		    }
+		</style>
+ 	</th:block>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div id="container">
+		  <div id="high-nav">
+		    <button id="qna-button">
+		      Q&A
+		    </button>
+		    <button id="notice-button">
+		      공지사항
+		    </button>
+		    <button id="event-button">
+		      이벤트
+		    </button>
+		  </div>
+		  <div id="high-container">
+		    <div id="mid-container">
+		      <div id="board-title">
+		        <h3>공지사항 제목</h3>
+		      </div>
+		      <div id="board-content">
+		        <p>공지사항 내용 공지사항 내용</p>
+		      </div>
+		      <div id="btn-container">
+		        <input type="button" id="listbtn" value="목록">
+		      </div>      
+		    </div>
+		  </div>
+		</div>
+	</div>
+</body>
+</html>

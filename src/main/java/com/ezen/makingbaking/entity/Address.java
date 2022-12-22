@@ -17,7 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="ADDRESS")
+@Table(name="T_MB_ADDRESS")
 @Data
 @SequenceGenerator(
 		name="AddressSequenceGenerator",

@@ -17,7 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="CART")
+@Table(name="T_MB_CART")
 @Data
 @SequenceGenerator(
 		name="CartSequenceGenerator",

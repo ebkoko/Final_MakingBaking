@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+	<th:block layout:fragment="css">
+		  <style>
+		    * {
+		      margin: 0; padding: 0;
+		      box-sizing: border-box;
+		      outline: none; 
+		      border: none;
+		      text-decoration: none;
+		    }
+		    #container {
+		      width: 1200px;
+		      margin: 0 auto 100px;
+		    }
+		    h3 { 
+		      font-size: 24px;
+		      margin: 10px 0 0 10px;
+		    }
+		    #high-nav {
+		      margin-top: 100px;
+		    }
+		    #high-nav>#notice-button {
+		      width: 200px; height: 70px;
+		      display: inline-block;
+		      font-size: 32px; font-weight: bold;
+		      color: black; 
+		      background-color: #fff;
+		      padding-bottom: 30px;
+		    }
+		    #high-container {
+		      width: 100%; height: fit-content;
+		      background-color: #FFFAF0;
+		      padding: 30px;
+		    }
+		    #mid-container{
+		      width: 100%; height: fit-content;
+		      background-color: #fff;
+		      padding: 30px;
+		    }
+		    #list-table { width: 100%; border-collapse: collapse; }
+		    tr { height: 40px;}
+		    th { 
+		      border-bottom: 1px solid gray;
+		      font-size: 15px;
+		    }
+		    td { font-size: 15px;}
+		    #th-title { border-right: 1px solid gray;}
+		    #th-date { border-left: 1px solid gray;}
+		    .list-answer, .list-date { text-align: center;}
+		    .list-title { 
+		      padding: 0 5px;
+		      border-right: 1px solid gray;
+		    }
+		    .list-date { border-left: 1px solid gray;}
+		</style>
+	</th:block>
+</head>
+<body>
+<div layout:fragment="content" style="height: 80%;">
+	<div id="container">
+	  <div id="high-nav">
+	    <button id="notice-button">
+	      공지사항
+	    </button>
+	  </div>
+	  <div id="high-container">
+	    <div id="mid-container">
+	      <table id="list-table">
+	        <tr>
+	          <th width="80%" id="th-title">제목</th>
+	          <th width="20%" id="th-date">작성일</th>
+	        </tr>
+	        <tr>
+	          <td class="list-title">공지사항입니다.</td>
+	          <td class="list-date">2022-12-20</td>
+	        </tr>
+	        <tr>
+	          <td class="list-title">공지사항입니다.</td>
+	          <td class="list-date">2022-12-20</td>
+	        </tr>
+	        <tr>
+	          <td class="list-title">공지사항입니다.</td>
+	          <td class="list-date">2022-12-20</td>
+	        </tr>
+	        <tr>
+	          <td class="list-title">공지사항입니다.</td>
+	          <td class="list-date">2022-12-20</td>
+	        </tr>
+	        <tr>
+	          <td class="list-title">공지사항입니다.</td>
+	          <td class="list-date">2022-12-20</td>
+	        </tr>
+	        <tr>
+	          <td class="list-title">공지사항입니다.</td>
+	          <td class="list-date">2022-12-20</td>
+	        </tr>
+	        <tr>
+	          <td class="list-title">공지사항입니다.</td>
+	          <td class="list-date">2022-12-20</td>
+	        </tr>
+	        <tr>
+	          <td class="list-title">공지사항입니다.</td>
+	          <td class="list-date">2022-12-20</td>
+	        </tr>
+	        <tr>
+	          <td class="list-title">공지사항입니다.</td>
+	          <td class="list-date">2022-12-20</td>
+	        </tr>
+	        <tr>
+	          <td class="list-title">공지사항입니다.</td>
+	          <td class="list-date">2022-12-20</td>
+	        </tr>
+	      </table>
+	    </div>
+	  </div>
+	</div>
+</div>
+</body>
+</html>

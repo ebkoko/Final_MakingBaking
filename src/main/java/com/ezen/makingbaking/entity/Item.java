@@ -19,7 +19,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="ITEM")
+@Table(name="T_MB_ITEM")
 @Data
 @SequenceGenerator(
 		name="ItemSequenceGenerator",
