@@ -1,664 +1,753 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-  <title>원데이클래스 상세</title>
-  <style>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+	  
+	<!-- head 영역 시작 -->
+	<!-- 개별적으로 사용할 css, js 링크를 걸기 위해서 남겨둠 -->
+	<head>
+		<th:block layout:fragment="css">
+			<style>
+				.entire-wrap {
+			      width: 100%;
+			      height: 100%;
+			      position: relative;
+			    }
+			    .dayclass {
+			      position: relative;
+			      width: 950px;
+			      margin: 0 auto;
+			      margin-top: 100px;
+			      padding-top: 30px;
+			    }
+			
+			    hr {
+			      margin-top: 30px;
+			    }
+			
+			    /* 내용 h2, p 글씨색상 공통 */
+			    .c_intro_title, .c_map_title, .c_rvw_title, .c_cancle_title {
+			      color: rgb(74, 74, 74);
+			      font-weight: 600;
+			    }
+			    .c_intro_text, .c_map_text {
+			      font-size: 15px;
+			      color: rgb(102, 102, 102);
+			      line-height: 28px;
+			    }
+			
+			
+			    /* dc_banner */
+			    .dc_banner_container {
+			      width: 100%;
+			      background-color: white;
+			    }
+			    .dc_banner {
+					display: flex;
+					justify-content: space-around;
+				}
+			    .banner_mian_img {
+			      	margin-left: 50px;
+			    }
+			    .banner_explain_sTitle {
+					margin-top: 10px;
+				}
+			    .banner_explain {
+			     	margin-top: 25px;
+			     	margin-right: 20px;
+			    }
+			    .banner_explain_details {
+			      	margin-top: 80px;
+			    }
+			    .banner_explain_KRW{
+					margin-top: 10px;
+				}
+			    .banner_explain_btn {
+			      	margin-top: 30px;
+			    }
+			    #dayclassRsrvtBtn, #dayclassLikeBtn {
+			      width: 100px;
+			      height: 40px;
+			      border: 1px solid rgb(95, 0, 128);
+			      border-radius: 4px;
+			      background-color: white;
+			      text-align: center;
+			      display: inline-block;
+			      color: rgb(95, 0, 128);
+			      font-size: 16px;
+			      font-weight: 500;
+			      margin-right: 10px;
+			
+			    }
+			    #dayclassRsrvtBtn:hover{
+			      background-color: rgb(95, 0, 128);
+			      color: white;
+			      font-weight: 510;
+			    }
+			
+			    #dayclassLikeBtn:hover {
+			      background-color: rgb(95, 0, 128);
+			      color: white;
+			      font-weight: 510;
+			    }
+			
+			
+			
+			    /* dc_menu */
+			    .dc_menu {
+			      margin-top: 60px;
+			    }
+			    .menu ul li {
+			      text-decoration: none;
+			      list-style:none;
+			      color: rgb(51, 51, 51);
+			      float: left;
+			      width: 25%;
+			      line-height: 50px;
+			      text-align: center;
+			      
+			      background-color: rgb(234, 234, 234);
+			    }
+			    .menu ul a {
+			      text-decoration: none;
+			      color: rgb(51, 51, 51);
+			    }
+			
+			    .menu a:hover {
+			      font-weight: 600;
+			      color: rgb(95, 0, 128); 
+			    }
+			
+			   
+			    /* dc_cotents */
+			    .dc_contents_container {
+			      margin-top: 200px;
+			    }
+				/* c_map */
+				.c_map {
+					margin-top:40px;
+				}
+			    /* dc_content_apply 예약날짜 예약 시간*/
+			    .c_apply ul li {
+			      list-style:none;
+			      float: left;
+			      width: 50%;
+			      font-size: 17px;
+			      font-weight: 700;
+			      color: rgb(74, 74, 74);
+			      margin-bottom: 100px;
+			    }
+			    .c_apply ul li input {
+			      border: none; 
+			      background: transparent;
+			      width: 200px;
+			      height: 25px;
+			    }
+			
+			    /* 후기 */
+			    .rvw_wirte_detail {
+			    
+			    }
+			    .rvw_option {
+			      margin-bottom:15px;
+			      float:right;
+			    }
+			    #rvw_array {
+				 border: 1px solid rgb(102, 102, 102);
+				 width: 100px;
+				 height: 23px;
+				 
+				}
+			    .rvw_writeBtn {
+				  
+			      text-decoration: none;
+			      background: rgb(95, 0, 128);
+			      border: 1px solid rgb(95, 0, 128);
+			      color: white;		      
+			      display: inline-block;
+			      text-align: center;    
+			      font-size: 14px;
+			      line-height: 0.9;
+			      padding: 5px 10px 4px;  
+			    }
+			    .rvw_writeBtn:hover {
+			      background: white;
+			      border: 1px solid white;
+			      font-weight: 600;
+			      color: rgb(95, 0, 128);
+			    }
+			    table {
+			      width: 100%;
+			      border-collapse: collapse;
+			      border-spacing: 2px;
+			      text-align: center;
+			    }
+			    table th{
+			      border:1px solid rgb(102, 102, 102);
+			      border-left: none;
+			      border-right: none;
+			      height: 30px;
+			      font-size: 14.5px;
+			      color: rgb(102, 102, 102);
+			    }
+			    table td{
+			      border:1px solid rgb(102, 102, 102);
+			      border-left: none;
+			      border-right: none;
+			      height: 90px;
+			      font-size: 13.5px;
+			      color: rgb(102, 102, 102);
+			    }
+			 
+			    .rvw_list{
+			      width: 100%;
+			    text-align: center;
+			    height: 25px;
+			    }
+			    .rvw_pasing{
+			      margin-top: 30px;
+			      margin-bottom: 50px;
+			    }
+			    .pasing {
+			      text-decoration: none;
+			      width: 100%;
+			      text-align: center;
+			      height: 25px;
+			      
+			    }
+			    .pasing a {
+			      text-decoration: none;
+			      /* border: 0.5px solid rgb(102, 102, 102);
+			      border-radius: 2px; */
+			      padding: 3px 10px 3px 10px ;
+			      color: rgb(102, 102, 102);
+			      font-size: 16px;
+			      
+			    }
+			    .pasing a:hover {
+			      font-weight: 600;
+			      /* border: 1.2px solid rgb(95, 0, 128);
+			      background-color: rgb(234, 234, 234); */
+			      color: rgb(95, 0, 128);
+			    }
+			
+			
+			    /* 환불 취소*/
+			    .c_cancle_text_A{ 
+			      margin-top: 50px;
+			      margin-bottom: -5px;
+			      font-weight: 600;
+			      font-size: 18px;
+			      color: rgb(102, 102, 102);
+			     
+			    }
+			    .c_cancle_text_B{ 
+				  margin-top: 10px;	
+			      font-size: 15px;
+			      color: rgb(102, 102, 102);
+			    }
+			
+			    /* 문의 */
+			    .c_Qna {
+			      height: 100px;
+			      margin-top: 100px;
+			      margin-bottom: 100px;
+			      margin-left: 0px;
+			    }
+			    .c_Qna ul li strong {
+			      color: rgb(95, 0, 128);
+			    }
+			    .c_Qna ul li {
+			      list-style:none;
+			      float: left;
+			      width: 50%;
+			    }
+			    .c_Qna_text_A, .c_Qna_text_B {
+				  margin-top:5px;
+			      font-size: 15px;
+			      color: rgb(102, 102, 102);
+			      line-height: 28px;
+			    }
+			    .c_Qna_text_C {
+			      margin-top: 5px;
+			      font-size: 13px;
+			      color: rgb(102, 102, 102);
+			     
+			    }
+			
+			    /* 안내 **/
+			    .c_refundGuide {
+			      display: flex;
+			      position: relative;
+			      padding: 14px 0px 17px;
+			      border-top: 1px solid rgb(221, 221, 221);
+			      border-right: 1px solid rgb(221, 221, 221);
+			      border-left: 1px solid rgb(221, 221, 221);
+			      border-image: initial;
+			      border-bottom: none;
+			      font-weight: 400;
+			      font-size: 14px;
+			      
+			    }
+			    .c_cancleGuide {
+			      display: flex;
+			      position: relative;
+			      padding: 14px 0px 17px;
+			      border: 1px solid rgb(221, 221, 221);
+			      font-weight: 400;
+			      font-size: 14px;
+			     
+			    }
+			    .c_refundG_title, .c_cancleG_title {
+			      width: 200px;
+			      padding: 14px 0px 17px;
+			      padding-left: 29px;
+			      font-weight: 600;
+			      font-size: 16px;
+			      color: rgb(95, 0, 128);
+			    }
+			    .c_refundG_text, .c_cancleG_text {
+				  margin-top:15px;
+			      margin-left: 50px;
+			      font-size: 15px;
+			      color: rgb(102, 102, 102);
+			    }
+			    .refundGuideBtn, .cancleGuideBtn {
+			      position: absolute;
+			      right: 25px;
+			      top: 50%;
+			      margin-top: -14px;
+			      padding-right: 20px;
+			      border: none;
+			      font-weight: 600;
+			      font-size: 14px;
+			      color: rgb(95, 0, 128);
+			      line-height: 24px;
+			      letter-spacing: -0.4px;
+			      background-color: transparent;
+			    }
+			    
+			    /* 안내 자세히 보기 - 교환 및 환불 */
+			    .c_refundG_01 {
+					display: flex;
+				    padding: 39px 0 40px;
+				    border-top: 1px solid #ddd;
+				}
+			    .c_refundG_01title {
+					width: 250px;
+				    padding-left: 31px;
+				    font-weight: 600;
+				    font-size: 14px;
+				    color: rgb(102, 102, 102);
+				    line-height: 25px;
+				}
+				.c_refundG_01text_A {
+				 	padding: 2px 20px 0 0;
+				    font-weight: 300;
+				    font-size: 14px;
+				    line-height: 22px;
+				    white-space: pre-line;
+				}
+				.c_refundG_01text_B {
+					margin-top:10px;
+				}
+				
+				.c_refundG_02 {
+					display: flex;
+				    padding: 39px 0 40px;
+				    border-top: 1px solid #ddd;
+				}
+			    .c_refundG_02title {
+					width: 340px;
+				    padding-left: 31px;
+				    font-weight: 600;
+				    font-size: 14px;
+				    color: rgb(102, 102, 102);
+				    line-height: 25px;
+				}
+				.c_refundG_02text {
+					
+				 	padding: 2px 20px 0 0;
+				    font-weight: 300;
+				    font-size: 14px;
+				    line-height: 22px;
+				    white-space: pre-line;
+				    margin-top: -22px
+				}
+				.c_refundG_02text_A  {
+					
+					font-weight: 600;
+					color: rgb(95, 0, 128);					
+				}
+				.c_refundG_02text_B {
+					margin-top:10px;
+					font-weight: 600;
+					color: rgb(95, 0, 128);					
+				}				
+				.c_refundG_03 {
+					display: flex;
+				    padding: 39px 0 40px;
+				    border-top: 1px solid #ddd;
+				}
+			    .c_refundG_03title {
+					width: 250px;
+				    padding-left: 31px;
+				    font-weight: 600;
+				    font-size: 14px;
+				    color: rgb(102, 102, 102);
+				    line-height: 25px;
+				}
+				.c_refundG_03text {
+				 	padding: 2px 20px 0 0;
+				    font-weight: 300;
+				    font-size: 14px;
+				    line-height: 22px;
+				    white-space: pre-line;
+				    margin-top: -22px;
+				}
+				
+				
+				/* 안내 자세히 보기 - 주문 및 예약 취소 안내 */
+				.c_cancleG_01 {
+					display: flex;
+				    padding: 39px 0 40px;
+				    border-top: 1px solid #ddd;
+				}
+			    .c_cancleG_01title {
+					width: 250px;
+				    padding-left: 31px;
+				    font-weight: 600;
+				    font-size: 14px;
+				    color: rgb(102, 102, 102);
+				    line-height: 25px;
+				}
+				.c_cancleG_01text {
+				 	padding: 2px 20px 0 0;
+				    font-weight: 300;
+				    font-size: 14px;
+				    line-height: 22px;
+				    white-space: pre-line;
+				    margin-top: -23px
+				}
+				.c_cancleG_02 {
+					display: flex;
+				    padding: 39px 0 40px;
+				    border-top: 1px solid #ddd;
+				    border-bottom: 1px solid #ddd;
+				}
+			    .c_cancleG_02title {
+					width: 250px;
+				    padding-left: 31px;
+				    font-weight: 600;
+				    font-size: 14px;
+				    color: rgb(102, 102, 102);
+				    line-height: 25px;
+				}
+				.c_cancleG_02text {					
+				 	padding: 2px 20px 0 0;
+				    font-weight: 300;
+				    font-size: 14px;
+				    line-height: 22px;
+				    white-space: pre-line;
+				    margin-top: -22px;
+				    
+				}
+				.c_cancleG_02text_A,  .c_cancleG_02text_B{
+					color: rgb(95, 0, 128);	
+				}
+			</style>
+		</th:block>
+		<th:block layout:fragment="script">
+			<script th:inline="javascript">
+				
+			</script>
+		</th:block>
+	</head>
+	<!-- head 영역 끝 -->
+	
+	<body>
+		<div layout:fragment="content">
+			  <div class="entire-wrap" >	  
+			  <div class="dayclass">
+			    <main > 
+			      <section class="dc_banner"> 
+			        <div class="dc_banner_container">
+			          <div class="dc_banner">
+			            <div class="banner_mainImg">
+			              <img class="banner_main_img" th:src="@{/images/class_main.jpg}"
+			              width="350px">
+			            </div>
+			            <div class="banner_explain">        
+			              <h2>타이틀 ${dayclass.dayclassTitle }</h2>
+			              <div class="banner_explain_sTitle">
+			              <p>소제목 ${}</p>
+			              </div>
+			              <div class="banner_explain_details">
+			                <span><img src="/images/class_day.png" width="17px">&ensp;원데이 클래스&ensp;</span>  
+			                <span><img src="/images/class_time.png" width="16.5px">&ensp;3시간&ensp;</span>
+			                <span><img src="/images/class_location.png" width="18px">서울/강남${} </span>
+			              </div>
+			              <div class="banner_explain_KRW">
+			                <span>KRW ${}</span>
+			              </div> 
+			              <div class="banner_explain_btn">
+			             
+			                  <span><button type="button" id="dayclassRsrvtBtn" value="dayclassRsrvt">예약하기  
+			                  </button><a href=""></a></span>
+			          
+			                  <span><button type="button" id="dayclassLikeBtn" th:value="@{dayclassLike}">♡ 1,809<!--<span 
+			                  id="likeTd">${dayclassLikeCnt }</span>--></button></span>
+			              </div>
+			            </div>
+			            
+			          </div>
+			        </div>
+			      </section>
+			      <section class="dc_menu">
+			        <div class="menu">
+			          <ul style="padding: 0;">
+			            <li><a href="/dayclass/getDayClass.do?dayclassCode=${dayclass.dayclassCode}#classIntro" 
+			              class="m_intro_a">클래스 소개</a></li>
+			            <li><a href="/dayclass/getDayClass.do?dayclassCode=${dayclass.dayclassCode}#classReview" 
+			              class="m_rvw_a">후기${rvwCnt }</a></li>
+			            <li><a href="/dayclass/getDayClass.do?dayclassCode=${dayclass.dayclassCode}#classApply" 
+			              class="m_apply_a">신청하기</a></li>
+			            <li><a href="/dayclass/getDayClass.do?dayclassCode=${dayclass.dayclassCode}#classCancle" 
+			              class="m_cancle_a">취소/환불</a></li>
+			          </ul>
+			        </div>    
+			      </section>
+			      <section class="dc_contents">
+			        <div class="dc_contents_container">
+			          <div class="contents">
+			            <div class="c_intro" id="classIntro" >
+			              <h3 class="c_intro_title">클래스 소개</h3>
+			              <p class="c_intro_text">
+			                국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국
+			                민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있으며, 법률에 저촉되지 아니하는 범위안에서 내
+			                부규율에 관한 규칙을 제정할 수 있다.              
+			                국무총리는 국회의 동의를 얻어 대통령이 임명한다. 헌법개정안이 제2항의 찬성을 얻은 때에는 헌법개 
+			                정은 확정되며, 대통령은 즉시 이를 공포하여야 한다.
+			                위원은 정당에 가입하거나 정치에 관여할 수 없다. 여자의 근로는 특별한 보호를 받으며, 고용·임금 
+			                및 근로조건에 있어서 부당한 차별을 받지 아니한다.
+			                행정권은 대통령을 수반으로 하는 정부에 속한다. 대한민국의 경제질서는 개인과 기업의 경제상의 자
+			                유와 창의를 존중함을 기본으로 한다. 대통령은 법률에서 구체적으로 범위를 정하여 위임받은 사항과 
+			                법률을 집행하기 위하여 필요한 사항에 관하여 대통령령을 발할 수 있다.</p>
+			            </div>
+			            <div class="c_map" id="classMap" style="width:100%; height:500px;">
+			              <h3 class="c_map_title">클래스 위치</h3>
+			              <p th:class="@{c_map_text}">서울시 강남구 어쩌고 저쩌고</p>
+			            </div>
+			
+			            <div class="c_apply" id="classApply" >
+			              <ul style="padding-left: 0;">
+			                <li>예약 날짜  <input type="text" id="rsrvtDate"></li>
+			                <li>예약 시간  <input type="text" id="rsrvtTime"></li>
+			              </ul>
+			              
+			              
+			              <!--
+			              <a href="#" target="" role="button" aria-haspopup="true" aria-expanded="false" 
+			              class="rsrvtDateBtn">예약 날짜</a>
+			              <a href="#" target="" role="button" aria-haspopup="true" aria-expanded="false" 
+			              class="rsrvtTimeBtn">예약 시간</a>
+			              -->
+			            </div>
+			            <div class="c_rvw" id="classReview">
+			              <hr>
+			              <h3 class="c_rvw_title" >클래스 후기</h3>
+			              <div class="c_rvw_write">
+			                <ul>
+			                  <li>
+			                    <a href onclick="changeAll('a')"; return="false" id="chgA"></a>
+			                  </li>
+			                  <li>
+			                    <a href onclick="changePhoto('p')"; return="false" id="chgP"></a>
+			                  </li>
+			                </ul>
+			                <input type="hidden" id="">
+			                <input type="hidden" id="">
+			                <div class="rvw_wirte_detail">
+			                  <div class="rvw_option"> 
+			                    <select name="rvw_array" id="rvw_array">
+			                      <option>평점순</option>
+			                      <option>최신순</option>
+			                      <option>오래된순</option>
+			                    </select>
+			                    <a href="" onclick="" class="rvw_writeBtn">
+			                      <span class="rvw_write">후기 작성하기</span>
+			                    </a>
+			                  </div>
+			                  <span>
+			                    <table class="rvw_list">
+			                      <caption></caption>
+			                      <colgroup>
+			                        <col width="140">
+			                        <col width="">
+			                        <col width="130">
+			                        <col width="120">
+			                        
+			                      </colgroup>
+			                      <thead>
+			                        <tr>
+			                          <th scope="col">평점</th>
+			                          <th scope="col">내용</th>
+			                          <th scope="col">작성일자</th>
+			                          <th scope="col">작성자</th>
+			                        </tr>
+			                      </thead>
+			                      <tbody>
+			                        <tr>
+			                          <td>⭐⭐⭐⭐⭐</td>
+			                          <td>국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있다.</td>
+			                          <td>2022/12/25</td>
+			                          <td>abcde***</td>
+			                        </tr>
+			                        <tr>
+			                          <td>⭐⭐</td>
+			                          <td>국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있다.</td>
+			                          <td>2022/12/25</td>
+			                          <td>abcde***</td>
+			                        </tr>
+			                        <tr>
+			                          <td>⭐⭐⭐⭐⭐</td>
+			                          <td>국회의원은 법률이 정하는 직을 겸할 수 없다. </td>
+			                          <td>2022/12/25</td>
+			                          <td>abcde***</td>
+			                        </tr>
+			                        <tr>
+			                          <td>⭐⭐⭐</td>
+			                          <td>국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있다.</td>
+			                          <td>2022/12/25</td>
+			                          <td>abcde***</td>
+			                        </tr>
+			                      </tbody>
+			                    </table>
+			                    <div class="rvw_pasing">
+			                      <div class="pasing">
+			                        <a href="" title="첫 페이지" class="firstPage" onclick="">《</a>
+			                        <a href="" title="이전 페이지" class="prevPage" onclick="">〈</a>
+			                        <a href="" title="1 페이지" class="Page1" onclick="">1</a>
+			                        <a href="" title="2 페이지" class="Page2" onclick="">2</a>
+			                        <a href="" title="3 페이지" class="Page3" onclick="">3</a>
+			                        <a href="" title="4 페이지" class="Page4" onclick="">4</a>
+			                        <a href="" title="5 페이지" class="Page5" onclick="">5</a>
+			                        <a href="" title="다음 페이지" class="nextPage" onclick="">〉</a>
+			                        <a href="" title="마지막 페이지" class="endPage" onclick="">》</a>
+			                      </div>
+			                    </div>
+			                  
+			                  </span>
+			                </div>
+			              </div>
+			
+			            </div>
+			          </div>
+			          <div class="c_cancle" id="classCancle" >
+			            <hr>
+			            <h2 class="c_cancle_title">취소/환불</h2>
+			            <p class="c_cancle_text_A">궁금하신 점이나 서비스 이용에 불편한 점이 있으신가요?</p>
+			            <p class="c_cancle_text_B">문제가 되는 부분을 사진을 찍어 아래 중 편하신 방법으로 접수해 주시면 
+			              빠르게 도와드리겠습니다.</p>
+			          </div>
+			          <div class="c_Qna">
+			            <ul style="padding-left: 0;">
+			              <li>
+			                <strong>| 전화 문의</strong>
+			                <p class="c_Qna_text_A">
+			                  월~금요일 오전 9시 - 오후 6시<br>
+			                  주말/공휴일 오전 9시 - 오후 3시
+			                </p>
+			              </li>
+			              <li>
+			                <strong>| 홈페이지 문의</strong>
+			                <p class="c_Qna_text_B">
+			                  365일<br>
+			                  로그인 > 마이페이지 > 1:1 문의
+			                </p>
+			                <p class="c_Qna_text_C">
+			                  고객센터 운영 시간에 순차적으로 답변해드리겠습니다.
+			                </p>
+			              </li>
+			            </ul>
+			          </div>
+			          <div class="c_guide">
+			            <div class="c_refundGuide">
+			              <strong class="c_refundG_title">교환 및 환불 안내</strong>
+			              <p class="c_refundG_text">교환 및 환불이 필요하신 경우 고객센터로 문의해주세요.</p>
+			              <button type="button" class="refundGuideBtn">자세히 보기 ▼</button>
+			            </div>
+			            <div class="c_refundG_01">
+			              <strong class="c_refundG_01title">01. 상품에 문제가 있는 경우</strong>
+			              <p class="c_refundG_01text_A">받으신 상품이 표시/광고/내용 또는 계약과 다른 경우에는 상품을 받은 날부터 1개월 이내,
+			              그 사실을 알게 된 날부터 14일 이내에 교환 및 환불을 요청하실 수 있습니다.
+			              <span class="c_refundG_01text_B">※ 배송 상품에 문제가 있는 것으로 확인되면 배송비는 MakingBaking이 부담합니다.</span>
+			              </p>
+			            </div>
+			            <div class="c_refundG_02">
+			              <strong class="c_refundG_02title">02. 단순 변심, 주문 착오의 경우</strong>
+			              <p class="c_refundG_02text">
+			              	<strong class="c_refundG_02text_A">실온/냉장 식품</strong><br>
+			              	재판매가 불가한 상품의 특성상, 단순변심, 주문 착오 시 교환 및 반품이 어려운 점 양해 부탁드립니다.
+			              	상품에 따라 조금씩 맛이 다를 수 있으며, 개인의 기호에 따라 같은 상품도 다르게 느끼실 수 있습니다.			              	
+			              	
+			              	<strong class="c_refundG_02text_B">유통기한 30일 이상 식품</strong><br>
+			              	상품을 받은 날부터 7일 이내 관리자에게 문의해주세요.
+			              	<span>※ 단순 변심으로 인한 배송 상품 교환 또는 환불의 경우 고객님께서 배송비 6,000원을 부담하셔야 합니다.(주문건 배송비를 결제하셨을 경우 3,000원)</span>	
+			              </p>
+			            </div>		            
+			            <div class="c_refundG_03">
+			              <strong class="c_refundG_03title">03. 교환/반품이 불가한 경우</strong>
+			              <p class="c_refundG_03text">
+			              	다음에 해당하는 교환/환불 신청은 처리가 어려울 수 있으니 양해 부탁드립니다.
+			              	<span>
+			              	- 고객님의 책임 있는 사유로 상품이 멸시되거나 훼손된 경우
+			              	- 고객님의 사용 또는 일부 소비로 상품의 가치가 감소한 경우
+			              	- 시간이 지나 다시 판매하기 곤란할 정도로 상품의 가치가 감소한 경우
+			              	- 복제가 가능한 상품의 포장이 훼손된 경우
+			              	- 고객님의 주문에 따라 개별적으로 생산되는 상품의 제작이 이미 진행된 경우
+			              	</span>
+			              </p>
+			            </div>
+			            
+			            
+			            <div class="c_cancleGuide">
+			              <strong class="c_cancleG_title">주문 및 예약 취소 안내</strong>
+			              <p class="c_cancleG_text">상품 주문 및 클래스 예약을 취소하실 수 있습니다.</p>
+			              <button type="button" class="cancleGuideBtn">자세히 보기 ▼</button>
+			            </div>
+			            <div class="c_cancleG_01">
+			              <strong class="c_cancleG_01title">상품 주문 취소 관련</strong>
+			              <p class="c_cancleG_01text">
+			              - [배송준비중] 부터는 취소가 불가하니, 반품으로 진행해주세요.
+			              - 상품에 반품이 불가할 수 있습니다.
+			              - 일부 예약상품은 배송 3~4일 전에만 취소 가능합니다
+			              - 주문상품의 부분취소는 불가능합니다. 전체 주문 취소 후 다시 구매 해주세요.
+			              </p>
+			            </div>
+			            <div class="c_cancleG_02">
+			              <strong class="c_cancleG_02title">클래스 예약 취소 관련</strong>
+			              <p class="c_cancleG_02text">
+			              	<strong class="c_cancleG_02text_A">클래스 예약 취소</strong><br>
+			              	- 클래스 예약 취소는, 클래스 진행 1일 전까지 취소 가능합니다.
+			              	- 클래스 예약은 당일 취소가 불가합니다.
+			              	
+			              	<strong class="c_cancleG_02text_B">클래스 예약 환불</strong><br>
+						 	- 클래스 진행 후 환불은 불가합니다.
+						  	- 클래스 진행 1일 전 취소시 환불 가능하니, 고객센터에 문의해주세요.
+			              </p>
+			            </div>
 
-    .entire-wrap {
-      width: 100%;
-      height: 100%;
-      position: relative;
-    }
-    .dayclass {
-      position: relative;
-      width: 850px;
-      margin: 0px auto;
-      padding-top: 30px;
-    }
+			          </div>
+			          <br><br><br><br><br><br><br><br><br>
+			        </div>
+			      </section>  
+			  	</main>
+			    </div>
+			
+			  </div>
 
-    hr {
-      margin-top: 30px;
-    }
-
-    /* 내용 h2, p 글씨색상 공통 */
-    .c_intro_title, .c_map_title, .c_rvw_title, .c_cancle_title {
-      color: rgb(74, 74, 74);
-      font-weight: 600;
-    }
-    .c_intro_text, .c_map_text {
-      font-size: 15px;
-      color: rgb(102, 102, 102);
-      line-height: 28px;
-    }
-
-    /* dc_banner */
-    .dc_banner_container {
-      width: 100%;
-      background-color: white;
-    }
-    .banner_mian_img {
-      margin-left: 80px;
-    }
-    .banner_explain {
-      width: 500px;
-      position: absolute;
-      left: 450px;
-      top: 50px;
-    }
-    .banner_explain_details {
-      margin-top: 30px;
-    }
-    .banner_explain_btn {
-      margin-top: 30px;
-    }
-    #dayclassRsrvtBtn, #dayclassLikeBtn {
-      width: 100px;
-      height: 40px;
-      border: 1px solid rgb(95, 0, 128);
-      border-radius: 4px;
-      background-color: white;
-      text-align: center;
-      display: inline-block;
-      color: rgb(95, 0, 128);
-      font-size: 16px;
-      font-weight: 500;
-      margin-right: 10px;
-
-    }
-    #dayclassRsrvtBtn:hover{
-      background-color: rgb(95, 0, 128);
-      color: white;
-      font-weight: 510;
-    }
-
-    #dayclassLikeBtn:hover {
-      background-color: rgb(95, 0, 128);
-      color: white;
-      font-weight: 510;
-    }
-
-
-
-    /* dc_menu */
-    .dc_menu {
-      margin-top: 60px;
-    }
-    .menu ul li {
-      text-decoration: none;
-      list-style:none;
-      color: rgb(51, 51, 51);
-      float: left;
-      width: 25%;
-      line-height: 50px;
-      text-align: center;
-      
-      background-color: rgb(234, 234, 234);
-    }
-    .menu ul a {
-      text-decoration: none;
-      color: rgb(51, 51, 51);
-    }
-
-    .menu a:hover {
-      font-weight: 600;
-      color: rgb(95, 0, 128); 
-    }
-
-   
-    /* dc_cotents */
-    .dc_contents_container {
-      margin-top: 200px;
-    }
-
-    /* dc_content_apply 예약날짜 예약 시간*/
-    .c_apply ul li {
-      list-style:none;
-      float: left;
-      width: 50%;
-      font-size: 17px;
-      font-weight: 700;
-      color: rgb(74, 74, 74);
-      margin-bottom: 100px;
-    }
-    .c_apply ul li input {
-      border: none; 
-      background: transparent;
-      width: 200px;
-      height: 25px;
-    }
-
-    /* 후기 */
-    .rvw_wirte_detail {
-    
-    }
-    .rvw_option {
-      
-    }
-    .rvw_writeBtn {
-      text-decoration: none;
-      background: rgb(95, 0, 128);
-      border: 1px solid rgb(95, 0, 128);
-      color: white;
-      
-      display: inline-block;
-      text-align: center;
-      
-      font-size: 14px;
-      line-height: 0.9;
-      padding: 5px 10px 4px;  
-    }
-    .rvw_writeBtn:hover {
-      background: white;
-      border: 1px solid white;
-      font-weight: 600;
-      color: rgb(95, 0, 128);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      border-spacing: 2px;
-      text-align: center;
-    }
-    table th{
-      border:1px solid rgb(102, 102, 102);
-      border-left: none;
-      border-right: none;
-      height: 30px;
-      font-size: 14.5px;
-      color: rgb(102, 102, 102);
-    }
-    table td{
-      border:1px solid rgb(102, 102, 102);
-      border-left: none;
-      border-right: none;
-      height: 90px;
-      font-size: 13.5px;
-      color: rgb(102, 102, 102);
-    }
- 
-    .rvw_list{
-      width: 100%;
-    text-align: center;
-    height: 25px;
-    }
-    .rvw_pasing{
-      margin-top: 30px;
-      margin-bottom: 50px;
-    }
-    .pasing {
-      text-decoration: none;
-      width: 100%;
-      text-align: center;
-      height: 25px;
-      
-    }
-    .pasing a {
-      text-decoration: none;
-      /* border: 0.5px solid rgb(102, 102, 102);
-      border-radius: 2px; */
-      padding: 3px 10px 3px 10px ;
-      color: rgb(102, 102, 102);
-      font-size: 16px;
-      
-    }
-    .pasing a:hover {
-      font-weight: 600;
-      /* border: 1.2px solid rgb(95, 0, 128);
-      background-color: rgb(234, 234, 234); */
-      color: rgb(95, 0, 128);
-    }
-
-
-    /* 환불 취소*/
-    .c_cancle_text_A{ 
-      margin-top: 50px;
-      margin-bottom: -5px;
-      font-weight: 600;
-      font-size: 18px;
-      color: rgb(102, 102, 102);
-     
-    }
-    .c_cancle_text_B{ 
-      font-size: 15px;
-      color: rgb(102, 102, 102);
-    }
-
-    /* 문의 */
-    .c_Qna {
-      height: 100px;
-      margin-top: 100px;
-      margin-bottom: 100px;
-      margin-left: 0px;
-    }
-    .c_Qna ul li strong {
-      color: rgb(95, 0, 128);
-    }
-    .c_Qna ul li {
-      list-style:none;
-      float: left;
-      width: 50%;
-    }
-    .c_Qna_text_A, .c_Qna_text_B {
-      font-size: 15px;
-      color: rgb(102, 102, 102);
-      line-height: 28px;
-    }
-    .c_Qna_text_C {
-      margin-top: -5px;
-      font-size: 13px;
-      color: rgb(102, 102, 102);
-     
-    }
-
-    /* 안내 **/
-    .c_refundGuide {
-      display: flex;
-      position: relative;
-      padding: 14px 0px 17px;
-      border-top: 1px solid rgb(221, 221, 221);
-      border-right: 1px solid rgb(221, 221, 221);
-      border-left: 1px solid rgb(221, 221, 221);
-      border-image: initial;
-      border-bottom: none;
-      font-weight: 400;
-      font-size: 14px;
-      
-    }
-    .c_cancleGuide {
-      display: flex;
-      position: relative;
-      padding: 14px 0px 17px;
-      border: 1px solid rgb(221, 221, 221);
-      font-weight: 400;
-      font-size: 14px;
-     
-    }
-    .c_refundG_title, .c_cancleG_title {
-      width: 179px;
-      padding: 14px 0px 17px;
-      padding-left: 29px;
-      font-weight: 600;
-      font-size: 16px;
-      color: rgb(95, 0, 128);
-    }
-    .c_refundG_text, .c_cancleG_text {
-      margin-left: 40px;
-      font-size: 15px;
-      color: rgb(102, 102, 102);
-    }
-    .refundGuideBtn, .cancleGuideBtn {
-      position: absolute;
-      right: 25px;
-      top: 50%;
-      margin-top: -14px;
-      padding-right: 20px;
-      border: none;
-      font-weight: 600;
-      font-size: 14px;
-      color: rgb(95, 0, 128);
-      line-height: 24px;
-      letter-spacing: -0.4px;
-      background-color: transparent;
-    }
-
-  </style> 
-</head>
-<body>
-  <div class="entire-wrap" >
-  <jsp:include page="${pageContext.request.contextPath }/header.jsp"></jsp:include>
-  <div class="dayclass">
-    <main id="container"> 
-      <section class="dc_banner"> 
-        <div class="dc_banner_container">
-          <div class="dc_banner">
-            <div class="banner_mainImg">
-              <img class="banner_mian_img" src="/class_img/main.jpg"
-              width="300px">
-            </div>
-            <div class="banner_explain">        
-              <h2>타이틀 ${dayclass.dayclassTitle }</h2>
-              <p>소제목 ${}</p>
-              <div class="banner_explain_details">
-                <span><img src="/class_img/day.png" width="19px">원데이 클래스  
-                </span>
-                <span><img src="/class_img/time.png" width="19px">3시간 </span>
-                <span><img src="/class_img/location.png" width="19px">서울/강남${} </span>
-              </div>
-              <div>
-                <span>KRW ${}</span>
-              </div> 
-              <div class="banner_explain_btn">
-                <c:if test="${loginUser ne null }">
-                  <span><button type="button" id="dayclassRsrvtBtn" value="dayclassRsrvt">예약하기  
-                  </button><a href=""></a></span>
-                </c:if>
-                  <span><button type="button" id="dayclassLikeBtn" value="dayclassLike">♡ 1,809<!--<span 
-                  id="likeTd">${dayclassLikeCnt }</span>--></button></span>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-      </section>
-      <section class="dc_menu">
-        <div class="menu">
-          <ul style="padding: 0;">
-            <li><a href="/dayclass/getDayClass.do?dayclassCode=${dayclass.dayclassCode}#classIntro" 
-              class="m_intro_a">클래스 소개</a></li>
-            <li><a href="/dayclass/getDayClass.do?dayclassCode=${dayclass.dayclassCode}#classReview" 
-              class="m_rvw_a">후기${rvwCnt }</a></li>
-            <li><a href="/dayclass/getDayClass.do?dayclassCode=${dayclass.dayclassCode}#classApply" 
-              class="m_apply_a">신청하기</a></li>
-            <li><a href="/dayclass/getDayClass.do?dayclassCode=${dayclass.dayclassCode}#classCancle" 
-              class="m_cancle_a">취소/환불</a></li>
-          </ul>
-        </div>    
-      </section>
-      <section class="dc_contents">
-        <div class="dc_contents_container">
-          <div class="contents">
-            <div class="c_intro" id="classIntro" >
-              <h3 class="c_intro_title">클래스 소개</h3>
-              <p class="c_intro_text">
-                국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국
-                민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있으며, 법률에 저촉되지 아니하는 범위안에서 내
-                부규율에 관한 규칙을 제정할 수 있다.              
-                국무총리는 국회의 동의를 얻어 대통령이 임명한다. 헌법개정안이 제2항의 찬성을 얻은 때에는 헌법개 
-                정은 확정되며, 대통령은 즉시 이를 공포하여야 한다.
-                위원은 정당에 가입하거나 정치에 관여할 수 없다. 여자의 근로는 특별한 보호를 받으며, 고용·임금 
-                및 근로조건에 있어서 부당한 차별을 받지 아니한다.
-                행정권은 대통령을 수반으로 하는 정부에 속한다. 대한민국의 경제질서는 개인과 기업의 경제상의 자
-                유와 창의를 존중함을 기본으로 한다. 대통령은 법률에서 구체적으로 범위를 정하여 위임받은 사항과 
-                법률을 집행하기 위하여 필요한 사항에 관하여 대통령령을 발할 수 있다.</p>
-            </div>
-            <div class="c_map" id="classMap" style="width:100%; height:500px;">
-              <h3 class="c_map_title">클래스 위치</h3>
-              <p class="c_map_text">서울시 강남구 어쩌고 저쩌고</p>
-            </div>
-
-            <div class="c_apply" id="classApply" >
-              <ul style="padding-left: 0;">
-                <li>예약 날짜  <input type="text" id="rsrvtDate"></li>
-                <li>예약 시간  <input type="text" id="rsrvtTime"></li>
-              </ul>
-              
-              
-              <!--
-              <a href="#" target="" role="button" aria-haspopup="true" aria-expanded="false" 
-              class="rsrvtDateBtn">예약 날짜</a>
-              <a href="#" target="" role="button" aria-haspopup="true" aria-expanded="false" 
-              class="rsrvtTimeBtn">예약 시간</a>
-              -->
-            </div>
-            <div class="c_rvw" id="classReview">
-              <hr>
-              <h3 class="c_rvw_title" >클래스 후기</h3>
-              <div class="c_rvw_write">
-                <ul>
-                  <li>
-                    <a href onclick="changeAll('a')"; return="false" id="chgA"></a>
-                  </li>
-                  <li>
-                    <a href onclick="changePhoto('p')"; return="false" id="chgP"></a>
-                  </li>
-                </ul>
-                <input type="hidden" id="">
-                <input type="hidden" id="">
-                <div class="rvw_wirte_detail">
-                  <div class="rvw_option"> 
-                    <seclect name="rvw_array" id="rvw_array">
-                      <option>평점순</option>
-                      <option>최신순</option>
-                      <option>오래된순</option>
-                    </seclect>
-                    <a href="" onclick="" class="rvw_writeBtn">
-                      <span class="rvw_write">후기 작성하기</span>
-                    </a>
-                  </div>
-                  <span>
-                    <table class="rvw_list">
-                      <caption></caption>
-                      <colgroup>
-                        <col width="140">
-                        <col width>
-                        <col width="130">
-                        <col width="120">
-                        
-                      </colgroup>
-                      <thead>
-                        <tr>
-                          <th scope="col">평점</th>
-                          <th scope="col">내용</th>
-                          <th scope="col">작성일자</th>
-                          <th scope="col">작성자</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>⭐⭐⭐⭐⭐</td>
-                          <td>국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있다.</td>
-                          <td>2022/12/25</td>
-                          <td>abcde***</td>
-                        </tr>
-                        <tr>
-                          <td>⭐⭐</td>
-                          <td>국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있다.</td>
-                          <td>2022/12/25</td>
-                          <td>abcde***</td>
-                        </tr>
-                        <tr>
-                          <td>⭐⭐⭐⭐⭐</td>
-                          <td>국회의원은 법률이 정하는 직을 겸할 수 없다. </td>
-                          <td>2022/12/25</td>
-                          <td>abcde***</td>
-                        </tr>
-                        <tr>
-                          <td>⭐⭐⭐</td>
-                          <td>국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있다.</td>
-                          <td>2022/12/25</td>
-                          <td>abcde***</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <div class="rvw_pasing">
-                      <div class="pasing">
-                        <a href="" title="첫 페이지" class="firstPage" onclick="">《</a>
-                        <a href="" title="이전 페이지" class="prevPage" onclick="">〈</a>
-                        <a href="" title="1 페이지" class="Page1" onclick="">1</a>
-                        <a href="" title="2 페이지" class="Page2" onclick="">2</a>
-                        <a href="" title="3 페이지" class="Page3" onclick="">3</a>
-                        <a href="" title="4 페이지" class="Page4" onclick="">4</a>
-                        <a href="" title="5 페이지" class="Page5" onclick="">5</a>
-                        <a href="" title="다음 페이지" class="nextPage" onclick="">〉</a>
-                        <a href="" title="마지막 페이지" class="endPage" onclick="">》</a>
-                      </div>
-                    </div>
-                  
-                  </span>
-                </div>
-              </div>
-
-            </div>
-          </div>
-          <div class="c_cancle" id="classCancle" >
-            <hr>
-            <h2 class="c_cancle_title">취소/환불</h2>
-            <p class="c_cancle_text_A">궁금하신 점이나 서비스 이용에 불편한 점이 있으신가요?</p>
-            <p class="c_cancle_text_B">문제가 되는 부분을 사진을 찍어 아래 중 편하신 방법으로 접수해 주시면 
-              빠르게 도와드리겠습니다.</p>
-          </div>
-          <div class="c_Qna">
-            <ul style="padding-left: 0;">
-              <li>
-                <strong>| 전화 문의</strong>
-                <p class="c_Qna_text_A">
-                  월~금요일 오전 9시 - 오후 6시<br>
-                  주말/공휴일 오전 9시 - 오후 3시
-                </p>
-              </li>
-              <li>
-                <strong>| 홈페이지 문의</strong>
-                <p class="c_Qna_text_B">
-                  365일<br>
-                  로그인 > 마이페이지 > 1:1 문의
-                </p>
-                <p class="c_Qna_text_C">
-                  고객센터 운영 시간에 순차적으로 답변해드리겠습니다.
-                </p>
-              </li>
-            </ul>
-          </div>
-          <div class="c_guide">
-            <div class="c_refundGuide">
-              <strong class="c_refundG_title">교환 및 환불 안내</strong>
-              <p class="c_refundG_text">교환 및 환불이 필요하신 경우 고객센터로 문의해주세요.</p>
-              <button type="button" class="refundGuideBtn">자세히 보기 ▼</button>
-            </div>
-            <div class="c_cancleGuide">
-              <strong class="c_cancleG_title">주문 및 예약 취소 안내</strong>
-              <p class="c_cancleG_text">상품 주문 및 클래스 예약을 취소하실 수 있습니다.</p>
-              <button type="button" class="cancleGuideBtn">자세히 보기 ▼</button>
-            </div>
-          </div>
-          <br><br><br><br><br><br><br><br><br>
-        </div>
-      </section>  
-    </div>
-  </main>
-
-  <jsp:include page="${pageContext.request.contextPath }/footer.jsp"></jsp:include>
-  </div>
-  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey={	
-    7c48f4c17dd836f517f8c8b9e41ee2af}"></script>
-  <script>
-    
-    //지도 설정
-    const mapContainer = document.getElementById('map'),
-      mapOption = { 
-          center: new kakao.maps.LatLng(36.5,127.5),	// 지도의 중심 좌표(임의 설정)
-          level: 13					// 지도의 확대 레벨(임의 설정)
-      };
-        
-    //설정한 지도 생성
-    const map = new kakao.maps.Map(mapContainer, mapOption);
-
-    //마커 초기화(초기화 시 지도에 미리 지정 가능 : 카카오맵 API 문서 참조)
-    const marker = new kakao.maps.Marker();
-
-    //카카오맵 클릭 이벤트 추가
-    kakao.maps.event.addListener(map, 'click', (mouseEvent) => {
-      //클릭한 위도, 경도 정보 불러오기
-      const latlng = mouseEvent.latLng;
-      //마커 위치를 클릭한 위치로 이동
-      marker.setPosition(latlng);
-      marker.setMap(map);
-      
-      alert(`위도 : ${latlng.getLat(37.50293352159168)}, 경도 : ${latlng.getLng(127.02499830769516)}`);
-    });
-
-
-     // 예약
-    $(document).ready(function() {
-      $("#rsrvtDate").rsrvtDate();
-    });
-  </script>
-  <!--
-  <script>
-  $(function() {
-      // 세션, 리퀘스트 스코프에 담겨진 데이터를 빼오는 방식
-      const loginUserId = "${loginUser.userId}";
-      
-      // 좋아요 클릭 여부에 따른 버튼 모양 
-      if(${getDayClassLike} == 0) {
-        $("#dayclassLike").text("🤍")
-      } else if(${getDayClassLike } == 1) {
-        $("#dayclassLike").text("❤️")
-      }
-      // 예약 클릭 여부에 따른 버튼 모양 
-      if(${getDayClassRsrvt} == 0) {
-        $("#dayclassRsrvt").text("수강신청")
-      } else if(${getDayClassRsrvt} == 1) {
-        $("#dayclassRsrvt").text("수강취소")
-      }
-      
-      // 좋아요 클릭 시 동작
-      $("#dayclassLike").on("click", function() {
-      
-      var sendDateLike = {
-            'dayclassCode' : $("#dayclassCode").val(), 
-            'getDayClassLike' : $("#getDayClassLike").val() }
-        
-        $.ajax({
-            url : '/dayclass/dayclassLike.do',
-            type: 'post',
-            data: sendDateLike,
-            success: function(obj) {
-              console.log(obj);
-              if(obj.getDayClassLike==0){
-                  $("#dayclassLike").text("🤍")
-              }
-              else if(obj.getDayClassLike==1){
-                  $("#dayclassLike").text("❤️")
-              } 
-              
-              $("#dayclassCode").val(obj.dayclassCode);
-              $("#getDayClassLike").val(obj.getDayClassLike);
-              
-              $("#likeTd").text(obj.dayclassLikeCnt);
-            },
-            error : function(e) {
-              console.log(e);
-            }
-        })
-      })
-      // 예약 클릭 시 동작
-      $("#dayclassRsrvt").on("click", function() {
-        
-      var sendDateUser = {
-            'dayclassCode' : $("#dayclassCode").val(), 
-            'getDayClassRsrvtr' : $("#getDayClassRsrvt").val() }
-        
-        $.ajax({
-            url : '/dayclass/dayclassRsrvt.do',
-            type: 'post',
-            data: sendDateUser,
-            success: function(obj) {
-              console.log(obj);
-              if(obj.getDayClassUser==0){
-                  $("#dayclassRsrvt").text("예약 해당 위치로 넘어가는 걸로")
-              }
-              else if(obj.getDayClassUser==1){
-                  $("#dayclassRsrvt").text("예약 취소")
-              } 
-              
-              $("#dayclassCode").val(obj.dayclassCode);
-              $("#getDayClassUser").val(obj.getDayClassUser);
-              
-              $("#UserTd").text(obj.dayclassUserCnt);
-            },
-            error : function(e) {
-              console.log(e);
-            }
-        })
-      })
-  })
-  
-  $(function() {
-  $(window).scroll(function() {
-      if ($(this).scrollTop() > 500) {
-            $('#topBtn').fadeIn();
-            } else {
-            $('#topBtn').fadeOut();
-      }
-  });
-  $("#topBtn").click(function() {   
-  $('html, body').animate({
-    scrollTop : 0
-    }, 400);
-    return false;
-    });
-  });
-</script>
--->
-</body>
+		</div>
+	</body>
 </html>
