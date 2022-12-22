@@ -10,72 +10,69 @@
 			<script th:src="@{https://unpkg.com/swiper@7/swiper-bundle.min.js}"></script>
   			<script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
 			<script th:inline="javascript">
-					$("#pw").on("keyup", function(e) {
-				        let password = document.querySelector('#pw').value;
-				
-				        let strength = Strength(password);
-				        if(strength <= 2) {
-				          $(".pw-check").addClass('weak');
-				          $(".pw-check").removeClass('normal');
-				          $(".pw-check").removeClass('strong');
-				        } else if(strength > 2 && strength < 5 ) {
-				          $(".pw-check").removeClass('weak');
-				          $(".pw-check").addClass('normal');
-				          $(".pw-check").removeClass('strong');
-				        } else {
-				          $(".pw-check").removeClass('weak');
-				          $(".pw-check").removeClass('normal');
-				          $(".pw-check").addClass('strong');
-				        }
-				      })
-					  
-					  $(function() {
-						  let pswrd = document.querySelector('#pw');
-					      let show = document.querySelector('.show');
-					      show.onclick = function() {
-					        if(pswrd.type === 'password') {
-					          pswrd.setAttribute('type', 'text');
-					          show.classList.add('hide');
+					$(function() {
+						$("#joinForm").on("submit", function(e) {
+							e.preventDefault();
+							
+							$.ajax({
+								url: '/user/join',
+								type: 'post',
+								data: $("#joinForm").serialize(),
+								success: function(obj) {
+									console.log(obj);
+									if(obj.item.joinMsg == 'joinSuccess') {
+										alert("회원가입이 완료되었습니다.");
+										// 메인으로 이동 후 로그인창 내려오게 하게
+										window.location.href="/main/main?msg=" + obj.item.joinMsg;
+									} else {
+										alert("회원가입에 실패하셨습니다. 다시 입력해주세요.");
+										return;
+									}
+								},
+								error: function(e) {
+									console.log(e)
+								}
+							})
+						});
+						
+						$("#pw").on("keyup", function(e) {
+					        let password = document.querySelector('#pw').value;
+					
+					        let strength = Strength(password);
+					        if(strength <= 2) {
+					          $(".pw-check").addClass('weak');
+					          $(".pw-check").removeClass('normal');
+					          $(".pw-check").removeClass('strong');
+					        } else if(strength > 2 && strength < 5 ) {
+					          $(".pw-check").removeClass('weak');
+					          $(".pw-check").addClass('normal');
+					          $(".pw-check").removeClass('strong');
+					        } else {
+					          $(".pw-check").removeClass('weak');
+					          $(".pw-check").removeClass('normal');
+					          $(".pw-check").addClass('strong');
 					        }
-					        else {
-					          pswrd.setAttribute('type', 'password');
-					          show.classList.remove('hide');
+					      });
+					      
+					      let pwRecheck = false;
+					      $("#pw2").on("change", function() {
+					        $("#pwRecheck").show();
+					        
+					        if($("#pw").val() == $("#pw2").val()) {
+					          pwRecheck = true;
+					          $("#pwRecheck").css("color", "#0f0");
+					          $("#pwRecheck").text("비밀번호가 일치합니다.");
+					        } else {
+					          pwRecheck = false;
+					          $("#pwRecheck").css("color", "#f00");
+					          $("#pwRecheck").text("비밀번호가 일치하지 않습니다.");
 					        }
-					      }
-					  });
-				      
-				
-				      let pwRecheck = false;
-				      $("#pw2").on("change", function() {
-				        $("#pwRecheck").show();
-				        
-				        if($("#pw").val() == $("#pw2").val()) {
-				          pwRecheck = true;
-				          $("#pwRecheck").css("color", "#0f0");
-				          $("#pwRecheck").text("비밀번호가 일치합니다.");
-				        } else {
-				          pwRecheck = false;
-				          $("#pwRecheck").css("color", "#f00");
-				          $("#pwRecheck").text("비밀번호가 일치하지 않습니다.");
-				        }
-				      });
-
-				    function findAddr(){
-				      new daum.Postcode({
-				        oncomplete: function(data) {
-				          let addr1 = data.roadAddress;
-				          let addr2 = data.jibunAddress;
-				          document.getElementById('post').value = data.zonecode;
-				          if(addr1 !== ''){
-				          document.getElementById("addr").value = addr1;
-				          } else if(addr2 !== '') {
-				            document.getElementById("detail-addr").value = addr2;
-				          }
-				        }
-				      }).open();
-				    }
-				
-				    function Strength(password) {
+					      });
+					      
+					});
+					
+					//작동안됨
+					function Strength(password) {
 				        let i = 0;
 				        if(password.length > 6) {
 				          i++;
@@ -93,7 +90,35 @@
 				          i++
 				        }
 				        return i;
-				      }
+			        }
+					
+					//작동
+				    function findAddr(){
+				      new daum.Postcode({
+				        oncomplete: function(data) {
+				          let addr1 = data.roadAddress;
+				          let addr2 = data.jibunAddress;
+				          document.getElementById('post').value = data.zonecode;
+				          if(addr1 !== ''){
+				          document.getElementById("addr").value = addr1;
+				          } else if(addr2 !== '') {
+				            document.getElementById("detail-addr").value = addr2;
+				          }
+				        }
+				      }).open();
+				    }
+				    
+				    function fnPwShow(div) {
+						let pswrd = document.querySelector('#pw');
+				        if(pswrd.type === 'password') {
+				          pswrd.setAttribute('type', 'text');
+				          div.classList.replace('show', 'hide');
+				        }
+				        else {
+				          pswrd.setAttribute('type', 'password');
+				          div.classList.replace('hide', 'show');
+				        }
+					}
 			</script>
 		</th:block>
 		
@@ -106,21 +131,17 @@
 		<div layout:fragment="content" style="height:100%">
 		  <main style="margin-top: 4.5rem;">
 		    <div class="c1">
-		      <form action="" class="form" method="post">
+		      <form action="/user/join" id="joinForm" class="form" method="post">
 		        <h3>회원가입</h3>
 		        <div style="display: flex;">
-		          <input type="text" placeholder="아이디" class="box" style=" width: 70%;">
+		          <input type="text" placeholder="아이디" class="box" id="userId" name="userId" style=" width: 70%;">
 		          <button class="check">중복체크</button>
-		        </div>
-		        <div style="display: flex;">
-		          <input type="text" placeholder="닉네임" class="box" style=" width: 70%;">
-		          <button  class="check">중복체크</button>
 		        </div>
 		
 		        <div class="pw-check">
 		          <div class="inputBox light">
 		            <input type="password" id="pw" required class="input" placeholder="비밀번호"><label for="pw" class="input-label"></label>
-		            <div class="show"></div>
+		            <div class="show" onclick="fnPwShow(this);"></div>
 		          </div>
 		          <div class="check-light"></div>
 		        </div>
