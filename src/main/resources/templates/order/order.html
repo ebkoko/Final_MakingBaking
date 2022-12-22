@@ -68,14 +68,17 @@
 				}
 				#img1 {
 				    margin-left: 80px;
+				    width: 100px;
 				}
 				#detail1 {
 				    display: inline-block;
 				    width: 55%;
+				    vertical-align: middle;
 				}
 				#name1 {
 				    display: inline-block;
 				    margin-left: 10px;
+				    vertical-align: top;
 				}
 				#price1 {
 				    display: inline-block;
@@ -150,8 +153,10 @@
 				    margin-bottom: 5px;
 				}
 				#btnZipcode {
+					width: 100px;
 				    height: 26px;
 				    vertical-align: middle;
+				    cursor: pointer;
 				}
 				#addr2 {
 				    margin-bottom: 5px;
@@ -201,9 +206,9 @@
 				#btns {
 				    margin: 15px 0 20px 40px;
 				}
-				#bankTransfer, #creditCard {
-				    width: 100px;
-				    height: 30px;
+				#bankTransfer, #kakaoPay {
+				    width: 150px;
+				    height: 35px;
 				}
 				#bankPayment {
 				    margin-left: 40px;
@@ -234,13 +239,26 @@
 				    width: 270px;
 				    height: 40px;
 				    font-size: 22px;
+					cursor: pointer;
+				}
+				#btnPayment:hover {
+					color: white;
+					background: black;
+				}
+				#btns input[type="button"] {
+					cursor: pointer;
+					font-size: 17px;
+				}
+				#btns input[type="button"]:hover {
+					color: white;
+					background: black;
 				}
 			</style>
 		</th:block>
 		<th:block layout:fragment="script">		
 			<script th:inline="javascript" th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
 			<script th:inline="javascript">
-				function addr1() {
+				function findAddr() {
 		            new daum.Postcode({
 		                oncomplete: function(data) {
 		                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
@@ -288,6 +306,24 @@
 		            }).open();
 		        }
 			</script>
+			<script th:inline="javascript">
+				$(function() {
+					$("#addr1").on('click', function() {
+						findAddr();
+					});
+					
+					$("#btnPayment").on('click', function() {
+						if(!$("#recipient").val()) {
+							alert("배송정보의 이름을 입력하세요.");
+							$("#recipient").focus();
+							return;
+						}
+						if($("#addr1")) {
+							
+						}
+					});
+				});
+			</script>
 		</th:block>
 	</head>
 	<!-- head 영역 끝 -->
@@ -310,7 +346,7 @@
 	            <div id="order_item">
 	                <div id="item1">
 	                    <div id="detail1">
-	                        <img id="img1">
+	                        <img id="img1" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
 	                        <div id="name1"><a th:text="${itemName}"></a>상품명</div>    
 	                    </div>
 	                    <div id="price1">원</div>  
@@ -322,98 +358,95 @@
 	                    <span>상품 총 금액: </span> <span >원</span> <span>&#43;</span> <span>배송비: </span> <span >원</span> <span>&#61;</span> <span>총 결제금액: </span> <span >원</span>
 	                </div>
 	                <hr>
-	            </div>            
-	            <div id="delivery">
-	                <p class="deliInfo">배송정보</p>&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span>
-	                <hr>
-	                <div class="table-wrap">                    
-	                    <table id="T1">
-	                        <tr>
-	                            <th>배송지</th>
-	                            <td><input type="radio" name="deli1" id="deli1" value="기본배송지" checked> 기본배송지&emsp;<input type="radio" name="deli2" id="deli2" value="직접입력"> 직접입력</td>
-	                        </tr>
-	                        <tr>
-	                            <th>이름<span class="essential">&#42;</span></th>
-	                            <td><input type="text" name="recipient" id="recipient"></td>
-	                        </tr>
-	                        <tr>
-	                            <th>배송주소<span class="essential">&#42;</span></th>
-	                            <td>
-	                                <input type="text" name="addr1" id="addr1" placeholder="우편번호"><input type="button" id="btnZipcode" onclick="addr1()" value="우편번호 찾기"><br>
-	                                <input type="text" name="addr2" id="addr2" placeholder="주소"><br>
-	                                <input type="text" name="addr3" id="addr3" placeholder="상세주소">&ensp;<input type="text" name="extraAddr" id="extraAddr">
-	                            </td>
-	                        </tr>
-	                        <tr>
-	                            <th>휴대폰<span class="essential">&#42;</span></th>
-	                            <td>
-	                                <select id="reciTel1">
-	                                    <option value="010">010</option>
-	                                    <option value="011">011</option>
-	                                    <option value="016">016</option>
-	                                    <option value="017">017</option>
-	                                    <option value="018">018</option>
-	                                </select> - 
-	                                <input type="text" name="reciTel2" id="reciTel2"> - 
-	                                <input type="text" name="reciTel3" id="reciTel3">
-	                            </td>
-	                        </tr>
-	                        <tr>
-	                            <th style="vertical-align: top;">배송메세지</th>
-	                            <td>
-	                                <textarea name="message" id="message" cols="50" rows="8" placeholder="배송메세지를 입력해주세요."></textarea>
-	                            </td>
-	                        </tr>
-	                    </table>
-	                    <table id="T2">
-	                        <caption>주문자 정보</caption>
-	                        <tr>
-	                            <th>이름<span class="essential">&#42;</span></th>
-	                            <td><input type="text" name="orderer" id="orderer" value="${userName}"></td>
-	                        </tr>
-	                        <tr>
-	                            <th>휴대폰<span class="essential">&#42;</span></th>
-	                            <td>
-	                                <select id="orderTel1">
-	                                    <option value="010">010</option>
-	                                    <option value="011">011</option>
-	                                    <option value="016">016</option>
-	                                    <option value="017">017</option>
-	                                    <option value="018">018</option>
-	                                </select> - 
-	                                <input type="text" name="orderTel2" id="orderTel2"> - 
-	                                <input type="text" name="orderTel3" id="orderTel3">
-	                            </td>
-	                        </tr>
-	                        <tr>
-	                            <th>이메일</th>
-	                            <td><input type="text" name="orderMail" id="orderMail"></td>
-	                        </tr>
-	                        <tr></tr>
-	                        <tr></tr>
-	                        <tr></tr>
-	                    </table>                   
-	                </div>
-	            </div>
-	            <hr>
-	            <div id="paymentOption">
-	                <p id="payment_title">결제방법</p><hr>
-	                <div id="btns">
-	                    <input type="button" name="bankTransfer" id="bankTransfer" value="무통장입금">&emsp;
-	                    <input type="button" name="creditCard" id="creditCard" value="신용카드">
-	                </div>
-	                <div id="bankPayment">
-	                    <select id="bank">
-	                        <option value="입금은행">입금은행</option>
-	                        <option value="국민은행">국민은행</option>
-	                        <option value="신한은행">신한은행</option>
-	                    </select>
-	                    <input type="text" name="accountNo1" id="accountNo1" value="국민은행계좌" readonly>&ensp;
-	                    <span class="accountName">예금주명: 메이킹베이킹</span><br>
-	                    <div id="depositorTitle">입금자명<span class="essential">&#42;</span>: <input type="text" name="depositor" id="depositor" placeholder="입금자명을 입력하세요.">&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span></div>
-	                </div>
-	            </div>
-	            <input type="button" id="btnPayment" value="결제하기" onclick="location.href='viewOrderpage'">
+	            </div>          
+	            <form id="orderForm" action="order/order" method="post">  
+		            <div id="delivery">
+		                <p class="deliInfo">배송정보</p>&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span>
+		                <hr>
+		                <div class="table-wrap">                    
+		                    <table id="T1">
+		                        <tr>
+		                            <th>배송지</th>
+		                            <td><input type="radio" name="deli1" id="deli1" value="기본배송지" checked> 기본배송지&emsp;<input type="radio" name="deli2" id="deli2" value="직접입력"> 직접입력</td>
+		                        </tr>
+		                        <tr>
+		                            <th>이름<span class="essential">&#42;</span></th>
+		                            <td><input type="text" name="recipient" id="recipient"></td>
+		                        </tr>
+		                        <tr>
+		                            <th>배송주소<span class="essential">&#42;</span></th>
+		                            <td>
+		                                <input type="text" name="addr1" id="addr1" placeholder="우편번호"><input type="button" id="btnZipcode" onclick="findAddr();" value="우편번호 찾기"><br>
+		                                <input type="text" name="addr2" id="addr2" placeholder="주소"><br>
+		                                <input type="text" name="addr3" id="addr3" placeholder="상세주소">&ensp;<input type="text" name="extraAddr" id="extraAddr">
+		                            </td>
+		                        </tr>
+		                        <tr>
+		                            <th>휴대폰<span class="essential">&#42;</span></th>
+		                            <td>
+		                                <select id="reciTel1">
+		                                    <option value="010">010</option>
+		                                    <option value="011">011</option>
+		                                    <option value="016">016</option>
+		                                    <option value="017">017</option>
+		                                    <option value="018">018</option>
+		                                </select> - 
+		                                <input type="text" name="reciTel2" id="reciTel2"> - 
+		                                <input type="text" name="reciTel3" id="reciTel3">
+		                            </td>
+		                        </tr>
+		                        <tr>
+		                            <th style="vertical-align: top;">배송메세지</th>
+		                            <td>
+		                                <textarea name="message" id="message" cols="50" rows="8" placeholder="배송메세지를 입력해주세요."></textarea>
+		                            </td>
+		                        </tr>
+		                    </table>
+		                    <table id="T2">
+		                        <caption>주문자 정보</caption>
+		                        <tr>
+		                            <th>이름<span class="essential">&#42;</span></th>
+		                            <td><input type="text" name="orderer" id="orderer" value="${userName}"></td>
+		                        </tr>
+		                        <tr>
+		                            <th>휴대폰<span class="essential">&#42;</span></th>
+		                            <td>
+		                                <select id="orderTel1">
+		                                    <option value="010">010</option>
+		                                    <option value="011">011</option>
+		                                    <option value="016">016</option>
+		                                    <option value="017">017</option>
+		                                    <option value="018">018</option>
+		                                </select> - 
+		                                <input type="text" name="orderTel2" id="orderTel2"> - 
+		                                <input type="text" name="orderTel3" id="orderTel3">
+		                            </td>
+		                        </tr>
+		                        <tr>
+		                            <th>이메일</th>
+		                            <td><input type="text" name="orderMail" id="orderMail"></td>
+		                        </tr>
+		                        <tr></tr>
+		                        <tr></tr>
+		                        <tr></tr>
+		                    </table>                   
+		                </div>
+		            </div>
+		            <hr>
+		            <div id="paymentOption">
+		                <p id="payment_title">결제방법</p><hr>
+		                <div id="btns">
+		                    <input type="button" name="bankTransfer" id="bankTransfer" value="무통장입금">&emsp;
+		                    <input type="button" name="kakaoPay" id="kakaoPay" value="카카오페이">
+		                </div>
+		                <div id="bankPayment">
+	                        <span>국민은행 799502-04-026913</span>&emsp;&emsp;
+		                    <span class="accountName">예금주: 메이킹베이킹</span><br>
+		                    <div id="depositorTitle">입금자명<span class="essential">&#42;</span>: <input type="text" name="depositor" id="depositor" placeholder="입금자명을 입력하세요.">&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span></div>
+		                </div>
+		            </div>
+	            </form>
+	            <button type="submit" id="btnPayment">결제하기</button>
 	        </div>
 		</div>
 	</body>
