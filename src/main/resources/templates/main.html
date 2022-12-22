@@ -12,6 +12,12 @@
 			
 			<script th:inline="javascript">
 				$(function() {
+					console.log($("#btn-login"));
+					console.log($("#msg").val());
+					if($("#msg").val() == "joinSuccess") {
+						$("#btn-login").click();
+					}
+					
 					let aaa = new Swiper(".mySwiper", {
 					    navigation: {
 					      nextEl: ".swiper-button-next",
@@ -29,6 +35,7 @@
 	
 	<body>
 		<div layout:fragment="content">
+		<input type="hidden" id="msg" th:value="${msg}">
 			<div class="swiper mySwiper">
 	    <div class="swiper-wrapper">
 	      <div class="swiper-slide"><img th:src="@{/images/bg.jpg}" alt=""></div>

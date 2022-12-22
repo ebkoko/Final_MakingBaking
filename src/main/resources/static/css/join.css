@@ -169,8 +169,23 @@
       letter-spacing: 0.15em;
       text-transform: uppercase;
     }
-    .show.hide::before {
+    .hide {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 60px;
+      height: 100%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hide::before {
       content: "Hide";
+      font-size: 0.6em;
+      color: black;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
     }
 
     /* 우편 */
