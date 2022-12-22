@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -46,6 +47,10 @@ public class Item {		// 상품 테이블
 	@ColumnDefault("'Y'")
 	private char itemStatus;	// 판매상태(기본값 Y, 재고없음 S, 판매중지 N)
 	private String itemCate;	// 카테고리(쿠키, 케잌..)
-	private LocalDateTime itemRegdate = LocalDateTime.now();	// 상품추가일	
+	private LocalDateTime itemRegdate = LocalDateTime.now();	// 상품추가일
+	@Transient
+	private String searchCondition;
+	@Transient
+	private String searchKeyword;
 
 }
