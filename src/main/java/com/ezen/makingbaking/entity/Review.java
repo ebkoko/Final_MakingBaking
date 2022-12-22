@@ -17,7 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="REVIEW")
+@Table(name="T_MB_REVIEW")
 @Data
 @SequenceGenerator(
 		name="ReviewSequenceGenerator",

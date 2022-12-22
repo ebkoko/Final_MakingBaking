@@ -17,7 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="DAYCLASS")
+@Table(name="T_MB_DAYCLASS")
 @Data
 @SequenceGenerator(
 		name="DayclassSequenceGenerator",

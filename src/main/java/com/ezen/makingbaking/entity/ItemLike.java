@@ -13,7 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="ITEM_LIKE")
+@Table(name="T_MB_ITEM_LIKE")
 @Data
 @NoArgsConstructor 
 @AllArgsConstructor 

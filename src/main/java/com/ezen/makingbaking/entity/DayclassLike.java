@@ -13,7 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="DAYCLASS_LIKE")
+@Table(name="T_MB_DAYCLASS_LIKE")
 @Data
 @NoArgsConstructor 
 @AllArgsConstructor 

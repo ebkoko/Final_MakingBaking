@@ -16,7 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="FILE")
+@Table(name="T_MB_FILE")
 @Data
 @SequenceGenerator(
 		name="FileSequenceGenerator",

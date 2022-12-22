@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+	<th:block layout:fragment="css">
+		<style>
+		    * {
+		      margin: 0; padding: 0;
+		      box-sizing: border-box;
+		      outline: none; 
+		      border: none;
+		      text-decoration: none;
+		    }
+		    #container {
+		      width: 1200px; 
+		      margin: 0 auto 100px;
+		    }
+		    #high-nav {
+		      margin-top: 100px;
+		    }
+		    #high-nav>#qna-button {
+		      width: 200px; height: 70px;
+		      display: inline-block;
+		      font-size: 32px; font-weight: bold;
+		      color: black; 
+		      background-color: #fff;
+		      padding-bottom: 30px;
+		    }
+		    #high-container {
+		      width: 100%; height: fit-content;
+		      background-color: #FFFAF0;
+		      padding: 30px;
+		    }
+		    #oft-qna-container {
+		      width: 100%; height: 280px;
+		      background-color: #fff;
+		      border-radius: 10px;
+		    }
+		    #oft-qna-title { 
+		      font-size: 24px;
+		      margin: 10px 0 10px 10px;
+		    }
+		    .oft-qna {
+		      display: inline-block;
+		      width: 347px;
+		      height: 240px;
+		      background-color: #FFE4E1;
+		      margin: 20px 10px 20px 10px;
+		      padding: 10px;
+		      border-radius: 10px;
+		    }
+		    .oft-qna:first-child {
+		      display: inline-block;
+		      width: 347px;
+		      height: 240px;
+		      margin: 20px 10px 20px 20px;
+		    }
+		    .oft-qna:last-child {
+		      display: inline-block;
+		      width: 348px;
+		      height: 240px;
+		      margin: 20px 20px 20px 10px;
+		    }
+		    .oft-qna-q {
+		      font-size: 20px;
+		      height: 105px;
+		      margin-left: 0 10px;
+		      font-weight: bold;
+		    }
+		    .oft-qna-a {
+		      font-size: 18px;
+		      height: 105px;
+		    }
+		    #mid-nav {
+		      margin-top: 60px;
+		    }
+		    #mid-nav>#dayclass-button {
+		      width: 130px; height: 50px;
+		      display: inline-block;
+		      font-size: 18px; font-weight: bold; 
+		      color: white; 
+		      background-color: #DC143C;
+		      margin-left: 20px;
+		    }
+		    #mid-nav>#item-button {
+		      width: 130px; height: 50px;
+		      display: inline-block;
+		      font-size: 18px; font-weight: bold; 
+		      color: black; 
+		      background-color: #fff;
+		      border: 1px solid #DC143C;
+		    }
+		    #mid-container{
+		      width: 100%; height: fit-content;
+		      background-color: #fff;
+		      padding: 30px;
+		    }
+		    #list-table { width: 100%; border-collapse: collapse; }
+		    tr { height: 40px;}
+		    th { 
+		      border-bottom: 1px solid gray;
+		      font-size: 15px;
+		    }
+		    td {
+		      font-size: 15px;
+		    }
+		    #th-title { border-right: 1px solid gray;}
+		    #th-date, #th-answer { border-left: 1px solid gray;}
+		    .list-answer, .list-date, .list-writer { text-align: center;}
+		    .list-title { 
+		      padding: 0 5px;
+		      border-right: 1px solid gray;
+		    }
+		    .list-date, .list-answer { border-left: 1px solid gray;}
+		</style>
+	</th:block>
+</head>
+<body>
+<div layout:fragment="content">
+	<div id="container">
+	  <div id="high-nav">
+	    <button id="qna-button">
+	      문의사항
+	    </button>
+	  </div>
+	  <div id="high-container">
+	    <h3 id="oft-qna-title">자주 묻는 질문</h3>
+	    <div id="oft-qna-container">
+	      <div class="oft-qna">
+	        <div class="oft-qna-q">
+	          Q. 오늘 주문한 상품은 언제 배송되나요?
+	        </div>
+	        <div class="oft-qna-a">
+	          A. 영업일 기준 2~3일 내로 배송됩니다.
+	        </div>
+	      </div>
+	      <div class="oft-qna">
+	        <div class="oft-qna-q">
+	          Q. 오늘 주문한 상품은 언제 배송되나요?
+	        </div>
+	        <div class="oft-qna-a">
+	          A. 영업일 기준 2~3일 내로 배송됩니다.
+	        </div>
+	      </div>
+	      <div class="oft-qna">
+	        <div class="oft-qna-q">
+	          Q. 오늘 주문한 상품은 언제 배송되나요?
+	        </div>
+	        <div class="oft-qna-a">
+	          A. 영업일 기준 2~3일 내로 배송됩니다.
+	        </div>
+	      </div>
+	    </div>
+	    <div id="mid-nav">
+	      <button id="dayclass-button">
+	        원데이클래스
+	      </button>
+	      <button id="item-button">
+	        상품판매
+	      </button>
+	    </div>
+	    <div id="mid-container">
+	      <table id="list-table">
+	        <tr>
+	          <th width="50%" id="th-title">제목</th>
+	          <th width="15%" id="th-writer">작성자</th>
+	          <th width="15%" id="th-answer">답변여부</th>
+	          <th width="20%" id="th-date">작성일</th>
+	        </tr>
+	        <tr>
+	          <td class="list-title">안녕하세요 질문있어요</td>
+	          <td class="list-writer">hyeji</td>
+	          <td class="list-answer">답변완료</td>
+	          <td class="list-date">2022-12-20</td>
+	        </tr>
+	        <tr th:each="board: ${getBoardList}">
+				<td>
+					<a th:text="${board.boardTitle}"
+					   th:href="@{/board/updateBoardCnt/{boardNo} (boardNo=${board.boardNo})}">
+					</a>
+				</td>			
+				<td th:text="${board.boardWriter}"></td>
+				<td th:text="${board.boardReply eq null ? '답변대기' : '답변완료'}"></td>
+				<td th:text="${board.boardCnt}"></td>
+			</tr>
+	        <tr>
+	          <td class="list-title">안녕하세요 질문있어요</td>
+	          <td class="list-writer">hyeji</td>
+	          <td class="list-answer">답변완료</td>
+	          <td class="list-date">2022-12-20</td>
+	        </tr>
+	        <tr>
+	          <td class="list-title">안녕하세요 질문있어요</td>
+	          <td class="list-writer">hyeji</td>
+	          <td class="list-answer">답변완료</td>
+	          <td class="list-date">2022-12-20</td>
+	        </tr>
+	      </table>
+	    </div>
+	  </div>
+	</div>
+</div>
+</body>
+</html>
