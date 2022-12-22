@@ -64,14 +64,17 @@
 				}
 				#img1 {
 				    margin-left: 80px;
+				    width: 100px;
 				}
 				#detail1 {
 				    display: inline-block;
 				    width: 58%;
+				    vertical-align: middle;
 				}
 				#name1 {
 				    display: inline-block;
 				    margin-left: 10px;
+				    vertical-align: top;
 				}
 				#price1 {
 				    display: inline-block;
@@ -178,9 +181,9 @@
 				#btns {
 				    margin: 15px 0 20px 40px;
 				}
-				#bankTransfer, #creditCard {
-				    width: 100px;
-				    height: 30px;
+				#bankTransfer, #kakaoPay {
+				    width: 150px;
+				    height: 35px;
 				}
 				#bankPayment {
 				    margin-left: 40px;
@@ -211,6 +214,19 @@
 				    width: 270px;
 				    height: 40px;
 				    font-size: 22px;
+				    cursor: pointer;
+				}
+				#btnPayment:hover {
+					color: white;
+					background: black;
+				}
+				input[type="button"] {
+					cursor: pointer;
+					font-size: 17px;
+				}
+				input[type="button"]:hover {
+					color: white;
+					background: black;
 				}
 			</style>
 		</th:block>
@@ -240,7 +256,7 @@
 	            <div id="reser_class">
 	                <div id="item1">
 	                    <div id="detail1">
-	                        <img id="img1" >
+	                        <img id="img1" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
 	                        <div id="name1"><a th:text="${className}"></a>클래스명</div>    
 	                    </div>
 	                    <div  id="price1">원</div>  
@@ -252,83 +268,80 @@
 	                    <span>총 결제금액: </span><span >원</span>
 	                </div>
 	                <hr>
-	            </div>            
-	            <div id="reservation">
-	                <p class="reserInfo">예약 정보</p>&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span>
-	                <hr>
-	                <div id="infoTitle">
-	                    <span class="orderTitle">주문자 정보</span><span class="reserTitle">예약자 정보</span><input type="checkbox" id="sameUser"> 주문자와 동일
-	                </div>
-	                <div class="table-wrap">
-	                    <table id="T1">
-	                        <tr>
-	                            <th>이름<span class="essential">&#42;</span></th>
-	                            <td><input type="text" name="orderer" id="orderer" value="${userName}"></td>
-	                        </tr>
-	                        <tr>
-	                            <th>휴대폰<span class="essential">&#42;</span></th>
-	                            <td>
-	                                <select id="orderTel1">
-	                                    <option value="010">010</option>
-	                                    <option value="011">011</option>
-	                                    <option value="016">016</option>
-	                                    <option value="017">017</option>
-	                                    <option value="018">018</option>
-	                                </select> - 
-	                                <input type="text" name="orderTel2" id="orderTel2"> - 
-	                                <input type="text" name="orderTel3" id="orderTel3">
-	                            </td>
-	                        </tr>
-	                    </table>
-	                    <table id="T2">
-	                        <tr>
-	                            <th>예약자<span class="essential">&#42;</span></th>
-	                            <td>
-	                                <input type="text" name="participant" id="participant">
-	                            </td>
-	                        </tr>
-	                        <tr>
-	                            <th>휴대폰<span class="essential">&#42;</span></th>
-	                            <td>
-	                                <select id="reciTel1">
-	                                    <option value="010">010</option>
-	                                    <option value="011">011</option>
-	                                    <option value="016">016</option>
-	                                    <option value="017">017</option>
-	                                    <option value="018">018</option>
-	                                </select> - 
-	                                <input type="text" name="reciTel2" id="reciTel2"> - 
-	                                <input type="text" name="reciTel3" id="reciTel3">
-	                            </td>
-	                        </tr>
-	                        <tr>
-	                            <th style="vertical-align: top;">요청사항</th>
-	                            <td>
-	                                <textarea name="request" id="request" cols="50" rows="8" placeholder="요청사항을 입력해주세요."></textarea>
-	                            </td>
-	                        </tr>
-	                    </table>   
-	                </div>             
-	            </div>
-	            <hr>
-	            <div id="paymentOption">
-	                <p id="payment_title">결제방법</p><hr>
-	                <div id="btns">
-	                    <input type="button" name="bankTransfer" id="bankTransfer" value="무통장입금">&emsp;
-	                    <input type="button" name="creditCard" id="creditCard" value="신용카드">
-	                </div>
-	                <div id="bankPayment">
-	                    <select id="bank">
-	                        <option value="입금은행">입금은행</option>
-	                        <option value="국민은행">국민은행</option>
-	                        <option value="신한은행">신한은행</option>
-	                    </select>
-	                    <input type="text" name="accountNo1" id="accountNo1" value="국민은행계좌" readonly>&ensp;
-	                    <span id="accountName">예금주명: 메이킹베이킹</span><br>
-	                    <div id="depositorTitle">입금자명<span class="essential">&#42;</span>: <input type="text" name="depositor" id="depositor" placeholder="입금자명을 입력하세요.">&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span></div>
-	                </div>
-	            </div>
-	            <input type="button" id="btnPayment" value="결제하기" onclick="location.href='viewOrderpage'">
+	            </div>     
+	            <form id="reserForm" action="reser/reser" method="post">       
+		            <div id="reservation">
+		                <p class="reserInfo">예약 정보</p>&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span>
+		                <hr>
+		                <div id="infoTitle">
+		                    <span class="orderTitle">주문자 정보</span><span class="reserTitle">예약자 정보</span><input type="checkbox" id="sameUser"> 주문자와 동일
+		                </div>
+		                <div class="table-wrap">
+		                    <table id="T1">
+		                        <tr>
+		                            <th>이름<span class="essential">&#42;</span></th>
+		                            <td><input type="text" name="orderer" id="orderer" value="${userName}"></td>
+		                        </tr>
+		                        <tr>
+		                            <th>휴대폰<span class="essential">&#42;</span></th>
+		                            <td>
+		                                <select id="orderTel1">
+		                                    <option value="010">010</option>
+		                                    <option value="011">011</option>
+		                                    <option value="016">016</option>
+		                                    <option value="017">017</option>
+		                                    <option value="018">018</option>
+		                                </select> - 
+		                                <input type="text" name="orderTel2" id="orderTel2"> - 
+		                                <input type="text" name="orderTel3" id="orderTel3">
+		                            </td>
+		                        </tr>
+		                    </table>
+		                    <table id="T2">
+		                        <tr>
+		                            <th>예약자<span class="essential">&#42;</span></th>
+		                            <td>
+		                                <input type="text" name="participant" id="participant">
+		                            </td>
+		                        </tr>
+		                        <tr>
+		                            <th>휴대폰<span class="essential">&#42;</span></th>
+		                            <td>
+		                                <select id="reciTel1">
+		                                    <option value="010">010</option>
+		                                    <option value="011">011</option>
+		                                    <option value="016">016</option>
+		                                    <option value="017">017</option>
+		                                    <option value="018">018</option>
+		                                </select> - 
+		                                <input type="text" name="reciTel2" id="reciTel2"> - 
+		                                <input type="text" name="reciTel3" id="reciTel3">
+		                            </td>
+		                        </tr>
+		                        <tr>
+		                            <th style="vertical-align: top;">요청사항</th>
+		                            <td>
+		                                <textarea name="request" id="request" cols="50" rows="8" placeholder="요청사항을 입력해주세요."></textarea>
+		                            </td>
+		                        </tr>
+		                    </table>   
+		                </div>             
+		            </div>
+		            <hr>
+		            <div id="paymentOption">
+		                <p id="payment_title">결제방법</p><hr>
+		                <div id="btns">
+		                    <input type="button" name="bankTransfer" id="bankTransfer" value="무통장입금">&emsp;
+		                    <input type="button" name="kakaoPay" id="kakaoPay" value="카카오페이">
+		                </div>
+		                <div id="bankPayment">
+		                    <span>국민은행 799502-04-026913</span>&emsp;&emsp;
+		                    <span id="accountName">예금주: 메이킹베이킹</span><br>
+		                    <div id="depositorTitle">입금자명<span class="essential">&#42;</span>: <input type="text" name="depositor" id="depositor" placeholder="입금자명을 입력하세요.">&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span></div>
+		                </div>
+		            </div>
+	            </form>
+	            <button type="submit" id="btnPayment">결제하기</button>
 	        </div>
 		</div>
 	</body>
