@@ -157,6 +157,7 @@
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
 				$(function() {
+					// 전체선택 버튼 클릭했을 때
 					$("#selectAll").click(function() {
 						var chk = $("#selectAll").prop("checked");
 						if(chk) {
@@ -165,6 +166,23 @@
 							$("input[name='select_item']").prop("checked", false);
 						}
 					});
+					
+					// 전체선택취소 버튼 클릭했을 때
+					$("#selectAllCancel").click(function() {
+						var chk = $("#selectAllCancel").prop("checked");
+						if(chk) {
+							$("input[name='select_item']").prop("checked", false);
+							$("#selectAll").prop("checked", false);
+						}
+					});
+					
+					// 상품리스트 중 하나라도 체크가 안되어있을 때
+					$(".check").click(function() {
+						if($("input[name='select_item']:checked").length  ) {
+							
+						}
+					});
+					
 				});
 			</script>
 		</th:block>
@@ -191,7 +209,7 @@
 		            <div id="cart_item">
 		                <div id="item1">
 		                    <div id="itemSelect">
-		                        <input type="checkbox" name="select_item" id="select_item">                    
+		                        <input type="checkbox" class="check" name="select_item" id="select_item">                    
 		                    </div>
 		                    <div id="itemView">
 		                        <img id="item_Img" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
@@ -208,8 +226,8 @@
 		                        <input type="button" id="btnDel" value="삭제" onclick="">
 		                    </div>
 		                </div>
-		                <p class="cart_noItem">장바구니에 담긴 상품이 없습니다.</p>
 		            </div>
+	                <p class="cart_noItem">장바구니에 담긴 상품이 없습니다.</p>
 	            </form>
 	            <hr>
 	            <div id="totalPrice">

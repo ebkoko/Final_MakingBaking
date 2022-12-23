@@ -47,46 +47,46 @@
 				#list_title {
 				    font-size: 0.9em;
 				}
-				#list_title .classInfo {
+				#list_title .title_classInfo {
 				    margin-left: 100px;
 				}
-				#list_title .classSum {
+				#list_title .title_classPrice {
 				    margin-left: 550px;
 				}
-				#list_title .classQuantity {
+				#list_title .title_classQuantity {
 				    margin-left: 120px;
 				}
-				#list_title .sumPrice {
+				#list_title .title_totalPrice {
 				    margin-left: 140px;
 				}
 				#list_title+hr {
 					margin-bottom: 15px;
 				}
-				#img1 {
+				#class_Img {
 				    margin-left: 80px;
 				    width: 100px;
 				}
-				#detail1 {
+				#class_Detail {
 				    display: inline-block;
 				    width: 58%;
 				    vertical-align: middle;
 				}
-				#name1 {
+				#detailName {
 				    display: inline-block;
 				    margin-left: 10px;
 				    vertical-align: top;
 				}
-				#price1 {
+				#class_Price {
 				    display: inline-block;
 				    width: 10%;
 				    text-align: right;
 				}
-				#cnt1 {
+				#class_Quantity {
 				    display: inline-block;
 				    width: 11%;
 				    text-align: right;
 				}
-				#sumprice1 {
+				#class_totalPrice {
 				    display: inline-block;
 				    width: 19%;
 				    text-align: right;
@@ -100,7 +100,7 @@
 				#totalPrice+hr {
 				    clear: both;
 				}
-				#item1+hr {
+				#classView+hr {
 					margin-top: 15px;
 					margin-bottom: 5px;
 				}
@@ -186,6 +186,7 @@
 				    height: 35px;
 				}
 				#bankPayment {
+					display: none;
 				    margin-left: 40px;
 				}
 				#bank {
@@ -232,7 +233,54 @@
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
-				
+				$(function() {
+					// 결제하기 버튼 클릭했을 때 유효성 검사
+					$("#btnPayment").on('click', function() {
+						if(!$("#orderer").val()) {
+							alert("주문인을 입력하세요.");
+							$("#orderer").focus();
+							return;
+						}
+						if(!$("#orderTel2").val()) {
+							alert("주문인 휴대폰 번호를 입력하세요.");
+							return;
+						}
+						if(!$("#orderTel3").val()) {
+							alert("주문인 휴대폰 번호를 입력하세요.");
+							return;
+						}
+						if(!$("#participant").val()) {
+							alert("예약자명을 입력하세요.");
+							$("#participant").focus();
+							return;
+						}
+						if(!$("#reciTel2").val()) {
+							alert("예약자 휴대폰 번호를 입력하세요.");
+							return;
+						}
+						if(!$("#reciTel3").val()) {
+							alert("예약자 휴대폰 번호를 입력하세요.");
+							return;
+						}
+						// 무통장입금, 카카오페이 버튼 안눌렀을 때
+					});
+					
+					$("#bankTransfer").on('click', function() {
+						$("#bankPayment").css("display", "block");
+						
+						$("#btnPayment").on('click', function() {
+							if(!$("#depositor").val()) {
+								alert("입금자명을 입력하세요.");
+								$("#depositor").focus();
+								return;
+							}
+						});
+					});
+					
+					$("#kakaoPay").on('click', function() {
+						$("#bankPayment").css("display", "none");
+					});
+				});
 			</script>
 		</th:block>
 	</head>
@@ -250,18 +298,18 @@
 	            </div>
 	            <hr>
 	            <div id="list_title">
-	                <span class="classInfo">클래스 정보</span><span class="classSum">클래스 금액</span><span class="classQuantity">인원 수</span><span class="sumPrice">합계금액</span>
+	                <span class="title_classInfo">클래스 정보</span><span class="title_classPrice">클래스 금액</span><span class="title_classQuantity">인원 수</span><span class="title_totalPrice">합계금액</span>
 	            </div>
 	            <hr>
 	            <div id="reser_class">
-	                <div id="item1">
-	                    <div id="detail1">
-	                        <img id="img1" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
-	                        <div id="name1"><a th:text="${className}"></a>클래스명</div>    
+	                <div id="classView">
+	                    <div id="class_Detail">
+	                        <img id="class_Img" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
+	                        <div id="detailName"><a th:text="${className}"></a>클래스명</div>    
 	                    </div>
-	                    <div  id="price1">원</div>  
-	                    <div  id="cnt1">2</div>                    
-	                    <div  id="sumprice1">원</div>
+	                    <div  id="class_Price">원</div>  
+	                    <div  id="class_Quantity">2</div>                    
+	                    <div  id="class_totalPrice">원</div>
 	                </div>            
 	                <hr>
 	                <div id="totalPrice">
@@ -279,7 +327,7 @@
 		                <div class="table-wrap">
 		                    <table id="T1">
 		                        <tr>
-		                            <th>이름<span class="essential">&#42;</span></th>
+		                            <th>주문자<span class="essential">&#42;</span></th>
 		                            <td><input type="text" name="orderer" id="orderer" value="${userName}"></td>
 		                        </tr>
 		                        <tr>
@@ -292,8 +340,8 @@
 		                                    <option value="017">017</option>
 		                                    <option value="018">018</option>
 		                                </select> - 
-		                                <input type="text" name="orderTel2" id="orderTel2"> - 
-		                                <input type="text" name="orderTel3" id="orderTel3">
+		                                <input type="text" name="orderTel2" id="orderTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4"> - 
+		                                <input type="text" name="orderTel3" id="orderTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4">
 		                            </td>
 		                        </tr>
 		                    </table>
@@ -314,8 +362,8 @@
 		                                    <option value="017">017</option>
 		                                    <option value="018">018</option>
 		                                </select> - 
-		                                <input type="text" name="reciTel2" id="reciTel2"> - 
-		                                <input type="text" name="reciTel3" id="reciTel3">
+		                                <input type="text" name="reciTel2" id="reciTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4"> - 
+		                                <input type="text" name="reciTel3" id="reciTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4">
 		                            </td>
 		                        </tr>
 		                        <tr>

@@ -51,46 +51,46 @@
 				#list_title {
 				    font-size: 0.9em;
 				}
-				#list_title .itemInfo {
+				#list_title .title_itemInfo {
 				    margin-left: 100px;
 				}
-				#list_title .itemSum {
+				#list_title .title_itemPrice {
 				    margin-left: 600px;
 				}
-				#list_title .itemQuantity {
+				#list_title .title_itemQuantity {
 				    margin-left: 120px;
 				}
-				#list_title .sumPrice {
+				#list_title .title_totalPrice {
 				    margin-left: 140px;
 				}
 				#list_title+hr {
 					margin-bottom: 15px;
 				}
-				#img1 {
+				#item_Img {
 				    margin-left: 80px;
 				    width: 100px;
 				}
-				#detail1 {
+				#item_Detail {
 				    display: inline-block;
 				    width: 55%;
 				    vertical-align: middle;
 				}
-				#name1 {
+				#detailName {
 				    display: inline-block;
 				    margin-left: 10px;
 				    vertical-align: top;
 				}
-				#price1 {
+				#item_Price {
 				    display: inline-block;
 				    width: 14%;
 				    text-align: right;
 				}
-				#cnt1 {
+				#item_Quantity {
 				    display: inline-block;
 				    width: 10%;
 				    text-align: right;
 				}
-				#sumprice1 {
+				#item_totalPrice {
 				    display: inline-block;
 				    width: 18%;
 				    text-align: right;
@@ -104,7 +104,7 @@
 				#totalPrice+hr {
 				    clear: both;
 				}
-				#item1+hr {
+				#itemView+hr {
 					margin-top: 15px;
 					margin-bottom: 5px;
 				}
@@ -211,6 +211,7 @@
 				    height: 35px;
 				}
 				#bankPayment {
+					display: none;
 				    margin-left: 40px;
 				}
 				#bank {
@@ -308,19 +309,65 @@
 			</script>
 			<script th:inline="javascript">
 				$(function() {
+					// 우편번호 input 클릭했을 때
 					$("#addr1").on('click', function() {
 						findAddr();
 					});
 					
+					// 결제하기 버튼 클릭했을 때 유효성 검사
 					$("#btnPayment").on('click', function() {
 						if(!$("#recipient").val()) {
-							alert("배송정보의 이름을 입력하세요.");
+							alert("수령인을 입력하세요.");
 							$("#recipient").focus();
 							return;
 						}
-						if($("#addr1")) {
-							
+						if(!$("#addr1").val()) {
+							alert("우편번호 찾기로 주소를 입력하세요.");
+							return;
 						}
+						if(!$("#addr3").val()) {
+							alert("상세주소를 입력하세요.");
+							$("#addr3").focus();
+							return;
+						}
+						if(!$("#reciTel2").val()) {
+							alert("수령인 휴대폰 번호를 입력하세요.");
+							return;
+						}
+						if(!$("#reciTel3").val()) {
+							alert("수령인 휴대폰 번호를 입력하세요.");
+							return;
+						}
+						if(!$("#orderer").val()) {
+							alert("주문자을 입력하세요.");
+							$("#orderer").focus();
+							return;
+						}
+						if(!$("#orderTel2").val()) {
+							alert("주문자 휴대폰 번호를 입력하세요.");
+							return;
+						}
+						if(!$("#orderTel3").val()) {
+							alert("주문자 휴대폰 번호를 입력하세요.");
+							return;
+						}
+						// 무통장입금, 카카오페이 버튼 안눌렀을 때
+					});
+					
+					$("#bankTransfer").on('click', function() {
+						$("#bankPayment").css("display", "block");
+						
+						$("#btnPayment").on('click', function() {
+							if(!$("#depositor").val()) {
+								alert("입금자명을 입력하세요.");
+								$("#depositor").focus();
+								return;
+							}
+						});
+					});
+					
+					$("#kakaoPay").on('click', function() {
+						$("#bankPayment").css("display", "none");
 					});
 				});
 			</script>
@@ -340,18 +387,18 @@
 	            </div>
 	            <hr>
 	            <div id="list_title">
-	                <span class="itemInfo">상품정보</span><span class="itemSum">상품금액</span><span class="itemQuantity">수량</span><span class="sumPrice">합계금액</span>
+	                <span class="title_itemInfo">상품정보</span><span class="title_itemPrice">상품금액</span><span class="total_itemQuantity">수량</span><span class="title_totalPrice">합계금액</span>
 	            </div>
 	            <hr>
 	            <div id="order_item">
-	                <div id="item1">
-	                    <div id="detail1">
-	                        <img id="img1" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
-	                        <div id="name1"><a th:text="${itemName}"></a>상품명</div>    
+	                <div id="itemView">
+	                    <div id="item_Detail">
+	                        <img id="item_Img" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
+	                        <div id="detailName"><a th:text="${itemName}"></a>상품명</div>    
 	                    </div>
-	                    <div id="price1">원</div>  
-	                    <div id="cnt1">5</div>                    
-	                    <div id="sumprice1">원</div>
+	                    <div id="item_Price">원</div>  
+	                    <div id="item_Quantity">5</div>                    
+	                    <div id="item_totalPrice">원</div>
 	                </div>            
 	                <hr>
 	                <div id="totalPrice">
@@ -370,7 +417,7 @@
 		                            <td><input type="radio" name="deli1" id="deli1" value="기본배송지" checked> 기본배송지&emsp;<input type="radio" name="deli2" id="deli2" value="직접입력"> 직접입력</td>
 		                        </tr>
 		                        <tr>
-		                            <th>이름<span class="essential">&#42;</span></th>
+		                            <th>수령인<span class="essential">&#42;</span></th>
 		                            <td><input type="text" name="recipient" id="recipient"></td>
 		                        </tr>
 		                        <tr>
@@ -391,8 +438,8 @@
 		                                    <option value="017">017</option>
 		                                    <option value="018">018</option>
 		                                </select> - 
-		                                <input type="text" name="reciTel2" id="reciTel2"> - 
-		                                <input type="text" name="reciTel3" id="reciTel3">
+		                                <input type="text" name="reciTel2" id="reciTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4"> - 
+		                                <input type="text" name="reciTel3" id="reciTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4">
 		                            </td>
 		                        </tr>
 		                        <tr>
@@ -405,7 +452,7 @@
 		                    <table id="T2">
 		                        <caption>주문자 정보</caption>
 		                        <tr>
-		                            <th>이름<span class="essential">&#42;</span></th>
+		                            <th>주문자<span class="essential">&#42;</span></th>
 		                            <td><input type="text" name="orderer" id="orderer" value="${userName}"></td>
 		                        </tr>
 		                        <tr>
@@ -418,8 +465,8 @@
 		                                    <option value="017">017</option>
 		                                    <option value="018">018</option>
 		                                </select> - 
-		                                <input type="text" name="orderTel2" id="orderTel2"> - 
-		                                <input type="text" name="orderTel3" id="orderTel3">
+		                                <input type="text" name="orderTel2" id="orderTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4"> - 
+		                                <input type="text" name="orderTel3" id="orderTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4">
 		                            </td>
 		                        </tr>
 		                        <tr>
