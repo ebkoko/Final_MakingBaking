@@ -1,43 +1,50 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>상품 등록</title>
-  <style>
-    #container { width: 1200px; margin: 0 auto;}
-    #itemReg_T {
-      margin: 0 auto;
-      border-left: hidden; border-right: hidden;
-    }
-    #itemReg {
-      width: 100px;
-      height: 40px;
-    }
-  </style>
-  <script>
-    /*  https://jamesdreaming.tistory.com/211  */
-    $(function() {
-      $("#inputPrice").on("focus", function() {
-        var val = $("#inputPrice").val();
-        if(!isEmpty(val)) {
-          val = val.replace(/,/g,'');
-          $("#inputPrice").val(val);
-        }
-      });
-      $("#inputPrice").on("blur", function() {
-        var val = $("#inputPrice").val();
-        if(!isEmpty(val) && inNumeric(val)) {
-          val = currencyFormatter(val);
-          $("#inputPrice").val(val);
-        }
-      });
-    });
-  </script>
-</head>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+	  
+	<!-- head 영역 시작 -->
+	<!-- 개별적으로 사용할 css, js 링크를 걸기 위해서 남겨둠 -->
+	<head>
+		<th:block layout:fragment="css">
+			<style>
+			    #itemReg_T {
+			      margin: 0 auto;
+			      border-left: hidden; border-right: hidden;
+			    }
+			    #itemReg {
+			      width: 100px;
+			      height: 40px;
+			    }
+			</style>
+		</th:block>
+		<th:block layout:fragment="script">
+			<script th:inline="javascript">
+				/*  https://jamesdreaming.tistory.com/211  */
+			    $(function() {
+			      $("#inputPrice").on("focus", function() {
+			        var val = $("#inputPrice").val();
+			        if(!isEmpty(val)) {
+			          val = val.replace(/,/g,'');
+			          $("#inputPrice").val(val);
+			        }
+			      });
+			      $("#inputPrice").on("blur", function() {
+			        var val = $("#inputPrice").val();
+			        if(!isEmpty(val) && inNumeric(val)) {
+			          val = currencyFormatter(val);
+			          $("#inputPrice").val(val);
+			        }
+			      });
+			    });
+			</script>
+		</th:block>
+	</head>
+	<!-- head 영역 끝 -->
+	
 <body>
-  <div id="container">
+  <div id="container" layout:fragment="content">
     <h1>상품 등록</h1>
     <!-- 상품등록내용 -->
     <div>

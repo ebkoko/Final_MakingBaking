@@ -10,32 +10,76 @@
 		<th:block layout:fragment="css">
 			<style>
 			    #itemMod {
-			      width:80px;
-			      height: 25px;
-			      margin-left: 22px;
+					width:80px;
+					height: 25px;
+					margin-left: 22px;
 			    }
 			    #itemDelete {
-			      width: 100px;
-			      height: 40px;
+					width: 120px;
+			      	height: 40px;
+			     	border: 1.2px solid #28693F;
+					border-radius: 4px;
+					background-color: white;
+					text-align: center;
+					display: inline-block;
+					color: #28693F;
+					font-size: 16px;
+					font-weight: 550;
+					letter-spacing:1px;
 			    }
+			    #itemDelete:hover {
+					background-color: #28693F;
+					color: white;
+					font-weight: 550;
+				}
 			    #itemRegistration {
-			      width: 100px;
-			      height: 40px;
+			     	width: 120px;
+			      	height: 40px;
+			     	border: 1.2px solid #28693F;
+					border-radius: 4px;
+					background-color: white;
+					text-align: center;
+					display: inline-block;
+					color: #28693F;
+					font-size: 16px;
+					font-weight: 550;
+					letter-spacing:1px;
 			    }
+			    #itemRegistration:hover {
+					background-color: #28693F;
+					color: white;
+					font-weight: 550;
+				}
+				#inputSearch {
+					width: 250px;
+					height: 30px;
+					border: 1.2px solid #28693F;
+					display: inline-block;
+				}
 			    .pagination {
-			      list-style: none;
-			      width: 100%;
-			      display: inline-block;
+			      	list-style: none;
+			      	width: 100%;
+			      	display: inline-block;
 			    }
 			    .pagination_button {
-			      float: left;
-			      margin-left: 5px;
+					float: left;
+					margin-left: 5px;
 			    }
 			</style>
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
-				
+				$(function() {
+					$("#searchCondition").on("change", function() {
+						if($(this).val() == 'ITEMSTATUS') {
+							$("#inputSearch").hide();
+							$("#selectSearch").show();
+						} else {
+							$("#inputSearch").show();
+							$("#selectSearch").hide();
+						}
+					});
+				});
 			</script>
 		</th:block>
 	</head>
@@ -44,19 +88,29 @@
 <body>
   <div id="container" layout:fragment="content">
     <h1>상품 관리</h1>
+    <br>
     <form>
       <table>
         <tr>
           <td align="center">
-            <select name="searchCondition">
+            <select name="searchCondition" id="searchCondition">
               <option value="ALL" th:selected="${searchCondition == 'ALL'}">전체</option>
               <option value="ITEMNAME" th:selected="${searchCondition == 'ITEMNAME'}">이름</option>
               <option value="ITEMPRICE" th:selected="${searchCondition == 'ITEMPRICE'}">가격</option>
               <option value="ITEMREGDATE" th:selected="${searchCondition == 'ITEMREGDATE'}">등록일</option>
-              <option value="ITEMSTATUS" th:selected="${searchCondition == 'ITEMSTATUS'}">상태</option>
+              <option value="ITEMSTATUS" name="itemStatus" th:selected="${searchCondition == 'ITEMSTATUS'}">상태</option>
             </select>
-            <input type="text" name="searchKeyword" value="">
-            <button type="button" id="btnSearch">검색</button>
+            <input type="text" name="searchKeyword" value="" id="inputSearch" th:style="${searchCondition != 'ITEMSTATUS'  ? 'display: inline-block;' : 'display: none;'}">
+            <select name="searchKeyword" id="selectSearch" th:style="${searchCondition == 'ITEMSTATUS' ? 'display: inline-block;' : 'display: none;'}">
+            	<option>선택하세요.</option>
+            	<option value="Y" th:selected="${searchKeyword == 'Y'}">재고있음</option>
+              	<option value="S" th:selected="${searchKeyword == 'S'}">재고없음</option>
+              	<option value="N" th:selected="${searchKeyword == 'N'}">판매중지</option>
+            </select>
+            <button type="button" id="btnSearch" 
+            	style="width: 80px; height: 35px; border: 1.2px solid #28693F; 
+            	background-color: white; text-align: center; color: #28693F;
+            	font-size: 16px; font-weight: 550; letter-spacing:1px; display: inline-block; cursor: pointer; ">검색</input>
           </td>
         </tr>
       </table>
@@ -68,20 +122,20 @@
         <td colspan="7" align="right"><input type="checkbox"> 전체 선택</td>
       </tr>
       <tr>
-        <th style="background: lightsteelblue; width: 10%;"></th>
-        <th style="background: lightsteelblue; width: 10%;">No.</th>
-        <th style="background: lightsteelblue; width: 20%;">상품 이름</th>
-        <th style="background: lightsteelblue; width: 20%;">상품 가격</th>
-        <th style="background: lightsteelblue; width: 15%;">상품 등록일</th>
-        <th style="background: lightsteelblue; width: 15%;">상품 상태</th>
-        <th style="background: lightsteelblue; width: 10%;">상품 관리</th>
+        <th style="background: #28693F; color: white; height: 35px; width: 10%;"></th>
+        <th style="background: #28693F; color: white; height: 35px; width: 10%;">No.</th>
+        <th style="background: #28693F; color: white; height: 35px; width: 20%;">상품 이름</th>
+        <th style="background: #28693F; color: white; height: 35px; width: 20%;">상품 가격</th>
+        <th style="background: #28693F; color: white; height: 35px; width: 15%;">상품 등록일</th>
+        <th style="background: #28693F; color: white; height: 35px; width: 15%;">판매 상태</th>
+        <th style="background: #28693F; color: white; height: 35px; width: 10%;">상품 관리</th>
       </tr>
-      <tr th:each="item: ${getItemList}">
+      <tr th:each="item: ${getItemList.content}">
         <td><input type="checkbox"></td>
-        <td th:text="${item.itemNo"></td>
+        <td th:text="${item.itemNo}"></td>
         <td th:text="${item.itemName}"></td>
         <td th:text="${item.itemPrice}"></td>
-        <td th:text="${item.itemRegdate eq null ? '' : #string.substring(item.itemRegdate, 0, 10)}}"></td>
+        <td th:text="${item.itemRegdate eq null ? '' : #strings.substring(item.itemRegdate, 0, 10)}"></td>
         <td th:text="${item.itemStatus}"></td>
         <td><a href="#"><input type="button" value="수정" id="itemMod"></a></td>
       </tr>
