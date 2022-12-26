@@ -21,3 +21,6 @@ public class ItemDTO {
 	private String searchCondition;
 	private String searchKeyword;
 }
+
+
+//ITME_STATUS LIKE '%#{searchKeyword}%'
