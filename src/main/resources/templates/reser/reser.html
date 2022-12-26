@@ -181,7 +181,7 @@
 				#btns {
 				    margin: 15px 0 20px 40px;
 				}
-				#bankTransfer, #kakaoPay {
+				#btnbankTransfer, #btnkakaoPay {
 				    width: 150px;
 				    height: 35px;
 				}
@@ -212,73 +212,111 @@
 				#btnPayment {
 				    margin-top: 70px;
 				    margin-left: 460px;
-				    width: 270px;
+				    width: 260px;
 				    height: 40px;
 				    font-size: 22px;
 				    cursor: pointer;
+					border: 1.5px solid #28693F;
+ 					border-radius: 4px;
+ 					background-color: white;
+ 					color: #28693F;
+ 					letter-spacing:1px
 				}
 				#btnPayment:hover {
 					color: white;
-					background: black;
+					background: #28693F;
 				}
 				input[type="button"] {
 					cursor: pointer;
 					font-size: 17px;
+					border: 1.5px solid #28693F;
+ 					border-radius: 4px;
+ 					background-color: white;
+ 					color: #28693F;
+ 					letter-spacing:1px
 				}
 				input[type="button"]:hover {
 					color: white;
-					background: black;
+					background: #28693F;
 				}
 			</style>
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
 				$(function() {
+					let isKakaoPay = false;
 					// 결제하기 버튼 클릭했을 때 유효성 검사
 					$("#btnPayment").on('click', function() {
 						if(!$("#orderer").val()) {
-							alert("주문인을 입력하세요.");
+							alert("주문자명을 입력해주세요.");
 							$("#orderer").focus();
 							return;
 						}
 						if(!$("#orderTel2").val()) {
-							alert("주문인 휴대폰 번호를 입력하세요.");
+							alert("주문자 휴대폰 번호를 입력해주세요.");
+							$("#orderTel2").focus();
 							return;
 						}
 						if(!$("#orderTel3").val()) {
-							alert("주문인 휴대폰 번호를 입력하세요.");
+							alert("주문자 휴대폰 번호를 입력해주세요.");
+							$("#orderTel3").focus();
 							return;
 						}
 						if(!$("#participant").val()) {
-							alert("예약자명을 입력하세요.");
+							alert("예약자명을 입력해주세요.");
 							$("#participant").focus();
 							return;
 						}
 						if(!$("#reciTel2").val()) {
-							alert("예약자 휴대폰 번호를 입력하세요.");
+							alert("예약자 휴대폰 번호를 입력해주세요.");
+							$("#reciTel2").focus();
 							return;
 						}
 						if(!$("#reciTel3").val()) {
-							alert("예약자 휴대폰 번호를 입력하세요.");
+							alert("예약자 휴대폰 번호를 입력해주세요.");
+							$("#reciTel3").focus();
 							return;
 						}
-						// 무통장입금, 카카오페이 버튼 안눌렀을 때
-					});
-					
-					$("#bankTransfer").on('click', function() {
-						$("#bankPayment").css("display", "block");
-						
-						$("#btnPayment").on('click', function() {
+						if($("#orderTel2").length < 4 && $("#orderTel3").length < 4 && $("#reciTel2").length < 4 && $("#reciTel3").length < 4) {
+							alert("휴대폰 번호를 정확히 입력해주세요.");
+							return;
+						}
+						if($("#bankPayment").css("display") == "block") {
 							if(!$("#depositor").val()) {
-								alert("입금자명을 입력하세요.");
+								alert("입금자명을 입력해주세요.");
 								$("#depositor").focus();
 								return;
 							}
-						});
+						}
+						
 					});
 					
-					$("#kakaoPay").on('click', function() {
+					// 무통장입금 버튼을 클릭했을 때
+					$("#btnbankTransfer").on('click', function() {
+						isKakaoPay = false;
+						if($("#bankPayment").css("display") == "none") {
+							$("#bankPayment").css("display", "block");
+							$("#btnbankTransfer").css("color", "white").css("background", "#28693F");
+							$("#btnkakaoPay").css("color", "#28693F").css("background", "white");
+						} else {
+							$("#bankPayment").css("display", "none");
+							$("#btnbankTransfer").css("color", "#28693F").css("background", "white");
+						}						
+					});
+					
+					// 카카오페이 버튼을 클릭했을 때
+					$("#btnkakaoPay").on('click', function() {
+						isKakaoPay = !isKakaoPay;
 						$("#bankPayment").css("display", "none");
+						$("#btnbankTransfer").css("color", "#28693F").css("background", "white");
+						if(!isKakaoPay) {						
+							$("#btnkakaoPay").css("color", "#28693F").css("background", "white");
+						} else {
+							$("#btnkakaoPay").css("color", "white").css("background", "#28693F");
+						}
+						// 카카오페이 API 실행
+						
+						
 					});
 				});
 			</script>
@@ -379,8 +417,8 @@
 		            <div id="paymentOption">
 		                <p id="payment_title">결제방법</p><hr>
 		                <div id="btns">
-		                    <input type="button" name="bankTransfer" id="bankTransfer" value="무통장입금">&emsp;
-		                    <input type="button" name="kakaoPay" id="kakaoPay" value="카카오페이">
+		                    <input type="button" name="bankTransfer" id="btnbankTransfer" value="무통장입금">&emsp;
+		                    <input type="button" name="kakaoPay" id="btnkakaoPay" value="카카오페이">
 		                </div>
 		                <div id="bankPayment">
 		                    <span>국민은행 799502-04-026913</span>&emsp;&emsp;
@@ -388,8 +426,8 @@
 		                    <div id="depositorTitle">입금자명<span class="essential">&#42;</span>: <input type="text" name="depositor" id="depositor" placeholder="입금자명을 입력하세요.">&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span></div>
 		                </div>
 		            </div>
+	            	<button type="submit" id="btnPayment">결제하기</button>
 	            </form>
-	            <button type="submit" id="btnPayment">결제하기</button>
 	        </div>
 		</div>
 	</body>
