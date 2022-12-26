@@ -9,26 +9,23 @@
 		
 		</script>
 	</th:block>
-	<th:block layout:frament="css">
-		<style>
-		
-		</style>
+	<th:block layout:fragment="css">
+		<link rel="stylesheet" th:href="@{/css/findID.css}"/>
 	</th:block>
 </head>
 
 <body>
-	<div layout:fragment="content">
-		<main style="height:100%">
+	<div layout:fragment="content" class="container">
+		<main>
 		    <div class="c1">
 		      <form action="" class="form" method="post">
 		        <h3>아이디 찾기</h3>
 		        <input type="text" placeholder="이름" class="box">
 		        <input type="password" placeholder="핸드폰번호" class="box">
-		        <input type="submit" value="확인" class="btn size">
+		        <a th:href="@{/user/findPW}" class="findPw">비밀번호찾기</a>
+		        <input type="submit" value="확인" class="btn2 size">
 		        <div class="buttons">
-		          <a href="#" class="btn">로그인</a>
-		          <a href="fintPW.html" class="btn">비밀번호 찾기</a>
-		          <a href="signUp.html" class="btn">회원가입</a>
+		          <a href="#" class="btn2 login2">로그인</a>
 		        </div>
 		      </form>
 		    </div>

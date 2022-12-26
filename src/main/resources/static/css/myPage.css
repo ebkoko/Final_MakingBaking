@@ -6,10 +6,9 @@
     }
 
     /* 사이드 바 */
-    .mypage {
+    .mypage2 {
       width: 170px;
       height: 120px;
-      /* border: 1px solid black; */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -19,10 +18,24 @@
 
     .menu {
       width: 170px;
-      height: 370px;
+      height: 400px;
       border: 1px solid rgba(0,0,0,.1);
       background: rgba(0,0,0,.1);
     }
+    
+    .menu-group, .menu-name {
+		margin-top:5px;
+	}
+    
+    .centre .left-nav-bar .menu .sub-menu .menu-group .menu-name a,
+    .centre .left-nav-bar .menu .sub-menu .menu-group a {
+		color: black;
+	}
+	
+    .centre .left-nav-bar .menu .sub-menu .menu-group .menu-name a:hover,
+    .centre .left-nav-bar .menu .sub-menu .menu-group a:hover {
+		color: red;
+	}
     
     .centre .left-nav-bar .menu .sub-menu{
       margin: 30px 20px;
@@ -104,17 +117,17 @@
       color: black;
     }
 
-    .test {
+    .paging {
       display: flex;
       justify-content: center;
       margin-bottom: 10px;
     }
     
-    .test a{
+    .paging a{
       color: black;
       letter-spacing: 2.5px;
     }
 
-    .test a:hover {
+    .paging a:hover {
       color: red;
     }
