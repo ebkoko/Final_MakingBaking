@@ -39,17 +39,14 @@ public class UserController {
 							.userId(userDTO.getUserId())
 							.userPw(userDTO.getUserPw())
 							.userName(userDTO.getUserNm())
-							
 							.userNo(userDTO.getUserNo())
 							.userBirth(userDTO.getUserBirth())
 							.userGender(userDTO.getUserGender())
 							.userTel(userDTO.getUserTel())
-							
 							.userMail(userDTO.getUserMail())
 							.userAddr1(userDTO.getUserAddr1())
 							.userAddr2(userDTO.getUserAddr2())
 							.userAddr3(userDTO.getUserAddr3())
-							
 							.build();
 			
 			userService.join(user);
@@ -68,7 +65,46 @@ public class UserController {
 		}
 	}
 	
+	@PostMapping("/idcheck")
+	public ResponseEntity<?> idCheck(UserDTO userDTO) {
+		ResponseDTO<Map<String, String>> responseDTO = new ResponseDTO<>();
+		Map<String, String> returnMap = new HashMap<String, String>();
+		
+		try {
+			User user = User.builder()
+							.userId(userDTO.getUserId())
+							.build();
+			
+			User checkedUser = userService.idcheck(user);
+			
+			if(checkedUser != null) {
+				returnMap.put("msg", "duplicatedId");
+			} else {
+				returnMap.put("msg", "idOk");
+			}
+			
+			responseDTO.setItem(returnMap);
+			
+			return ResponseEntity.ok().body(responseDTO);
+		} catch(Exception e) {
+			responseDTO.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(responseDTO);
+		}
+	}
 	
+	@GetMapping("/findID")
+	public ModelAndView findIdView() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("user/findID.html");
+		return mv;
+	}
+	
+	@GetMapping("/findPW")
+	public ModelAndView findPwView() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("user/findPW.html");
+		return mv;
+	}
 	
 	
 }

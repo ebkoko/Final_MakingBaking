@@ -9,10 +9,8 @@
 		
 		</script>
 	</th:block>
-	<th:block layout:frament="css">
-		<style>
-		
-		</style>
+	<th:block layout:fragment="css">
+		<link rel="stylesheet" th:href="@{/css/myPage.css}"/>
 	</th:block>
 </head>
 
@@ -21,34 +19,34 @@
 		<main class="centre">
 	    <!-- 사이드 바 -->
 	    <div class="left-nav-bar">
-	      <div class="mypage">
+	      <div class="mypage2">
 	        <h2>마이페이지</h2>
 	      </div>
 	      <div class="menu">
 	        <div class="sub-menu">
 	          <h3>My 쇼핑</h3>
-	          <ul>
-	            <li class="menu-name"><a href="#" style="color: black;">구매내역</a></li>
-	            <li class="menu-name"><a href="#" style="color: black;">예약확인</a></li>
-	            <li class="menu-name"><a href="#" style="color: black;">장바구니</a></li>
-	            <li class="menu-name"><a href="#" style="color: black;">찜목록</a></li>
+	          <ul class="menu-group">
+	            <li class="menu-name"><a href="#">구매내역</a></li>
+	            <li class="menu-name"><a href="#">예약확인</a></li>
+	            <li class="menu-name"><a href="#">장바구니</a></li>
+	            <li class="menu-name"><a href="#">찜목록</a></li>
 	          </ul>
 	        </div>
 	        <div class="sub-menu">
-	          <ul>
+	          <ul class="menu-group">
 	            <h3>My 할동</h3>
-	            <li class="menu-name"><a href="#" style="color: black;">나의 리뷰</a></li>
+	            <li class="menu-name"><a href="#">나의 리뷰</a></li>
 	          </ul>
 	        </div>
 	        <div class="sub-menu">
-	          <ul>
+	          <ul class="menu-group">
 	            <h3>My 정보</h3>
-	            <li class="menu-name"><a href="#" style="color: black;">개인정보확인/수정</a></li>
+	            <li class="menu-name"><a th:href="@{/mypage/changeInfo}">개인정보확인/수정</a></li>
 	          </ul>
 	        </div>
 	        <div class="sub-menu">
-	          <ul>
-	            <li style="list-style: none;"><a href="#"><h3 style=" color: black;">나의 QnA</h3></a></li>
+	          <ul class="menu-group">
+	            <li style="list-style: none;"><a href="#"><h3>나의 QnA</h3></a></li>
 	          </ul>
 	        </div>
 	      </div>
@@ -123,6 +121,13 @@
 	      </div>
 	    </div>
 	  </main>
+	  <div class="paging">
+	    <a href="#"><이전</a>
+	    <a href="#">1</a>
+	    <a href="#">2</a>
+	    <a href="#">3</a>
+	    <a href="#">다음></a>
+	  </div>
 	</div>
 </body>
 </html>

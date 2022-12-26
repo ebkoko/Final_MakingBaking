@@ -10,68 +10,172 @@
 			<script th:src="@{https://unpkg.com/swiper@7/swiper-bundle.min.js}"></script>
   			<script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
 			<script th:inline="javascript">
-					$(function() {
-						$("#joinForm").on("submit", function(e) {
-							e.preventDefault();
-							
-							$.ajax({
-								url: '/user/join',
-								type: 'post',
-								data: $("#joinForm").serialize(),
-								success: function(obj) {
-									console.log(obj);
-									if(obj.item.joinMsg == 'joinSuccess') {
-										alert("회원가입이 완료되었습니다.");
-										// 메인으로 이동 후 로그인창 내려오게 하게
-										window.location.href="/main/main?msg=" + obj.item.joinMsg;
-									} else {
-										alert("회원가입에 실패하셨습니다. 다시 입력해주세요.");
-										return;
+				$(function() {
+					$('#userGender option:selected').val();
+					$('#userGender option:selected').text();
+					let checkId = false;
+					var pw = false;
+					let pwRecheck = false;
+					let name = false;
+					let birth = false;
+					let tel = false;
+					let mail = false;
+					let addr3 = false;
+					$("#IdCheck").on("click", function() {
+						$.ajax({
+							url: "/user/idcheck",
+							type: "post",
+							data: $("#joinForm").serialize(),
+							success: function(obj) {
+								console.log(obj);
+								
+								if(obj.item.msg == 'duplicatedId') {
+									alert("중복된 아이디입니다.");
+									$("#userId").focus();
+								} else {
+									if(confirm("사용가능한 아이디입니다. " + $("#userId").val() + "를(을) 사용하시겠습니까?")) {
+										checkId = true;
+										$("#IdCheck").attr("disabled", true);
 									}
-								},
-								error: function(e) {
-									console.log(e)
 								}
-							})
-						});
-						
-						$("#pw").on("keyup", function(e) {
-					        let password = document.querySelector('#pw').value;
-					
-					        let strength = Strength(password);
-					        if(strength <= 2) {
-					          $(".pw-check").addClass('weak');
-					          $(".pw-check").removeClass('normal');
-					          $(".pw-check").removeClass('strong');
-					        } else if(strength > 2 && strength < 5 ) {
-					          $(".pw-check").removeClass('weak');
-					          $(".pw-check").addClass('normal');
-					          $(".pw-check").removeClass('strong');
-					        } else {
-					          $(".pw-check").removeClass('weak');
-					          $(".pw-check").removeClass('normal');
-					          $(".pw-check").addClass('strong');
-					        }
-					      });
-					      
-					      let pwRecheck = false;
-					      $("#pw2").on("change", function() {
-					        $("#pwRecheck").show();
-					        
-					        if($("#pw").val() == $("#pw2").val()) {
-					          pwRecheck = true;
-					          $("#pwRecheck").css("color", "#0f0");
-					          $("#pwRecheck").text("비밀번호가 일치합니다.");
-					        } else {
-					          pwRecheck = false;
-					          $("#pwRecheck").css("color", "#f00");
-					          $("#pwRecheck").text("비밀번호가 일치하지 않습니다.");
-					        }
-					      });
-					      
+							},
+							error: function(e) {
+								console.log(e);
+							}
+						})
+					});
+					$("#userId").on("change", function() {
+						checkId = false;
+						$("#IdCheck").attr("disabled", false);
 					});
 					
-					//작동안됨
+					
+					$("#joinForm").on("submit", function(e) {
+						e.preventDefault();
+						
+						if(!checkId) {
+							alert("중복체크를 눌러주세요.");
+							$("#userId").focus();
+							return;
+						}
+						/*
+						if(!pw) {
+							alert("비밀번호를 다시 입력해주세요.");
+							$("#pw").focus();
+							return;
+						}
+						
+						if(!pw2) {
+							alert("비밀번호가 일치하지 않습니다.");
+							$("#pw2").focus();
+							return;
+						}
+						
+						if(!name) {
+							alert("이름을 입력해주세요.");
+							$("#userNm").focus();
+							return;
+						}
+						if(!birth) {
+							alert("생년월일을 입력해주세요.");
+							$("#userBirth").focus();
+							return;
+						}
+						if(!tel) {
+							alert("전화번호를 입력해주세요.");
+							$("#userTel").focus();
+							return;
+						}
+						if(!mail) {
+							alert("이메일을 입력해주세요.");
+							$("#userMail").focus();
+							return;
+						}
+						if(!addr3) {
+							alert("상세주소를 입력해주세요.");
+							$("#detail-addr").focus();
+							return;
+						}
+						*/
+						
+						$.ajax({
+							url: '/user/join',
+							type: 'post',
+							data: $("#joinForm").serialize(),
+							success: function(obj) {
+								console.log(obj);
+								if(obj.item.joinMsg == 'joinSuccess') {
+									alert("회원가입이 완료되었습니다.");
+									window.location.href="/main/main?msg=" + obj.item.joinMsg;
+								} else {
+									alert("회원가입에 실패하셨습니다. 다시 입력해주세요.");
+									return;
+								}
+							},
+							error: function(e) {
+								console.log(e)
+							}
+						})
+					});
+						
+					$("#pw").on("keyup", function(e) {
+				        let password = document.querySelector('#pw').value;
+				
+				        let strength = Strength(password);
+				        if(strength <= 2) {
+				          $(".pw-check").addClass('weak');
+				          $(".pw-check").removeClass('normal');
+				          $(".pw-check").removeClass('strong');
+				        } else if(strength > 2 && strength < 5 ) {
+				          $(".pw-check").removeClass('weak');
+				          $(".pw-check").addClass('normal');
+				          $(".pw-check").removeClass('strong');
+				        } else {
+				          $(".pw-check").removeClass('weak');
+				          $(".pw-check").removeClass('normal');
+				          $(".pw-check").addClass('strong');
+				        }
+				      });
+				      
+						//비밀번호 입력될때마다 유효성 검사
+						$("#pw").on("change", function() {
+							//비밀번호 유효성 처리
+							if(!validatePassword($("#pw").val())) {
+								pw = false;
+								$("#pw2").show();
+								$("#pw").focus();
+							} else {
+								pw = true;
+								$("#pw2").hide();
+							}
+							
+							//비밀번호 확인까지 입력한 후 다시 비밀번호 재설정
+							if($("#pw").val() == $("#pw2").val()) {
+								pw2 = true;
+								$("#pwRecheck").css("color", "#0f0");
+								$("#pwRecheck").text("비밀번호가 일치합니다.");
+							} else {
+								pw2 = false;
+								$("#pwRecheck").css("color", "#f00");
+								$("#pwRecheck").text("비밀번호가 일치하지 않습니다.");
+							}
+						});
+				      
+				      $("#pw2").on("change", function() {
+							
+				        $("#pwRecheck").show();
+				        if($("#pw").val() == $("#pw2").val()) {
+				          pwRecheck = true;
+				          $("#pwRecheck").css("color", "#0f0");
+				          $("#pwRecheck").text("비밀번호가 일치합니다.");
+				        } else {
+				          pwRecheck = false;
+				          $("#pwRecheck").css("color", "#f00");
+				          $("#pwRecheck").text("비밀번호가 일치하지 않습니다.");
+				        }
+				      });
+					});
+					
 					function Strength(password) {
 				        let i = 0;
 				        if(password.length > 6) {
@@ -86,7 +190,7 @@
 				        if(/(?=.*[!@#$%^&*+=-])/.test(password)) {
 				          i++
 				        }
-				        if(/(?=.*[0-9])/.test(password)) {
+				        if(/(?=.*[0-9]$)/.test(password)) {
 				          i++
 				        }
 				        return i;
@@ -126,7 +230,7 @@
 			<link rel="stylesheet" th:href="@{/css/join.css}"/>
 		</th:block>
 	</head>
-	
+	<!-- name dt랑 맞추기 -->
 	<body>
 		<div layout:fragment="content" style="height:100%">
 		  <main style="margin-top: 4.5rem;">
@@ -135,41 +239,40 @@
 		        <h3>회원가입</h3>
 		        <div style="display: flex;">
 		          <input type="text" placeholder="아이디" class="box" id="userId" name="userId" style=" width: 70%;">
-		          <button class="check">중복체크</button>
+		          <button type="button" id="IdCheck" class="check">중복체크</button>
 		        </div>
 		
 		        <div class="pw-check">
 		          <div class="inputBox light">
-		            <input type="password" id="pw" required class="input" placeholder="비밀번호"><label for="pw" class="input-label"></label>
-		            <div class="show" onclick="fnPwShow(this);"></div>
+		            <input type="password" id="pw" name="userPw" required class="input" placeholder="비밀번호"><label for="pw" class="input-label"></label>
+		            <div id="show" class="show" onclick="fnPwShow(this);"></div>
 		          </div>
 		          <div class="check-light"></div>
 		        </div>
 		
 		        <div class=" check2">
 		          <div class="inputBox light">
-		            <input type="password" id="pw2" required class="input" placeholder="비밀번호확인" style="margin-top: 12px;"><label for="pw2" class="input-label"></label>
+		            <input type="password" id="pw2" name="userPwCheck" required class="input" placeholder="비밀번호확인" style="margin-top: 12px;"><label for="pw2" class="input-label"></label>
 		            <!-- <div class="show"></div> -->
 		          </div>
 		          <div class="check-light"></div>
 		          <p id="pwRecheck" style="font-size: 11px; text-align: left;"></p>
 		        </div>
-		        <!-- <input type="password" placeholder="비밀번호 확인" class="box"> -->
 		
-		
-		        <input type="text" placeholder="이름" class="box">
-		        <input type="text" placeholder="생년월일" class="box">
-		        <select class="box">
-		          <option value="체크안함">체크안함</option>
-		          <option value="남자">남자</option>
-		          <option value="여자">여자</option>
+		        <input type="text" id="userNm" name="userNm" placeholder="이름" class="box">
+		        <input type="text" id="userBirth" name="userBirth" placeholder="생년월일 ex)19901010" class="box">
+		        <select id="userGender" name="userGender" class="box">
+		          <option value="gen" selected disabled>성별</option>
+		          <option value="m">남자</option>
+		          <option value="f">여자</option>
+		          <option value="none">선택 안함</option>
 		        </select>
-		        <input type="text" placeholder="전화번호" class="box">
-		        <input type="text" placeholder="이메일" class="box">
-		        <input id="post"  type="text" value="우편번호" readonly onclick="findAddr()">
-		        <input id="addr" type="text" placeholder="주소" readonly> <br>
-		        <input id="detail-addr" type="text" placeholder="상세주소">
-		        <input type="submit" value="가입하기" class="btn size">
+		        <input type="text" id="userTel" name="userTel" placeholder="전화번호 ex)01012345678" class="box">
+		        <input type="text" id="userMail" name="userMail" placeholder="이메일 ex)xxx@xxx.com" class="box">
+		        <input id="post"  name="userAddr1" type="text" value="우편번호" readonly onclick="findAddr()">
+		        <input id="addr" name="userAddr2" type="text" placeholder="주소" readonly> <br>
+		        <input id="detail-addr" name="userAddr3" type="text" placeholder="상세주소">
+		        <input type="submit" value="가입하기" class="btn2 size">
 		      </form>
 		    </div>
 		  </main>

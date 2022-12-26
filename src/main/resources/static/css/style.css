@@ -1,9 +1,9 @@
 * {
-  /* font-family: sans-serif; */
   margin:0; padding:0;
   box-sizing: border-box;
   outline: none; border:none;
   text-decoration: none;
+  
 }
 html, body {
   height: 100%;
@@ -22,7 +22,7 @@ html, body {
 
 /* 헤더 */
 .logo img{
-  width: 10rem;
+  width: 7rem;
   float: left;
   margin-left: 10rem;
 }
@@ -30,12 +30,13 @@ html, body {
   display: inline-block;
   width: 100%;
   padding: 1rem;
-  background: wheat;
+  /*background: wheat;*/
 }
 .header .navbar a{
   margin:0 1rem;
   font-size: 1.7rem;
   color:black;
+  font-weight: 600;
 }
 #login-btn {
   float: right;
@@ -45,18 +46,31 @@ html, body {
 #login-btn .btn{
   margin-top: 0;
 }
-.btn{
+.btn, .login, .mypage {
   display: inline-block;
+  font-size: 1rem;
   margin-top: 1rem;
-  padding: 1rem;
-  background:lightgray;
-  color:black;
+  padding: 0.7rem;
+  background: white;
+  color: #28693F;
+  border: 1px solid #28693F;
   cursor: pointer;
   font-size: .9rem;
   border-radius: .5rem;
   font-weight: 500;
   text-align: center;
 }
+.login:hover, .mypage:hover {
+  background:#28693F;
+  color:white;
+  border: 1px solid #28693F;	
+}
+.btn-none {
+  background:#28693F;
+  color:white;
+  border: 1px solid #28693F;	
+}
+
 .navbar {
   text-align: center;
   /* margin-top: 2rem; */
@@ -64,6 +78,25 @@ html, body {
 }
 .nav-h {
   margin-top: 2.3rem;
+}
+.header .nav-h .navbar a {
+	position:relative;
+	display: inline-block;
+}
+.header .nav-h .navbar a::before {
+	content: '';
+	position: absolute;
+	left:0;
+	bottom: 0;
+	width: 100%;
+	height: 2px;
+	background-color: black;
+	scale: 0 1;
+	transform-origin: center;
+	transition: scale 0.25s;
+}
+.header .nav-h .navbar a:hover::before {
+	scale: 1;
 }
 
   /* 로그인 */
@@ -88,11 +121,21 @@ html, body {
   margin:2rem;
   text-align: center;
   padding:2rem;
-  width:30rem;
+  width:28rem;
   border-radius: .5rem;
   box-shadow: 0 .5rem 1rem rgba(0,0,0,.1);
-  border:1px solid black;
   background: #fff;
+}
+.button {
+  display: flex;
+  font-size: 12px;
+  margin: 10px 0 2rem 14rem;
+  gap: 7px;
+  color: black;
+}
+.button a {
+  color: black;
+  font-weight: 600;
 }
 
 .login-form-container form .buttons{
@@ -104,7 +147,7 @@ html, body {
 .login-form-container form .btn{
   display: block;
   width:100%;
-  margin:.5rem 0;
+  font-size: 1.1rem;
 }
 
 .login-form-container form h3{
@@ -121,14 +164,20 @@ html, body {
   color:black;
   cursor: pointer;
 }
+
+.kakao {
+	margin-top: 1rem;
+	cursor: pointer;
+}
+
 .input-group {
-  margin: 3rem auto;
+  margin: 3rem auto 10px;
   position: relative;
   border-bottom: 1px solid black;
   width: 200px;
   width: 100%;
 }
-#id, #pw {
+#id, #pw3 {
   width: 100%;
   /* border-style: none; */
 }
@@ -186,7 +235,7 @@ html, body {
       background: #303740;
       color: lightgray;
       width: 100%;
-      height: 200px;
+      height: 250px;
     }
     .footer .footer-log img {
       float: left;
@@ -214,6 +263,19 @@ html, body {
       float: right;
       margin: 10px auto;
     }
+    .insta {
+		cursor: pointer;
+    	float: left;
+    	margin: 4px 6px 0 0;
+    	color: rgb(238, 233, 233);
+	}
+	
+	.insta2 {
+		cursor: pointer;
+    	float: left;
+    	margin: 4px 6px 0 4rem;
+    	color: rgb(238, 233, 233);
+	}
 
 #container {
     width: 1200px; 

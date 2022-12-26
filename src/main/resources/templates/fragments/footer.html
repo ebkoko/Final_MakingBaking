@@ -2,27 +2,42 @@
 <html lang="ko"
 	  xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-	  	
+			
 	<body>
 		<footer th:fragment="footer" class="footer">
 		    <div class="footer-log">
-		      <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg"width="100px">
+		      <img th:src="@{/images/logo.png}" style="width: 100px; margin-left:-1rem;">
 		    </div>
 		    <div class="ft">
-		      <div>
+		      <div style="margin-top: 1.9rem; margin-left:-1rem;">
 		        <div id="footer-p">조장: 고은별</div>
 		        <div id="footer-p">조원: 신나라 안선민 안혜지 이래중</div>
 		      </div>
 		    </div>
 		    <div class="ft-details">
 		      <div class="left">
+		      <div>
+		      	<a th:href="@{https://www.instagram.com/ss_sseb/}"><i class="fa-brands fa-instagram insta"></i></a>
 		        <div class="ft-left t">고은별: 상품주문페이지</div>
+		      </div>
+		      <div>
+		        <a th:href="@{#}"><i class="fa-brands fa-instagram insta"></i></a>
 		        <div class="ft-left t">신나라: 상품상세페이지</div>
+		      </div>
+		      <div>
+		        <a th:href="@{https://www.instagram.com/raejung_lee/}"><i class="fa-brands fa-instagram insta"></i></a>
 		        <div class="ft-left t">이래중: 로그인,회원가입,정보수정</div>
 		      </div>
+		      </div>
 		      <div class="right">
+		      <div>
+		      	<a th:href="@{https://www.instagram.com/seonminiz/}"><i class="fa-brands fa-instagram insta2"></i></a>
 		        <div class="ft-right s">안선민: 관리자페이지</div>
+		      </div>
+		      <div>
+		        <a th:href="@{https://www.instagram.com/0103__hj/}"><i class="fa-brands fa-instagram insta2"></i></a>
 		        <div class="ft-right s">안혜지: Q&A,공지사항,이벤트게시판</div>
+		      </div>
 		      </div>
 		    </div>
 		  </footer>

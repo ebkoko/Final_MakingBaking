@@ -16,4 +16,13 @@ public class UserServiceImpl implements UserService {
 	public void join(User user) {
 		userRepository.save(user);
 	}
+	
+	@Override
+	public User idcheck(User user) {
+		if(!userRepository.findById(user.getUserId()).isEmpty()) {
+			return userRepository.findById(user.getUserId()).get();
+		} else {
+			return null;
+		}
+	}
 }
