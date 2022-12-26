@@ -14,25 +14,25 @@
 		      height: 100%;
 		      position: relative;
 		    }
-		    .dayclass {
+		    .item {
 		      position: relative;
 		      width: 950px;
 		      margin: 0 auto;
 		      margin-top: 100px;
 		      padding-top: 30px;
 		    }	
-		    #dayclass_hr{
+		    #item_hr{
 		      margin: 50px 0 50px 0;
 		      height: 2px; 
 		      background-color: rgb(235, 235, 235);		      
 		    }
 		
 		    /* 내용 h2, p 글씨색상 공통 */
-		    .c_intro_title, .c_map_title, .c_rvw_title, .c_cancle_title {
+		    .it_cintro_title, .it_cDetatils_title, .it_rvw_title, .c_cancle_title {
 		      color: rgb(74, 74, 74);
 		      font-weight: 600;
 		    }
-		    .c_intro_text, .c_map_text {
+		    .it_cintro_text, .it_cDetatils_text {
 		      font-size: 15px;
 		      color: rgb(102, 102, 102);
 		      line-height: 28px;
@@ -40,34 +40,34 @@
 				
 				
 		    /* 배너 dc_banner */
-		    .dc_banner_container {
+		    .it_banner_container {
 		      width: 100%;
 		      background-color: white;
 		    }
-		    .dc_banner {
+		    .it_banner {
 				display: flex;
 				justify-content: space-around;
 			}
-		    .banner_mian_img {
+		    .itbanner_mian_img {
 		      	margin-left: 50px;
 		    }
-		    .banner_explain_sTitle {
+		    .itbanner_explain_sTitle {
 				margin-top: 10px;
 			}
-		    .banner_explain {
+		    .itbanner_explain {
 		     	margin-top: 25px;
 		     	margin-right: 20px;
 		    }
-		    .banner_explain_details {
+		    .itbanner_explain_details {
 		      	margin-top: 80px;
 		    }
-		    .banner_explain_KRW{
+		    .itbanner_explain_KRW{
 				margin-top: 10px;
 			}
-		    .banner_explain_btn {
+		    .itbanner_explain_btn {
 		      	margin-top: 30px;
 		    }
-		    #dayclassRsrvtBtn, #dayclassLikeBtn {
+		    #itemGetBtn, #itemCartBtn {
 		      width: 120px;
 		      height: 40px;
 		      border: 1.2px solid #28693F;
@@ -81,23 +81,42 @@
 		      margin-right: 10px;
 		      letter-spacing:1px	
 		    }
-		    #dayclassRsrvtBtn:hover{
+		    #itemLikeBtn {
+			  width: 60px;
+		      height: 40px;
+		      border: 1.2px solid #28693F;
+		      border-radius: 4px;
+		      background-color: white;
+		      text-align: center;
+		      display: inline-block;
+		      color: #28693F;
+		      font-size: 16px;
+		      font-weight: 550;
+		      margin-right: 10px;
+		      letter-spacing:1px	
+			}
+		    #itemGetBtn:hover{
 		      background-color: #28693F;
 		      color: white;
-		      font-weight: 400;		      
+		      font-weight: 520;		      
 		    }
-		    #dayclassLikeBtn:hover {
+		    #itemCartBtn:hover {
 		      background-color: #28693F;
 		      color: white;
 		      font-weight: 520;
 		    }
-		
+		    #itemLikeBtn:hover {
+		      background-color: #28693F;
+		      color: white;
+		      font-weight: 520;
+		    }
+		    
 		
 		    /* 메뉴바 dc_menu */
-		    .dc_menu {
+		    .it_menu {
 		      margin-top: 60px;
 		    }
-		    .menu ul li {
+		    .itmenu ul li {
 		      text-decoration: none;
 		      list-style:none;
 		      color: rgb(51, 51, 51);
@@ -107,77 +126,51 @@
 		      text-align: center;		      
 		      background-color: rgb(235, 235, 235);
 		    }
-		    .menu ul a {
+		    .itmenu ul a {
 		      text-decoration: none;
 		      color: rgb(51, 51, 51);
 		    }		
-		    .menu a:hover {
+		    .itmenu a:hover {
 		      font-weight: 600;
 		      color: #28693F; 
 		    }		
 		   
-		    /* dc_cotents */
-		    .dc_contents_container {
+		   
+		    /* it_cotents */
+		    .it_contents_container {
 		      margin-top: 200px;
 		    }
 		    
-			/* 위치 */
-			.c_map {
-				margin-top:40px;
-			}
-			.kakao_location {
-			  margin: 20px 0 20px 0;
-			}
-			#kakao_map {
-			  width:80%;
-			  height:380px;
-			}
-			
-		    /* dc_content_apply 예약날짜 예약 시간*/
-		    .c_apply ul li {
-		      list-style:none;
-		      float: left;
-		      width: 50%;
-		      font-size: 17px;
-		      font-weight: 700;
-		      color: rgb(74, 74, 74);
-		      margin-bottom: 100px;
-		    }
-		    .c_apply ul li input {
-		      border: none; 
-		      background: transparent;
-		      width: 200px;
-		      height: 25px;
-		    }
+
 
 		    /* 후기 작성  */
-		    .rvw_write_member{
+		    .it_rvw_write_member{
 			  margin-top:30px;
 			}
-		    .rvw_write_form fieldset{
+		    .it_rvw_write_form fieldset{
 			  display: inline-block;
     		  direction: rtl;
     		  border:0;
     		  margin-bottom: 15px;
 			}
-			.rvw_write_form input[type=radio]{
+			.it_rvw_write_form input[type=radio]{
 		 	  display: none;
  			} 			
-			.rvw_write_form label{
+			.it_rvw_write_form label{
     		  font-size: 30px;
     		  color: transparent;
     		  text-shadow: 0 0 0 #f0f0f0;
 			}
-			.rvw_write_form label:hover{
+			.it_rvw_write_form label:hover{
     		  text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 			}
-			.rvw_write_form label:hover ~ label{
+			.it_rvw_write_form label:hover ~ label{
     		  text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 			}
-			.rvw_write_form input[type=radio]:checked ~ label{
+			.it_rvw_write_form input[type=radio]:checked ~ label{
    			  text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 			}		
-			.rvw_write_form textarea {	  
+			.it_rvw_write_form textarea {	  
 			  width: 100%;
     		  height: 6.3em;
     		  border: 1px solid rgb(102, 102, 102);
@@ -186,7 +179,7 @@
 			textarea::placeholder {
   			  font-size: 1.2em;
 			}
-			.rvw_writeBtn {
+			.it_rvw_writeBtn {
 			  margin-top:10px;
 			  float: right;
 			  width: 100px;
@@ -202,7 +195,7 @@
 		      line-height: 1;
 		      letter-spacing:3px;		      
 			}
-			.rvw_writeBtn:hover {
+			.it_rvw_writeBtn:hover {
 		      background: white;
 		      border: 1px solid #28693F;
 		      font-weight: 600;
@@ -210,14 +203,14 @@
 		    }
 			
 			/* 후기 목록 */
-		    .rvw_wirte_detail {
+		    .it_rvw_wirte_detail {
 		   	  margin-top:100px;
 		    }
-		    .rvw_option {
+		    .it_rvw_option {
 		      margin-bottom:15px;
 		      float:right;
 		    }
-		    #rvw_array {
+		    #it_rvw_array {
 			 border: 1px solid rgb(102, 102, 102);
 			 width: 100px;
 			 height: 28px;			 
@@ -244,22 +237,22 @@
 		      font-size: 13.5px;
 		      color: rgb(102, 102, 102);
 		    }		 
-		    .rvw_list{
+		    .it_rvw_list{
 		      width: 100%;
 		      text-align: center;
 		      height: 25px;
 		    }
-		    .rvw_pasing{
+		    .it_rvw_pasing{
 		      margin-top: 30px;
 		      margin-bottom: 50px;
 		    }
-		    .pasing {
+		    .it_pasing {
 		      text-decoration: none;
 		      width: 100%;
 		      text-align: center;
 		      height: 25px;
 		    }
-		    .pasing a {
+		    .it_pasing a {
 		      text-decoration: none;
 		      /* border: 0.5px solid rgb(102, 102, 102);
 		      border-radius: 2px; */
@@ -267,7 +260,7 @@
 		      color: rgb(102, 102, 102);
 		      font-size: 16px;      
 		    }
-		    .pasing a:hover {
+		    .it_pasing a:hover {
 		      font-weight: 600;
 		      /* border: 1.2px solid #28693F;
 		      background-color: rgb(234, 234, 234); */
@@ -501,46 +494,8 @@
 		</style>
 		</th:block>
 		<th:block layout:fragment="script">
-			<script th:inline="javascript" th:src="@{//dapi.kakao.com/v2/maps/sdk.js?appkey=7c48f4c17dd836f517f8c8b9e41ee2af&libraries=services}"></script>
 			<script th:inline="javascript">
-				$(function() {					
-					var mapContainer = document.getElementById('kakao_map'), // 지도를 표시할 div 
-					    mapOption = {
-					        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-					        level: 2 // 지도의 확대 레벨
-					    };  
-					
-					// 지도를 생성합니다    
-					var map = new kakao.maps.Map(mapContainer, mapOption); 
-					
-					// 주소-좌표 변환 객체를 생성합니다
-					var geocoder = new kakao.maps.services.Geocoder();
-					
-					// 주소로 좌표를 검색합니다
-					geocoder.addressSearch('제주특별자치도 제주시 첨단로 242', function(result, status) {
-					
-					    // 정상적으로 검색이 완료됐으면 
-					     if (status === kakao.maps.services.Status.OK) {
-					
-					        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-					
-					        // 결과값으로 받은 위치를 마커로 표시합니다
-					        var marker = new kakao.maps.Marker({
-					            map: map,
-					            position: coords
-					        });
-					
-					        // 인포윈도우로 장소에 대한 설명을 표시합니다
-					        var infowindow = new kakao.maps.InfoWindow({
-					            content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
-					        });
-					        infowindow.open(map, marker);
-					
-					        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-					        map.setCenter(coords);
-					    } 
-					}); 
-				})
+				
 			</script>
 		</th:block>
 	</head>
@@ -549,60 +504,60 @@
 	<body>
 	<div layout:fragment="content">
 	  <div class="entire-wrap" >	  
-	  <div class="dayclass">
+	  <div class="item">
 	    <main > 
-	      <section class="dc_banner"> 
-	        <div class="dc_banner_container">
-	          <div class="dc_banner">
-	            <div class="banner_mainImg">
-	              <img class="banner_main_img" th:src="@{/images/class_main.jpg}"
+	      <section class="it_banner"> 
+	        <div class="it_banner_container">
+	          <div class="it_banner">
+	            <div class="itbanner_mainImg">
+	              <img class="itbanner_main_img" th:src="@{/images/class_main.jpg}"
 	              width="350px">
 	            </div>
-	            <div class="banner_explain">        
-	              <h2>타이틀 ${dayclass.dayclassTitle }</h2>
-	              <div class="banner_explain_sTitle">
+	            <div class="itbanner_explain">        
+	              <h2>타이틀 ${item.dayclassTitle }</h2>
+	              <div class="itbanner_explain_sTitle">
 	              <p>소제목 ${}</p>
 	              </div>
-	              <div class="banner_explain_details">
-	                <span><img src="/images/class_day.png" width="17px">&ensp;원데이 클래스&ensp;</span>  
-	                <span><img src="/images/class_time.png" width="16.5px">&ensp;3시간&ensp;</span>
-	                <span><img src="/images/class_location.png" width="18px">서울/강남${} </span>
-	              </div>
-	              <div class="banner_explain_KRW">
+	              <div class="itbanner_explain_KRW">
 	                <span>KRW ${}</span>
 	              </div> 
-	              <div class="banner_explain_btn">
-	             
-	                <span><button type="button" id="dayclassRsrvtBtn" value="dayclassRsrvt">예약하기  
+	              <div class="itbanner_explain_details">
+	                <span>&ensp;&ensp;</span>  
+	                <span>&ensp;3시간&ensp;</span>
+	                <span>서울/강남${} </span>
+	              </div>
+	              <div class="itbanner_explain_btn">	             
+	                <span><button type="button" id="itemGetBtn" value="itemGet">바로구매  
 	                </button><a href=""></a></span>
-	          
-	                <span><button type="button" id="dayclassLikeBtn" th:value="@{dayclassLike}">♡ 1,809<!--<span 
-	                id="likeTd">${dayclassLikeCnt }</span>--></button></span>
+	          		<span><button type="button" id="itemCartBtn" value="itemCart">장바구니  
+	                </button><a href=""></a></span>
+	                <span><button type="button" id="itemLikeBtn" th:value="@{itemLike}">♡<!--<span 
+	                id="likeTd">${itemLikeCnt }</span>--></button></span>
 	              </div>
 	            </div>  
 	          </div>
 	        </div>
 	      </section>
-	      <section class="dc_menu">
-	        <div class="menu">
+	      <section class="it_menu">
+	        <div class="itmenu">
 	          <ul >
-	            <li><a href="/dayclass/getDayClass.do?dayclassCode=${dayclass.dayclassCode}#classIntro" 
-	              class="m_intro_a">클래스 소개</a></li>
-	            <li><a href="/dayclass/getDayClass.do?dayclassCode=${dayclass.dayclassCode}#classReview" 
+	            <li><a href="/item/getDayClass.do?dayclassCode=${item.itemCode}#classIntro" 
+	              class="m_intro_a">상품설명</a></li>
+	            <li><a href="/item/getDayClass.do?dayclassCode=${item.itemCode}#classApply" 
+	              class="m_apply_a">상세정보</a></li>
+	            <li><a href="/item/getDayClass.do?dayclassCode=${item.itemCode}#classReview" 
 	              class="m_rvw_a">후기${rvwCnt }</a></li>
-	            <li><a href="/dayclass/getDayClass.do?dayclassCode=${dayclass.dayclassCode}#classApply" 
-	              class="m_apply_a">신청하기</a></li>
-	            <li><a href="/dayclass/getDayClass.do?dayclassCode=${dayclass.dayclassCode}#classCancle" 
+	            <li><a href="/item/getDayClass.do?dayclassCode=${item.itemCode}#classCancle" 
 	              class="m_cancle_a">취소/환불</a></li>
 	          </ul>
 	        </div>    
 	      </section>
-	      <section class="dc_contents">
-	        <div class="dc_contents_container">
-	          <div class="contents">
-	            <div class="c_intro" id="classIntro" >
-	              <h3 class="c_intro_title">클래스 소개</h3>
-	              <p class="c_intro_text">
+	      <section class="it_contents">
+	        <div class="it_contents_container">
+	          <div class="it_contents">
+	            <div class="it_cintro" id="itemIntro" >
+	              <h3 class="it_cintro_title">상품설명</h3>
+	              <p class="it_cintro_text">
 	                ${lctr.lctrDetails } 국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국
 	                민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있으며, 법률에 저촉되지 아니하는 범위안에서 내
 	                부규율에 관한 규칙을 제정할 수 있다.              
@@ -615,31 +570,29 @@
 	                법률을 집행하기 위하여 필요한 사항에 관하여 대통령령을 발할 수 있다.
 	              </p>
 	            </div>
-	            <hr id="dayclass_hr">
-	            <div class="c_map" id="classMap">
-	              <h3 class="c_map_title">클래스 위치</h3>
-	              <p class="kakao_location">서울시 강남구 어쩌고 저쩌고</p>
-	              <div id="kakao_map" ></div>
+	            <hr id="item_hr">
+	            <div class="it_cDetatils" id="itemDetails">
+	              <h3 class="it_cDetatils_title">상세정보</h3>
+	              <p class="it_cDetatils_text">
+	              	${lctr.lctrDetails } 상품 상세 정보(영양정보)
+	              	국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국
+	                민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있으며, 법률에 저촉되지 아니하는 범위안에서 내
+	                부규율에 관한 규칙을 제정할 수 있다.              
+	                국무총리는 국회의 동의를 얻어 대통령이 임명한다. 헌법개정안이 제2항의 찬성을 얻은 때에는 헌법개 
+	                정은 확정되며, 대통령은 즉시 이를 공포하여야 한다.
+	                위원은 정당에 가입하거나 정치에 관여할 수 없다. 여자의 근로는 특별한 보호를 받으며, 고용·임금 
+	                및 근로조건에 있어서 부당한 차별을 받지 아니한다.
+	                행정권은 대통령을 수반으로 하는 정부에 속한다. 대한민국의 경제질서는 개인과 기업의 경제상의 자
+	                유와 창의를 존중함을 기본으로 한다. 대통령은 법률에서 구체적으로 범위를 정하여 위임받은 사항과 
+	                법률을 집행하기 위하여 필요한 사항에 관하여 대통령령을 발할 수 있다.
+	              </p>
 	            </div>
-				<hr id="dayclass_hr">
-	            <div class="c_apply" id="classApply" >
-	              <ul style="padding-left: 0;">
-	                <li>예약 날짜  <input type="text" id="rsrvtDate"></li>
-	                <li>예약 시간  <input type="text" id="rsrvtTime"></li>
-	              </ul>
-	              <!--
-	              <a href="#" target="" role="button" aria-haspopup="true" aria-expanded="false" 
-	              class="rsrvtDateBtn">예약 날짜</a>
-	              <a href="#" target="" role="button" aria-haspopup="true" aria-expanded="false" 
-	              class="rsrvtTimeBtn">예약 시간</a>
-	              -->
-	            </div>
-	            <hr id="dayclass_hr">
-	            <div class="c_rvw" id="classReview">
-	              <h3 class="c_rvw_title" >클래스 후기</h3>
-	              <div class="c_rvw_write">
-	              	<div class="rvw_write_member">
-	              		<form class="rvw_write_form" method="post" action="" >
+	            <hr id="item_hr">
+	            <div class="it_rvw" id="itemReview">
+	              <h3 class="it_rvw_title" >상품후기</h3>
+	              <div class="it_rvw_write">
+	              	<div class="it_rvw_write_member">
+	              		<form class="it_rvw_write_form" method="post" action="" >
 	              			<p>
 	              			작성자<input type="hidden" name="writerId" id="writerId" value="${loginUser.userId }">
 	              			</p>
@@ -659,20 +612,20 @@
 	              				<textarea placeholder=" 로그인 후 상품 및 클래스 후기를 작성해주세요."></textarea>
 	              			</p>
 	              			<div class=""> 
-	              			<button class="rvw_writeBtn" type="submit">등록</button>
+	              			<button class="it_rvw_writeBtn" type="submit">등록</button>
 	              			</div>
 	              		</form>
 	              	</div>
-	                <div class="rvw_wirte_detail">
-	                  <div class="rvw_option"> 
-	                    <select name="rvw_array" id="rvw_array">
+	                <div class="it_rvw_wirte_detail">
+	                  <div class="it_rvw_option"> 
+	                    <select name="it_rvw_array" id="it_rvw_array">
 	                      <option>평점순</option>
 	                      <option>최신순</option>
 	                      <option>오래된순</option>
 	                    </select>
 	                  </div>
 	                  <span>
-	                    <table class="rvw_list">
+	                    <table class="it_rvw_list">
 	                      <colgroup>
 	                        <col width="140">
 	                        <col width="">
@@ -714,8 +667,8 @@
 	                        </tr>
 	                      </tbody>
 	                    </table>
-	                    <div class="rvw_pasing">
-	                      <div class="pasing">
+	                    <div class="it_rvw_pasing">
+	                      <div class="it_pasing">
 	                        <a href="" title="첫 페이지" class="firstPage" onclick="">《</a>
 	                        <a href="" title="이전 페이지" class="prevPage" onclick="">〈</a>
 	                        <a href="" title="1 페이지" class="Page1" onclick="">1</a>
@@ -732,8 +685,8 @@
 	              </div>
 	            </div>
 	          </div>
-	          <hr id="dayclass_hr">
-	          <div class="c_cancle" id="classCancle" >
+	          <hr id="item_hr">
+	          <div class="c_cancle" id="itemCancle" >
 	            <h3 class="c_cancle_title">취소/환불</h3>
 	            <p class="c_cancle_text_A">궁금하신 점이나 서비스 이용에 불편한 점이 있으신가요?</p>
 	            <p class="c_cancle_text_B">문제가 되는 부분을 사진을 찍어 아래 중 편하신 방법으로 접수해 주시면 
