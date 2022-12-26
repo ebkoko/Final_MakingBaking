@@ -40,6 +40,7 @@ public class BoardController {
 												   qnaList.get(i).getBoardRegdate() == null ?
 												   null : 
 											       qnaList.get(i).getBoardRegdate().toString())
+										   .boardReply(qnaList.get(i).getBoardReply())
 										   .boardCnt(qnaList.get(i).getBoardCnt())
 										   .build();
 			getQnaList.add(returnBoard);

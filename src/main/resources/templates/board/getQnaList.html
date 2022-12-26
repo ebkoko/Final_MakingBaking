@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko"
 	xmlns:th="http://www.thymeleaf.org"
@@ -113,7 +114,18 @@
 		      padding: 0 5px;
 		      border-right: 1px solid gray;
 		    }
+		    .list-title>a {color: black;}
 		    .list-date, .list-answer { border-left: 1px solid gray;}
+		    .pagination {
+			  list-style: none;
+			  width: 100%;
+			  display: inline-block;
+			  text-align: center;
+			}
+			.pagination_button {
+			  float: left;
+			  margin-left: 5px;
+			}
 		</style>
 	</th:block>
 </head>
@@ -154,7 +166,7 @@
 	      </div>
 	    </div>
 	    <div id="mid-nav">
-	      <button id="dayclass-button">
+	      <button id="dayclass-button" >
 	        원데이클래스
 	      </button>
 	      <button id="item-button">
@@ -169,35 +181,38 @@
 	          <th width="15%" id="th-answer">답변여부</th>
 	          <th width="20%" id="th-date">작성일</th>
 	        </tr>
-	        <tr>
-	          <td class="list-title">안녕하세요 질문있어요</td>
-	          <td class="list-writer">hyeji</td>
-	          <td class="list-answer">답변완료</td>
-	          <td class="list-date">2022-12-20</td>
-	        </tr>
-	        <tr th:each="board: ${getBoardList}">
-				<td>
-					<a th:text="${board.boardTitle}"
-					   th:href="@{/board/updateBoardCnt/{boardNo} (boardNo=${board.boardNo})}">
+	        <tr th:each="qna: ${getQnaList}">
+				<td class="list-title">
+					<a th:text="${qna.boardTitle}"
+					   th:href="@{/board/updateBoardCnt/{boardNo} (boardNo=${qna.boardNo})}">
 					</a>
 				</td>			
-				<td th:text="${board.boardWriter}"></td>
-				<td th:text="${board.boardReply eq null ? '답변대기' : '답변완료'}"></td>
-				<td th:text="${board.boardCnt}"></td>
+				<td class="list-writer" th:text="${qna.boardWriter}"></td>
+				<td class="list-answer" th:text="${qna.boardReply eq null ? '답변대기' : '답변완료'}"></td>
+				<td class="list-date" th:text="${qna.boardRegdate eq null ? '' : #strings.substring(qna.boardRegdate, 0, 10)}"></td>
 			</tr>
-	        <tr>
-	          <td class="list-title">안녕하세요 질문있어요</td>
-	          <td class="list-writer">hyeji</td>
-	          <td class="list-answer">답변완료</td>
-	          <td class="list-date">2022-12-20</td>
-	        </tr>
-	        <tr>
-	          <td class="list-title">안녕하세요 질문있어요</td>
-	          <td class="list-writer">hyeji</td>
-	          <td class="list-answer">답변완료</td>
-	          <td class="list-date">2022-12-20</td>
-	        </tr>
 	      </table>
+	      <br/>
+		  <div style="text-align: center;">
+			<ul class="pagination">
+			  <li class="pagination_button">
+				<a href="">이전</a>
+			  </li>
+			  <li class="pagination_button">
+				<a href=""></a>
+			  </li>
+			  <li class="pagination_button">
+				<a href="#">다음</a>
+			  </li>
+			</ul>
+		  </div>
+		  <!-- <th:block  th:if="${session.userId == 'admin'}">
+	      <div id="btn-container">
+		    <div id="right-btn">
+		      <input type="button" id="insertQna" value="등록" onclick="">
+		    </div>
+		  </div>    
+		  </th:block> -->
 	    </div>
 	  </div>
 	</div>
