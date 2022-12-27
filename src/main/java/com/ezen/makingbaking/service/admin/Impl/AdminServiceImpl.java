@@ -7,7 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
+import com.ezen.makingbaking.repository.FileRepository;
 import com.ezen.makingbaking.repository.ItemRepository;
 import com.ezen.makingbaking.service.admin.AdminService;
 
@@ -15,6 +17,9 @@ import com.ezen.makingbaking.service.admin.AdminService;
 public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private ItemRepository itemRepository;
+	
+	@Autowired
+	private FileRepository fileRepository;
 
 	@Override
 	public List<Item> getItemList(Item item) {
@@ -52,11 +57,31 @@ public class AdminServiceImpl implements AdminService {
 	      
 	   }
 
+	
+	@Override
+	public void insertItem(Item item, List<ImgFile> uploadFileList) {
+		itemRepository.save(item);
+		itemRepository.flush();
+		
+		for(ImgFile imgFile : uploadFileList) {
+//			imgFile.setItem(item);
+			
+			int imgFileNo = fileRepository.getMaxFileNo(item.getItemNo());
+			imgFile.setFileNo(imgFileNo);
+			
+			fileRepository.save(imgFile);
+		}
+		
+	}
+	
+	
 	@Override
 	public void deleteItem(int itemNo) {
 		itemRepository.deleteById(itemNo);
 		
 	}
+
+	
 	
 
 //	@Override
