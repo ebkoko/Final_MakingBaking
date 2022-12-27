@@ -1,5 +1,6 @@
 package com.ezen.makingbaking.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,10 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -44,6 +47,9 @@ public class User {		// 회원 테이블
 	private String userAddr1;	// 우편번호
 	private String userAddr2;	// 기본주소
 	private String userAddr3;	// 상세주소
+	@Column
+	@ColumnDefault("ROLE_USER")
+	private String userRole;	
 	
 	
 	
