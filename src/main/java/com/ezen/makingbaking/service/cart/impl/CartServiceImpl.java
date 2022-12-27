@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Cart;
 import com.ezen.makingbaking.repository.CartRepository;
 import com.ezen.makingbaking.service.cart.CartService;
@@ -27,8 +28,8 @@ public class CartServiceImpl implements CartService {
 			cartRepository.save(cart);
 		} else {
 			//2. 없으면 인서트
-			if(!CollectionUtils.isEmpty(cartRepository.findByUserIdAndNotInStatus("aa"))) {
-				List<Cart> cartList = cartRepository.findByUserIdAndNotInStatus("aa");
+			if(!CollectionUtils.isEmpty(cartRepository.findAllByUserIdAndCartStatus("aa", 'C'))) {
+				List<Cart> cartList = cartRepository.findAllByUserIdAndCartStatus("aa", 'C');
 				
 				cart.setCartNo(cartList.get(0).getCartNo());
 				cart.setCartItemCnt(1);
@@ -42,5 +43,15 @@ public class CartServiceImpl implements CartService {
 			}
 		}
 		
+	}
+	
+	@Override
+	public List<CamelHashMap> getCartList(/*@AuthenticationPricipal CustomUserDetails customUser*/) {
+		return cartRepository.findAllItemInfoinCart("aa", 'C'); /*customUser.getUsername();*/
+	}
+	
+	@Override
+	public void deleteCart(Cart cart) {
+		cartRepository.delete(cart);
 	}
 }
