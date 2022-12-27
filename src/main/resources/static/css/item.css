@@ -17,7 +17,7 @@
 		    }
 		
 		    /* 내용 h2, p 글씨색상 공통 */
-		    .it_cintro_title, .it_cDetatils_title, .it_rvw_title, .c_cancle_title {
+		    .it_cintro_title, .it_cDetatils_title, .it_rvw_title, .c_cancel_title {
 		      color: rgb(74, 74, 74);
 		      font-weight: 600;
 		    }
@@ -258,7 +258,7 @@
 		
 		
 		    /* 환불 취소*/
-		    .c_cancle_text_A{ 
+		    .c_cancel_text_A{ 
 		      margin-top: 50px;
 		      margin-bottom: -5px;
 		      font-weight: 600;
@@ -266,7 +266,7 @@
 		      color: rgb(102, 102, 102);
 		     
 		    }
-		    .c_cancle_text_B{ 
+		    .c_cancel_text_B{ 
 			  margin-top: 13px;	
 		      font-size: 14px;
 		      color: rgb(102, 102, 102);
@@ -314,7 +314,7 @@
 		      font-size: 14px;
 		      
 		    }
-		    .c_cancleGuide {
+		    .c_cancelGuide {
 		      display: flex;
 		      position: relative;
 		      padding: 14px 0px 17px;
@@ -323,7 +323,7 @@
 		      font-size: 14px;
 		     
 		    }
-		    .c_refundG_title, .c_cancleG_title {
+		    .c_refundG_title, .c_cancelG_title {
 		      width: 200px;
 		      padding: 14px 0px 17px;
 		      padding-left: 29px;
@@ -331,13 +331,13 @@
 		      font-size: 16px;
 		      color: #28693F;
 		    }
-		    .c_refundG_text, .c_cancleG_text {
+		    .c_refundG_text, .c_cancelG_text {
 			  margin-top:15px;
 		      margin-left: 50px;
 		      font-size: 15px;
 		      color: rgb(102, 102, 102);
 		    }
-		    .refundGuideBtn, .cancleGuideBtn {
+		    .refundGuideBtn, .cancelGuideBtn {
 		      position: absolute;
 		      right: 25px;
 		      top: 50%;
@@ -433,12 +433,12 @@
 			
 			
 			/* 안내 자세히 보기 - 주문 및 예약 취소 안내 */
-			.c_cancleG_01 {
+			.c_cancelG_01 {
 				display: flex;
 			    padding: 39px 0 40px;
 			    border-top: 1px solid #ddd;
 			}
-		    .c_cancleG_01title {
+		    .c_cancelG_01title {
 				width: 250px;
 			    padding-left: 31px;
 			    font-weight: 600;
@@ -446,7 +446,7 @@
 			    color: rgb(102, 102, 102);
 			    line-height: 25px;
 			}
-			.c_cancleG_01text {
+			.c_cancelG_01text {
 			 	padding: 2px 20px 0 0;
 			    font-weight: 300;
 			    font-size: 14px;
@@ -454,13 +454,13 @@
 			    white-space: pre-line;
 			    margin-top: -23px
 			}
-			.c_cancleG_02 {
+			.c_cancelG_02 {
 				display: flex;
 			    padding: 39px 0 40px;
 			    border-top: 1px solid #ddd;
 			    border-bottom: 1px solid #ddd;
 			}
-		    .c_cancleG_02title {
+		    .c_cancelG_02title {
 				width: 250px;
 			    padding-left: 31px;
 			    font-weight: 600;
@@ -468,7 +468,7 @@
 			    color: rgb(102, 102, 102);
 			    line-height: 25px;
 			}
-			.c_cancleG_02text {					
+			.c_cancelG_02text {					
 			 	padding: 2px 20px 0 0;
 			    font-weight: 300;
 			    font-size: 14px;
@@ -477,6 +477,6 @@
 			    margin-top: -22px;
 			    
 			}
-			.c_cancleG_02text_A,  .c_cancleG_02text_B{
+			.c_cancelG_02text_A,  .c_cancelG_02text_B{
 				color: #28693F;	
 			}
