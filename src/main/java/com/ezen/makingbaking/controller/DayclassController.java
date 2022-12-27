@@ -17,6 +17,12 @@ public class DayclassController {
 	@Autowired
 	private DayclassService dayclassService;
 	
+	@GetMapping("/onedayClass")
+	public ModelAndView onedayClassView() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("dayclass/onedayClass.html");
+		return mv;
+	}
 	
 	@GetMapping("/dayclass/{dayclassNo}")
 	public ModelAndView getDayclass(@PathVariable int dayclassNo) {
