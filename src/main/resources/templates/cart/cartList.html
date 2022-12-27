@@ -47,49 +47,48 @@
 				    margin-left: 120px;
 				}
 				#list_title .title_itemDel {
-				    margin-left: 140px;
+				    margin-left: 130px;
 				}
 				#list_title+hr {
 					margin-bottom: 15px;
 				}
-				#item1 {
+				.item1 {
 					margin-top: 15px;
 					margin-bottom: 15px;
 				}
-				#itemSelect {
+				.itemSelect {
 				    width: 5%; 
 				    display: inline-block;
 				}
-				#select_item {
+				.check {
 				    margin-left: 20px;
 				    margin-top: 6px;
 				}
-				#itemView {
+				.itemView {
 				    display: inline-block; 
 				    width:58%;
 				    vertical-align: middle;
 				}
-				#item_Img {
+				.item_Img {
 				    margin-left: 10px;
 				    width: 100px;
 				}
-				#item_Detail {
+				.item_Detail {
 				    display: inline-block;
 				    margin-left: 15px;
 				    vertical-align: top;
 				}
-				#item_Detail #detailName {
+				.item_Detail .detailName {
 				    font-size: 0.95em;
-				}
-				
-				#item_Detail #detailPrice {
+				}				
+				.item_Detail .detailPrice {
 				    font-size: 0.8em;
 				}
-				#item_Quantity {
+				.item_Quantity {
 				    display: inline-block; 
 				    width:9%;
 				}
-				#Quantity {
+				.Quantity {
 					text-align:center;
 				}
 				input[type="number"] {
@@ -100,16 +99,16 @@
 					opacity: 1;
 					height: 30px;
 				}
-				#item_Price {
+				.item_Price {
 				    display: inline-block;
-				    width:10%;
+				    width:9%;
 				    text-align: right;
 				}
-				#item_Del {
+				.item_Del {
 				    display: inline-block; 
 				    width:16%;
 				}
-				#btnDel {
+				.btnDel {
 				    margin-left: 110px;
 				    width: 50px;
 				    height: 25px;
@@ -184,21 +183,57 @@
 					});
 					
 					
-					
-					// 상품 삭제버튼을 클릭했을 때
-					$("#btnDel").on('click', function() {
-						$.ajax({
-							url: '/cart/deleteCart',
-							type: 'post',
-							data: {itemNo: 2},
-							success: function(obj) {
-								console.log(obj);
-							}, error: function(e) {
-								console.log(e);
-							}
-						});
-					});
+					$(document).on("change", "input[name='Quantity']", function() {
+						const index = $(this).attr("data-current-index");
+						const itemPrice = $(this).attr("data-default-price");
+						const quantity = $(this).val();
+						
+						$(`#itemPrice${index}`).text(`${itemPrice*quantity}원`);
+					})
 				});
+				
+				const fnDeleteItem = (cartNo, itemNo) => {
+					$.ajax({
+							url: '/cart/cart',
+							type: 'delete',
+							data: {
+								cartNo: cartNo,
+								itemNo: itemNo
+							}
+						})
+						.done(function(result) {
+							let htmlStr = "";
+							for(let i = 0; i < result.items.length; i++) {
+								htmlStr += `
+									<div class="item1">
+					                    <div class="itemSelect">
+					                        <input type="checkbox" class="check" name="select_item">                    
+					                    </div>
+					                    <div class="itemView">
+					                        <img class="item_Img" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
+					                        <div class="item_Detail">
+					                            <div class="detailName"><a href="/item/item/${result.items[i].itemNo}">${result.items[i].itemName}</a></div>
+					                            <div class="detailPrice">${result.items[i].itemPrice}원</div>
+					                        </div>    
+					                    </div>
+					                    <div class="item_Quantity">
+					                        <input type="number" name="Quantity" class="Quantity" data-current-index="${i}" 
+					                         id="quantity${i}" min="1" max="5" value="${result.items[i].cartItemCnt}" data-default-price="${result.items[i].itemPrice}">
+					                    </div>                    
+					                    <div class="item_Price" id="itemPrice${i}">${result.items[i].itemPrice*result.items[i].cartItemCnt}원</div>
+					                    <div class="item_Del">
+					                        <input type="button" class="btnDel" value="삭제" onclick="fnDeleteItem(${result.items[i].cartNo}, ${result.items[i].itemNo});">
+					                    </div>
+					                </div>
+								`;
+								
+							}
+							$("#cart_item").html(htmlStr);
+						})
+						.fail(function(error) {
+							console.log(error);
+						});
+				}
 			</script>
 		</th:block>
 	</head>
@@ -222,23 +257,24 @@
 	            <hr>
 	            <form id="cartForm" action="cart/cartList" method="post">
 		            <div id="cart_item">
-		                <div id="item1">
-		                    <div id="itemSelect">
-		                        <input type="checkbox" class="check" name="select_item" id="select_item">                    
+		                <div class="item1" th:each="cart : ${getCartList}">
+		                    <div class="itemSelect">
+		                        <input type="checkbox" class="check" name="select_item">                    
 		                    </div>
-		                    <div id="itemView">
-		                        <img id="item_Img" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
-		                        <div id="item_Detail">
-		                            <div id="detailName"><a th:href="@{/}" th:text="${itemName}"></a>상품명</div>
-		                            <div id="detailPrice" >상품가격</div>
+		                    <div class="itemView">
+		                        <img class="item_Img" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
+		                        <div class="item_Detail">
+		                            <div class="detailName"><a th:href="@{/}" th:text="${cart.itemName}"></a></div>
+		                            <div class="detailPrice" th:text="${cart.itemPrice + '원'}"></div>
 		                        </div>    
 		                    </div>
-		                    <div id="item_Quantity">
-		                        <input type="number" name="Quantity" id="Quantity" min="1" max="5" value="1">
+		                    <div class="item_Quantity">
+		                        <input type="number" name="Quantity" class="Quantity" th:data-current-index="${cartStat.index}" 
+		                         th:id="'quantity' + ${cartStat.index}" min="1" max="5" th:value="${cart.cartItemCnt}" th:data-default-price="${cart.itemPrice}">
 		                    </div>                    
-		                    <div id="item_Price">원</div>  
-		                    <div id="item_Del">
-		                        <input type="button" id="btnDel" value="삭제">
+		                    <div class="item_Price" th:id="'itemPrice' + ${cartStat.index}" th:text="${cart.cartItemCnt * cart.itemPrice} + '원'"></div>
+		                    <div class="item_Del">
+		                        <input type="button" class="btnDel" value="삭제" th:onclick="fnDeleteItem([[${cart.cartNo}]], [[${cart.itemNo}]]);">
 		                    </div>
 		                </div>
 		            </div>

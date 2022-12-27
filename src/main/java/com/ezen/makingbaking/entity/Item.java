@@ -40,6 +40,7 @@ public class Item {		// 상품 테이블
 	)
 	private int itemNo;		// 상품번호
 	private String itemName;	// 상품이름
+	private String itemMinName;
 	private int itemPrice;		// 상품가격
 	private String itemDetails;		// 상품상세내용
 	private int itemStock;		// 재고량

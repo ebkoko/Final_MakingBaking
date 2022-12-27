@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class DayclassDTO {
 	private int dayclassNo;		// 클래스번호
 	private String dayclassName;		// 클래스명
+	private String dayclassMinName;
 	private int dayclassPrice;			// 클래스가격
 	private String dayclassDetails;		// 클래스 상세내용
 	private char dayclassTime;			// 클래스운영시간(A(AM),P(PM),B(BOTH))

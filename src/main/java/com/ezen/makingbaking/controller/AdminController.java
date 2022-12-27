@@ -1,7 +1,13 @@
 package com.ezen.makingbaking.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,14 +15,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ezen.makingbaking.dto.DayclassDTO;
+import com.ezen.makingbaking.common.FileUtils;
 import com.ezen.makingbaking.dto.ItemDTO;
-import com.ezen.makingbaking.entity.Dayclass;
+import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.service.admin.AdminService;
 
@@ -35,9 +44,6 @@ public class AdminController {
 	public ModelAndView getItemList(ItemDTO itemDTO,
 			@PageableDefault(page = 0, size = 10) Pageable pageable) {
 		Item item = Item.builder()
-//							.itemName(itemDTO.getItemName())
-//							.itemPrice(itemDTO.getItemPrice())
-//							.itemStatus(itemDTO.getItemStatus())
 							.searchCondition(itemDTO.getSearchCondition())
 							.searchKeyword(itemDTO.getSearchKeyword())
 							.build();
@@ -102,54 +108,65 @@ public class AdminController {
 		return mv;
 	}
 	
-//	@PostMapping("/insertItem")
-//	public void insertItem(ItemDTO itemDTO, MultipartFile[] uploadFiles, 
-//			HttpServletResponse response, HttpServletRequest request) throws IOException {
-//		Item item = Item.builder()
-//						.itemName(itemDTO.getItemName())
-//						.itemPrice(itemDTO.getItemPrice())
-//						.itemRegdate(LocalDateTime.now())
-//						.itemStatus(itemDTO.getItemStatus())
-//						.build();
-//		
-//		//DB에 입력될 파일 정보 리스트
-//		List<File> uploadFileList = new ArrayList<File>();
-//		
-//		if(uploadFiles.length > 0) {
-//			String attachPath = request.getSession().getServletContext().getRealPath("/")
-//					+ "/item/";
-//			
-//			File directory = new File(attachPath);
-//			
-//			if(!directory.exists()) {
-//				directory.mkdir();
-//			}
-//			
-//			//multipartFile 형식의 데이터를 DB 테이블에 맞는 구조로 변경
-//			for(int i = 0; i < uploadFiles.length; i++) {
-//				MultipartFile file = uploadFiles[i];
-//				
-//				if(!file.getOriginalFilename().equals("") &&
-//					file.getOriginalFilename() != null) {
-//					File itemFile = new File();
-//					
-//					itemFile = FileUtils.parseFileInfo(file, attachPath);
-//					
-//					uploadFileList.add(itemFile);
-//					
-//					//C:\Users\EZEN\AppData\Local\Temp\tomcat.9090.542208420639967599에서 이미지 확인 가능.
-//					//src > main에서 webapp 폴더 생성. webapp 폴더 안에 upload 폴더 생성을 한다면,
-//					//깃공유시, 조원들과 이미지를 함께 볼 수 있게됨.
-//				}
-//			}
-//		}
-//		
-//		adminService.insertItem(item, uploadFileList);
-//		
-//		response.sendRedirect("/admin/itemList");
-//	}
+	@PostMapping("/insertItem")
+	public void insertItem(ItemDTO itemDTO, MultipartFile[] uploadFiles, 
+			HttpServletResponse response, HttpServletRequest request) throws IOException {
+		Item item = Item.builder()
+						.itemStatus(itemDTO.getItemStatus())
+						.itemCate(itemDTO.getItemCate())
+						.itemName(itemDTO.getItemName())
+						.itemDetails(itemDTO.getItemDetails())
+						.itemPrice(itemDTO.getItemPrice())
+						.itemStatus(itemDTO.getItemStatus())
+						.itemRegdate(LocalDateTime.now())
+						.build();
 	
-	@DeleteMapping("item")
+		//DB에 입력될 파일 정보 리스트
+		List<ImgFile> uploadFileList = new ArrayList<ImgFile>();
+		
+		if(uploadFiles.length > 0) {
+			String attachPath = request.getSession().getServletContext().getRealPath("/")
+					+ "/item/";
+			
+			File directory = new File(attachPath);
+			
+			if(!directory.exists()) {
+				directory.mkdir();
+			}
+			
+			//multipartFile 형식의 데이터를 DB 테이블에 맞는 구조로 변경
+			for(int i = 0; i < uploadFiles.length; i++) {
+				MultipartFile file = uploadFiles[i];
+				
+				if(!file.getOriginalFilename().equals("") &&
+					file.getOriginalFilename() != null) {
+					ImgFile itemFile = new ImgFile();
+					
+					itemFile = FileUtils.parseFileInfo(file, attachPath);
+					
+					uploadFileList.add(itemFile);
+					
+					//C:\Users\EZEN\AppData\Local\Temp\tomcat.9090.542208420639967599에서 이미지 확인 가능.
+					//src > main에서 webapp 폴더 생성. webapp 폴더 안에 upload 폴더 생성을 한다면,
+					//깃공유시, 조원들과 이미지를 함께 볼 수 있게됨.
+				}
+			}
+		}
+		
+		adminService.insertItem(item, uploadFileList);
+		
+		response.sendRedirect("/item/itemList");
+	}
+	
+	
+	
+	
+	
+	
+	@PutMapping("/updateItem")
+//	public ResponseEntity<?> updateItem(ItemDTO itemDTO, HttpServletResponse response)
+	
+	@DeleteMapping("/delItem")
 	public void deleteItem(@RequestParam("itemNo") int itemNo) {
 		adminService.deleteItem(itemNo);
 	}

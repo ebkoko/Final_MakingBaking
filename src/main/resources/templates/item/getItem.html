@@ -12,13 +12,36 @@
 		</th:block>
 		
 		<th:block layout:fragment="script">
+		<script th:inline="javascript" th:src="@{/js/jquery-ui.min.js}"></script>
 			<script th:inline="javascript">
-				
+				$(function() {
+					// 취소환불 문의 자세히 보기
+					$(".refundGuideBtn").on("click", function(){
+						if($("#refundGuide").css("display") == "none") {
+							$("#refundGuide").css("display", "block");	
+							$(".refundGuideBtn").text("자세히 보기 ▲");	
+						} else {
+							$("#refundGuide").css("display", "none");
+							$(".refundGuideBtn").text("자세히 보기 ▼");	
+						}
+						
+					});
+					
+					$(".cancelGuideBtn").on("click", function(){
+						if($("#cancelGuide").css("display") == "none") {
+							$("#cancelGuide").css("display", "block");		
+							$(".cancelGuideBtn").text("자세히 보기 ▲");						
+						} else {
+							$("#cancelGuide").css("display", "none");
+							$(".cancelGuideBtn").text("자세히 보기 ▼");	
+						}
+						
+					});
+				});
 			</script>
 		</th:block>
 	</head>
 	<!-- head 영역 끝 -->
-	
 	<body>
 	<div layout:fragment="content">
 	  <div class="entire-wrap" >	  
@@ -59,14 +82,14 @@
 	      <section class="it_menu">
 	        <div class="itmenu">
 	          <ul >
-	            <li><a href="/item/getDayClass.do?dayclassCode=${item.itemCode}#classIntro" 
+	            <li><a th:href="/item/getDayClass.do?dayclassCode=${item.itemCode}#classIntro" 
 	              class="m_intro_a">상품설명</a></li>
-	            <li><a href="/item/getDayClass.do?dayclassCode=${item.itemCode}#classApply" 
+	            <li><a th:href="/item/getDayClass.do?dayclassCode=${item.itemCode}#classApply" 
 	              class="m_apply_a">상세정보</a></li>
-	            <li><a href="/item/getDayClass.do?dayclassCode=${item.itemCode}#classReview" 
+	            <li><a th:href="/item/getDayClass.do?dayclassCode=${item.itemCode}#classReview" 
 	              class="m_rvw_a">후기${rvwCnt }</a></li>
-	            <li><a href="/item/getDayClass.do?dayclassCode=${item.itemCode}#classCancle" 
-	              class="m_cancle_a">취소/환불</a></li>
+	            <li><a th:href="/item/getDayClass.do?dayclassCode=${item.itemCode}#classCancle" 
+	              class="m_cancel_a">취소/환불</a></li>
 	          </ul>
 	        </div>    
 	      </section>
@@ -75,20 +98,9 @@
 	          <div class="it_contents">
 	            <div class="it_cintro" id="itemIntro" >
 	              <h3 class="it_cintro_title">상품설명</h3>
-	              <p class="it_cintro_text">
-	                ${lctr.lctrDetails } 국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국
-	                민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있으며, 법률에 저촉되지 아니하는 범위안에서 내
-	                부규율에 관한 규칙을 제정할 수 있다.              
-	                국무총리는 국회의 동의를 얻어 대통령이 임명한다. 헌법개정안이 제2항의 찬성을 얻은 때에는 헌법개 
-	                정은 확정되며, 대통령은 즉시 이를 공포하여야 한다.
-	                위원은 정당에 가입하거나 정치에 관여할 수 없다. 여자의 근로는 특별한 보호를 받으며, 고용·임금 
-	                및 근로조건에 있어서 부당한 차별을 받지 아니한다.
-	                행정권은 대통령을 수반으로 하는 정부에 속한다. 대한민국의 경제질서는 개인과 기업의 경제상의 자
-	                유와 창의를 존중함을 기본으로 한다. 대통령은 법률에서 구체적으로 범위를 정하여 위임받은 사항과 
-	                법률을 집행하기 위하여 필요한 사항에 관하여 대통령령을 발할 수 있다.
-	              </p>
+	              <p class="it_cintro_text"></p>
 	            </div>
-	            <hr id="item_hr">
+	            <hr class="item_hr">
 	            <div class="it_cDetatils" id="itemDetails">
 	              <h3 class="it_cDetatils_title">상세정보</h3>
 	              <p class="it_cDetatils_text">
@@ -204,10 +216,10 @@
 	            </div>
 	          </div>
 	          <hr id="item_hr">
-	          <div class="c_cancle" id="itemCancle" >
-	            <h3 class="c_cancle_title">취소/환불</h3>
-	            <p class="c_cancle_text_A">궁금하신 점이나 서비스 이용에 불편한 점이 있으신가요?</p>
-	            <p class="c_cancle_text_B">문제가 되는 부분을 사진을 찍어 아래 중 편하신 방법으로 접수해 주시면 
+	          <div class="c_cancel" id="itemCancle" >
+	            <h3 class="c_cancel_title">취소/환불</h3>
+	            <p class="c_cancel_text_A">궁금하신 점이나 서비스 이용에 불편한 점이 있으신가요?</p>
+	            <p class="c_cancel_text_B">문제가 되는 부분을 사진을 찍어 아래 중 편하신 방법으로 접수해 주시면 
 	              빠르게 도와드리겠습니다.</p>
 	          </div>
 	          <div class="c_Qna">
@@ -236,69 +248,72 @@
 	              <strong class="c_refundG_title">교환 및 환불 안내</strong>
 	              <p class="c_refundG_text">교환 및 환불이 필요하신 경우 고객센터로 문의해주세요.</p>
 	              <button type="button" class="refundGuideBtn">자세히 보기 ▼</button>
-	            </div>			       
-	            <div class="c_refundG_01">
-	              <strong class="c_refundG_01title">01. 상품에 문제가 있는 경우</strong>
-	              <p class="c_refundG_01text_A">받으신 상품이 표시/광고/내용 또는 계약과 다른 경우에는 상품을 받은 날부터 1개월 이내,
-	              그 사실을 알게 된 날부터 14일 이내에 교환 및 환불을 요청하실 수 있습니다.
-	              
-	              <span class="c_refundG_01text_B">※ 배송 상품에 문제가 있는 것으로 확인되면 배송비는 MakingBaking이 부담합니다.</span>
-	              </p>
 	            </div>
-	            <div class="c_refundG_02">
-	              <strong class="c_refundG_02title">02. 단순 변심, 주문 착오의 경우</strong>
-	              <p class="c_refundG_02text">
-	              	<strong class="c_refundG_02text_A">실온/냉장 식품</strong><br>
-	              	재판매가 불가한 상품의 특성상, 단순변심, 주문 착오 시 교환 및 반품이 어려운 점 양해 부탁드립니다.
-	              	상품에 따라 조금씩 맛이 다를 수 있으며, 개인의 기호에 따라 같은 상품도 다르게 느끼실 수 있습니다.			              	
-	              	
-	              	<strong class="c_refundG_02text_B">유통기한 30일 이상 식품</strong><br>
-	              	상품을 받은 날부터 7일 이내 관리자에게 문의해주세요.
-	              	
-	              	<span>※ 단순 변심으로 인한 배송 상품 교환 또는 환불의 경우 고객님께서 배송비 6,000원을 부담하셔야 합니다.(주문건 배송비를 결제하셨을 경우 3,000원)</span>	
-	              </p>
-	            </div>		            
-	            <div class="c_refundG_03">
-	              <strong class="c_refundG_03title">03. 교환/반품이 불가한 경우</strong>
-	              <p class="c_refundG_03text">
-	              	다음에 해당하는 교환/환불 신청은 처리가 어려울 수 있으니 양해 부탁드립니다.
-	              	<span>
-	              	- 고객님의 책임 있는 사유로 상품이 멸시되거나 훼손된 경우
-	              	- 고객님의 사용 또는 일부 소비로 상품의 가치가 감소한 경우
-	              	- 시간이 지나 다시 판매하기 곤란할 정도로 상품의 가치가 감소한 경우
-	              	- 복제가 가능한 상품의 포장이 훼손된 경우
-	              	- 고객님의 주문에 따라 개별적으로 생산되는 상품의 제작이 이미 진행된 경우
-	              	</span>
-	              </p>
+	            <div id="refundGuide">			       
+		            <div class="c_refundG_01">
+		              <strong class="c_refundG_01title">01. 상품에 문제가 있는 경우</strong>
+		              <p class="c_refundG_01text_A">받으신 상품이 표시/광고/내용 또는 계약과 다른 경우에는 상품을 받은 날부터 1개월 이내,
+		              그 사실을 알게 된 날부터 14일 이내에 교환 및 환불을 요청하실 수 있습니다.
+		              
+		              <span class="c_refundG_01text_B">※ 배송 상품에 문제가 있는 것으로 확인되면 배송비는 MakingBaking이 부담합니다.</span>
+		              </p>
+		            </div>
+		            <div class="c_refundG_02">
+		              <strong class="c_refundG_02title">02. 단순 변심, 주문 착오의 경우</strong>
+		              <p class="c_refundG_02text">
+		              	<strong class="c_refundG_02text_A">실온/냉장 식품</strong><br>
+		              	재판매가 불가한 상품의 특성상, 단순변심, 주문 착오 시 교환 및 반품이 어려운 점 양해 부탁드립니다.
+		              	상품에 따라 조금씩 맛이 다를 수 있으며, 개인의 기호에 따라 같은 상품도 다르게 느끼실 수 있습니다.			              	
+		              	
+		              	<strong class="c_refundG_02text_B">유통기한 30일 이상 식품</strong><br>
+		              	상품을 받은 날부터 7일 이내 관리자에게 문의해주세요.
+		              	
+		              	<span>※ 단순 변심으로 인한 배송 상품 교환 또는 환불의 경우 고객님께서 배송비 6,000원을 부담하셔야 합니다.(주문건 배송비를 결제하셨을 경우 3,000원)</span>	
+		              </p>
+		            </div>		            
+		            <div class="c_refundG_03">
+		              <strong class="c_refundG_03title">03. 교환/반품이 불가한 경우</strong>
+		              <p class="c_refundG_03text">
+		              	다음에 해당하는 교환/환불 신청은 처리가 어려울 수 있으니 양해 부탁드립니다.
+		              	<span>
+		              	- 고객님의 책임 있는 사유로 상품이 멸시되거나 훼손된 경우
+		              	- 고객님의 사용 또는 일부 소비로 상품의 가치가 감소한 경우
+		              	- 시간이 지나 다시 판매하기 곤란할 정도로 상품의 가치가 감소한 경우
+		              	- 복제가 가능한 상품의 포장이 훼손된 경우
+		              	- 고객님의 주문에 따라 개별적으로 생산되는 상품의 제작이 이미 진행된 경우
+		              	</span>
+		              </p>
+		            </div>
+	            </div> 
+	            <div class="c_cancelGuide">
+	              <strong class="c_cancelG_title">주문 및 예약 취소 안내</strong>
+	              <p class="c_cancelG_text">상품 주문 및 클래스 예약을 취소하실 수 있습니다.</p>
+	              <button type="button" class="cancelGuideBtn">자세히 보기 ▼</button>
 	            </div>
-	            <div class="c_cancleGuide">
-	              <strong class="c_cancleG_title">주문 및 예약 취소 안내</strong>
-	              <p class="c_cancleG_text">상품 주문 및 클래스 예약을 취소하실 수 있습니다.</p>
-	              <button type="button" class="cancleGuideBtn">자세히 보기 ▼</button>
-	            </div>
-	            <div class="c_cancleG_01">
-	              <strong class="c_cancleG_01title">상품 주문 취소 관련</strong>
-	              <p class="c_cancleG_01text">
-	              - [배송준비중] 부터는 취소가 불가하니, 반품으로 진행해주세요.
-	              - 상품에 반품이 불가할 수 있습니다.
-	              - 일부 예약상품은 배송 3~4일 전에만 취소 가능합니다
-	              - 주문상품의 부분취소는 불가능합니다. 전체 주문 취소 후 다시 구매 해주세요.
-	              </p>
-	            </div>
-	            <div class="c_cancleG_02">
-	              <strong class="c_cancleG_02title">클래스 예약 취소 관련</strong>
-	              <p class="c_cancleG_02text">
-	              	<strong class="c_cancleG_02text_A">클래스 예약 취소</strong><br>
-	              	- 클래스 예약 취소는, 클래스 진행 1일 전까지 취소 가능합니다.
-	              	- 클래스 예약은 당일 취소가 불가합니다.
-	              	
-	              	<strong class="c_cancleG_02text_B">클래스 예약 환불</strong><br>
-				 	- 클래스 진행 후 환불은 불가합니다.
-				  	- 클래스 진행 1일 전 취소시 환불 가능하니, 고객센터에 문의해주세요.
-	              </p>
-	            </div>
-	          </div>
-	          <br><br><br><br><br><br><br><br><br>
+	            <div id="cancelGuide">
+		            <div class="c_cancelG_01">
+		              <strong class="c_cancelG_01title">상품 주문 취소 관련</strong>
+		              <p class="c_cancelG_01text">
+		              - [배송준비중] 부터는 취소가 불가하니, 반품으로 진행해주세요.
+		              - 상품에 반품이 불가할 수 있습니다.
+		              - 일부 예약상품은 배송 3~4일 전에만 취소 가능합니다
+		              - 주문상품의 부분취소는 불가능합니다. 전체 주문 취소 후 다시 구매 해주세요.
+		              </p>
+		            </div>
+		            <div class="c_cancelG_02">
+		              <strong class="c_cancelG_02title">클래스 예약 취소 관련</strong>
+		              <p class="c_cancelG_02text">
+		              	<strong class="c_cancelG_02text_A">클래스 예약 취소</strong><br>
+		              	- 클래스 예약 취소는, 클래스 진행 1일 전까지 취소 가능합니다.
+		              	- 클래스 예약은 당일 취소가 불가합니다.
+		              	
+		              	<strong class="c_cancelG_02text_B">클래스 예약 환불</strong><br>
+					 	- 클래스 진행 후 환불은 불가합니다.
+					  	- 클래스 진행 1일 전 취소시 환불 가능하니, 고객센터에 문의해주세요.
+		              </p>
+		            </div>
+		          </div>	
+	          </div> 
 	        </div>
 	      </section>  
 	  	</main>

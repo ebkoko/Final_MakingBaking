@@ -37,6 +37,7 @@ public class Dayclass {		// 원데이클래스 테이블
 	)
 	private int dayclassNo;		// 클래스번호
 	private String dayclassName;		// 클래스명
+	private String dayclassMinName;
 	private int dayclassPrice;			// 클래스가격
 	private String dayclassDetails;		// 클래스 상세내용
 	private char dayclassTime;			// 클래스운영시간(A(AM),P(PM),B(BOTH))

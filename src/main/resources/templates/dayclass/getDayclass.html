@@ -109,11 +109,25 @@
 					
 					
 					// 예약 인원
-					$(".peopleNm_plus").on("click", function(){
+					$("#peopleNm_plus").on("click", function(){
+						$("#peopleNm_cnt").val(parseInt($("#peopleNm_cnt").val()) + 1);
 						
+						if($("#peopleNm_cnt").val() > 4) {
+							$("#peopleNm_cnt").val(4);
+							alert("최대인원은 4명까지 설정할 수 있습니다.");
+							return;
+						}
 					});
 						
+					$("#peopleNm_minus").on("click", function(){
+						$("#peopleNm_cnt").val(parseInt($("#peopleNm_cnt").val()) - 1);
 						
+						if($("#peopleNm_cnt").val() < 1) {
+							$("#peopleNm_cnt").val(1);
+							alert("최소인원은 1명입니다.");
+							return;
+						}
+					});
 						
 				});
 			</script>
@@ -135,7 +149,9 @@
 	            </div>
 	            <div class="banner_explain">        
 	              <h1 th:text="${dayclass.dayclassName}"></h1>
-	              <div class="banner_explain_sTitle">
+	              
+	              <div class="banner_explain_MinName">
+	              	<p th:text="${dayclass.dayclassMinName}"></p>
 	              </div>
 	              <div class="banner_explain_details">
 	                <span><img src="/images/class_day.png" width="17px">&ensp;원데이 클래스&ensp;</span>  
@@ -176,7 +192,8 @@
 	          <div class="contents">
 	            <div class="c_intro" id="classIntro" >
 	              <h3 class="c_intro_title">클래스 소개</h3>
-	              <p class="c_intro_text" th:text="${dayclass.dayclassDetails}"></p>
+	              <textarea class="c_intro_text"  th:text="${dayclass.dayclassDetails}"></textarea>
+	              <!--<p class="c_intro_text" th:text="${dayclass.dayclassDetails}"></p>-->
 	            </div>
 	            
 	            <hr class="dayclass_hr">
@@ -199,9 +216,9 @@
 					</li>
 					<li><img src="/images/class_people.png" width="23px">
 						<div class="peopleNm">
-							<button type="button" name="수량내리기" class="peopleNm_minus">－</button>
-							<input type="number" class="peopleNm_cnt" min="1" max="4" value="1">
-							<button type="button" name="수량올리기" class="peopleNm_plus">＋</button>
+							<button type="button" name="수량내리기" id="peopleNm_minus" class="peopleNm_minus">－</button>
+							<input type="number" id="peopleNm_cnt" class="peopleNm_cnt" min="1" max="4" value="1">
+							<button type="button" name="수량올리기" id="peopleNm_plus" class="peopleNm_plus">＋</button>
 						</div>
 					</li>
 					<li>
@@ -268,29 +285,14 @@
 	                        </tr>
 	                      </thead>
 	                      <tbody>
-	                        <tr>
-	                          <td>⭐⭐⭐⭐⭐</td>
-	                          <td>국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있다.</td>
-	                          <td>2022/12/25</td>
-	                          <td>abcde***</td>
-	                        </tr>
-	                        <tr>
-	                          <td>⭐⭐</td>
-	                          <td>국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있다.</td>
-	                          <td>2022/12/25</td>
-	                          <td>abcde***</td>
-	                        </tr>
-	                        <tr>
-	                          <td>⭐⭐⭐⭐⭐</td>
-	                          <td>국회의원은 법률이 정하는 직을 겸할 수 없다. </td>
-	                          <td>2022/12/25</td>
-	                          <td>abcde***</td>
-	                        </tr>
-	                        <tr>
-	                          <td>⭐⭐⭐</td>
-	                          <td>국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있다.</td>
-	                          <td>2022/12/25</td>
-	                          <td>abcde***</td>
+	                        <tr th:each="review : ${reviewList}">
+	                          <td>
+	                          	<span th:each="num : ${#numbers.sequence(1, review.rvwScore)}">⭐</span>
+                          	  </td>
+	                          <td th:text="${review.rvwContent}"></td>
+	                          <td th:text="${review.rvwRegdate eq null ? '' : #strings.substring(review.rvwRegdate, 0, 10)}"></td>
+	                          <td sec:authorize access="hasRole('ROLE_ADMIN')" th:text="${review.rvwWriter}"></td>
+	                          <td sec:authorize access="hasRole('permitAll')" th:text="${review.rvwWriter.substring(0, review.rvwWriter.length()-3) + '***'}"></td>
 	                        </tr>
 	                      </tbody>
 	                    </table>

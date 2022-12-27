@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
 
 public interface AdminService {
@@ -13,6 +14,8 @@ public interface AdminService {
 	
 	List<Item> getItemList(Item item);
 	Page<Item> getPageItemList(Item item, Pageable pageable);
+	
+	void insertItem(Item item, List<ImgFile> uploadFileList);
 	
 	void deleteItem(int ItemNo);
 }

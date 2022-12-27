@@ -9,11 +9,13 @@
 	<head>
 		<th:block layout:fragment="css">
 			<style>
+				#itemAdmin_Title {
+					font-size: 40px;
+				}
 				/* 검색 div */
 				#item_search {
 					margin: 80px auto;
 				}
-				
 				/* 검색창 */
 				#inputSearch {
 					width: 250px;
@@ -36,9 +38,17 @@
 					cursor: pointer;
 				}
 				
+				/* 전체선택 Select */
+				#div_item_totalSelect {
+					margin: 15px auto;
+					text-align: right;
+				}
+				
 				/* 테이블 */
 				#itemList_T {
 					width: 1200px;
+					height: 200px;
+					border: 1.2px solid #28693F;
 					border-collapse: collapse;
 					border-left: hidden;
 					border-right: hidden;
@@ -61,16 +71,11 @@
 				}
 				
 				#itemList_T td {
+					border-bottom: 1.2px solid #28693F;
 					text-align: center;
 				}
-				#item_totalSelect {
-					display: inline-block;
-				}
 				
-				#itemBtn_div {
-					margin: 20px auto;
-				}
-				
+
 				/* 수정버튼 */
 			    #itemMod {
 					width:80px;
@@ -78,37 +83,42 @@
 					margin-left: 22px;
 			    }
 			    
+			    /* 상품삭제&등록 버튼 div */
+			    #itemTotalBtn {
+					 text-align:right;
+					 margin: 50px auto;
+				}
 			    /* 상품삭제버튼 */
 			    #itemDelete {
-					width: 120px;
-			      	height: 40px;
+					width: 150px;
+			      	height: 50px;
 			     	border: 1.2px solid #28693F;
 					border-radius: 4px;
 					background-color: white;
 					text-align: center;
 					display: inline-block;
 					color: #28693F;
-					font-size: 16px;
+					font-size: 18px;
 					font-weight: 550;
 					letter-spacing:1px;
+					margin-right: 30px;
 			    }
 			    #itemDelete:hover {
 					background-color: #28693F;
 					color: white;
 					font-weight: 550;
 				}
-				
 				/* 상품등록버튼 */
 			    #itemRegistration {
-			     	width: 120px;
-			      	height: 40px;
+			     	width: 150px;
+			      	height: 50px;
 			     	border: 1.2px solid #28693F;
 					border-radius: 4px;
 					background-color: white;
 					text-align: center;
 					display: inline-block;
 					color: #28693F;
-					font-size: 16px;
+					font-size: 18px;
 					font-weight: 550;
 					letter-spacing:1px;
 			    }
@@ -117,7 +127,6 @@
 					color: white;
 					font-weight: 550;
 				}
-				
 				
 				
 				/* 페이징처리 */
@@ -135,15 +144,31 @@
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
 				$(function() {
+					//검색창(상품카테, 판매상태)
 					$("#searchCondition").on("change", function() {
-						if($(this).val() == 'ITEMSTATUS') {
+						if($(this).val() == 'ITEMCATE') {
 							$("#inputSearch").hide();
-							$(".selectSearch").show();
+							$("#selectSearch1").show();
+						} else if($(this).val() == 'ITEMSTATUS') {
+							$("#inputSearch").hide();
+							$("#selectSearch2").show();
 						} else {
 							$("#inputSearch").show();
-							$(".selectSearch").hide();
+							$("#selectSearch1").hide();
+							$("#selectSearch2").hide();
 						}
 					});
+					
+					// 전체선택 버튼 클릭했을 때
+					$("#itemSelectAll").click(function() {
+						var chk = $("#itemSelectAll").prop("checked");
+						if(chk) {
+							$("input[name='select_item']").prop("checked", true);
+						} else {
+							$("input[name='select_item']").prop("checked", false);
+						}
+					});
+					
 					
 					//상품삭제 버튼 클릭 시
 					$("#itemDelete").on('click', function (e) {
@@ -170,8 +195,8 @@
 	
 <body>
 	<div id="container" layout:fragment="content">
-		<div id="h1_item_admin">
-			<h1>상품 관리</h1>
+		<div>
+			<h1 id="itemAdmin_Title">상품 관리</h1>
 		</div>
 		
 		<div id="item_search">
@@ -184,27 +209,28 @@
 				<option value="ITEMSTATUS" name="itemStatus" th:selected="${searchCondition == 'ITEMSTATUS'}">상태</option>
             </select>
             <input type="text" name="searchKeyword" value="" id="inputSearch" 
-            	th:style="${searchCondition != 'ITEMSTATUS' && searchCondition != 'ITEMCATE'  ? 'display: inline-block;' : 'display: none;'}">
-            <select name="searchKeyword" class="selectSearch" th:style="${searchCondition == 'ITEMSTATUS' ? 'display: inline-block;' : 'display: none;'}">
-            <option>선택하세요.</option>
-            	<option value="Y" th:selected="${searchKeyword == 'Y'}">재고있음(Y)</option>
-              	<option value="S" th:selected="${searchKeyword == 'S'}">재고없음(S)</option>
-              	<option value="N" th:selected="${searchKeyword == 'N'}">판매중지(N)</option>
-            </select>
-            <select name="searchKeyword" class="selectSearch" th:style="${searchCondition == 'ITEMCATE' ? 'display: inline-block;' : 'display: none;'}">
+            	th:style="${ searchCondition != 'ITEMCATE' && searchCondition != 'ITEMSTATUS'  ? 'display: inline-block;' : 'display: none;'}">
+            <select name="searchKeyword1" id="selectSearch1" th:style="${searchCondition == 'ITEMCATE' ? 'display: inline-block;' : 'display: none;'}">
             	<option>선택하세요.</option>
-            	<option value="CAKE" th:selected="${searchKeyword == 'CAKE'}">케이크</option>
-              	<option value="BREAD" th:selected="${searchKeyword == 'BREAD'}">빵</option>
-              	<option value="COOKIE" th:selected="${searchKeyword == 'COOKIE'}">쿠키</option>
-              	<option value="DESSERT" th:selected="${searchKeyword == 'DESSERT'}">디저트</option>
-              	<option value="VEGAN" th:selected="${searchKeyword == 'VEGAN'}">비건</option>
+            	<option value="CAKE" th:selected="${searchKeyword1 == 'CAKE'}">케이크</option>
+              	<option value="BREAD" th:selected="${searchKeyword1 == 'BREAD'}">빵</option>
+              	<option value="COOKIE" th:selected="${searchKeyword1 == 'COOKIE'}">쿠키</option>
+              	<option value="DESSERT" th:selected="${searchKeyword1 == 'DESSERT'}">디저트</option>
+              	<option value="VEGAN" th:selected="${searchKeyword1 == 'VEGAN'}">비건</option>
             </select>
+            <select name="searchKeyword2" id="selectSearch2" th:style="${searchCondition == 'ITEMSTATUS' ? 'display: inline-block;' : 'display: none;'}">
+            <option>선택하세요.</option>
+            	<option value="Y" th:selected="${searchKeyword2 == 'Y'}">재고있음(Y)</option>
+              	<option value="S" th:selected="${searchKeyword2 == 'S'}">재고없음(S)</option>
+              	<option value="N" th:selected="${searchKeyword2 == 'N'}">판매중지(N)</option>
+            </select>
+            
             <button type="button" id="btnSearch">검색</input>
         </div>
         
 		<!-- 전체선택 Select -->
 		<div id="div_item_totalSelect">
-			<input type="checkbox" id="item_totalSelect"> 전체 선택</td>
+			<label for="selectAll"><input type="checkbox" name="select" id="itemSelectAll"> <span>전체선택</span></label>
 		</div>
         
         <!-- 상품 리스트 Table -->
@@ -220,24 +246,23 @@
 			        <th class="itemList_T_10">상품 관리</th>
 	      		</tr>
 	      		<tr th:each="item: ${getItemList.content}">
-	      			<td><input type="checkbox"></td>
+	      			<td><input type="checkbox" name="select_item"></td>
 		        	<td th:text="${item.itemNo}"></td>
 		        	<td th:text="${item.itemName}"></td>
 		        	<td th:text="${item.itemPrice}"></td>
 		        	<td th:text="${item.itemRegdate eq null ? '' : #strings.substring(item.itemRegdate, 0, 10)}"></td>
 		        	<td th:text="${item.itemStatus}"></td>
-		        	<td><a href="#"><input type="button" value="수정" id="itemMod"></a></td>
+		        	<td><a href="/admin/updateItem"><input type="button" value="수정" id="itemMod"></a></td>
 		     	 </tr>
-	        	</div>
 		    </table>
-        </div>
-
-	    <!-- 삭제/등록버튼 -->
-	    <div id="itemBtn" style="text-align:right;">
-	      <a href="#"><input type="button" value="상품삭제" id="itemDelete"></a>
-	      <a href="#"><input type="button" value="상품등록" id="itemRegistration"></a>
+		</div>
+		
+		<!-- 삭제/등록버튼 -->
+	    <div id="itemTotalBtn">
+	    	<a href="/admin/delItem"><input type="button" value="상품삭제" id="itemDelete"></a>
+	    	<a href="/admin/insertItem"><input type="button" value="상품등록" id="itemRegistration"></a>
 	    </div>
-
 	</div>
+
 </body>
 </html>
