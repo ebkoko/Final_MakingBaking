@@ -14,6 +14,14 @@ public class ItemController {
 	@Autowired
 	private ItemService itemService;
 	
+	@GetMapping("/list")
+	public ModelAndView listView() {
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("list/list.html");
+		return mv;
+	}
+	
 	@GetMapping("/item")
 	public ModelAndView dayclassVeiw() {
 		

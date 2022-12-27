@@ -6,20 +6,22 @@
 	<body>
 		<header th:fragment="header" class="header">
 		    <div id="login-btn">
-			    <div th:if="${session.loginUser == null}" th:remove="tag">
+			    <div sec:authorize="!isAuthenticated()" th:remove="tag">
 			    	<button type="button" id="btn-login" class="login header-font">login</button>
 			    	<a th:href="@{/mypage/myPage}" class="mypage header-font">mypage</a>
 			    </div>
-			    <div th:if="${session.loginUser != null}" th:remove="tag">
-			    	<a th:href="@{/mypage/myPage}" th:text="${session.loginUser.userId}" class="mypage header-font"></a>
+			    <div sec:authorize="isAuthenticated()" th:remove="tag">
+			    	<a th:href="@{/mypage/myPage}" sec:authentication="principal.username" class="mypage header-font"></a>
 			    	<a th:href="@{/main/logout}" id="btn-login" class="login header-font">logout</a>
 			    </div>
 		    </div>
 		    <div><a th:href="@{/}" class="logo"><img th:src="@{/images/logo.png}"></a></div>
+		    
+		    
 		    <div class="nav-h header-font">
 		      <div class="navbar">
 		        <a th:href="@{/dayclass/dayclass}">원데이클래스</a>
-		        <a th:href="@{/}">제품구매</a>
+		        <a th:href="@{/item/list}">제품구매</a>
 		        <a th:href="@{/board/notice}">공지사항</a>
 		        <a th:href="@{/board/qna/1}">Q&A</a>
 		        <a th:href="@{/board/event}">이벤트</a>
@@ -28,7 +30,6 @@
 		        <a th:href="@{/cart/cartList}">장바구니</a>
 		        <a th:href="@{/order/order}">주문</a>
 		        <a th:href="@{/reser/reser}">예약</a>
-		        <a th:href="@{/main/list}">리스트</a>
 		      </div>
 		    </div>
 		    </div>
@@ -36,7 +37,8 @@
 		    <div class="login-form-container">
 		      <span id="close-login-form" class="fas fa-times"></span>
 		  
-		      <form id="loginForm">
+		      <form id="loginForm" action="/user/loginProc" method="post">
+		      	  <input type="hidden" id="errorMsg" th:value="${param.errorMsg}">
 		          <h3>login</h3>
 		          <div class="input-group">
 		            <input type="text" id="id" name="userId" required class="input">
@@ -55,7 +57,7 @@
 		            <a th:href="@{/user/findPW}" class="findPw">비밀번호찾기</a>
 		          </div>
 		          <div>
-			          <button type="button" id="btnLogin" class="btn btn-none">로그인</button>
+			          <button type="submit" id="btnLogin" class="btn btn-none">로그인</button>
 			          <a th:href="@{/user/join}" class="btn">회원가입</a>
 		          </div>
 		          <!-- <a class="kakao"><img th:src="@{/images/kakao_login2.png}"></a> -->

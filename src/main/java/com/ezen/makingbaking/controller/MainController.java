@@ -1,18 +1,17 @@
 package com.ezen.makingbaking.controller;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,17 +21,22 @@ import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.service.user.UserService;
 
 
-
 @RestController
-@RequestMapping("main")
+@RequestMapping("/main")
 public class MainController {
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping("main")
-	public ModelAndView mainView(@RequestParam("msg") String msg) {
+	@GetMapping("/main")
+	public ModelAndView mainView(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/main.html");
+		
+		String msg = "";
+		
+		if(!CollectionUtils.isEmpty(request.getParameterMap())) {
+			msg = request.getParameter("msg");
+		}
 		
 		if(msg != null && !msg.equals("")) {
 			if(msg.equals("joinSuccess")) {
@@ -44,7 +48,6 @@ public class MainController {
 	
 	@PostMapping("/login")
 	public ResponseEntity<?> login(UserDTO userDTO, HttpSession session) {
-		System.out.println("login========" + userDTO.toString());
 		ResponseDTO<Map<String, String>> responseDTO = new ResponseDTO<>();
 		Map<String, String> returnMap = new HashMap<String, String>();
 		try {
@@ -88,19 +91,12 @@ public class MainController {
 		}
 	}
 	
-	@RequestMapping("/logout")
-	public void logout(HttpSession session, HttpServletResponse response) throws IOException {		
-		session.invalidate();
-		response.sendRedirect("/");
-	}
+//	@RequestMapping("/logout")
+//	public void logout(HttpSession session, HttpServletResponse response) throws IOException {		
+//		session.invalidate();
+//		response.sendRedirect("/");
+//	}
 	
-	//나중에 옮기기
-	@GetMapping("/list")
-	public ModelAndView listView() {
-		ModelAndView mv = new ModelAndView();
-		
-		mv.setViewName("item/list.html");
-		return mv;
-	}
+	
 	
 }
