@@ -183,6 +183,21 @@
 						}
 					});
 					
+					
+					
+					// 상품 삭제버튼을 클릭했을 때
+					$("#btnDel").on('click', function() {
+						$.ajax({
+							url: '/cart/deleteCart',
+							type: 'post',
+							data: {itemNo: 2},
+							success: function(obj) {
+								console.log(obj);
+							}, error: function(e) {
+								console.log(e);
+							}
+						});
+					});
 				});
 			</script>
 		</th:block>
@@ -223,7 +238,7 @@
 		                    </div>                    
 		                    <div id="item_Price">원</div>  
 		                    <div id="item_Del">
-		                        <input type="button" id="btnDel" value="삭제" onclick="">
+		                        <input type="button" id="btnDel" value="삭제">
 		                    </div>
 		                </div>
 		            </div>

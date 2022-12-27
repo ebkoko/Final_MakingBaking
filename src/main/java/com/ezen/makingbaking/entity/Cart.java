@@ -41,11 +41,10 @@ public class Cart {		// 장바구니 테이블
 	@Id
 	private int itemNo;		// 상품번호
 	private String userId;		// 회원아이디
-	private int cartItemCnt;	// 상품수량	
-	@Column
-	@ColumnDefault("'C'")
-	private char cartStatus;	// C : 현재 장바구니 아이템
-								// D : 삭제된 장바구니 아이템
-								// O : 주문한 장바구니 아이템	
+	private int cartItemCnt;	// 상품수량		
+	@Builder.Default
+	private char cartStatus = 'C';	// C : 현재 장바구니 아이템
+									// D : 삭제된 장바구니 아이템
+									// O : 주문한 장바구니 아이템	
 
 }
