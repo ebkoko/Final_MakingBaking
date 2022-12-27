@@ -20,6 +20,20 @@ $(function() {
       }
     }
     
+	console.log($("#errorMsg").val());
+	
+	const url = new URL(window.location.href);
+	
+	const urlParams = url.searchParams;
+	
+	if(urlParams.get("error")) {
+		alert(urlParams.get("errorMsg"));
+	}
+	
+	if(urlParams.get("loginPage")) {
+		$('.login-form-container').toggleClass('active');
+	}
+		/*
 	$("#btnLogin").on("click", function() {
 		console.log($("#loginForm").serialize());
 		$.ajax({
@@ -43,4 +57,5 @@ $(function() {
 			}
 		})
 	});
+	*/
 });
