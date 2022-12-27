@@ -3,6 +3,8 @@ package com.ezen.makingbaking.service.board.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ezen.makingbaking.entity.Board;
@@ -15,9 +17,16 @@ public class BoardServiceImpl implements BoardService {
 	private BoardRepository boardRepository;
 
 	@Override
+	public Page<Board> getPageBoardList(Board board, Pageable pageable) {
+		return boardRepository.findByCateCode(board.getCateCode(), pageable);
+	}
+
+	@Override
 	public List<Board> getQnaList(Board board) {
 		return boardRepository.findByCateCode(board.getCateCode());
 	}
+
+	
 
 
 }

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,14 +24,35 @@ public class BoardController {
 	private BoardService boardService;
 	
 	@GetMapping("/qna/{cateCode}")
-	public ModelAndView getQnaList(BoardDTO boardDTO, @PathVariable("cateCode") int cateCode) {
+	public ModelAndView getQnaList(BoardDTO boardDTO, @PathVariable("cateCode") int cateCode,
+			@PageableDefault(page=0, size=10) Pageable pageable) {
 		System.out.println(cateCode);
+				
 		Board board = Board.builder()
 						   .cateCode(cateCode)
 						   .build();
+		
 		List<Board> qnaList = boardService.getQnaList(board);
 		
+		Page<Board> pageBoardList = boardService.getPageBoardList(board, pageable);
+		
+		Page<BoardDTO> pageBoardDTOList = pageBoardList.map(pageQna -> 
+						   BoardDTO.builder()
+						   		   .boardNo(pageQna.getBoardNo())
+						   		   .boardTitle(pageQna.getBoardTitle())
+						   		   .boardContent(pageQna.getBoardContent())
+						   		   .boardWriter(pageQna.getBoardWriter())
+						   		   .boardRegdate(
+						   				   		pageQna.getBoardRegdate() == null?
+												null :
+												pageQna.getBoardRegdate().toString())
+						   		   .boardCnt(pageQna.getBoardCnt())
+						   		   .build()
+						   );  //화살표함수 람다식
+		
+		// 화면으로 보낼 때는 boardDTO로 보내줘야함
 		List<BoardDTO> getQnaList = new ArrayList<BoardDTO>();
+		
 		for(int i=0; i<qnaList.size(); i++) {
 			BoardDTO returnBoard = BoardDTO.builder()
 										   .boardNo(qnaList.get(i).getBoardNo())
@@ -48,7 +72,7 @@ public class BoardController {
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("board/getQnaList.html");
-		mv.addObject("getQnaList", getQnaList);
+		mv.addObject("getQnaList", pageBoardDTOList); // content부터 pageable까지만 오게됨
 		
 		return mv;
 	}
