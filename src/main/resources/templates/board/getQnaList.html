@@ -193,19 +193,32 @@
 			</tr>
 	      </table>
 	      <br/>
-		  <div style="text-align: center;">
-			<ul class="pagination">
-			  <li class="pagination_button">
-				<a href="">이전</a>
-			  </li>
-			  <li class="pagination_button">
-				<a href=""></a>
-			  </li>
-			  <li class="pagination_button">
-				<a href="#">다음</a>
-			  </li>
-			</ul>
-		  </div>
+		  <div style="text-align:center;">
+			<ul class="pagination" style="display: flex; justify-content: center;" 
+				th:if="${getQnaList.totalElements > 0}"
+				th:with="pageNumber = ${getQnaList.pageable.pageNumber},
+									pageSize = ${getQnaList.pageable.pageSize},
+									totalPages = ${getQnaList.totalPages},
+									startPage =${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+									tempEndPage = ${startPage + pageSize -1}, 
+									endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+					<li class="pagination_button" th:if="${pageNumber > 0}">
+						<a th:href="@{/board/qna/1(
+										page=${pageNumber - 1}
+										)}"><</a>
+					</li>
+					<li class="pagination_button" th:each="page : ${#numbers.sequence(startPage, endPage)}">
+						<a th:href="@{/board/qna/1(
+										page=${page - 1},				
+										)}" th:text="${page}"></a>
+					</li>
+					<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+						<a th:href="@{/board/qna/1(
+										page=${pageNumber + 1},				
+										)}">></a>
+					</li>
+				</ul>
+			</div>
 		  <!-- <th:block  th:if="${session.userId == 'admin'}">
 	      <div id="btn-container">
 		    <div id="right-btn">
