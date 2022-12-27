@@ -22,12 +22,13 @@
 			      width: 100px;
 			      height: 40px;
 			    }
+			    
+			    /* 페이징처리 */
 			    .pagination {
 			      list-style: none;
 			      width: 100%;
 			      display: inline-block;
 			    }
-			
 			    .pagination_button {
 			      float: left;
 			      margin-left: 5px;
@@ -56,7 +57,7 @@
               <option value="DAYCLASSREGDATE" th:selected="${searchCondition == 'DAYCLASSREGDATE'}">등록일</option>
               <option value="DAYCLASSSTATUS" th:selected="${searchCondition == 'DAYCLASSSTATUS'}">진행여부</option>
             </select>
-            <input type="text" name="searchKeyword" th:value="">
+            <input type="text" name="searchKeyword" value="">
             <button type="button" id="btnSearch">검색</button>
           </td>
         </tr>
@@ -96,7 +97,7 @@
     </div>
     <br>
     <!-- 페이징 -->
-    <div style="text-align:center;">
+    <!-- <div style="text-align:center;">
       <ul class="pagination" th:if="${getDayclassList.totalElements > 0}"
                   th:with="pageNumber = ${getDayclassList.pageable.pageNumber},
                               pageSize = ${getDayclassList.pageable.pageSize},
@@ -112,9 +113,9 @@
           </li>
         
         
-          <li class="pagination_button" th:each="page : ${#numbers.sequence(startPage, endPage)}">
+          <li class="pagination_button" th:each="page : ${#numbers.sequence(startPage, endPage)}"> -->
           <!-- startPage와 endPage에 있는 숫자들을 page에 담아옴. -->
-            <a th:href="@{/dayclass/dayclassList(page=${page - 1},
+            <!--<a th:href="@{/dayclass/dayclassList(page=${page - 1},
                     searchCondition=${searchCondition},
                     searchKeyword=${searchKeyword})}"
                     th:text="${page}"></a>
@@ -125,7 +126,7 @@
                     searchCondition=${searchCondition},
                     searchKeyword=${searchKeyword})}">다음</a>
           </li>
-      </ul>
+      </ul>-->
     </div>
 
   </div>

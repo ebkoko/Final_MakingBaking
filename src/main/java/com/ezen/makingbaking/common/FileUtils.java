@@ -1,21 +1,21 @@
-//package com.ezen.makingbaking.common;
-//
-//import java.io.File;
-//import java.io.IOException;
-//import java.nio.file.Files;
-//import java.text.SimpleDateFormat;
-//import java.util.Date;
-//import java.util.UUID;
-//
-//import org.springframework.web.multipart.MultipartFile;
-//
-//
-//public class FileUtils {
-//		//Map<String, String> => 파일 업로드 기능이 여러군데에서 사용될 때 범용성을 높이기 위해
-//		//Map을 사용한다. Map을 사용할 경우 매퍼까지 Map으로 보내준다.
+package com.ezen.makingbaking.common;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+
+import org.springframework.web.multipart.MultipartFile;
+
+
+public class FileUtils {
+		//Map<String, String> => 파일 업로드 기능이 여러군데에서 사용될 때 범용성을 높이기 위해
+		//Map을 사용한다. Map을 사용할 경우 매퍼까지 Map으로 보내준다.
 //		public static File parseFileInfo(MultipartFile file, 
 //				String attachPath) throws IOException {
-//			File boardFile = new File();
+//			File itemFile = new File();
 //			
 //			String boardOriginFileNm = file.getOriginalFilename();
 //			
@@ -36,7 +36,7 @@
 //			
 //			if(type != null) {
 //				if(type.startsWith("image")) {
-//					boardFile.setBoardFileCate("img");
+//					itemFile.setBoardFileCate("img");
 //				} else {
 //					boardFile.setBoardFileCate("etc");
 //				}
@@ -56,4 +56,4 @@
 //			
 //			return boardFile;
 //		}
-//}
+}

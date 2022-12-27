@@ -26,14 +26,17 @@ public class AdminServiceImpl implements AdminService {
 	public Page<Item> getPageItemList(Item item, Pageable pageable) {
 		if(item.getSearchKeyword() != null && !item.getSearchKeyword().equals("")) {
 			if(item.getSearchCondition().equals("ALL")) {
-				return itemRepository.findByItemNameContainingOrItemPriceContainingOrItemRegdateContainingOrItemStatusContaining
+				return itemRepository.findByItemNameContainingOrItemCateContainingOrItemPriceContainingOrItemRegdateContainingOrItemStatusContaining
 			               (item.getSearchKeyword(), 
+			            	item.getSearchKeyword(),
 			            	item.getSearchKeyword(),
 			            	item.getSearchKeyword(),
 			            	item.getSearchKeyword(),
 			            	pageable);
 			      } else if (item.getSearchCondition().equals("ITEMNAME")) {
 			         return itemRepository.findByItemNameContaining(item.getSearchKeyword(), pageable);
+			      } else if (item.getSearchCondition().equals("ITEMCATE")) {
+			    	  return itemRepository.findByItemCateContaining(item.getSearchKeyword(), pageable);
 			      } else if (item.getSearchCondition().equals("ITEMPRICE")) {
 			         return itemRepository.findByItemPriceContaining(item.getSearchKeyword(), pageable);
 			      } else if (item.getSearchCondition().equals("ITEMREGDATE")) {
@@ -48,6 +51,12 @@ public class AdminServiceImpl implements AdminService {
 		  }
 	      
 	   }
+
+	@Override
+	public void deleteItem(int itemNo) {
+		itemRepository.deleteById(itemNo);
+		
+	}
 	
 
 //	@Override

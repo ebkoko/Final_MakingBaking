@@ -12,6 +12,7 @@ public interface AdminService {
 	//Page<CamelHashMap> getItemFileList(Pageable pageable);
 	
 	List<Item> getItemList(Item item);
-	
 	Page<Item> getPageItemList(Item item, Pageable pageable);
+	
+	void deleteItem(int ItemNo);
 }
