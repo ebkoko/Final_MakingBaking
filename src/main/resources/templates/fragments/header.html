@@ -5,12 +5,14 @@
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<body>
 		<header th:fragment="header" class="header">
+		
 		    <div id="login-btn">
 			    <div sec:authorize="!isAuthenticated()" th:remove="tag">
 			    	<button type="button" id="btn-login" class="login header-font">login</button>
 			    	<a th:href="@{/mypage/myPage}" class="mypage header-font">mypage</a>
 			    </div>
 			    <div sec:authorize="isAuthenticated()" th:remove="tag">
+			    	<a th:href="@{/cart/cartList}"><img th:src="@{/images/cart.png}" style="width: 45px; margin-top: 10px"></a>
 			    	<a th:href="@{/mypage/myPage}" sec:authentication="principal.username" class="mypage header-font"></a>
 			    	<a th:href="@{/main/logout}" id="btn-login" class="login header-font">logout</a>
 			    </div>
@@ -20,7 +22,7 @@
 		    
 		    <div class="nav-h header-font">
 		      <div class="navbar">
-		        <a th:href="@{/dayclass/dayclass}">원데이클래스</a>
+		        <a th:href="@{/dayclass/onedayClass}">원데이클래스</a>
 		        <a th:href="@{/item/list}">제품구매</a>
 		        <a th:href="@{/board/notice}">공지사항</a>
 		        <a th:href="@{/board/qna/1}">Q&A</a>

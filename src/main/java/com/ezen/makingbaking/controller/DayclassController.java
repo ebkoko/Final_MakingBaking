@@ -23,6 +23,13 @@ public class DayclassController {
 	@Autowired
 	private DayclassService dayclassService;
 	
+	@GetMapping("/onedayClass")
+	public ModelAndView onedayClassView() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("dayclass/onedayClass.html");
+		return mv;
+	}
+
 	@Autowired
 	private ReviewService reviewService;
 	
