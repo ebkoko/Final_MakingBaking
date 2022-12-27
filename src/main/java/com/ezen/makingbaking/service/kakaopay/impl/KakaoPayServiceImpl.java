@@ -24,7 +24,7 @@
 //	@Autowired
 //	private CartRepository cartRepository;
 //	
-//	public ReadyResponseDTO payReady(int totalAmount, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+//	public ReadyResponseDTO payReady(int totalAmount, @AuthenticationPrincipal CustomUserDetails customUser) {
 //		//User user =  (User)SessionUtils.getAttribute("LOGIN_USER");
 //		List<CartDTO> carts = cartRepository.getCartByUserNo(user.getNo());
 //		

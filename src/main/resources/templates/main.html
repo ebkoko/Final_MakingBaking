@@ -24,12 +24,25 @@
 					      prevEl: ".swiper-button-prev",
 					    },
 					});
+					
+					$("#cartBtn").on('click', function() {
+						$.ajax({
+							url: '/cart/insertCart',
+							type: 'post',
+							data: {itemNo: 2},
+							success: function(obj) {
+								console.log(obj);
+							}, error: function(e) {
+								console.log(e);
+							}
+						});
+					});
 				});
 			</script>
 		</th:block>
 		<th:block layout:fragment="css">
 			<link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css}"/>
-			<link rel="stylesheet" th:href="@{/css/index.css?ver}"/>
+			<link rel="stylesheet" th:href="@{/css/index/index.css?ver}"/>
 		</th:block>
 	</head>
 	
@@ -86,6 +99,7 @@
 	        </p>
 	      </div>
 	    </div>
+	    <button type="button" id="cartBtn">장바구니</button>
 	  </main>
 		</div>
 	</body>

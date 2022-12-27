@@ -319,6 +319,8 @@
 			</script>
 			<script th:inline="javascript">
 				let isKakaoPay = false;
+				let pushbankTransfer = false;
+				let pushKakaoPay = false;
 				$(function() {
 					// 우편번호 input 클릭했을 때
 					$("#addr1").on('click', function() {
@@ -377,7 +379,7 @@
 								return;
 							}
 						}
-						if($("#btnbankTransfer").css("background") == "white" && $("#btnkakaoPay").css("background") == "white") {
+						if(!pushbankTransfer && !pushKakaoPay) {
 							alert("결제방법을 선택해주세요.");
 							return;
 						}
@@ -392,10 +394,12 @@
 							$("#bankPayment").css("display", "block");
 							$("#btnbankTransfer").css("color", "white").css("background", "#28693F");
 							$("#btnkakaoPay").css("color", "#28693F").css("background", "white");
+							pushbankTransfer = true;
 						} else {
 							$("#bankPayment").css("display", "none");
 							$("#btnbankTransfer").css("color", "#28693F").css("background", "white");
-						}						
+							pushbankTransfer = false;
+						}	
 					});					
 					
 					// 카카오페이 버튼을 클릭했을 때
@@ -405,8 +409,10 @@
 						$("#btnbankTransfer").css("color", "#28693F").css("background", "white");
 						if(!isKakaoPay) {						
 							$("#btnkakaoPay").css("color", "#28693F").css("background", "white");
+							pushKakaoPay = false;
 						} else {
 							$("#btnkakaoPay").css("color", "white").css("background", "#28693F");
+							pushKakaoPay = true;
 						}
 						
 						// 카카오페이 API 실행
@@ -478,7 +484,7 @@
 	                </div>
 	                <hr>
 	            </div>          
-	            <form id="orderForm" action="order/order" method="post">  
+	            <form id="orderForm" action="/order/orderComplete" method="post">  
 		            <div id="delivery">
 		                <p class="deliInfo">배송정보</p>&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span>
 		                <hr>

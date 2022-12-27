@@ -1,5 +1,7 @@
 package com.ezen.makingbaking.service.cart;
 
-public interface CartService {
+import com.ezen.makingbaking.entity.Cart;
 
+public interface CartService {
+	void insertCart(Cart cart);
 }

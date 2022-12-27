@@ -245,6 +245,8 @@
 			<script th:inline="javascript">
 				$(function() {
 					let isKakaoPay = false;
+					let pushbankTransfer = false;
+					let pushKakaoPay = false;
 					// 결제하기 버튼 클릭했을 때 유효성 검사
 					$("#btnPayment").on('click', function() {
 						if(!$("#orderer").val()) {
@@ -277,7 +279,7 @@
 							$("#reciTel3").focus();
 							return;
 						}
-						if($("#orderTel2").length < 4 && $("#orderTel3").length < 4 && $("#reciTel2").length < 4 && $("#reciTel3").length < 4) {
+						if($("#orderTel2").val().length < 4 || $("#orderTel3").val().length < 4 || $("#reciTel2").val().length < 4 || $("#reciTel3").val().length < 4) {
 							alert("휴대폰 번호를 정확히 입력해주세요.");
 							return;
 						}
@@ -288,7 +290,12 @@
 								return;
 							}
 						}
+						if(!pushbankTransfer && !pushKakaoPay) {
+							alert("결제방법을 선택해주세요.");
+							return;
+						}
 						
+						$("#reserForm").submit();
 					});
 					
 					// 무통장입금 버튼을 클릭했을 때
@@ -298,9 +305,11 @@
 							$("#bankPayment").css("display", "block");
 							$("#btnbankTransfer").css("color", "white").css("background", "#28693F");
 							$("#btnkakaoPay").css("color", "#28693F").css("background", "white");
+							pushbankTransfer = true;
 						} else {
 							$("#bankPayment").css("display", "none");
 							$("#btnbankTransfer").css("color", "#28693F").css("background", "white");
+							pushbankTransfer = false;
 						}						
 					});
 					
@@ -311,8 +320,10 @@
 						$("#btnbankTransfer").css("color", "#28693F").css("background", "white");
 						if(!isKakaoPay) {						
 							$("#btnkakaoPay").css("color", "#28693F").css("background", "white");
+							pushKakaoPay = false;
 						} else {
 							$("#btnkakaoPay").css("color", "white").css("background", "#28693F");
+							pushKakaoPay = true;
 						}
 						// 카카오페이 API 실행
 						
@@ -355,7 +366,7 @@
 	                </div>
 	                <hr>
 	            </div>     
-	            <form id="reserForm" action="reser/reser" method="post">       
+	            <form id="reserForm" action="/reser/reserComplete" method="post">       
 		            <div id="reservation">
 		                <p class="reserInfo">예약 정보</p>&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span>
 		                <hr>
@@ -426,7 +437,7 @@
 		                    <div id="depositorTitle">입금자명<span class="essential">&#42;</span>: <input type="text" name="depositor" id="depositor" placeholder="입금자명을 입력하세요.">&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span></div>
 		                </div>
 		            </div>
-	            	<button type="submit" id="btnPayment">결제하기</button>
+	            	<button type="button" id="btnPayment">결제하기</button>
 	            </form>
 	        </div>
 		</div>
