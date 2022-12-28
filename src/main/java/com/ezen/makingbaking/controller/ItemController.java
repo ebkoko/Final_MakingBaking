@@ -3,6 +3,7 @@ package com.ezen.makingbaking.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,5 +29,10 @@ public class ItemController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("item/getItem.html");
 		return mv;
+	}
+	
+	@GetMapping("/stock")
+	public int getItemStock(@RequestParam("itemNo") int itemNo) {
+		return itemService.getItemStock(itemNo);
 	}
 }
