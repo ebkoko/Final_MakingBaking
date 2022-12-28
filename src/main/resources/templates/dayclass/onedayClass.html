@@ -16,54 +16,17 @@
 
 <body>
 	<div layout:fragment="content" class="container">
-		<div class="boxx">
+		<div th:each="dayclass : ${dayclassList}" class="boxx">
 		    <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
 		    <div class="box_product">
-		      <div class="box_product_detail">상품명: 케이크</div>
-		      <div class="box_product_detail">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Labore ut nemo possimus vitae expedita? Eos, deserunt delectus! Autem quidem blanditiis ducimus voluptas tempora, distinctio nemo optio ipsam in. Iste, reiciendis.</div>
+		      <div class="box_product_detail">상품명: <a th:href="@{/dayclass/dayclass/{dayclassNo} (dayclassNo=${dayclass.dayclassNo})}" th:text="${dayclass.dayclassName}"></a></div>
+		      <div class="box_product_detail">
+		      	<span name="detailSpan" 
+		      		th:text="${dayclass.dayclassDetails.length > 100 ? #strings.substring(dayclass.dayclassDetails, 0, 100) + '...' : dayclass.dayclassDetails} "></span>
+		      </div>
 		    </div>
 		    <div class="box_right">
-		      <span class="box_right_detail_b">가격: 35000원</span>
-		    </div>
-		</div>
-		<div class="boxx">
-		    <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
-		    <div class="box_product">
-		      <div class="box_product_detail">상품명: 케이크</div>
-		      <div class="box_product_detail">내용</div>
-		    </div>
-		    <div class="box_right">
-		      <span class="box_right_detail_b">가격: 35000원</span>
-		    </div>
-		</div>
-		<div class="boxx">
-		    <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
-		    <div class="box_product">
-		      <div class="box_product_detail">상품명: 케이크</div>
-		      <div class="box_product_detail">내용</div>
-		    </div>
-		    <div class="box_right">
-		      <span class="box_right_detail_b">가격: 35000원</span>
-		    </div>
-		</div>
-		<div class="boxx">
-		    <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
-		    <div class="box_product">
-		      <div class="box_product_detail">상품명: 케이크</div>
-		      <div class="box_product_detail">내용</div>
-		    </div>
-		    <div class="box_right">
-		      <span class="box_right_detail_b">가격: 35000원</span>
-		    </div>
-		</div>
-		<div class="boxx">
-		    <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
-		    <div class="box_product">
-		      <div class="box_product_detail">상품명: 케이크</div>
-		      <div class="box_product_detail">내용</div>
-		    </div>
-		    <div class="box_right">
-		      <span class="box_right_detail_b">가격: 35000원</span>
+		      <span class="box_right_detail_b" th:text="${dayclass.dayclassPrice}"></span>
 		    </div>
 		</div>
 	</div>

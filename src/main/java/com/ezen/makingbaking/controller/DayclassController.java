@@ -26,6 +26,26 @@ public class DayclassController {
 	@Autowired
 	private ReviewService reviewService;
 	
+	@GetMapping("/onedayClass")
+	public ModelAndView onedayClassView(@PageableDefault(page = 0, size = 5) Pageable pageable) {
+		Page<Dayclass> dayclassList = dayclassService.getOneDayclass(pageable);
+		
+		System.out.println(dayclassList.getContent().get(0).getDayclassNo());
+		
+		Page<DayclassDTO> dayclassDTOList = dayclassList.map(dayclass -> DayclassDTO.builder()
+																					.dayclassNo(dayclass.getDayclassNo())
+																					.dayclassName(dayclass.getDayclassName())
+																					.dayclassPrice(dayclass.getDayclassPrice())
+																					.dayclassDetails(dayclass.getDayclassDetails())
+																					.build()
+															);
+		System.out.println(dayclassDTOList.getContent().get(0).getDayclassNo());
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("dayclass/onedayClass.html");
+		mv.addObject("dayclassList", dayclassDTOList);
+		return mv;
+	}
+	
 	@GetMapping("/dayclass/{dayclassNo}")
 	public ModelAndView getDayclass(@PathVariable int dayclassNo, @PageableDefault(page = 0, size = 4) Pageable pageable) {
 		

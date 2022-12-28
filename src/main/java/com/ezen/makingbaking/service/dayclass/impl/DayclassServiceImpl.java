@@ -1,6 +1,8 @@
 package com.ezen.makingbaking.service.dayclass.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ezen.makingbaking.entity.Dayclass;
@@ -17,4 +19,10 @@ public class DayclassServiceImpl implements DayclassService {
 		// TODO Auto-generated method stub
 		return dayclassRepository.findById(dayclassNo).get();
 	}
+	
+	@Override
+	public Page<Dayclass> getOneDayclass(Pageable pageable) {
+		return dayclassRepository.findAll(pageable);
+	}
+
 }
