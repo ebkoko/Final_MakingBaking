@@ -64,11 +64,11 @@ public class AdminServiceImpl implements AdminService {
 		itemRepository.flush();
 		
 		for(ImgFile imgFile : uploadFileList) {
-//			imgFile.setItem(item);
+			imgFile.setFileReferNo(item.getItemNo());
 			
 			int imgFileNo = fileRepository.getMaxFileNo(item.getItemNo());
 			imgFile.setFileNo(imgFileNo);
-			
+			imgFile.setFileType("item");
 			fileRepository.save(imgFile);
 		}
 		

@@ -2,7 +2,6 @@ package com.ezen.makingbaking.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class AdminController {
 	//상품리스트
 	@GetMapping("/itemList")
 	public ModelAndView getItemList(ItemDTO itemDTO,
-			@PageableDefault(page = 0, size = 10) Pageable pageable) {
+			@PageableDefault(page = 0, size = 20) Pageable pageable) {
 		Item item = Item.builder()
 							.searchCondition(itemDTO.getSearchCondition())
 							.searchKeyword(itemDTO.getSearchKeyword())
@@ -111,14 +110,19 @@ public class AdminController {
 	@PostMapping("/insertItem")
 	public void insertItem(ItemDTO itemDTO, MultipartFile[] uploadFiles, 
 			HttpServletResponse response, HttpServletRequest request) throws IOException {
+		System.out.println(itemDTO.getItemStatus());
+		
 		Item item = Item.builder()
 						.itemStatus(itemDTO.getItemStatus())
+						.itemStock(itemDTO.getItemStock())
 						.itemCate(itemDTO.getItemCate())
 						.itemName(itemDTO.getItemName())
+						.itemMinName(itemDTO.getItemMinName())
 						.itemDetails(itemDTO.getItemDetails())
 						.itemPrice(itemDTO.getItemPrice())
-						.itemStatus(itemDTO.getItemStatus())
-						.itemRegdate(LocalDateTime.now())
+						.itemExpDate(itemDTO.getItemExpDate())
+						.itemOrigin(itemDTO.getItemOrigin())
+						.itemAllergyInfo(itemDTO.getItemAllergyInfo())
 						.build();
 	
 		//DB에 입력될 파일 정보 리스트
@@ -155,7 +159,7 @@ public class AdminController {
 		
 		adminService.insertItem(item, uploadFileList);
 		
-		response.sendRedirect("/item/itemList");
+		response.sendRedirect("/admin/itemList");
 	}
 	
 	

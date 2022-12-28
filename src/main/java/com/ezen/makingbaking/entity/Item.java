@@ -2,7 +2,6 @@ package com.ezen.makingbaking.entity;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,7 +10,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import lombok.AllArgsConstructor;
@@ -40,15 +38,18 @@ public class Item {		// 상품 테이블
 	)
 	private int itemNo;		// 상품번호
 	private String itemName;	// 상품이름
-	private String itemMinName;
+	private String itemMinName; // 상품소제목
 	private int itemPrice;		// 상품가격
 	private String itemDetails;		// 상품상세내용
 	private int itemStock;		// 재고량
-	@Column
-	@ColumnDefault("'Y'")
-	private char itemStatus;	// 판매상태(기본값 Y, 재고없음 S, 판매중지 N)
+	@Builder.Default
+	private char itemStatus = 'Y';	// 판매상태(기본값 Y, 재고없음 S, 판매중지 N)
 	private String itemCate;	// 카테고리(쿠키, 케잌..)
+	@Builder.Default
 	private LocalDateTime itemRegdate = LocalDateTime.now();	// 상품추가일
+	private String itemExpDate;	// 유통기한
+	private String itemOrigin;	// 원산지
+	private String itemAllergyInfo;	// 알레르기정보
 	@Transient
 	private String searchCondition;
 	@Transient

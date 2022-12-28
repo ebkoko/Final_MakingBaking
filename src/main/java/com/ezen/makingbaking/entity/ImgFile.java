@@ -23,11 +23,10 @@ import lombok.NoArgsConstructor;
 @DynamicInsert 
 @IdClass(FileId.class)
 public class ImgFile {		// 상품, 클래스, 리뷰에서 쓰는 파일 테이블
-	
 	@Id
-	private int fileNo;		// 파일번호
+	private int fileReferNo;		// 참조항목번호(상품번호, 클래스번호, 리뷰글번호) ex)상품1
 	@Id
-	private int fileReferNo;		// 참조항목번호(상품번호, 클래스번호, 리뷰글번호)
+	private int fileNo;				// 첨부파일번호 ex) (상품1의) 이미지1,  이미지2, 이미지3, ...
 	@Id
 	private String fileType;		// 타입(item, class, review)
 	private String fileName;		// 파일명
