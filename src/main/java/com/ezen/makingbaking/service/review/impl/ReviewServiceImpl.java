@@ -19,4 +19,6 @@ public class ReviewServiceImpl implements ReviewService {
 		// TODO Auto-generated method stub
 		return reviewRepository.findByRvwReferNoAndRvwType(dayclassNo, "class", pageable);
 	}
+
+
 }
