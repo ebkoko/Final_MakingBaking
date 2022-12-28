@@ -47,7 +47,6 @@
 				/* 테이블 */
 				#itemList_T {
 					width: 1200px;
-					height: 200px;
 					border: 1.2px solid #28693F;
 					border-collapse: collapse;
 					border-left: hidden;
@@ -73,6 +72,7 @@
 				#itemList_T td {
 					border-bottom: 1.2px solid #28693F;
 					text-align: center;
+					height: 80px;
 				}
 				
 
@@ -249,7 +249,7 @@
 	      			<td><input type="checkbox" name="select_item"></td>
 		        	<td th:text="${item.itemNo}"></td>
 		        	<td th:text="${item.itemName}"></td>
-		        	<td th:text="${item.itemPrice}"></td>
+		        	<td th:text="${#numbers.formatInteger(item.itemPrice , 3, 'COMMA')}"></td>
 		        	<td th:text="${item.itemRegdate eq null ? '' : #strings.substring(item.itemRegdate, 0, 10)}"></td>
 		        	<td th:text="${item.itemStatus}"></td>
 		        	<td><a href="/admin/updateItem"><input type="button" value="수정" id="itemMod"></a></td>
@@ -260,7 +260,7 @@
 		<!-- 삭제/등록버튼 -->
 	    <div id="itemTotalBtn">
 	    	<a href="/admin/delItem"><input type="button" value="상품삭제" id="itemDelete"></a>
-	    	<a href="/admin/insertItem"><input type="button" value="상품등록" id="itemRegistration"></a>
+	    	<a href="/admin/insertItemView"><input type="button" value="상품등록" id="itemRegistration"></a>
 	    </div>
 	</div>
 

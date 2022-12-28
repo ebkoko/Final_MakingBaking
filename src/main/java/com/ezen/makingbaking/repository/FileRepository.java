@@ -9,6 +9,6 @@ import com.ezen.makingbaking.entity.ImgFile;
 
 public interface FileRepository extends JpaRepository<ImgFile, FileId> {
 	
-	@Query(value="SELECT IFNULL(MAX(F.FILE_NO), 0) + 1 FROM T_MB_FILE F WHERE F.FILE_NO=:fileNo", nativeQuery=true)
-	int getMaxFileNo(@Param("fileNo") int fileNo);
+	@Query(value="SELECT IFNULL(MAX(F.FILE_NO), 0) + 1 FROM T_MB_FILE F WHERE F.FILE_REFER_NO =:itemNo AND F.FILE_TYPE = 'item'", nativeQuery=true)
+	int getMaxFileNo(@Param("itemNo") int itemNo);
 }
