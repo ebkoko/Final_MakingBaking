@@ -33,6 +33,7 @@ public interface CartRepository extends JpaRepository<Cart, CartId> {
 			+ "			SELECT A.*\r\n"
 			+ "				 , B.ITEM_NAME\r\n"
 			+ "				 , B.ITEM_PRICE\r\n"
+			+ "				 , B.ITEM_STOCK\r\n"
 			+ "				FROM T_MB_CART A\r\n"
 			+ "				   , T_MB_ITEM B\r\n"
 			+ "				WHERE A.ITEM_NO = B.ITEM_NO\r\n"

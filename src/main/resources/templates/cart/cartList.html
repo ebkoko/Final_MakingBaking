@@ -30,6 +30,7 @@
 				    clear: both;
 				    margin-top: 90px;
 				    margin-bottom: 10px;
+				    margin-left: 5px;
 				}
 				#selectAllCancel {
 					margin-left: 10px;
@@ -44,7 +45,7 @@
 				    margin-left: 600px;
 				}
 				#list_title .title_itemPrice {
-				    margin-left: 120px;
+				    margin-left: 125px;
 				}
 				#list_title .title_itemDel {
 				    margin-left: 130px;
@@ -82,7 +83,11 @@
 				    font-size: 0.95em;
 				}				
 				.item_Detail .detailPrice {
+					display: inline-block;
 				    font-size: 0.8em;
+				}
+				.item_Detail .detailPrice+span {
+					font-size: 0.8em;
 				}
 				.item_Quantity {
 				    display: inline-block; 
@@ -94,6 +99,7 @@
 				input[type="number"] {
 					height: 30px;
 					border: 1px solid #DCDCDC;
+					width: 50px;
 				}
 				input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button {
 					opacity: 1;
@@ -101,7 +107,7 @@
 				}
 				.item_Price {
 				    display: inline-block;
-				    width:9%;
+				    width:8%;
 				    text-align: right;
 				}
 				.item_Del {
@@ -126,6 +132,7 @@
 				#totalPrice {
 				    float: right;
 				    font-size: 0.9em;
+				    margin-right: 5px;
 				    margin-bottom: 8px;
 				}
 				#totalPrice+hr {
@@ -156,42 +163,85 @@
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
 				$(function() {
+					fnTotalItemPrice();
+					
 					// 전체선택 버튼 클릭했을 때
 					$("#selectAll").click(function() {
-						var chk = $("#selectAll").prop("checked");
+						let chk = $("#selectAll").prop("checked");
 						if(chk) {
 							$("input[name='select_item']").prop("checked", true);
+							$("#selectAllCancel").prop("checked", false);
 						} else {
 							$("input[name='select_item']").prop("checked", false);
 						}
+						fnTotalItemPrice();
 					});
 					
-					// 전체선택취소 버튼 클릭했을 때
+					// 선택취소 버튼 클릭했을 때
 					$("#selectAllCancel").click(function() {
-						var chk = $("#selectAllCancel").prop("checked");
+						let chk = $("#selectAllCancel").prop("checked");
 						if(chk) {
 							$("input[name='select_item']").prop("checked", false);
 							$("#selectAll").prop("checked", false);
 						}
+						fnTotalItemPrice();
 					});
 					
-					// 상품리스트 중 하나라도 체크가 안되어있을 때
+					// 상품리스트 중 하나라도 체크가 안되어있을 때 전체선택 체크박스 체크 해제, 상품리스트 전체가 체크되면 전체선택 체크박스 체크
 					$(".check").click(function() {
-						if($("input[name='select_item']:checked").length  ) {
-							
+						$("#selectAllCancel").prop("checked", false);
+						if($("input[name='select_item']:checked").length < $("input[name='select_item']").length) {
+							$("#selectAll").prop("checked", false);
+						} else if($("input[name='select_item']:checked").length == $("input[name='select_item']").length) {
+							$("#selectAll").prop("checked", true);
 						}
 					});
 					
-					
-					$(document).on("change", "input[name='Quantity']", function() {
+					// 수량 변경시 변경된 수량으로 상품금액 계산
+					$(document).on("change", "input[name='Quantity']", function(e) {
+						$.ajax({
+							url: '/item/stock',
+							type: 'get',
+							data: {
+								itemNo : $(e.target).attr("data-item-no")
+							},
+							success: function(obj) {
+								if($(e.target).val() > obj ) {
+									alert("재고가 부족합니다.");
+									$(e.target).val(obj);
+								}
+								
+							}, error: function(e) {
+								console.log(e);
+							}
+							
+						})
+						
 						const index = $(this).attr("data-current-index");
 						const itemPrice = $(this).attr("data-default-price");
 						const quantity = $(this).val();
+						const totalP = itemPrice*quantity;
+						const totalPComma = totalP.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 						
-						$(`#itemPrice${index}`).text(`${itemPrice*quantity}원`);
-					})
+						$(`#itemPrice${index}`).text(`${totalPComma}`);
+						fnTotalItemPrice();
+					});
+					
+					$(document).on("change", "input[name='select_item']", function() {
+						fnTotalItemPrice();
+					});
+					
+					// 상품리스트가 없을 때
+					if($("input[name='select_item']").length > 0) {
+						$(".cart_noItem").css("display", "none");
+					} else {
+						$(".cart_noItem").css("display", "block");
+					}
+					
+					
 				});
 				
+				// 상품리스트에서 삭제버튼 클릭했을 때
 				const fnDeleteItem = (cartNo, itemNo) => {
 					$.ajax({
 							url: '/cart/cart',
@@ -203,7 +253,14 @@
 						})
 						.done(function(result) {
 							let htmlStr = "";
+							$(".item_Price").text($(".item_Price").text().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+							
 							for(let i = 0; i < result.items.length; i++) {
+								const detailPrice = result.items[i].itemPrice;
+								const detailPriceComma = detailPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+								const itemPrice = result.items[i].itemPrice*result.items[i].cartItemCnt;
+								const itemPriceComma = itemPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+								
 								htmlStr += `
 									<div class="item1">
 					                    <div class="itemSelect">
@@ -213,14 +270,17 @@
 					                        <img class="item_Img" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
 					                        <div class="item_Detail">
 					                            <div class="detailName"><a href="/item/item/${result.items[i].itemNo}">${result.items[i].itemName}</a></div>
-					                            <div class="detailPrice">${result.items[i].itemPrice}원</div>
+					                            <div class="detailPrice">${detailPriceComma}</div><span>원</span>
 					                        </div>    
 					                    </div>
 					                    <div class="item_Quantity">
 					                        <input type="number" name="Quantity" class="Quantity" data-current-index="${i}" 
-					                         id="quantity${i}" min="1" max="5" value="${result.items[i].cartItemCnt}" data-default-price="${result.items[i].itemPrice}">
+					                         id="quantity${i}" min="1" 
+					                         value="${result.items[i].cartItemCnt > result.items[i].itemStock ? result.items[i].itemStock : result.items[i].cartItemCnt}" 
+					                         data-default-price="${result.items[i].itemPrice}"
+					                         data-item-no="${result.items[i].itemNo}">
 					                    </div>                    
-					                    <div class="item_Price" id="itemPrice${i}">${result.items[i].itemPrice*result.items[i].cartItemCnt}원</div>
+					                    <div class="item_Price" id="itemPrice${i}">${itemPriceComma}</div><span>원</span>
 					                    <div class="item_Del">
 					                        <input type="button" class="btnDel" value="삭제" onclick="fnDeleteItem(${result.items[i].cartNo}, ${result.items[i].itemNo});">
 					                    </div>
@@ -233,6 +293,28 @@
 						.fail(function(error) {
 							console.log(error);
 						});
+				}
+				
+				function fnTotalItemPrice() {
+					let totalItemPrice = 0;
+					let deliFee = 0;
+					
+					// 총 결제 금액
+					$("input[name='Quantity']").each(function(index) {
+						if($("#chk" + index).is(":checked")) {
+							totalItemPrice += $(this).val() * $(this).attr("data-default-price");
+						}
+					});
+					
+					$("#totalItemPrice").text(totalItemPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+					
+					if(totalItemPrice < 30000 && totalItemPrice != 0) {
+						deliFee = 3000;
+					}
+					
+					$("#deliFee").text(deliFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+					
+					$("#totalPayPrice").text((totalItemPrice+deliFee).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 				}
 			</script>
 		</th:block>
@@ -248,41 +330,42 @@
 	            </div>
 	            <div id="selectbox">
 	                <label for="selectAll"><input type="checkbox" name="select" id="selectAll"> <span>전체선택</span></label>
-	                <label for="selectAllCancel"><input type="checkbox" name="select" id="selectAllCancel"> <span>전체선택취소</span></label>
+	                <label for="selectAllCancel"><input type="checkbox" name="select" id="selectAllCancel"> <span>선택취소</span></label>
 	            </div>
 	            <hr>
 	            <div id="list_title">
 	                <span class="title_itemInfo">상품정보</span><span class="title_itemQuantity">수량</span><span class="title_itemPrice">상품금액</span><span class="title_itemDel">삭제</span>
 	            </div>
 	            <hr>
-	            <form id="cartForm" action="cart/cartList" method="post">
+	            <form id="cartForm" action="/cart/cartList" method="post">
 		            <div id="cart_item">
 		                <div class="item1" th:each="cart : ${getCartList}">
 		                    <div class="itemSelect">
-		                        <input type="checkbox" class="check" name="select_item">                    
+		                        <input type="checkbox" class="check" th:id="'chk' + ${cartStat.index}" name="select_item">                    
 		                    </div>
 		                    <div class="itemView">
 		                        <img class="item_Img" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
 		                        <div class="item_Detail">
 		                            <div class="detailName"><a th:href="@{/}" th:text="${cart.itemName}"></a></div>
-		                            <div class="detailPrice" th:text="${cart.itemPrice + '원'}"></div>
+		                            <div class="detailPrice" th:text="${#numbers.formatInteger(cart.itemPrice, 3, 'COMMA')}"></div><span>원</span>
 		                        </div>    
 		                    </div>
 		                    <div class="item_Quantity">
 		                        <input type="number" name="Quantity" class="Quantity" th:data-current-index="${cartStat.index}" 
-		                         th:id="'quantity' + ${cartStat.index}" min="1" max="5" th:value="${cart.cartItemCnt}" th:data-default-price="${cart.itemPrice}">
+		                         th:id="'quantity' + ${cartStat.index}" min="1" th:value="${cart.cartItemCnt > cart.itemStock ? cart.itemStock : cart.cartItemCnt}" th:data-default-price="${cart.itemPrice}"
+		                         th:data-item-no="${cart.itemNo}">
 		                    </div>                    
-		                    <div class="item_Price" th:id="'itemPrice' + ${cartStat.index}" th:text="${cart.cartItemCnt * cart.itemPrice} + '원'"></div>
+		                    <div class="item_Price" th:id="'itemPrice' + ${cartStat.index}" th:text="${#numbers.formatInteger(cart.cartItemCnt * cart.itemPrice, 3, 'COMMA')}"></div><span>원</span>
 		                    <div class="item_Del">
 		                        <input type="button" class="btnDel" value="삭제" th:onclick="fnDeleteItem([[${cart.cartNo}]], [[${cart.itemNo}]]);">
 		                    </div>
 		                </div>
+		                <p class="cart_noItem">장바구니에 담긴 상품이 없습니다.</p>
 		            </div>
-	                <p class="cart_noItem">장바구니에 담긴 상품이 없습니다.</p>
 	            </form>
 	            <hr>
 	            <div id="totalPrice">
-	                <span>상품 총 금액: </span> <span >원</span> <span>&#43;</span> <span>배송비: </span> <span >원</span> <span>&#61;</span> <span>총 결제금액: </span> <span >원</span>
+	                <span>상품 총 금액: </span> <span id="totalItemPrice"></span><span>원</span> <span>&#43;</span> <span>배송비: </span> <span id="deliFee"></span><span>원</span> <span>&#61;</span> <span>총 결제금액: </span> <span id="totalPayPrice"></span><span>원</span>
 	            </div>
 	            <hr>
 	            <button type="submit" id="btnSelectedOrder">주문하기</button>

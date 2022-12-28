@@ -10,4 +10,9 @@ import com.ezen.makingbaking.service.item.ItemService;
 public class ItemServiceImpl implements ItemService {
 	@Autowired
 	private ItemRepository itemRepository;
+	
+	@Override
+	public int getItemStock(int itemNo) {
+		return itemRepository.findItemStockByItemNo(itemNo);
+	}
 }
