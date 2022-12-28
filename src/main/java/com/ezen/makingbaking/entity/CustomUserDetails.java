@@ -32,7 +32,9 @@ public class CustomUserDetails implements UserDetails{
 			new GrantedAuthority() {
 				@Override
 				public String getAuthority() {
-					return user.getUserId();
+					//범인색출
+					//return user.getUserId();
+					return user.getUserRole();
 				}
 			}
 		);

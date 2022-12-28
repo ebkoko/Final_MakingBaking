@@ -9,4 +9,7 @@ public interface ReviewService {
 
 	Page<Review> getReviewList(int dayclassNo, Pageable pageable);
 
+	
+
+	
 }

@@ -321,6 +321,9 @@
 		      font-weight: 600;
 		      color: #28693F;
 		    }
+		    .paging_btn {
+				list-style: none;
+			}
 		
 		
 		    /* 환불 취소*/
