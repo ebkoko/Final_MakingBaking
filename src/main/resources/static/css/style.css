@@ -139,11 +139,13 @@ html, body {
   font-weight: 600;
 }
 
+/*
 .login-form-container form .buttons{
   display: flex;
   gap:1rem;
   align-items: center;
 }
+*/
 
 .login-form-container form .btn{
   display: block;
@@ -167,9 +169,11 @@ html, body {
   cursor: pointer;
 }
 
-.kakao {
-	margin-top: 1rem;
-	cursor: pointer;
+.kakao img{
+	width: 100%;
+    height: 50px;
+    margin-top: 1rem;
+    cursor:pointer;
 }
 
 .input-group {

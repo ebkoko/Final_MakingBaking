@@ -230,7 +230,7 @@
 			<link rel="stylesheet" th:href="@{/css/user/join.css}"/>
 		</th:block>
 	</head>
-	<!-- name dt랑 맞추기 -->
+	<!-- name dto랑 맞추기 -->
 	<body>
 		<div layout:fragment="content" style="height:100%">
 		  <main style="margin-top: 4.5rem;">
@@ -238,7 +238,7 @@
 		      <form action="/user/join" id="joinForm" class="form" method="post">
 		        <h3>회원가입</h3>
 		        <div style="display: flex;">
-		          <input type="text" placeholder="아이디" class="box" id="userId" name="userId" style=" width: 70%;">
+		          <input type="text" placeholder="아이디" class="box" id="userId" name="userId" th:value="${socialUser != null ? socialUser.userId : ''}" readonly style="width: 70%;">
 		          <button type="button" id="IdCheck" class="check">중복체크</button>
 		        </div>
 		
@@ -253,7 +253,6 @@
 		        <div class=" check2">
 		          <div class="inputBox light">
 		            <input type="password" id="pw2" name="userPwCheck" required class="input" placeholder="비밀번호확인" style="margin-top: 12px;"><label for="pw2" class="input-label"></label>
-		            <!-- <div class="show"></div> -->
 		          </div>
 		          <div class="check-light"></div>
 		          <p id="pwRecheck" style="font-size: 11px; text-align: left;"></p>
@@ -262,13 +261,13 @@
 		        <input type="text" id="userNm" name="userNm" placeholder="이름" class="box">
 		        <input type="text" id="userBirth" name="userBirth" placeholder="생년월일 ex)19901010" class="box">
 		        <select id="userGender" name="userGender" class="box">
-		          <option value="gen" selected disabled>성별</option>
+		          <option selected disabled>성별</option>
 		          <option value="m">남자</option>
 		          <option value="f">여자</option>
-		          <option value="none">선택 안함</option>
+		          <option value="n">선택 안함</option>
 		        </select>
 		        <input type="text" id="userTel" name="userTel" placeholder="전화번호 ex)01012345678" class="box">
-		        <input type="text" id="userMail" name="userMail" placeholder="이메일 ex)xxx@xxx.com" class="box">
+		        <input type="text" id="userMail" name="userMail" placeholder="이메일 ex)xxx@xxx.com" th:value="${socialUser != null ? socialUser.userMail : ''}" class="box">
 		        <input id="post"  name="userAddr1" type="text" value="우편번호" readonly onclick="findAddr()">
 		        <input id="addr" name="userAddr2" type="text" placeholder="주소" readonly> <br>
 		        <input id="detail-addr" name="userAddr3" type="text" placeholder="상세주소">
