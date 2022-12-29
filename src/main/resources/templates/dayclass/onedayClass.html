@@ -19,14 +19,14 @@
 		<div th:each="dayclass : ${dayclassList}" class="boxx">
 		    <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
 		    <div class="box_product">
-		      <div class="box_product_detail">상품명: <a th:href="@{/dayclass/dayclass/{dayclassNo} (dayclassNo=${dayclass.dayclassNo})}" th:text="${dayclass.dayclassName}"></a></div>
-		      <div class="box_product_detail">
+		      <div class="box_product_detail">상품명: <a th:href="@{/dayclass/dayclass/{dayclassNo} (dayclassNo=${dayclass.dayclassNo})}" th:text="${dayclass.dayclassName}" class="className"></a></div>
+		      <div class="box_product_detail2">
 		      	<span name="detailSpan" 
-		      		th:text="${dayclass.dayclassDetails.length > 100 ? #strings.substring(dayclass.dayclassDetails, 0, 100) + '...' : dayclass.dayclassDetails} "></span>
+		      		th:text="${dayclass.dayclassDetails.length > 100 ? #strings.substring(dayclass.dayclassDetails, 0, 200) + '...' : dayclass.dayclassDetails} "></span>
 		      </div>
 		    </div>
 		    <div class="box_right">
-		      <span class="box_right_detail_b" th:text="${dayclass.dayclassPrice}"></span>
+		      <span class="box_right_detail_b" th:text="${dayclass.dayclassPrice}"></span><span class="currency">원</span>
 		    </div>
 		</div>
 	</div>

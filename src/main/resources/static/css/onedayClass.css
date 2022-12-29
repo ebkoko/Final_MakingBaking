@@ -32,6 +32,18 @@
 }
 .box_product_detail {
   margin: 5px;
+  font-weight: 600;
+}
+.box_product_detail2{
+	margin: 5px;
+}
+.container .boxx .box_product .box_product_detail a {
+	color:black;
+	font-weight: 600;
+}
+.container .boxx .box_product .box_product_detail a:hover{
+	color: #28693F;
+	
 }
 .box_right {
   display: flex;
@@ -39,8 +51,14 @@
   flex-wrap: wrap;
   align-content: space-between;
 }
+
 .box_right_detail_b {
   position: absolute;
   bottom: 10px;
-  right: 10px;
+  right: 26px;
+}
+.currency {
+	position: absolute;
+	bottom: 10px;
+  	right: 10px;
 }
