@@ -183,6 +183,7 @@
 			             
 			             $("#btnAtt")[0].files = dt.files;
 			             
+			             // 상품등록 버튼 클릭 시 유효성 검사
 			             if(!$("#input_itemName").val()) {
 								alert("상품 이름을 입력해주세요.");
 								e.preventDefault();
@@ -381,12 +382,6 @@
 	                    	 }
 	                    	});
 					})
-					
-					
-					// 상품등록 버튼 클릭 시 유효성 검사
-					$(function() {
-						
-					});
 					
 			</script>
 		</th:block>
