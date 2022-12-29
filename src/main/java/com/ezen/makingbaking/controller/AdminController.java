@@ -2,6 +2,7 @@ package com.ezen.makingbaking.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +45,10 @@ public class AdminController {
 	public ModelAndView getItemList(ItemDTO itemDTO,
 			@PageableDefault(page = 0, size = 50) Pageable pageable) {
 		Item item = Item.builder()
+							.itemName(itemDTO.getItemName())
+							.itemPrice(itemDTO.getItemPrice())
+							.itemRegdate(LocalDateTime.now())
+							.itemStatus(itemDTO.getItemStatus())
 							.searchCondition(itemDTO.getSearchCondition())
 							.searchKeyword(itemDTO.getSearchKeyword())
 							.build();
@@ -162,6 +168,23 @@ public class AdminController {
 		response.sendRedirect("/admin/itemList");
 	}
 	
+	//상품 상세보기
+//	public ModelAndView getItem(@PathVariable int itemNo) {
+//		Item item = adminService.getItem(itemNo);
+//		
+//		ItemDTO itemDTO = ItemDTO.builder()
+//									.itemNo(item.getItemNo())
+//									.itemName(item.getItemName())
+//									.itemPrice(item.getItemPrice())
+//									.itemRegdate(
+//											item.getItemRegdate() == null ?
+//											null :
+//											item.getItemRegdate().toString())
+//									.itemStatus(item.getItemStatus())
+//									.build();
+//		
+//		
+//	}
 	
 	
 	
