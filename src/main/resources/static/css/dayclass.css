@@ -3,6 +3,7 @@
 		       height: 100%;
 		       position: relative;
 		    }
+		    
 		    .dayclass {
 		       position: relative;
 		       width: 950px;
@@ -28,7 +29,12 @@
 		       color: rgb(102, 102, 102);
 		       line-height: 28px;
 		    }
-				
+			.c_intro_text {
+				width: 100%;
+    			overflow:visible;
+   				border: none;
+   				resize: none;
+			}
 				
 		    /* 배너 dc_banner */
 		    .dc_banner_container {
@@ -42,15 +48,15 @@
 		    .banner_mian_img {
 		      margin-left: 50px;
 		    }
-		    .banner_explain_sTitle {
-			  margin-top: 10px;
-			}
 		    .banner_explain {
 		      margin-top: 25px;
 		      margin-right: 20px;
 		    }
+		    .banner_explain_MinName {
+			  margin-top: 15px;
+			}
 		    .banner_explain_details {
-		      margin-top: 140px;
+		      margin: 120px 0 10px 0;
 		      font-size: 17px;
 		    }
 		    .banner_explain_KRW{
@@ -61,7 +67,7 @@
 		    .banner_explain_btn {
 		      margin-top: 30px;
 		    }
-		    #dayclassRsrvtBtn, #dayclassLikeBtn {
+		    #moveRsrvtBtn, #dayclassLikeBtn {
 		      width: 120px;
 		      height: 40px;
 		      border: 1.2px solid #28693F;
@@ -75,7 +81,7 @@
 		      margin-right: 10px;
 		      letter-spacing:1px;
 		    }
-		    #dayclassRsrvtBtn:hover{
+		    #moveRsrvtBtn:hover{
 		      background-color: #28693F;
 		      color: white;
 		      font-weight: 400;		      
@@ -198,6 +204,26 @@
     			margin: 0;
 			}
 			
+			#dayclassRsrvtBtn {
+		      width: 120px;
+		      height: 40px;
+		      border: 1.2px solid #28693F;
+		      border-radius: 4px;
+		      background-color: white;
+		      text-align: center;
+		      display: inline-block;
+		      color: #28693F;
+		      font-size: 16px;
+		      font-weight: 550;
+		      margin-right: 10px;
+		      letter-spacing:1px;
+		    }
+		    #dayclassRsrvtBtn:hover{
+		      background-color: #28693F;
+		      color: white;
+		      font-weight: 400;		      
+		    }
+			
 		    /* 후기 작성  */
 		    .c_rvw{
 			  margin-top:100px auto;
@@ -301,29 +327,31 @@
 		      text-align: center;
 		      height: 25px;
 		    }
-		    .rvw_pasing{
-		      margin-top: 30px;
-		      margin-bottom: 50px;
+		    .rvw_paging{
+		      margin:50px 0 50px 0;
 		    }
-		    .pasing {
+		    .paging_btn{
+				list-style: none;
+			}
+		    .paging a{
 		      text-decoration: none;
 		      width: 100%;
 		      text-align: center;
 		      height: 25px;
+		      
 		    }
-		    .pasing a {
+		    .paging_btn a {
 		      text-decoration: none;
 		      padding: 3px 10px 3px 10px ;
 		      color: rgb(102, 102, 102);
 		      font-size: 16px;      
+		      
 		    }
-		    .pasing a:hover {
-		      font-weight: 600;
+		    .paging_btn a:hover {
+		      font-weight: 600;	  
 		      color: #28693F;
 		    }
-		    .paging_btn {
-				list-style: none;
-			}
+
 		
 		
 		    /* 환불 취소*/

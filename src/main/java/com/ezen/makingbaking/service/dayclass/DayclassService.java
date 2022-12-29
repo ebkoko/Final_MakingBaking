@@ -9,4 +9,12 @@ public interface DayclassService {
 	Dayclass getDayclass (int dayclassNo);
 	
 	Page<Dayclass> getOneDayclass(Pageable pageable);
+	
+	String getLikeYn(String loginUserId, int dayclassNo);
+	
+	int getLikeCnt(int dayclassNo);
+	
+	void insertLike(int dayclassNo, String userId);
+	
+	void deleteLike(int dayclassNo, String userId);
 }

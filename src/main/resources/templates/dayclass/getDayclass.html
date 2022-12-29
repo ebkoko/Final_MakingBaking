@@ -47,7 +47,7 @@
 					
 					        // 인포윈도우로 장소에 대한 설명을 표시합니다
 					        var infowindow = new kakao.maps.InfoWindow({
-					            content: '<div style="width:150px;text-align:center;padding:6px 0;">나라 건물</div>'
+					            content: '<div style="width:150px;text-align:center;padding:6px 0;">내 건물</div>'
 					        });
 					        infowindow.open(map, marker);
 					
@@ -61,7 +61,7 @@
 			<script th:inline="javascript" th:src="@{/js/jquery-ui.min.js}"></script>
 			<script th:inline="javascript">
 				$(function() {
-					// 취소환불 문의 자세히 보기
+					// 취소 환불 문의 자세히 보기
 					$(".refundGuideBtn").on("click", function(){
 						if($("#refundGuide").css("display") == "none") {
 							$("#refundGuide").css("display", "block");	
@@ -83,7 +83,7 @@
 						}
 						
 					});
-					
+				
 					// 예약 달력
 					$('#rsrvtDate').on("focus", function() {
 						$(".c_apply").animate({
@@ -105,8 +105,9 @@
 						});
 					});
 					
-					$("#rsrvtDate").datepicker();
-					$("#rsrvtDate").datepicker('setDate', 'today');
+					$("#rsrvtDate").datepicker({ dateFormat: 'yy-mm-dd'});
+					//$("#rsrvtDate").datepicker('setDate', 'today');
+					
 					
 					
 					// 예약 인원
@@ -129,8 +130,68 @@
 							return;
 						}
 					});
+					// 좋아요 클릭시
+
+					
+					// 예약하기 클릭시 (예약날짜, 예약시간, 인원) 	
+					$("#dayclassRsrvtBtn").on("click", function() {
+						if(!$("#rsrvtDate").val()) {
+							alert("예약날짜 선택하라");
+							return;
+						}
+						if($(".c_apply_timeOp").val() != "A" && $(".c_apply_timeOp").val() != "P") {
+							alert("예약시간을 선택하세요.");
+							return;
+						}
 						
+						let reserTime = "";
+						if($(".c_apply_timeOp").val() == "A") {
+							reserTime = "오전 09:30~12:30";
+						} else if($(".c_apply_timeOp").val() == "P") {
+							reserTime = "오후 14:00~17:00";
+						}
+						
+						
+						confirm("예약 날짜 : " + $("#rsrvtDate").val() + "\n예약 시간 : " + reserTime + "\n예약 인원 : " + $("#peopleNm_cnt").val() +"명\n\n예약하실?" );
+					});	
+					
+					// 좋아요 버튼 클릭시
+					$("#dayclassLikeBtn").on("click", function(e) {
+						if($(this).val() == 'Y') {
+						$.ajax({
+							url: '/dayclass/like',
+							type: 'delete',
+							data: {dayclassNo: $("#dayclassNo").val()},
+							success: function(obj) {
+								console.log(obj);
+								$("#dayclassLikeBtn").text("♡ " + obj.item.likeCnt);
+								$("#dayclassLikeBtn").val("N");
+							},
+							error: function(e) {
+								console.log(e);
+							}
+						});
+					} else {
+						$.ajax({
+							url: '/dayclass/like',
+							type: 'post',
+							data: {dayclassNo: $("#dayclassNo").val()},
+							success: function(obj) {
+								console.log(obj);
+								$("#dayclassLikeBtn").text("♥ " + obj.item.likeCnt);
+								$("#dayclassLikeBtn").val("Y");
+							},
+							error: function(e) {
+								console.log(e);
+							}
+						});
+					}
+					});
 				});
+				
+				function fnLike(likeYn) {
+					
+				}
 			</script>
 		</th:block>
 	</head>
@@ -141,6 +202,7 @@
 	  <div class="entire-wrap" >	  
 	  <div class="dayclass">
 	    <main > 
+	    	<input type="hidden" id="dayclassNo" name="dayclassNo" th:value="${dayclass.dayclassNo}">
 	      <section class="dc_banner"> 
 	        <div class="dc_banner_container">
 	          <div class="dc_banner">
@@ -149,8 +211,7 @@
 	              width="350px">
 	            </div>
 	            <div class="banner_explain">        
-	              <h1 th:text="${dayclass.dayclassName}"></h1>
-	              
+	              <h1 th:text="${dayclass.dayclassName}"></h1>        
 	              <div class="banner_explain_MinName">
 	              	<p th:text="${dayclass.dayclassMinName}"></p>
 	              </div>
@@ -164,11 +225,12 @@
 	              </div> 
 	              <div class="banner_explain_btn">
 	             
-	                <span><button type="button" id="dayclassRsrvtBtn" value="dayclassRsrvt"
+	                <span><button type="button" id="moveRsrvtBtn" value="dayclassRsrvt"
 	                th:onclick="'location.href=\'' + @{#dayclass_hr1} +'\''">예약하기  
 	                </button></span>
 	          
-	                <span><button type="button" id="dayclassLikeBtn" th:value="@{dayclassLike}">♡ 1,809</button></span>
+	                <span id="likeSpan"><button type="button" id="dayclassLikeBtn" 
+	                	th:value="${likeYn}" th:text="${likeYn == 'Y' ? '♥' : '♡'} + ${likeCnt}"></button></span>
 	              </div>
 	            </div>  
 	          </div>
@@ -211,8 +273,9 @@
 	           
 	                <li><img src="/images/class_time.png" width="17px"> 예약 시간  
 	                	<select class="c_apply_timeOp">
-	               			<option>오전 09:30~12:30</option>
-	               			<option>오후 14:00~17:00</option>
+	                		<option disabled selected>날짜 선택</option>
+	              			<option value="A">오전 09:30~12:30</option>
+	               			<option value="P">오후 14:00~17:00</option>
 						</select>
 					</li>
 					<li><img src="/images/class_people.png" width="23px">
@@ -297,7 +360,7 @@
 	                        </tr>
 	                      </tbody>
 	                    </table>
-	                    <div class="rvw_pasing">
+	                    <div class="rvw_paging">
 	                      <ul class="paging" style="display: flex; justify-content: center;" 
 							th:if="${reviewList.totalElements > 0}"
 							th:with="pageNumber = ${reviewList.pageable.pageNumber},
@@ -309,7 +372,7 @@
 								<li class="paging_btn" th:if="${pageNumber > 0}">
 									<a th:href="@{/dayclass/dayclass/1(
 													page=${pageNumber - 1}
-													)}"><</a>
+													)}">◀</a>
 								</li>
 								<li class="paging_btn" th:each="page : ${#numbers.sequence(startPage, endPage)}">
 									<a th:href="@{/dayclass/dayclass/1(
@@ -319,7 +382,7 @@
 								<li class="paging_btn" th:if="${pageNumber < totalPages - 1}">
 									<a th:href="@{/dayclass/dayclass/1(
 													page=${pageNumber + 1},				
-													)}">></a>
+													)}">▶</a>
 								</li>
 							</ul>
 	                    </div>
