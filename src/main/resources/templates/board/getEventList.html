@@ -5,59 +5,48 @@
 	layout:decorate="~{layouts/layout}">
 <head>
 	<th:block layout:fragment="css">
-		  <style>
-		    * {
-		      margin: 0; padding: 0;
-		      box-sizing: border-box;
-		      outline: none; 
-		      border: none;
-		      text-decoration: none;
-		    }
-		    #container {
-		      width: 1200px;
-		      margin: 0 auto 100px;
-		    }
-		    h3 { 
-		      font-size: 24px;
-		      margin: 10px 0 0 10px;
-		    }
-		    #high-nav {
-		      margin-top: 100px;
-		    }
-		    #high-nav>#event-button {
-		      width: 200px; height: 70px;
-		      display: inline-block;
-		      font-size: 32px; font-weight: bold;
-		      color: black; 
-		      background-color: #fff;
-		      padding-bottom: 30px;
-		    }
-		    #high-container {
-		      width: 100%; height: fit-content;
-		      background-color: #FFFAF0;
-		      padding: 30px;
-		    }
-		    #mid-container{
-		      width: 100%; height: fit-content;
-		      background-color: #fff;
-		      padding: 30px;
-		    }
-		    #list-table { width: 100%; border-collapse: collapse; }
-		    tr { height: 40px;}
-		    th { 
-		      border-bottom: 1px solid gray;
-		      font-size: 15px;
-		    }
-		    td { font-size: 15px;}
-		    #th-title { border-right: 1px solid gray;}
-		    #th-date { border-left: 1px solid gray;}
-		    .list-answer, .list-date { text-align: center;}
-		    .list-title { 
-		      padding: 0 5px;
-		      border-right: 1px solid gray;
-		    }
-		    .list-date { border-left: 1px solid gray;}
-		</style>
+		<link rel="stylesheet" th:href="@{/css/board/boardList.css}"/>
+	</th:block>
+	<th:block layout:fragment="script">
+		<script th:inline="javascript">
+			$(function() {
+				$(".pagination_button a").on("click", function(e) {
+					e.preventDefault();
+					$.ajax({
+						url: '/board/event/4',
+						type: 'post',
+						data: {	page: $(e.target).attr("data-page-num")},
+						success: function(obj) {
+							console.log(obj);
+							
+							let htmlStr = "";
+							
+							for(let i=0; i<obj.pageItems.content.length; i++) {
+								htmlStr += `
+									<tr>
+										<td class="list-title">
+											<a href="/board/updateBoardCnt/${obj.pageItems.content[i].boardNo}">
+											${obj.pageItems.content[i].boardTitle}
+											</a>
+										</td>			
+										<td class="list-date">${obj.pageItems.content[i].boardRegdate == null ? '' : obj.pageItems.content[i].boardRegdate.substring(0, 10)}</td>
+									</tr>
+								`;
+							}
+							$("#list-table").children(":first").children().not(":first").remove();
+							$("#list-table").children(":first").append(htmlStr);
+						},
+						error: function(e) {
+							console.log(e);
+							console.log($(e.target).attr("data-page-num"));
+						}
+					})
+					/*.done(function(result) {
+						$("#list-table").replaceWith(result);
+					});*/
+				});
+			});
+		</script>
 	</th:block>
 </head>
 <body>
@@ -75,19 +64,36 @@
 	          <th width="80%" id="th-title">제목</th>
 	          <th width="20%" id="th-date">작성일</th>
 	        </tr>
-	        <tr>
-	          <td class="list-title">안녕하세요 질문있어요</td>
-	          <td class="list-date">2022-12-20</td>
-	        </tr>
-	        <tr>
-	          <td class="list-title">안녕하세요 질문있어요</td>
-	          <td class="list-date">2022-12-20</td>
-	        </tr>
-	        <tr>
-	          <td class="list-title">안녕하세요 질문있어요</td>
-	          <td class="list-date">2022-12-20</td>
+	        <tr th:each="event: ${getBoardList}">
+	          <td class="list-title">
+	          	<a th:text="${event.boardTitle}"
+				   th:href="@{/board/updateBoardCnt/{boardNo} (boardNo=${event.boardNo})}">
+				</a>
+	          </td>
+	          <td class="list-date" th:text="${event.boardRegdate eq null ? '' : #strings.substring(event.boardRegdate, 0, 10)}"></td>
 	        </tr>
 	      </table>
+	      <br/>
+		  <div style="text-align:center;">
+			<ul class="pagination" style="display: flex; justify-content: center;" 
+				th:if="${getBoardList.totalElements > 0}"
+				th:with="pageNumber = ${getBoardList.pageable.pageNumber},
+									pageSize = ${getBoardList.pageable.pageSize},
+									totalPages = ${getBoardList.totalPages},
+									startPage =${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+									tempEndPage = ${startPage + pageSize -1}, 
+									endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+					<li class="pagination_button" th:if="${pageNumber > 0}">
+						<a th:data-page-num="${pageNumber - 1}"><</a>
+					</li>
+					<li class="pagination_button" th:each="page : ${#numbers.sequence(startPage, endPage)}">
+						<a th:data-page-num="${page - 1}" th:text="${page}"></a>
+					</li>
+					<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+						<a th:data-page-num="${pageNumber + 1}">></a>
+					</li>
+				</ul>
+			</div>
 	    </div>
 	  </div>
 	</div>

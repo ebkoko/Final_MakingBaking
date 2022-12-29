@@ -1,7 +1,5 @@
 package com.ezen.makingbaking.service.board.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,9 +20,15 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<Board> getQnaList(Board board) {
-		return boardRepository.findByCateCode(board.getCateCode());
+	public void updateBoardCnt(int boardNo) {
+		boardRepository.updateBoardCnt(boardNo);		
 	}
+
+	@Override
+	public Board getBoard(int boardNo) {
+		return boardRepository.findById(boardNo).get();
+	}
+
 
 	
 

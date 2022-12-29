@@ -11,11 +11,34 @@
   margin: 0 auto 100px;
 }
 
+h3 { 
+  font-size: 24px;
+  margin: 10px 0 0 10px;
+}
+
 #high-nav {
   margin-top: 100px;
 }
 
 #high-nav>#qna-button {
+  width: 200px; height: 70px;
+  display: inline-block;
+  font-size: 32px; font-weight: bold;
+  color: black; 
+  background-color: #fff;
+  padding-bottom: 30px;
+}
+
+#high-nav>#notice-button {
+  width: 200px; height: 70px;
+  display: inline-block;
+  font-size: 32px; font-weight: bold;
+  color: black; 
+  background-color: #fff;
+  padding-bottom: 30px;
+}
+
+#high-nav>#event-button {
   width: 200px; height: 70px;
   display: inline-block;
   font-size: 32px; font-weight: bold;
