@@ -41,7 +41,7 @@ public class AdminController {
 	//상품리스트
 	@GetMapping("/itemList")
 	public ModelAndView getItemList(ItemDTO itemDTO,
-			@PageableDefault(page = 0, size = 20) Pageable pageable) {
+			@PageableDefault(page = 0, size = 50) Pageable pageable) {
 		Item item = Item.builder()
 							.searchCondition(itemDTO.getSearchCondition())
 							.searchKeyword(itemDTO.getSearchKeyword())
