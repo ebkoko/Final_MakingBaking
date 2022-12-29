@@ -12,6 +12,9 @@
 				input {
 					border: 1px solid #DCDCDC;
 				}
+				input[type="text"] {
+					padding-left: 5px;
+				}
 				select {
 					border: 1px solid #DCDCDC;
 				}
@@ -55,10 +58,10 @@
 				    margin-left: 100px;
 				}
 				#list_title .title_itemPrice {
-				    margin-left: 600px;
+				    margin-left: 605px;
 				}
 				#list_title .title_itemQuantity {
-				    margin-left: 120px;
+				    margin-left: 118px;
 				}
 				#list_title .title_totalPrice {
 				    margin-left: 140px;
@@ -66,33 +69,33 @@
 				#list_title+hr {
 					margin-bottom: 15px;
 				}
-				#item_Img {
-				    margin-left: 80px;
+				.item_Img {
+				    margin-left: 30px;
 				    width: 100px;
 				}
-				#item_Detail {
+				.item_Detail {
 				    display: inline-block;
 				    width: 55%;
 				    vertical-align: middle;
 				}
-				#detailName {
+				.detailName {
 				    display: inline-block;
 				    margin-left: 10px;
 				    vertical-align: top;
 				}
-				#item_Price {
+				.item_Price {
 				    display: inline-block;
-				    width: 14%;
+				    width: 12%;
 				    text-align: right;
 				}
-				#item_Quantity {
+				.item_Quantity {
 				    display: inline-block;
-				    width: 10%;
+				    width: 11%;
 				    text-align: right;
 				}
-				#item_totalPrice {
+				.item_totalPrice {
 				    display: inline-block;
-				    width: 18%;
+				    width: 15%;
 				    text-align: right;
 				}
 				#totalPrice {
@@ -104,7 +107,7 @@
 				#totalPrice+hr {
 				    clear: both;
 				}
-				#itemView+hr {
+				.itemView+hr {
 					margin-top: 15px;
 					margin-bottom: 5px;
 				}
@@ -322,6 +325,8 @@
 				let pushbankTransfer = false;
 				let pushKakaoPay = false;
 				$(function() {
+					fnTotalPrice()
+					
 					// 우편번호 input 클릭했을 때
 					$("#addr1").on('click', function() {
 						findAddr();
@@ -448,6 +453,27 @@
 						
 					});
 				});
+				
+				
+				function fnTotalPrice() {
+					let item_PriceSum = 0;
+					let deliFee = 0;
+					
+					// 총 결제 금액
+					$(".item_totalPrice").each(function() {
+						item_PriceSum += totalItemPrice
+						console.log(item_PriceSum);
+					});
+					
+					$(".item_PriceSum").text(item_totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+					
+					if(item_PriceSum < 30000) {
+						deliFee = 3000;
+					}
+					
+					$(".deliFee").text(deliFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+					
+				}
 			</script>
 		</th:block>
 	</head>
@@ -455,6 +481,9 @@
 	
 	<body>
 		<div layout:fragment="content">
+		<input type="hidden" name="itemList" th:value="${itemList}">
+		<input type="hidden" name="totalItemPrice" th:value="${totalItemPrice}">
+		<input type="hidden" name="deliFee" th:value="${deliFee}">
 			<div id="container">
 	            <h1 id="order_title">주문결제</h1>
 	            <div id="process">
@@ -469,18 +498,19 @@
 	            </div>
 	            <hr>
 	            <div id="order_item">
-	                <div id="itemView">
-	                    <div id="item_Detail">
-	                        <img id="item_Img" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
-	                        <div id="detailName"><a th:text="${itemName}"></a>상품명</div>    
+	                <div class="itemView" th:each="itemList : ${itemList}">
+	                    <div class="item_Detail">
+	                        <img class="item_Img" th:src="@{'/item/' + ${itemList.fileName}}">
+	                        <div class="detailName"><a th:text="${itemList.itemName}"></a></div>    
 	                    </div>
-	                    <div id="item_Price"><span>원</span></div>  
-	                    <div id="item_Quantity">5</div>                    
-	                    <div id="item_totalPrice"><span>원</span></div>
+	                    <div class="item_Price"><span class="itemPrice" th:text="${#numbers.formatInteger(itemList.itemPrice, 3, 'COMMA')}"></span></div><span>원</span>  
+	                    <div class="item_Quantity" th:text="${itemList.cartItemCnt}"></div>                    
+	                    <div class="item_totalPrice"><span th:text="${#numbers.formatInteger((T(java.lang.Integer).parseInt(itemList.itemPrice) * T(java.lang.Integer).parseInt(itemList.cartItemCnt)), 3, 'COMMA')}"></span></div><span>원</span>
 	                </div>            
 	                <hr>
 	                <div id="totalPrice">
-	                    <span>상품 총 금액: </span> <span class="item_PriceSum"></span><span >원</span> <span>&#43;</span> <span>배송비: </span> <span class="deliFee"></span><span >원</span> <span>&#61;</span> <span>총 결제금액: </span> <span class="totalPrice"></span><span >원</span>
+	                    <span>상품 총 금액: </span> <span class="item_PriceSum" th:text="${#numbers.formatInteger(totalItemPrice, 3, 'COMMA')}"></span><span >원</span> <span>&#43;</span> <span>배송비: </span> <span class="deliFee" th:text="${deliFee != 0 ? #numbers.formatInteger(deliFee, 3, 'COMMA') : 0}"></span><span >원</span> <span>&#61;</span> <span>총 결제금액: </span> <span class="totalPrice" 
+	                    th:text="${#numbers.formatInteger((T(java.lang.Integer).parseInt(totalItemPrice)+T(java.lang.Integer).parseInt(deliFee)), 3, 'COMMA')}"></span><span >원</span>
 	                </div>
 	                <hr>
 	            </div>          
@@ -492,18 +522,18 @@
 		                    <table id="T1">
 		                        <tr>
 		                            <th>배송지</th>
-		                            <td><input type="radio" name="deli1" id="deli1" value="기본배송지" checked> 기본배송지&emsp;<input type="radio" name="deli2" id="deli2" value="직접입력"> 직접입력</td>
+		                            <td><input type="radio" name="deli1" id="deli1" value="기본배송지" checked> 기본배송지&emsp;<input type="radio" name="deli1" id="deli2" value="직접입력"> 직접입력</td>
 		                        </tr>
 		                        <tr>
 		                            <th>수령인<span class="essential">&#42;</span></th>
-		                            <td><input type="text" name="recipient" id="recipient"></td>
+		                            <td><input type="text" name="recipient" id="recipient" th:value="${userInfo.userId}"></td>
 		                        </tr>
 		                        <tr>
 		                            <th>배송주소<span class="essential">&#42;</span></th>
 		                            <td>
-		                                <input type="text" name="addr1" id="addr1" placeholder="우편번호"><input type="button" id="btnZipcode" onclick="findAddr();" value="우편번호 찾기"><br>
-		                                <input type="text" name="addr2" id="addr2" placeholder="주소"><br>
-		                                <input type="text" name="addr3" id="addr3" placeholder="상세주소">&ensp;<input type="text" name="extraAddr" id="extraAddr">
+		                                <input type="text" name="addr1" id="addr1" placeholder="우편번호" val="${addr1}"><input type="button" id="btnZipcode" onclick="findAddr();" value="우편번호 찾기"><br>
+		                                <input type="text" name="addr2" id="addr2" placeholder="주소" val="${addr2}"><br>
+		                                <input type="text" name="addr3" id="addr3" placeholder="상세주소" val="${addr3}">&ensp;<input type="text" name="extraAddr" id="extraAddr">
 		                            </td>
 		                        </tr>
 		                        <tr>

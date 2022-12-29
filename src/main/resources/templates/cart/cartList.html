@@ -35,6 +35,9 @@
 				#selectAllCancel {
 					margin-left: 10px;
 				}
+				#selectbox .freeDeliMent {
+					margin-left: 800px;
+				}
 				#list_title {
 				    font-size: 0.9em;
 				}
@@ -76,7 +79,7 @@
 				}
 				.item_Detail {
 				    display: inline-block;
-				    margin-left: 15px;
+				    margin-left: 10px;
 				    vertical-align: top;
 				}
 				.item_Detail .detailName {
@@ -125,7 +128,7 @@
 				.cart_noItem {
 				    text-align: center;
 				}
-				#cartForm+hr {
+				#cart_item+hr {
 					margin-top: 15px;
 					margin-bottom: 5px;
 				}
@@ -133,7 +136,7 @@
 				    float: right;
 				    font-size: 0.9em;
 				    margin-right: 5px;
-				    margin-bottom: 8px;
+				    margin-bottom: 5px;
 				}
 				#totalPrice+hr {
 				    clear: both;
@@ -162,6 +165,9 @@
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
+				let checkedList = [];
+				const getCartList = /*[[${getCartList}]]*/;
+			
 				$(function() {
 					fnTotalItemPrice();
 					
@@ -196,6 +202,7 @@
 							$("#selectAll").prop("checked", true);
 						}
 					});
+					
 					
 					// 수량 변경시 변경된 수량으로 상품금액 계산
 					$(document).on("change", "input[name='Quantity']", function(e) {
@@ -237,8 +244,6 @@
 					} else {
 						$(".cart_noItem").css("display", "block");
 					}
-					
-					
 				});
 				
 				// 상품리스트에서 삭제버튼 클릭했을 때
@@ -303,18 +308,35 @@
 					$("input[name='Quantity']").each(function(index) {
 						if($("#chk" + index).is(":checked")) {
 							totalItemPrice += $(this).val() * $(this).attr("data-default-price");
+							const item = {
+								itemNo: getCartList[index].itemNo,
+								itemName: getCartList[index].itemName,
+								cartItemCnt: $(this).val(),
+								itemPrice: getCartList[index].itemPrice,
+								fileName: getCartList[index].fileName
+							};
+							
+							checkedList.push(item);
+						} else {
+							checkedList = checkedList.filter(item => item.itemNo != getCartList[index].itemNo);
 						}
 					});
 					
 					$("#totalItemPrice").text(totalItemPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+					$("#realTotalItemPrice").text(totalItemPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 					
 					if(totalItemPrice < 30000 && totalItemPrice != 0) {
 						deliFee = 3000;
 					}
 					
 					$("#deliFee").text(deliFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+					$("#realDeliFee").text(deliFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 					
 					$("#totalPayPrice").text((totalItemPrice+deliFee).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+					
+					$("#itemList").val(JSON.stringify(checkedList));
+					$("#totalItemPrice").val(totalItemPrice);
+					$("#deliFee").val(deliFee);
 				}
 			</script>
 		</th:block>
@@ -331,20 +353,24 @@
 	            <div id="selectbox">
 	                <label for="selectAll"><input type="checkbox" name="select" id="selectAll"> <span>전체선택</span></label>
 	                <label for="selectAllCancel"><input type="checkbox" name="select" id="selectAllCancel"> <span>선택취소</span></label>
+	                <span class="freeDeliMent">3만원 이상 구매시 무료배송</span>
 	            </div>
 	            <hr>
 	            <div id="list_title">
 	                <span class="title_itemInfo">상품정보</span><span class="title_itemQuantity">수량</span><span class="title_itemPrice">상품금액</span><span class="title_itemDel">삭제</span>
 	            </div>
 	            <hr>
-	            <form id="cartForm" action="/cart/cartList" method="post">
+	            <form id="cartForm" action="/cart/orderCartList" method="post">
+	            	<input type="hidden" name="itemList" id="itemList">
+	            	<input type="hidden" name="totalItemPrice" id="totalItemPrice">
+	            	<input type="hidden" name="deliFee" id="deliFee">
 		            <div id="cart_item">
 		                <div class="item1" th:each="cart : ${getCartList}">
 		                    <div class="itemSelect">
 		                        <input type="checkbox" class="check" th:id="'chk' + ${cartStat.index}" name="select_item">                    
 		                    </div>
 		                    <div class="itemView">
-		                        <img class="item_Img" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
+		                        <img class="item_Img" th:src="@{'/item/' + ${cart.fileName}}">
 		                        <div class="item_Detail">
 		                            <div class="detailName"><a th:href="@{/}" th:text="${cart.itemName}"></a></div>
 		                            <div class="detailPrice" th:text="${#numbers.formatInteger(cart.itemPrice, 3, 'COMMA')}"></div><span>원</span>
@@ -362,13 +388,13 @@
 		                </div>
 		                <p class="cart_noItem">장바구니에 담긴 상품이 없습니다.</p>
 		            </div>
+		            <hr>
+		            <div id="totalPrice">
+		                <span>상품 총 금액: </span> <span id="realTotalItemPrice"></span><span>원</span> <span>&#43;</span> <span>배송비: </span> <span id="realDeliFee"></span><span>원</span> <span>&#61;</span> <span>총 결제금액: </span> <span id="totalPayPrice"></span><span>원</span>
+		            </div>
+		            <hr>
+		            <button type="submit" id="btnSelectedOrder">주문하기</button>
 	            </form>
-	            <hr>
-	            <div id="totalPrice">
-	                <span>상품 총 금액: </span> <span id="totalItemPrice"></span><span>원</span> <span>&#43;</span> <span>배송비: </span> <span id="deliFee"></span><span>원</span> <span>&#61;</span> <span>총 결제금액: </span> <span id="totalPayPrice"></span><span>원</span>
-	            </div>
-	            <hr>
-	            <button type="submit" id="btnSelectedOrder">주문하기</button>
 	        </div>
 		</div>
 	</body>
