@@ -249,7 +249,7 @@
 	      			<td><input type="checkbox" name="select_item"></td>
 		        	<td th:text="${item.itemNo}"></td>
 		        	<td th:text="${item.itemName}"></td>
-		        	<td th:text="${#numbers.formatInteger(item.itemPrice , 3, 'COMMA')}"></td>
+		        	<td th:text="${item.itemPrice >= 1000 ? #numbers.formatInteger(item.itemPrice , 3, 'COMMA') : item.itemPrice}"></td>
 		        	<td th:text="${item.itemRegdate eq null ? '' : #strings.substring(item.itemRegdate, 0, 10)}"></td>
 		        	<td th:text="${item.itemStatus}"></td>
 		        	<td><a href="/admin/updateItem"><input type="button" value="수정" id="itemMod"></a></td>

@@ -54,6 +54,9 @@
 					height: 35px;
 					font-size: 20px;
 				}
+				#input_itemPrice {
+					width: 100px;
+				}
 				#itemRegTextarea {
 					width: 600px;
 					font-size: 15px;
@@ -68,6 +71,13 @@
 					font-size: 15px;
 				}
 				
+				/* 상품카테 라디오버튼 */
+				#div_itemRadio 
+					input[type='radio']{
+				      accent-color:rgb(64, 128, 128);
+				      border: 2px solid #808080;
+					}
+				
 				/* 파일 첨부 */
 				#attZone {
 					width: 660px;
@@ -81,13 +91,46 @@
 					font-size: 0.9em;
 				}
 				
+				/* 상품 재고 */
+				#itemStockNm {
+		            float: left;
+		            position: relative;
+		            min-width: 114px;
+		            height: 34px;
+		            border: solid 1px #dde0e3;
+		            margin-left: 20px;
+		         }
+		         #itemStockNm_minus, #itemStockNm_plus{
+		            position: relative;
+		            width: 34px;
+		            height: 100%;
+		            background-color: #f1f2f4;
+		            border: none;
+		         }
+		         #itemStockNm_cnt{
+		            width: 40px;
+		            height: 100%;
+		            border-width: 0 1px;
+		            vertical-align: top;
+		            color: #333333;
+		            font-size: 14px;
+		            font-weight: bold;
+		            line-height: 34px;
+		            text-align: center;  
+		         }
+		         input[type="number"]::-webkit-outer-spin-button,
+		         input[type="number"]::-webkit-inner-spin-button {
+		             -webkit-appearance: none;
+		             margin: 0;
+		         }
+				
 				/* 상품등록 버튼 div */
 			    #div_itemRegBtn {
 					display: flex;
 					justify-content:center;
 				}
 				/* 상품등록 버튼 */
-			    #itemReg {
+			    #itemRegBtn {
 					width: 150px;
 					height: 50px;
 					border: 1.2px solid #28693F;
@@ -102,7 +145,7 @@
 					margin: 0 auto;
 					margin-top: 50px;
 			    }
-			    #itemReg:hover {
+			    #itemRegBtn:hover {
 					background-color: #28693F;
 					color: white;
 					font-weight: 550;
@@ -111,6 +154,7 @@
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
+				let itemPrice = 0;
 				// 추가된 파일들을 담아줄 배열. File 객체로 하나씩 담음
 			      let uploadFiles = [];
 			   
@@ -128,7 +172,7 @@
 			            }
 			         });
 			         
-			         $("#itemRegForm").on("submit", function() {
+			         $("#itemRegForm").on("submit", function(e) {
 			        	 //마지막으로 btnAtt에 uploadFiles에 있는 파일들을 담아준다.
 			        	 dt = new DataTransfer();
 			             
@@ -138,6 +182,59 @@
 			             }
 			             
 			             $("#btnAtt")[0].files = dt.files;
+			             
+			             if(!$("#input_itemName").val()) {
+								alert("상품 이름을 입력해주세요.");
+								e.preventDefault();
+								$("#input_itemName").focus();
+								return;
+							}
+							if(!$("#input_itemMinName").val()) {
+								alert("상품 소제목을 입력해주세요.");
+								e.preventDefault();
+								$("#input_itemMinName").focus();
+								return;
+							}
+							if(!$("#itemRegTextarea").val()) {
+								alert("상품 설명을 입력해주세요.");
+								e.preventDefault();
+								$("#itemRegTextarea").focus();
+								return;
+							}
+							if(!$("#input_itemPrice").val()) {
+								alert("상품 가격을 입력해주세요.");
+								e.preventDefault();
+								$("#input_itemPrice").focus();
+								return;
+							} else {
+								$("#input_itemPrice").val(itemPrice);
+							}
+							if(!$("#input_itemExpDate").val()) {
+								alert("상품 유통기한을 입력해주세요.");
+								e.preventDefault();
+								$("#input_itemExpDate").focus();
+								return;
+							}
+							if(!$("#input_itemOrigin").val()) {
+								alert("상품 원산지를 입력해주세요.");
+								e.preventDefault();
+								$("#input_itemOrigin").focus();
+								return;
+							}
+							if(!$("#input_itemAllergyInfo").val()) {
+								alert("상품 알레르기 정보를 입력해주세요.");
+								e.preventDefault();
+								$("#input_itemAllergyInfo").focus();
+								return;
+							}
+							if(confirm("등록하시겠습니까?")) {
+								alert("상품이 등록되었습니다.");
+								return;
+							} else {
+								e.preventDefault();
+								alert("상품등록이 취소되었습니다.");
+								return;
+							}
 			         })
 			         
 			         
@@ -237,25 +334,60 @@
 			         // 완성된 div 리턴
 			         return div;
 			      }
-				
-				
-				/*  https://jamesdreaming.tistory.com/211  */
-			    /* $(function() {
-			      $("#inputPrice").on("focus", function() {
-			        var val = $("#inputPrice").val();
-			        if(!isEmpty(val)) {
-			          val = val.replace(/,/g,'');
-			          $("#inputPrice").val(val);
-			        }
-			      });
-			      $("#inputPrice").on("blur", function() {
-			        var val = $("#inputPrice").val();
-			        if(!isEmpty(val) && inNumeric(val)) {
-			          val = currencyFormatter(val);
-			          $("#inputPrice").val(val);
-			        }
-			      });
-			    }); */
+			      
+			      //가격 천단위 콤마
+			      
+			      function inputNumberFormat(obj) {
+					  itemPrice = obj.value.replace(",", "");
+					  obj.value = comma(uncomma(obj.value));
+				  }
+				  
+				  function comma(str) {
+					  str = String(str);
+					  return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+				  }
+				  
+				  function uncomma(str) {
+					  str = String(str);
+					  return str.replace(/[^\d]+/g, '');
+				  }
+				  
+				  //가격 숫자만입력가능
+				  $(function() {
+					  $("#input_itemPrice").on("keyup", function(event) {
+				        if (event.which && ((event.which  > 47 && event.which  < 58) || (event.which > 95 && event.which < 106) || event.which == 8)) {
+				            
+				        }else{
+				            alert('숫자만 입력해주세요.');
+				            $(this).val($(this).val().replace(/[^0-9]/g,""));
+				        }
+				    });
+				  });
+				  
+					//재고
+					$(function() {
+						$("#itemStockNm_plus").on("click", function(){
+							$("#itemStockNm_cnt").val(parseInt($("#itemStockNm_cnt").val()) + 1);
+							
+	                    });
+	                    	
+						$("#itemStockNm_minus").on("click", function(){
+							$("#itemStockNm_cnt").val(parseInt($("#itemStockNm_cnt").val()) - 1);
+							
+							if($("#itemStockNm_cnt").val() < 0) {
+								$("#itemStockNm_cnt").val(0);
+	                     		alert("최소 재고수량은 0입니다.");
+	                    	 	return;
+	                    	 }
+	                    	});
+					})
+					
+					
+					// 상품등록 버튼 클릭 시 유효성 검사
+					$(function() {
+						
+					});
+					
 			</script>
 		</th:block>
 	</head>
@@ -283,12 +415,14 @@
 	        </tr>
 	        <tr>
 	          <th id="itemCate_Th">카테고리</th>
-	          <td>&ensp;&ensp;
+	          <td>
+	          <div id="div_itemRadio">&ensp;&ensp;
 	          	<input type="radio" name="itemCate" value="케이크"><label for="케이크">케이크&ensp;&ensp;</label>
 	          	<input type="radio" name="itemCate" value="빵" checked><label for="빵">빵&ensp;&ensp;</label>
 	          	<input type="radio" name="itemCate" value="쿠키"><label for="쿠키">쿠키&ensp;&ensp;</label>
 	          	<input type="radio" name="itemCate" value="디저트"><label for="디저트">디저트&ensp;&ensp;</label>
 	          	<input type="radio" name="itemCate" value="비건"><label for="비건">비건</label>
+	          </div>
 	          </td>
 	        </tr>
 	        <tr>
@@ -305,7 +439,10 @@
 	        </tr>
 	        <tr>
 	          <th>가격</th>
-	          <td>&ensp;&ensp;<input type="text" name="itemPrice" class="inputH" id="input_itemPrice">원</td>
+	          <td>&ensp;&ensp;
+	          	<input type="text" name="itemPrice" class="inputH" id="input_itemPrice"
+	          	onkeyup="inputNumberFormat(this)" maxlength="8">원
+	          </td>
 	        </tr>
 	        <tr>
 	          <th>유통기한</th>
@@ -317,7 +454,7 @@
 	        </tr>
 	        <tr>
 	          <th>알레르기 정보</th>
-	          <td>&ensp;&ensp;<input type="text" name="itemAllergyInfo" class="inputH" id="input_itemAllergyInfo"></td>
+	          <td>&ensp;&ensp;<textarea name="itemAllergyInfo" id="input_itemAllergyInfo" class="inputH"></textarea></td>
 	        </tr>
 	        <tr>
 	          <th>영양정보</th>
@@ -331,14 +468,20 @@
 	        </tr>
 	        <tr>
 	          <th>재고</th>
-	          <td>&ensp;&ensp;<input type="number" name="itemStock" min="0" class="inputH" value="30"></td>
+	          <td>&ensp;&ensp;
+	          	<div id="itemStockNm">
+					<button type="button" name="재고내리기" id="itemStockNm_minus">－</button>
+					<input type="number" name="itemStock" id="itemStockNm_cnt" class="inputH" value="30">
+					<button type="button" name="재고올리기" id="itemStockNm_plus">＋</button>
+				</div>
+	          </td>
 	        </tr>
 	      </table>
       </div>
       
       <!-- 상품등록 버튼 -->
       <div id="div_itemRegBtn">
-      	<input type="submit" value="상품 등록" id="itemReg">
+      	<input type="submit" value="상품 등록" id="itemRegBtn">
       </div>
       </form>
   </div>
