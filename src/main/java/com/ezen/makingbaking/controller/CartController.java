@@ -38,10 +38,10 @@ public class CartController {
 	private UserService userService;
 	
 	@GetMapping("/cartList")
-	public ModelAndView cartListView() {
+	public ModelAndView cartListView(@AuthenticationPrincipal CustomUserDetails customUser) {
 		ModelAndView mv = new ModelAndView();
 		
-		List<CamelHashMap> cartList = cartService.getCartList();
+		List<CamelHashMap> cartList = cartService.getCartList(customUser.getUsername());
 		
 		mv.addObject("getCartList", cartList);
 		
@@ -50,9 +50,10 @@ public class CartController {
 	}
 	
 	@PostMapping("/insertCart")
-	public void insertCart(CartDTO cartDTO) {
+	public void insertCart(CartDTO cartDTO, @AuthenticationPrincipal CustomUserDetails customUser) {
 		Cart cart = Cart.builder()
 						.itemNo(cartDTO.getItemNo())
+						.userId(customUser.getUsername())
 						.build();
 		
 		System.out.println(cart.getCartStatus());
@@ -61,18 +62,19 @@ public class CartController {
 	}
 	
 	@DeleteMapping("/cart")
-	public ResponseEntity<?> deleteCart(CartDTO cartDTO, Model model) {
+	public ResponseEntity<?> deleteCart(CartDTO cartDTO, Model model, @AuthenticationPrincipal CustomUserDetails customUser) {
 		ResponseDTO<CamelHashMap> response = new ResponseDTO<>();
 		
 		try {
 			Cart cart = Cart.builder()
 							.cartNo(cartDTO.getCartNo())
 							.itemNo(cartDTO.getItemNo())
+							.userId(customUser.getUsername())
 							.build();
 			
 			cartService.deleteCart(cart);
 			
-			List<CamelHashMap> cartList = cartService.getCartList();
+			List<CamelHashMap> cartList = cartService.getCartList(customUser.getUsername());
 			response.setItems(cartList);
 			
 			model.addAttribute("getCartList", cartList);
@@ -95,7 +97,9 @@ public class CartController {
 		
 		ModelAndView mv = new ModelAndView();
 		
-		mv.addObject("userInfo", userService.idcheck(user));
+		user = userService.idcheck(user);
+		
+		mv.addObject("userInfo", user);
 		mv.addObject("itemList", returnItemList);
 		mv.addObject("totalItemPrice", Integer.parseInt(paramMap.get("totalItemPrice")));
 		mv.addObject("deliFee", Integer.parseInt(paramMap.get("deliFee")));

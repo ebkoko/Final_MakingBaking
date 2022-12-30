@@ -21,4 +21,5 @@ public class OrderDTO {
 	private String shippingAddr3;
 	private int orderDeliFee;
 	private int orderTotalPrice;
+	private String orderPayment;
 }

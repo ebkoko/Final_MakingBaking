@@ -316,7 +316,19 @@
 								fileName: getCartList[index].fileName
 							};
 							
-							checkedList.push(item);
+							let sameNo = false;
+							
+							for(let i = 0; i < checkedList.length; i++) {
+								if(item.itemNo == checkedList[i].itemNo) {
+									checkedList[i].cartItemCnt = $(this).val();
+									sameNo = true;
+									break;
+								}
+							}
+							
+							if(!sameNo) {
+								checkedList.push(item);
+							}
 						} else {
 							checkedList = checkedList.filter(item => item.itemNo != getCartList[index].itemNo);
 						}
