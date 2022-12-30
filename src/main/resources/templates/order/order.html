@@ -64,7 +64,7 @@
 				    margin-left: 118px;
 				}
 				#list_title .title_totalPrice {
-				    margin-left: 140px;
+				    margin-left: 135px;
 				}
 				#list_title+hr {
 					margin-bottom: 15px;
@@ -179,6 +179,7 @@
 				textarea {
 					border: 1px solid #DCDCDC;
 					resize: none;
+					padding: 2px;
 				}
 				#delivery #T2 {
 				    display: inline-block;
@@ -324,8 +325,9 @@
 				let isKakaoPay = false;
 				let pushbankTransfer = false;
 				let pushKakaoPay = false;
+				const userInfo = /*[[${userInfo}]]*/;
+				
 				$(function() {
-					fnTotalPrice()
 					
 					// 우편번호 input 클릭했을 때
 					$("#addr1").on('click', function() {
@@ -392,6 +394,50 @@
 						$("#orderForm").submit();
 					});
 					
+					// 배송지를 직접입력 체크했을 때
+					$("input[name='deliDestination']").change(function() {
+						const user = {
+							userName: userInfo.userName,
+							userAddr1: userInfo.userAddr1,
+							userAddr2: userInfo.userAddr2,
+							userAddr3: userInfo.userAddr3,
+							userTel: userInfo.userTel
+						};
+						
+						if($("input[name='deliDestination']:checked").val() == "selfInput") {
+							$("#recipient").val('');
+							$("#addr1").val('');
+							$("#addr2").val('');
+							$("#addr3").val('');
+							$("#reciTel2").val('');
+							$("#reciTel3").val('');
+						} else {
+							$("#recipient").val(user.userName);
+							$("#addr1").val(user.userAddr1);
+							$("#addr2").val(user.userAddr2);
+							$("#addr3").val(user.userAddr3);
+							$("#reciTel2").val((user.userTel).substring(3,7));
+							$("#reciTel3").val((user.userTel).substring((user.userTel).length-4));
+						}
+					});
+					
+					// 배송메세지 글자수 세기, 글자수 제한
+					$("#message").keyup(function(e) {
+						let msg = $(this).val();
+						
+						// 글자수 세기
+						if(msg.length == 0 || msg == '') {
+							$(".textCnt").text(0);
+						} else {
+							$(".textCnt").text(msg.length);
+						}
+						
+						// 글자수 제한
+						if(msg.length > 200) {
+							$(this).val($(this).val().substring(0, 200));
+						}
+					});
+					
 					// 무통장입금 버튼을 클릭했을 때
 					$("#btnbankTransfer").on('click', function() {
 						isKakaoPay = false;
@@ -454,26 +500,6 @@
 					});
 				});
 				
-				
-				function fnTotalPrice() {
-					let item_PriceSum = 0;
-					let deliFee = 0;
-					
-					// 총 결제 금액
-					$(".item_totalPrice").each(function() {
-						item_PriceSum += totalItemPrice
-						console.log(item_PriceSum);
-					});
-					
-					$(".item_PriceSum").text(item_totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-					
-					if(item_PriceSum < 30000) {
-						deliFee = 3000;
-					}
-					
-					$(".deliFee").text(deliFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-					
-				}
 			</script>
 		</th:block>
 	</head>
@@ -522,18 +548,18 @@
 		                    <table id="T1">
 		                        <tr>
 		                            <th>배송지</th>
-		                            <td><input type="radio" name="deli1" id="deli1" value="기본배송지" checked> 기본배송지&emsp;<input type="radio" name="deli1" id="deli2" value="직접입력"> 직접입력</td>
+		                            <td><input type="radio" name="deliDestination" id="deli1" value="defaultDestination" checked> 기본배송지&emsp;<input type="radio" name="deliDestination" id="deli2" value="selfInput"> 직접입력</td>
 		                        </tr>
 		                        <tr>
 		                            <th>수령인<span class="essential">&#42;</span></th>
-		                            <td><input type="text" name="recipient" id="recipient" th:value="${userInfo.userId}"></td>
+		                            <td><input type="text" name="recipient" id="recipient" th:value="${userInfo.userName}"></td>
 		                        </tr>
 		                        <tr>
 		                            <th>배송주소<span class="essential">&#42;</span></th>
 		                            <td>
-		                                <input type="text" name="addr1" id="addr1" placeholder="우편번호" val="${addr1}"><input type="button" id="btnZipcode" onclick="findAddr();" value="우편번호 찾기"><br>
-		                                <input type="text" name="addr2" id="addr2" placeholder="주소" val="${addr2}"><br>
-		                                <input type="text" name="addr3" id="addr3" placeholder="상세주소" val="${addr3}">&ensp;<input type="text" name="extraAddr" id="extraAddr">
+		                                <input type="text" name="addr1" id="addr1" placeholder="우편번호" th:value="${userInfo.userAddr1}"><input type="button" id="btnZipcode" onclick="findAddr();" value="우편번호 찾기"><br>
+		                                <input type="text" name="addr2" id="addr2" placeholder="주소" th:value="${userInfo.userAddr2}"><br>
+		                                <input type="text" name="addr3" id="addr3" placeholder="상세주소" th:value="${userInfo.userAddr3}">&ensp;<input type="text" name="extraAddr" id="extraAddr">
 		                            </td>
 		                        </tr>
 		                        <tr>
@@ -546,14 +572,14 @@
 		                                    <option value="017">017</option>
 		                                    <option value="018">018</option>
 		                                </select> - 
-		                                <input type="text" name="reciTel2" id="reciTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4"> - 
-		                                <input type="text" name="reciTel3" id="reciTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4">
+		                                <input type="text" name="reciTel2" id="reciTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(userInfo.userTel).substring(3,7)}"> - 
+		                                <input type="text" name="reciTel3" id="reciTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(userInfo.userTel).substring((userInfo.userTel).length-4)}">
 		                            </td>
 		                        </tr>
 		                        <tr>
-		                            <th style="vertical-align: top;">배송메세지</th>
+		                            <th style="vertical-align: top;">배송메세지<br>(<span class="textCnt">0</span>/<span class="textTotal">200</span>)</th>
 		                            <td>
-		                                <textarea name="message" id="message" cols="50" rows="8" placeholder="배송메세지를 입력해주세요."></textarea>
+		                                <textarea name="message" id="message" cols="50" rows="8" maxlength="200" placeholder="배송메세지를 입력해주세요."></textarea>
 		                            </td>
 		                        </tr>
 		                    </table>
@@ -561,7 +587,7 @@
 		                        <caption>주문자 정보</caption>
 		                        <tr>
 		                            <th>주문자<span class="essential">&#42;</span></th>
-		                            <td><input type="text" name="orderer" id="orderer" value="${userName}"></td>
+		                            <td><input type="text" name="orderer" id="orderer" th:value="${userInfo.userName}"></td>
 		                        </tr>
 		                        <tr>
 		                            <th>휴대폰<span class="essential">&#42;</span></th>
@@ -573,13 +599,13 @@
 		                                    <option value="017">017</option>
 		                                    <option value="018">018</option>
 		                                </select> - 
-		                                <input type="text" name="orderTel2" id="orderTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4"> - 
-		                                <input type="text" name="orderTel3" id="orderTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4">
+		                                <input type="text" name="orderTel2" id="orderTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(userInfo.userTel).substring(3,7)}"> - 
+		                                <input type="text" name="orderTel3" id="orderTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(userInfo.userTel).substring((userInfo.userTel).length-4)}">
 		                            </td>
 		                        </tr>
 		                        <tr>
 		                            <th>이메일</th>
-		                            <td><input type="text" name="orderMail" id="orderMail"></td>
+		                            <td><input type="text" name="orderMail" id="orderMail" th:value="${userInfo.userMail}"></td>
 		                        </tr>
 		                        <tr></tr>
 		                        <tr></tr>
@@ -600,7 +626,7 @@
 		                    <div id="depositorTitle">입금자명<span class="essential">&#42;</span>: <input type="text" name="depositor" id="depositor" placeholder="입금자명을 입력하세요.">&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span></div>
 		                </div>
 		            </div>
-	            	<button type="button" id="btnPayment">결제하기</button>
+	            	<button type="submit" id="btnPayment">결제하기</button>
 	            </form>
 	        </div>
 		</div>

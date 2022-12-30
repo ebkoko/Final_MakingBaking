@@ -8,7 +8,7 @@ import com.ezen.makingbaking.entity.Cart;
 public interface CartService {
 	void insertCart(Cart cart);
 	
-	List<CamelHashMap> getCartList();
+	List<CamelHashMap> getCartList(String userId);
 	
 	void deleteCart(Cart cart);
 }

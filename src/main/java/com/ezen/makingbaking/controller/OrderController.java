@@ -22,10 +22,6 @@ public class OrderController {
 	public ModelAndView orderView() {
 		ModelAndView mv = new ModelAndView();
 		
-//		List<CamelHashMap> orderList = orderService.getOrderList();
-//		
-//		mv.addObject("getOrderList", orderList);
-		
 		mv.setViewName("order/order.html");
 		return mv;
 	}

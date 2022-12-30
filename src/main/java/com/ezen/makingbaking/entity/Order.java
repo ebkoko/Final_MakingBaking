@@ -46,6 +46,7 @@ public class Order {	// 주문정보 테이블
 	private String shippingAddr3;	// 상세주소
 	private int orderDeliFee;		// 배송비
 	private int orderTotalPrice;	// 총 가격	
+	private String orderPayment;    // 결제방법(무통장입금, 카카오페이)
 	
 
 }
