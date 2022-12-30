@@ -17,4 +17,5 @@ public class ReviewDTO {
 	private String rvwWriter;	// 리뷰 작성자
 	private String rvwRegdate;	// 리뷰작성일	
 	private int rvwScore;
+	private String searchCondition;
 }

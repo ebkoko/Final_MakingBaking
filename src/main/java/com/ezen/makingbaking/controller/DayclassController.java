@@ -57,12 +57,14 @@ public class DayclassController {
 	}
 	
 	@GetMapping("/dayclass/{dayclassNo}")
-	public ModelAndView getDayclass(@PathVariable int dayclassNo, @PageableDefault(page = 0, size = 4) Pageable pageable,
+	public ModelAndView getDayclass(ReviewDTO reviewDTO, @PathVariable int dayclassNo, @PageableDefault(page = 0, size = 4) Pageable pageable,
 			@AuthenticationPrincipal CustomUserDetails customUser) {
 		
 		Dayclass dayclass = dayclassService.getDayclass(dayclassNo);
+		String loginUserId = "";
 		
-		String loginUserId = customUser.getUser().getUserId();
+		if(customUser != null)
+			loginUserId = customUser.getUser().getUserId();
 		
 		DayclassDTO dayclassDTO = DayclassDTO.builder()
 											 .dayclassNo(dayclass.getDayclassNo())
@@ -83,12 +85,16 @@ public class DayclassController {
 																		  .rvwType(review.getRvwType())
 																		  .rvwContent(review.getRvwContent())
 																		  .rvwWriter(review.getRvwWriter())
+																		  .searchCondition(review.getSearchCondition())
 																		  .rvwRegdate(review.getRvwRegdate().toString())
 																		  .rvwScore(review.getRvwScore())
 																		  .build()
 		);
+		String likeYn = "N";
 		
-		String likeYn = dayclassService.getLikeYn(loginUserId, dayclassNo);
+		if(!loginUserId.equals(""))
+			likeYn = dayclassService.getLikeYn(loginUserId, dayclassNo);
+		
 		int likeCnt = dayclassService.getLikeCnt(dayclassNo);
 	
 		ModelAndView mv = new ModelAndView();
@@ -98,9 +104,16 @@ public class DayclassController {
 		mv.addObject("reviewList", reviewDTOList);
 		mv.addObject("likeYn", likeYn);
 		mv.addObject("likeCnt", likeCnt);
+		
+		
+		if(reviewDTO.getSearchCondition() !=null && !reviewDTO.getSearchCondition().equals("")) {
+			mv.addObject("searchCondition", reviewDTO.getSearchCondition());
+	}
 		return mv;
 	}
 	
+	
+	// 좋아요
 	@PostMapping("like")
 	public ResponseEntity<?> insertLike(@RequestParam("dayclassNo") int dayclassNo,
 			@AuthenticationPrincipal CustomUserDetails customUser) {
@@ -142,5 +155,9 @@ public class DayclassController {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
+	
+
 	//
 }
+
+

@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicInsert;
 
@@ -43,6 +44,9 @@ public class Review {		// 리뷰 테이블
 	private LocalDateTime rvwRegdate = LocalDateTime.now();	// 리뷰작성일	
 	@Builder.Default
 	private int rvwScore = 5;	// 별점
+	
+	@Transient
+	private String searchCondition;
 	
 	// 1227 수정 - rvwTitle 삭제, rvwScore 추가
 	
