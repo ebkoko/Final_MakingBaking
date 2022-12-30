@@ -35,12 +35,12 @@
 				}
 			    #itemReg_T th {
 					width: 30%;
-					border: 1.2px solid #28693F;
-					background-color:#28693F;
 					color: white;
+					border: 1.2px solid #28693F;
 					border-left: hidden;
+					background-color:#28693F;
+					text-align: center;
 				}
-				
 				#itemStatus_Th {
 					height:40px;
 				}
@@ -159,30 +159,7 @@
 			      let uploadFiles = [];
 			   
 			      $(function() {
-			         // input type="file"이 변경되면 미리보기 동작
-			         $("#btnAtt").on("change", function(e) {
-			            // input type="file"에 추가된 파일들을 변수로 받아옴
-			            const files = e.target.files;
-			            // 변수로 받아온 파일들을 배열 형태로 변환
-			            const fileArr = Array.prototype.slice.call(files);
-			            
-			            // 배열에 있는 파일들을 하나씩 꺼내서 처리
-			            for(f of fileArr) {
-			               imageLoader(f);
-			            }
-			         });
-			         
 			         $("#itemRegForm").on("submit", function(e) {
-			        	 //마지막으로 btnAtt에 uploadFiles에 있는 파일들을 담아준다.
-			        	 dt = new DataTransfer();
-			             
-			             for(f in uploadFiles) {
-			             	const file = uploadFiles[f];
-			             	dt.items.add(file);
-			             }
-			             
-			             $("#btnAtt")[0].files = dt.files;
-			             
 			             // 상품등록 버튼 클릭 시 유효성 검사
 			             if(!$("#input_itemName").val()) {
 								alert("상품 이름을 입력해주세요.");
@@ -236,99 +213,8 @@
 								alert("상품등록이 취소되었습니다.");
 								return;
 							}
-			         })
+			         })    
 			      });
-			      
-			      // 미리보기 영역에 들어갈 img태그 생성 및 선택된 파일을 Base64 인코딩된 문자열 형태로 미리보기 가능하게 해줌
-			      function imageLoader(file) {
-			         uploadFiles.push(file);
-			         
-			         const reader = new FileReader();
-			         
-			         reader.onload = function(e) {
-			            // 이미지를 표출해 줄 img태크 선언
-			            let img = document.createElement("img");
-			            img.setAttribute("style", "width: 100%; height: 100%; z-index: none;");
-			            
-			            // 이미지 파일인지 아닌지 체크
-			            if(file.name.toLowerCase().match(/(.*?)\.(jpg|jpeg|png|gif|svg|bmp)$/)) {
-			               // 이미지 파일 미리보기 처리
-			               img.src = e.target.result;            
-			            } else {
-			               // 일반 파일 미리보기 처리
-			               img.src = "/images/defaultFileImg.png";
-			            }
-			            
-			            // 미리보기 영역에 추가
-			            // 미리보기 이미지 태그와 삭제 버튼, 파일명을 표출하는 p태그를 묶어주는 div를 만들어 미리보기 영역에 추가
-			            $("#attZone").append(makeDiv(img, file));
-			         };
-			         
-			         // 파일을 Base64 인코딩된 문자열로 변경
-			         reader.readAsDataURL(file);
-			      };
-			      
-			      // 미리보기 영역에 들어갈 div(img + button + p)를 생성하고 리턴
-			      function makeDiv(img, file) {
-			         // div 생성
-			         let div = document.createElement("div");
-			         div.setAttribute("style", "display: inline-block; position: relative;"
-			          + " width: 150px; height: 120px; margin: 5px; border: 1px solid #00f; z-index: 1;");
-			         
-			         // button 생성
-			         let btn = document.createElement("input");
-			         btn.setAttribute("type", "button");
-			         btn.setAttribute("value", "x");
-			         btn.setAttribute("delFile", file.name);
-			         btn.setAttribute("style", "width: 30px; height: 30px; position: absolute;"
-			         + " right: 0px; bottom: 0px; z-index: 999; background-color: rgba(255, 255, 255, 0.1);"
-			         + " color: #f00;");
-			         
-			         // 버튼 클릭 이벤트
-			         // 버튼 클릭 시 해당 파일이 삭제되도록 설정
-			         btn.onclick = function(e) {
-			            // 클릭된 버튼
-			            const ele = e.srcElement;
-			            // delFile(파일이름) 속성 꺼내오기: 삭제될 파일명
-			            const delFile = ele.getAttribute("delFile");
-			            
-			            for(let i = 0; i < uploadFiles.length; i++) {
-			               // 배열에 담아놓은 파일들 중에 해당 파일 삭제
-			               if(delFile == uploadFiles[i].name) {
-			                  // 배열에서 i번째 한 개만 제거
-			                  uploadFiles.splice(i, 1);
-			               }
-			            }
-			            
-			            //버튼 클릭 시 btnAtt에 첨부된 파일도 삭제
-			            dt = new DataTransfer();
-			            
-			            for(f in uploadFiles) {
-			            	const file = uploadFiles[f];
-			            	dt.items.add(file);
-			            }
-			            
-			            console.log($("#btnAtt"));
-			            $("#btnAtt")[0].files = dt.files;
-			            
-			            // 해당 img를 담고있는 부모태그인 div 삭제
-			            const parentDiv = ele.parentNode;
-			            $(parentDiv).remove();
-			         }
-			         
-			         // 파일명 표출할 p태그 생성
-			         const fName = document.createElement("p");
-			         fName.setAttribute("style", "display: inline-block; font-size: 8px;");
-			         fName.textContent = file.name;
-			         
-			         // div에 하나씩 추가
-			         div.appendChild(img);
-			         div.appendChild(btn);
-			         div.appendChild(fName);
-			         
-			         // 완성된 div 리턴
-			         return div;
-			      }
 			      
 			      
 			      //가격 천단위 콤마
@@ -358,23 +244,24 @@
 				    });
 				  });
 				  
-				//재고
-				$(function() {
-					$("#itemStockNm_plus").on("click", function(){
-						$("#itemStockNm_cnt").val(parseInt($("#itemStockNm_cnt").val()) + 1);
-						
-                    });
-                    	
-					$("#itemStockNm_minus").on("click", function(){
-						$("#itemStockNm_cnt").val(parseInt($("#itemStockNm_cnt").val()) - 1);
-						
-						if($("#itemStockNm_cnt").val() < 0) {
-							$("#itemStockNm_cnt").val(0);
-                     		alert("최소 재고수량은 0입니다.");
-                    	 	return;
-                    	 }
-                    });
-				});
+					//재고
+					$(function() {
+						$("#itemStockNm_plus").on("click", function(){
+							$("#itemStockNm_cnt").val(parseInt($("#itemStockNm_cnt").val()) + 1);
+							
+	                    });
+	                    	
+						$("#itemStockNm_minus").on("click", function(){
+							$("#itemStockNm_cnt").val(parseInt($("#itemStockNm_cnt").val()) - 1);
+							
+							if($("#itemStockNm_cnt").val() < 0) {
+								$("#itemStockNm_cnt").val(0);
+	                     		alert("최소 재고수량은 0입니다.");
+	                    	 	return;
+	                    	 }
+	                    	});
+					});
+					
 			</script>
 		</th:block>
 	</head>
@@ -383,7 +270,7 @@
 <body>
 	<div id="container" layout:fragment="content">
 		<div>
-			<h1 class="itemAdmin">상품 등록</h1>
+			<h1 class="itemAdmin">상품 수정</h1>
 		</div>
 		
 	    <!-- 상품등록내용 -->

@@ -155,10 +155,6 @@ public class AdminController {
 					itemFile = FileUtils.parseFileInfo(file, attachPath);
 					
 					uploadFileList.add(itemFile);
-					
-					//C:\Users\EZEN\AppData\Local\Temp\tomcat.9090.542208420639967599에서 이미지 확인 가능.
-					//src > main에서 webapp 폴더 생성. webapp 폴더 안에 upload 폴더 생성을 한다면,
-					//깃공유시, 조원들과 이미지를 함께 볼 수 있게됨.
 				}
 			}
 		}
@@ -167,6 +163,49 @@ public class AdminController {
 		
 		response.sendRedirect("/admin/itemList");
 	}
+	
+	@GetMapping("/item/{itemNo}")
+//	public ModelAndView getItem(@PathVariable int itemNo) {
+//		Item item = adminService.getItem(itemNo);
+//		
+//		ItemDTO itemDTO = ItemDTO.builder()
+//									.itemNo(item.getItemNo())
+//									.itemTitle(item.getItemTitle())
+//									.itemContent(item.getItemContent())
+//									.itemWriter(item.getItemWriter())
+//									.itemRegdate(
+//											item.getItemRegdate() == null ?
+//											null :
+//											item.getItemRegdate().toString())
+//									.itemCnt(item.getItemCnt())
+//									.build();
+//		
+//		List<ImgFile> itemFileList = adminService.getItemFileList(itemNo);
+//		
+//		//itemFileDTO를 담는 List
+//		List<ImgFileDTO> imgFileDTOList = new ArrayList<ImgFileDTO>();
+//		
+//		for(ImgFile imgFile : imgFileList) {
+//			ImgFileDTO imgFileDTO = ImgFileDTO.builder()
+//													.itemFileNo(itemNo)
+//													.itemFileNo(imgFile.getItemFileNo())
+//													.itemFileNm(imgFile.getItemFileNm())
+//													.itemOriginFileNm(imgFile.getItemOriginFileNm())
+//													.itemFilePath(imgFile.getItemFilePath())
+//													.itemFileRegdate(imgFile.getItemFileRegdate().toString())
+//													.itemFileCate(imgFile.getItemFileCate())
+//													.build();
+//			
+//			imgFileDTOList.add(imgFileDTO);
+//		}
+//		
+//		ModelAndView mv = new ModelAndView();
+//		mv.setViewName("item/getItem.html");
+//		mv.addObject("getItem", itemDTO);
+//		mv.addObject("itemFileList", imgFileDTOList);
+//		
+//		return mv;
+//	}
 	
 	//상품 상세보기
 //	public ModelAndView getItem(@PathVariable int itemNo) {

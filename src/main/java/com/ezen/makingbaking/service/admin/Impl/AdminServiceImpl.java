@@ -31,10 +31,8 @@ public class AdminServiceImpl implements AdminService {
 	public Page<Item> getPageItemList(Item item, Pageable pageable) {
 		if(item.getSearchKeyword() != null && !item.getSearchKeyword().equals("")) {
 			if(item.getSearchCondition().equals("ALL")) {
-				return itemRepository.findByItemNameContainingOrItemCateContainingOrItemPriceContainingOrItemRegdateContainingOrItemStatusContaining
+				return itemRepository.findByItemNameContainingOrItemCateContainingOrItemStatusContaining
 			               (item.getSearchKeyword(), 
-			            	item.getSearchKeyword(),
-			            	item.getSearchKeyword(),
 			            	item.getSearchKeyword(),
 			            	item.getSearchKeyword(),
 			            	pageable);
@@ -42,11 +40,7 @@ public class AdminServiceImpl implements AdminService {
 			         return itemRepository.findByItemNameContaining(item.getSearchKeyword(), pageable);
 			      } else if (item.getSearchCondition().equals("ITEMCATE")) {
 			    	  return itemRepository.findByItemCateContaining(item.getSearchKeyword(), pageable);
-			      } else if (item.getSearchCondition().equals("ITEMPRICE")) {
-			         return itemRepository.findByItemPriceContaining(item.getSearchKeyword(), pageable);
-			      } else if (item.getSearchCondition().equals("ITEMREGDATE")) {
-			         return itemRepository.findByItemRegdateContaining(item.getSearchKeyword(), pageable);
-			      } else if (item.getSearchCondition().equals("ITEMSTATUS")) {
+			      }  else if (item.getSearchCondition().equals("ITEMSTATUS")) {
 				         return itemRepository.findByItemStatusContaining(item.getSearchKeyword(), pageable);
 				  } else {
 			    	  return itemRepository.findAll(pageable);
