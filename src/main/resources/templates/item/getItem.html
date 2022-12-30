@@ -82,13 +82,13 @@
 	      <section class="it_menu">
 	        <div class="itmenu">
 	          <ul >
-	            <li><a th:href="/item/getDayClass.do?dayclassCode=${item.itemCode}#classIntro" 
+	            <li><a th:href="@{#itemIntro}" 
 	              class="m_intro_a">상품설명</a></li>
-	            <li><a th:href="/item/getDayClass.do?dayclassCode=${item.itemCode}#classApply" 
+	            <li><a th:href="@{#dayclass_hr2}" 
 	              class="m_apply_a">상세정보</a></li>
-	            <li><a th:href="/item/getDayClass.do?dayclassCode=${item.itemCode}#classReview" 
+	            <li><a th:href="@{#dayclass_hr1}" 
 	              class="m_rvw_a">후기${rvwCnt }</a></li>
-	            <li><a th:href="/item/getDayClass.do?dayclassCode=${item.itemCode}#classCancle" 
+	            <li><a th:href="@{#dayclass_hr3}" 
 	              class="m_cancel_a">취소/환불</a></li>
 	          </ul>
 	        </div>    

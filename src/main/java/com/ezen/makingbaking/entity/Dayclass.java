@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -47,5 +48,6 @@ public class Dayclass {		// 원데이클래스 테이블
 	@Column
 	@ColumnDefault("'서울 서초구 서초대로77길 54 서초더블유타워'")
 	private String dayclassAddress;		// 가게주소(고정값, 지도api 사용하기 위해 넣음)
+	
 
 }

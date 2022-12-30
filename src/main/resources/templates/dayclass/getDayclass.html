@@ -105,8 +105,9 @@
 						});
 					});
 					
-					$("#rsrvtDate").datepicker({ dateFormat: 'yy-mm-dd'});
+					$("#rsrvtDate").datepicker({ dateFormat: 'yy-mm-dd', minDate: 0});
 					//$("#rsrvtDate").datepicker('setDate', 'today');
+					
 					
 					
 					
@@ -116,7 +117,7 @@
 						
 						if($("#peopleNm_cnt").val() > 4) {
 							$("#peopleNm_cnt").val(4);
-							alert("최대인원은 4명까지 설정할 수 있습니다.");
+							alert("최대 인원은 4명입니다.");
 							return;
 						}
 					});
@@ -126,72 +127,124 @@
 						
 						if($("#peopleNm_cnt").val() < 1) {
 							$("#peopleNm_cnt").val(1);
-							alert("최소인원은 1명입니다.");
+							alert("최소 인원은 1명입니다.");
 							return;
 						}
 					});
-					// 좋아요 클릭시
-
 					
+	
 					// 예약하기 클릭시 (예약날짜, 예약시간, 인원) 	
 					$("#dayclassRsrvtBtn").on("click", function() {
-						if(!$("#rsrvtDate").val()) {
-							alert("예약날짜 선택하라");
-							return;
-						}
-						if($(".c_apply_timeOp").val() != "A" && $(".c_apply_timeOp").val() != "P") {
-							alert("예약시간을 선택하세요.");
-							return;
-						}
-						
 						let reserTime = "";
-						if($(".c_apply_timeOp").val() == "A") {
-							reserTime = "오전 09:30~12:30";
-						} else if($(".c_apply_timeOp").val() == "P") {
-							reserTime = "오후 14:00~17:00";
-						}
+
+							if(!$("#rsrvtDate").val()) {
+								alert("예약 날짜를 선택하세요.");
+								return;
+							}
+							if($(".c_apply_timeOp").val() != "A" && $(".c_apply_timeOp").val() != "P") {
+								alert("예약 시간을 선택하세요.");
+								return;
+							}
+							if($(".c_apply_timeOp").val() == "A") {
+								reserTime = "오전 09:30~12:30";
+							} else if($(".c_apply_timeOp").val() == "P") {
+								reserTime = "오후 14:00~17:00";
+							}
+			
+							if(confirm("예약 날짜 : " + $("#rsrvtDate").val() 
+													+ "\n예약 시간 : " + reserTime 
+													+ "\n예약 인원 : " + $("#peopleNm_cnt").val() 
+													+"명\n\n예약하싈?" )) {						
+								$("#rsvtForm").submit();
+							} else {
+								alert("취소되었습니다.");
+								return;
+							}
 						
-						
-						confirm("예약 날짜 : " + $("#rsrvtDate").val() + "\n예약 시간 : " + reserTime + "\n예약 인원 : " + $("#peopleNm_cnt").val() +"명\n\n예약하실?" );
+
+
 					});	
 					
-					// 좋아요 버튼 클릭시
-					$("#dayclassLikeBtn").on("click", function(e) {
-						if($(this).val() == 'Y') {
-						$.ajax({
-							url: '/dayclass/like',
-							type: 'delete',
-							data: {dayclassNo: $("#dayclassNo").val()},
-							success: function(obj) {
-								console.log(obj);
-								$("#dayclassLikeBtn").text("♡ " + obj.item.likeCnt);
-								$("#dayclassLikeBtn").val("N");
-							},
-							error: function(e) {
-								console.log(e);
-							}
-						});
-					} else {
-						$.ajax({
-							url: '/dayclass/like',
-							type: 'post',
-							data: {dayclassNo: $("#dayclassNo").val()},
-							success: function(obj) {
-								console.log(obj);
-								$("#dayclassLikeBtn").text("♥ " + obj.item.likeCnt);
-								$("#dayclassLikeBtn").val("Y");
-							},
-							error: function(e) {
-								console.log(e);
-							}
+					const customUser = /*[[${#authentication.principal}]]*/;
+					
+					if(customUser != null) {
+						// 좋아요 버튼 클릭시
+						$("#dayclassLikeBtn").on("click", function(e) {
+							if($(this).val() == 'Y') {
+							$.ajax({
+								url: '/dayclass/like',
+								type: 'delete',
+								data: {dayclassNo: $("#dayclassNo").val()},
+								success: function(obj) {
+									console.log(obj);
+									$("#dayclassLikeBtn").text("♡ " + obj.item.likeCnt);
+									$("#dayclassLikeBtn").val("N");
+								},
+								error: function(e) {
+									console.log(e);
+								}
+							});
+						} else {
+							$.ajax({
+								url: '/dayclass/like',
+								type: 'post',
+								data: {dayclassNo: $("#dayclassNo").val()},
+								success: function(obj) {
+									console.log(obj);
+									$("#dayclassLikeBtn").text("♥ " + obj.item.likeCnt);
+									$("#dayclassLikeBtn").val("Y");
+								},
+								error: function(e) {
+									console.log(e);
+								}
+							});
+						}
 						});
 					}
-					});
-				});
-				
-				function fnLike(likeYn) {
 					
-				}
+					// 페이징
+					/*
+					$(".paging a").on("click", function(e) {
+						e.preventDefault();
+						reviewPagingAndOrder($(e.target).attr("href"), $("#rvw_array").val());
+					});
+				}); 
+				*/
+				
+				// 페이징
+				/*
+				function reviewPagingAndOrder(page, condition) {
+					$.ajax({
+						url: '/dayclass/dayclass/1',
+						type: 'post',
+						data: {
+							page: page,
+							searchCondition: condition
+						},
+						success: function(obj) {
+							console.log(obj);
+							
+							let htmlStr = "";
+							
+							for(let i=0; i<obj.pageItems.content.length; i++) {
+								htmlStr += `
+									<tr>
+			                          <td>
+			                          	<span th:each="num : ${#numbers.sequence(1, obj.pageItems.content[i].rvwScore)}">⭐</span>
+		                          	  </td>
+			                          <td th:text="${obj.pageItems.content[i].rvwContent}"></td>
+			                          <td th:text="${obj.pageItems.content[i].rvwRegdate eq null ? '' : #strings.substring(obj.pageItems.content[i].rvwRegdate, 0, 10)}"></td>
+			                          <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${obj.pageItems.content[i].rvwWriter}"></td>
+			                          <td sec:authorize="!hasRole('ROLE_ADMIN')" th:text="${obj.pageItems.content[i].rvwWriter.substring(0, obj.pageItems.content[i].rvwWriter.length()-3) + '***'}"></td>			                  
+									</tr>
+								`;
+							}
+						},
+						error: function(e) {
+							console.log(e);
+						}
+					});
+				} */
 			</script>
 		</th:block>
 	</head>
@@ -242,7 +295,7 @@
 	            <li><a th:href="@{#classIntro}" 
 	              class="m_intro_a">클래스 소개</a></li>
 	            <li><a th:href="@{#dayclass_hr2}" 
-	              class="m_rvw_a">후기${rvwCnt }</a></li>
+	              class="m_rvw_a">후기</a></li>
 	            <li><a th:href="@{#dayclass_hr1}" 
 	              class="m_apply_a">신청하기</a></li>
 	            <li><a th:href="@{#dayclass_hr3}" 
@@ -268,6 +321,7 @@
 	            
 				<hr class="dayclass_hr" id="dayclass_hr1">
 	            <div class="c_apply" id="classApply" >
+	             <form id="rsvtForm" action="/reser/reser" method="post">
 	              <ul style="padding-left: 0;">
 	                <li><img src="/images/class_day.png" width="17px"> 예약 날짜  <input type="text" id="rsrvtDate"></li>
 	           
@@ -287,13 +341,12 @@
 					</li>
 					<li>
 					<div class="apply_btn">
-	                <span><button type="button" id="dayclassRsrvtBtn" value="dayclassRsrvt"
-	                th:onclick="'location.href=\'' + @{#dayclass_hr1} +'\''">예약하기 
+	                <span><button type="button" id="dayclassRsrvtBtn" value="dayclassRsrvt">예약하기 
 	                </button></span>
 	              </div>
 					</li>
 	              </ul>
-
+				 </form>
 	            </div>
 	            
 	            <hr class="dayclass_hr" id="dayclass_hr2">
@@ -301,7 +354,7 @@
 	              <h3 class="c_rvw_title" >클래스 후기</h3>
 	              <div class="c_rvw_write">
 	              	<div class="rvw_write_member">
-	              		<form class="rvw_write_form" method="post" action="" >
+	              		<form class="rvw_write_form" action="" method="post" >
 	              			<fieldset>
 							<input type="radio" name="reviewStar" value="5" id="rate1"><label
 								for="rate1">★</label>
@@ -327,9 +380,10 @@
 	                <div class="rvw_wirte_detail" id="classReviewList">
 	                  <div class="rvw_option"> 
 	                    <select name="rvw_array" id="rvw_array">
-	                      <option>평점순</option>
-	                      <option>최신순</option>
-	                      <option>오래된순</option>
+	                      <option value="HIGH" th:selected="${searchCondition == null || searchCondition == "" || searchCondition == 'HIGH'}">평점 높은순</option>
+	                      <option value="LOW" th:selected="${searchCondition == 'LOW'}"> 평점 낮은순</option>
+	                      <option value="NEW" th:selected="${searchCondition == 'NEW'}">최신순</option>
+	                      <option value="OLD" th:selected="${searchCondition == 'OLD'}">오래된순</option>
 	                    </select>
 	                  </div>
 	                  <span>
@@ -370,19 +424,13 @@
 												tempEndPage = ${startPage + pageSize -1}, 
 												endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
 								<li class="paging_btn" th:if="${pageNumber > 0}">
-									<a th:href="@{/dayclass/dayclass/1(
-													page=${pageNumber - 1}
-													)}">◀</a>
+									<a th:href="@{${pageNumber - 1}}">◀</a>
 								</li>
 								<li class="paging_btn" th:each="page : ${#numbers.sequence(startPage, endPage)}">
-									<a th:href="@{/dayclass/dayclass/1(
-													page=${page - 1},				
-													)}" th:text="${page}"></a>
+									<a th:href="@{${page - 1}}" th:text="${page}"></a>
 								</li>
 								<li class="paging_btn" th:if="${pageNumber < totalPages - 1}">
-									<a th:href="@{/dayclass/dayclass/1(
-													page=${pageNumber + 1},				
-													)}">▶</a>
+									<a th:href="@{page=${pageNumber + 1}}">▶</a>
 								</li>
 							</ul>
 	                    </div>

@@ -30,4 +30,12 @@ public class ReserController {
 		mv.setViewName("reser/reserComplete.html");
 		return mv;
 	}
+	
+	@PostMapping("/reser")
+	public ModelAndView moveReser() {
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("/reser/reser.html");
+		return mv;
+	}
 }
