@@ -53,16 +53,17 @@ public class Oauth2UserService extends DefaultOAuth2UserService{
 		}
 		
 		String provider = oAuth2UserInfo.getProvider();
-		String userId = provider + "_" + providerId;
+		String userId = oAuth2UserInfo.getEmail();
 		String password = passwordEncoder.encode(oAuth2UserInfo.getName());
 		String birth = oAuth2UserInfo.getBirth();
 		String email = oAuth2UserInfo.getEmail();
-		String role = "";
+		String role = "ROLE_USER";
 		
 		User user;
 		
 		if(userRepository.findById(userId).isPresent()) {
 			user = userRepository.findById(userId).get();
+			user.setJoinYn("Y");
 		} else {
 			user = null;
 		}
@@ -76,6 +77,7 @@ public class Oauth2UserService extends DefaultOAuth2UserService{
 					   .userBirth(birth)
 					   .userMail(email)
 					   .userRole(role)
+					   .joinYn("N")
 					   .userGender((char) 4)
 					   .build();
 			

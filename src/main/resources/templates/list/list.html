@@ -7,33 +7,41 @@
 	<th:block layout:fragment="script">
 		<script th:inline="javascript">
 				$(function(){
-		      $("#prod").slice(0, 7).show();
-		      $("#more").click(function(e){
-		        let htmlStr = `
-		          <div>
-		          <div class="card">
-		            <img src="http://res.heraldm.com/content/image/2020/04/29/20200429000197_0.jpg" class="card_img">
-		          </div>
-		          <div class="text">
-		            <h3>제목</h3>
-		            <p>가격</p>
-		          </div>
-		          </div>
-		          <div>
-		            <div class="card">
-		              <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg" class="card_img">
-		            </div>
-		            <div class="text">
-		              <h3>제목</h3>
-		              <p>가격</p>
-		            </div>
-		          </div>
-		        `;
-		        for(let i = 0; i < 2; i++) {
-		          $("#prod").append(htmlStr);
-		
-		        }
-		      });
+		      	  let htmlStr = "";
+		      	  const itemList = /*[[${itemList}]]*/;
+		      	  
+			      $("#more").click(function(e){
+					  console.log(content[i])
+					  $.ajax({
+						  url:"/item/list",
+						  type: "post",
+						  data: {
+							  searchKeyword: $("#searchKeyword").val(),
+							  page: itemList.pageable.pageNum + 1
+						  },
+						  success: function(obj) {
+							  for(let i = 0; i < obj.pageItems.content.length; i++) {
+						        htmlStr += 
+						        `
+						          <div id="prod">
+						            <div class="card">
+						              <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg" class="card_img">
+						            </div>
+						            <div class="text">
+						              <h3><a href="{/item/item/${obj.pageItems.content[i].itemNo}}">${obj.pageItems.content[i].itemName}</a></h3>
+						              <span>${obj.pageItems.content[i].itemPrice}</span><span>원</span>
+						            </div>
+						          </div>
+						        `;
+								  
+							  }
+							  $("#prod").append(htmlStr);
+						  },
+						  error: function(e) {
+							  console.log(e);
+						  }
+					  })
+			      });
 		    });
 		</script>
 	</th:block>
@@ -46,96 +54,33 @@
 	<div layout:fragment="content">
 	  <main class="centre">
 	    <div class="search">
-	      <input type="text" class="search-bar" placeholder="검색어 입력">
+	      <input type="text" id="searchKeyword" class="search-bar" placeholder="검색어 입력">
 	      <a><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" id="search-icon"></a>
 	    </div>
 	    <nav class="sub-navbar">
-	      <a href="#">sub-nav1</a>
-	      <a href="#">sub-nav2</a>
-	      <a href="#">sub-nav3</a>
-	      <a href="#">sub-nav4</a>
-	      <a href="#">sub-nav5</a>
+	      <a href="#">빵</a>
+	      <a href="#">케이크</a>
+	      <a href="#">쿠키</a>
+	      <a href="#">비건</a>
+	      <a href="#">디저트</a>
 	      <a href="#">sub-nav6</a>
 	      <a href="#">sub-nav7</a>
 	      <a href="#">sub-nav8</a>
 	    </nav>
 	    <div id="prod">
-      <div>
-        <div class="card">
-          <img src="http://res.heraldm.com/content/image/2020/04/29/20200429000197_0.jpg" class="card_img">
-        </div>
-        <div class="text">
-          <h3>제목</h3>
-          <p>가격</p>
-        </div>
-      </div>
-      <div>
-        <div class="card">
-          <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg" class="card_img">
-        </div>
-        <div class="text">
-          <h3>제목</h3>
-          <p>가격</p>
-        </div>
-      </div>
-      <div>
-        <div class="card">
-          <img src="http://res.heraldm.com/content/image/2020/04/29/20200429000197_0.jpg" class="card_img">
-        </div>
-        <div class="text">
-          <h3>제목</h3>
-          <p>가격</p>
-        </div>
-      </div>
-      <div>
-        <div class="card">
-          <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg" class="card_img">
-        </div>
-        <div class="text">
-          <h3>제목</h3>
-          <p>가격</p>
-        </div>
-      </div>
-      <div>
-        <div class="card">
-          <img src="http://res.heraldm.com/content/image/2020/04/29/20200429000197_0.jpg" class="card_img">
-        </div>
-        <div class="text">
-          <h3>제목</h3>
-          <p>가격</p>
-        </div>
-      </div>
-      <div>
-        <div class="card">
-          <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg" class="card_img">
-        </div>
-        <div class="text">
-          <h3>제목</h3>
-          <p>가격</p>
-        </div>
-      </div>
-      <div>
-        <div class="card">
-          <img src="http://res.heraldm.com/content/image/2020/04/29/20200429000197_0.jpg" class="card_img">
-        </div>
-        <div class="text">
-          <h3>제목</h3>
-          <p>가격</p>
-        </div>
-      </div>
-      <div>
-        <div class="card">
-          <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg" class="card_img">
-        </div>
-        <div class="text">
-          <h3>제목</h3>
-          <p>가격</p>
-        </div>
-      </div>
-    </div>
+	      <div th:each="item : ${itemList}">
+	        <div class="card">
+	          <img th:src="@{'/item/' + ${item.fileName}}" alt="NoImg" class="card_img">
+	        </div>
+	        <div class="text">
+	          <h3><a th:href="@{/item/item/{itemNo} (itemNo=${item.itemNo})}" th:text="${item.itemName}"></a></h3>
+	          <span th:text="${item.itemPrice}"></span><span>원</span>
+	        </div>
+      	  </div>
+    	</div>
 	    <div id="more">
 	      <!-- <a href="/footer">더보기+</a> -->
-	      <button class="show-more">더보기+</button>
+	      <button type="button" class="show-more">더보기+</button>
 	    </div>
   		</main>
 	</div>

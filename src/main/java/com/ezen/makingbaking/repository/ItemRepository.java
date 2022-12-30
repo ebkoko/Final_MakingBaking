@@ -25,4 +25,30 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	// 장바구니에서 수량 변경할 때 재고보다 많이 변경할 수 없도록 itemNo의 itemStock 조회_은별
 	@Query(value=" SELECT I.ITEM_STOCK FROM T_MB_ITEM I WHERE I.ITEM_NO = :itemNo", nativeQuery = true)
 	int findItemStockByItemNo(@Param("itemNo") int itemNo);
+	
+	@Query(value="SELECT A.*"
+			+ "		   , B.FILE_NO"
+			+ "		   , B.FILE_NAME"
+			+ "		   , B.FILE_ORIGIN_NAME"
+			+ "		   , B.FILE_PATH"
+			+ "		FROM T_MB_ITEM A"
+			+ "		LEFT OUTER JOIN T_MB_FILE B"
+			+ "		ON A.ITEM_NO = B.FILE_REFER_NO"
+			+ "		AND B.FILE_TYPE = 'item'"
+			+ "		AND B.FILE_NO = 1",
+			countQuery = "SELECT COUNT(*)"
+					+ "		FROM ("
+					+ "					SELECT A.*"
+					+ "						 , B.FILE_NAME"
+					+ "						 , B.FILE_ORIGIN_NAME"
+					+ "						 , B.FILE_PATH"
+					+ "						FROM T_MB_ITEM A"
+					+ "						LEFT OUTER JOIN T_MB_FILE B"
+					+ "						ON A.ITEM_NO = B.FILE_REFER_NO"
+					+ "						AND B.FILE_TYPE = 'item'"
+					+ "						AND B.FILE_NO = 1"
+					+ "			 ) C",
+			nativeQuery = true)
+	Page<CamelHashMap> findItemAndFile(Pageable pageable);
+
 }

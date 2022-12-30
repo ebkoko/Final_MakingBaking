@@ -136,17 +136,18 @@
 				          $(".pw-check").addClass('strong');
 				        }
 				      });
+				     
 				      
 						//비밀번호 입력될때마다 유효성 검사
 						$("#pw").on("change", function() {
 							//비밀번호 유효성 처리
-							if(!validatePassword($("#pw").val())) {
+							if(!Strength($("#pw").val())) {
 								pw = false;
-								$("#pw2").show();
+								$("#pw2").hide();
 								$("#pw").focus();
 							} else {
 								pw = true;
-								$("#pw2").hide();
+								$("#pw2").show();
 							}
 							
 							//비밀번호 확인까지 입력한 후 다시 비밀번호 재설정
@@ -238,7 +239,7 @@
 		      <form action="/user/join" id="joinForm" class="form" method="post">
 		        <h3>회원가입</h3>
 		        <div style="display: flex;">
-		          <input type="text" placeholder="아이디" class="box" id="userId" name="userId" th:value="${socialUser != null ? socialUser.userId : ''}" readonly style="width: 70%;">
+		          <input type="text" placeholder="아이디" class="box" id="userId" name="userId" th:value="${socialUser != null ? socialUser.userId : ''}" style="width: 70%;">
 		          <button type="button" id="IdCheck" class="check">중복체크</button>
 		        </div>
 		
