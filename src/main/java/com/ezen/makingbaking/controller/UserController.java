@@ -1,8 +1,10 @@
 package com.ezen.makingbaking.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +36,9 @@ public class UserController {
 	private PasswordEncoder passwordEncoder;
 	
 	@GetMapping("/join")
-	public ModelAndView joinView(HttpSession session, @AuthenticationPrincipal CustomUserDetails customUser) {
+	public ModelAndView joinView(HttpSession session, 
+			@AuthenticationPrincipal CustomUserDetails customUser,
+			HttpServletResponse response) throws IOException {
 		ModelAndView mv = new ModelAndView();
 		
 		User user = null;
@@ -42,18 +46,22 @@ public class UserController {
 		if(customUser != null)
 			user = customUser.getUser();
 		
-		SecurityContext securityContext = SecurityContextHolder.getContext();
-		Authentication authentication = null;
-		securityContext.setAuthentication(authentication);
-		session.setAttribute("SPRING_SERCURITY_CONTEXT", securityContext);
-		
-		mv.setViewName("user/join.html");
-		mv.addObject("socialUser", user);
+		if(user == null || user.getJoinYn().equals("N")) {
+			SecurityContext securityContext = SecurityContextHolder.getContext();
+			Authentication authentication = null;
+			securityContext.setAuthentication(authentication);
+			session.setAttribute("SPRING_SERCURITY_CONTEXT", securityContext);
+			
+			mv.setViewName("user/join.html");
+			mv.addObject("socialUser", user);
+		} else {
+			response.sendRedirect("/home/main");
+		}
 		return mv;
 	}
 
 	@PostMapping("/join")
-	public ResponseEntity<?> join(@AuthenticationPrincipal UserDTO userDTO) {
+	public ResponseEntity<?> join(UserDTO userDTO) {
 		ResponseDTO<Map<String, String>> responseDTO = new ResponseDTO<>();
 		Map<String, String> returnMap = new HashMap<String, String>();
 		try {
