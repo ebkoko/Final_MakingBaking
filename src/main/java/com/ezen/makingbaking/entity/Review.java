@@ -45,9 +45,7 @@ public class Review {		// 리뷰 테이블
 	@Builder.Default
 	private int rvwScore = 5;	// 별점
 	
-	@Transient
-	private String searchCondition;
-	
+
 	// 1227 수정 - rvwTitle 삭제, rvwScore 추가
 	
 }
