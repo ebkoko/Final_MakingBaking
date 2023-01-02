@@ -61,6 +61,15 @@
 			<script th:inline="javascript" th:src="@{/js/jquery-ui.min.js}"></script>
 			<script th:inline="javascript">
 				$(function() {
+					// 비회원이 예약하기 버튼 클릭시 로그인창 
+					$("#moveRsrvtBtn").on("click", function() {
+                  
+                  	const isAuthenticated = $(".header > input[name='authenticate']").val();
+		                  if(isAuthenticated == "false") {
+		                     $('.login-form-container').toggleClass('active');
+		                  }
+					});
+					
 					// 취소 환불 문의 자세히 보기
 					$(".refundGuideBtn").on("click", function(){
 						if($("#refundGuide").css("display") == "none") {
@@ -155,13 +164,13 @@
 													+ "\n예약 시간 : " + reserTime 
 													+ "\n예약 인원 : " + $("#peopleNm_cnt").val() 
 													+"명\n\n예약하싈?" )) {						
+								
 								$("#rsvtForm").submit();
+							
 							} else {
 								alert("취소되었습니다.");
 								return;
 							}
-						
-
 
 					});	
 					
@@ -201,50 +210,11 @@
 						}
 						});
 					}
-					
-					// 페이징
-					/*
-					$(".paging a").on("click", function(e) {
-						e.preventDefault();
-						reviewPagingAndOrder($(e.target).attr("href"), $("#rvw_array").val());
-					});
+
+
+
 				}); 
-				*/
-				
-				// 페이징
-				/*
-				function reviewPagingAndOrder(page, condition) {
-					$.ajax({
-						url: '/dayclass/dayclass/1',
-						type: 'post',
-						data: {
-							page: page,
-							searchCondition: condition
-						},
-						success: function(obj) {
-							console.log(obj);
-							
-							let htmlStr = "";
-							
-							for(let i=0; i<obj.pageItems.content.length; i++) {
-								htmlStr += `
-									<tr>
-			                          <td>
-			                          	<span th:each="num : ${#numbers.sequence(1, obj.pageItems.content[i].rvwScore)}">⭐</span>
-		                          	  </td>
-			                          <td th:text="${obj.pageItems.content[i].rvwContent}"></td>
-			                          <td th:text="${obj.pageItems.content[i].rvwRegdate eq null ? '' : #strings.substring(obj.pageItems.content[i].rvwRegdate, 0, 10)}"></td>
-			                          <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${obj.pageItems.content[i].rvwWriter}"></td>
-			                          <td sec:authorize="!hasRole('ROLE_ADMIN')" th:text="${obj.pageItems.content[i].rvwWriter.substring(0, obj.pageItems.content[i].rvwWriter.length()-3) + '***'}"></td>			                  
-									</tr>
-								`;
-							}
-						},
-						error: function(e) {
-							console.log(e);
-						}
-					});
-				} */
+
 			</script>
 		</th:block>
 	</head>
@@ -278,8 +248,7 @@
 	              </div> 
 	              <div class="banner_explain_btn">
 	             
-	                <span><button type="button" id="moveRsrvtBtn" value="dayclassRsrvt"
-	                th:onclick="'location.href=\'' + @{#dayclass_hr1} +'\''">예약하기  
+	                <span><button type="button" id="moveRsrvtBtn" value="dayclassRsrvt">예약하기  
 	                </button></span>
 	          
 	                <span id="likeSpan"><button type="button" id="dayclassLikeBtn" 
@@ -341,9 +310,9 @@
 					</li>
 					<li>
 					<div class="apply_btn">
-	                <span><button type="button" id="dayclassRsrvtBtn" value="dayclassRsrvt">예약하기 
-	                </button></span>
-	              </div>
+	                	<span><button type="button" id="dayclassRsrvtBtn" value="dayclassRsrvt">예약하기 
+	                	</button></span>
+	              	</div>
 					</li>
 	              </ul>
 				 </form>
@@ -380,7 +349,8 @@
 	                <div class="rvw_wirte_detail" id="classReviewList">
 	                  <div class="rvw_option"> 
 	                    <select name="rvw_array" id="rvw_array">
-	                      <option value="HIGH" th:selected="${searchCondition == null || searchCondition == "" || searchCondition == 'HIGH'}">평점 높은순</option>
+	      
+	                      <option value="HIGH" th:selected="${searchCondition == 'HIGH'}">평점 높은순</option>
 	                      <option value="LOW" th:selected="${searchCondition == 'LOW'}"> 평점 낮은순</option>
 	                      <option value="NEW" th:selected="${searchCondition == 'NEW'}">최신순</option>
 	                      <option value="OLD" th:selected="${searchCondition == 'OLD'}">오래된순</option>

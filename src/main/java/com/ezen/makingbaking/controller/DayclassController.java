@@ -1,7 +1,10 @@
 package com.ezen.makingbaking.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +30,7 @@ import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.Review;
 import com.ezen.makingbaking.service.dayclass.DayclassService;
 import com.ezen.makingbaking.service.review.ReviewService;
+
 
 @RestController
 @RequestMapping("/dayclass")
@@ -57,7 +62,7 @@ public class DayclassController {
 	}
 	
 	@GetMapping("/dayclass/{dayclassNo}")
-	public ModelAndView getDayclass(ReviewDTO reviewDTO, @PathVariable int dayclassNo, @PageableDefault(page = 0, size = 4) Pageable pageable,
+	public ModelAndView getDayclass(@PathVariable int dayclassNo, @PageableDefault(page = 0, size = 4) Pageable pageable,
 			@AuthenticationPrincipal CustomUserDetails customUser) {
 		
 		Dayclass dayclass = dayclassService.getDayclass(dayclassNo);
@@ -85,7 +90,7 @@ public class DayclassController {
 																		  .rvwType(review.getRvwType())
 																		  .rvwContent(review.getRvwContent())
 																		  .rvwWriter(review.getRvwWriter())
-																		  .searchCondition(review.getSearchCondition())
+																		  
 																		  .rvwRegdate(review.getRvwRegdate().toString())
 																		  .rvwScore(review.getRvwScore())
 																		  .build()
@@ -105,10 +110,7 @@ public class DayclassController {
 		mv.addObject("likeYn", likeYn);
 		mv.addObject("likeCnt", likeCnt);
 		
-		
-		if(reviewDTO.getSearchCondition() !=null && !reviewDTO.getSearchCondition().equals("")) {
-			mv.addObject("searchCondition", reviewDTO.getSearchCondition());
-	}
+	
 		return mv;
 	}
 	
@@ -158,6 +160,8 @@ public class DayclassController {
 	
 
 	//
+
+	
 }
 
 
