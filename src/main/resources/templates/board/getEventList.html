@@ -13,7 +13,7 @@
 				$(".pagination_button a").on("click", function(e) {
 					e.preventDefault();
 					$.ajax({
-						url: '/board/event/4',
+						url: '/board/eventList/4',
 						type: 'post',
 						data: {	page: $(e.target).attr("data-page-num")},
 						success: function(obj) {
@@ -25,11 +25,12 @@
 								htmlStr += `
 									<tr>
 										<td class="list-title">
-											<a href="/board/updateBoardCnt/${obj.pageItems.content[i].boardNo}">
+											<a href="/board/updateEventCnt/${obj.pageItems.content[i].boardNo}">
 											${obj.pageItems.content[i].boardTitle}
 											</a>
 										</td>			
 										<td class="list-date">${obj.pageItems.content[i].boardRegdate == null ? '' : obj.pageItems.content[i].boardRegdate.substring(0, 10)}</td>
+										<td class="list-cnt">${obj.pageItems.content[i].boardCnt}</td>
 									</tr>
 								`;
 							}
@@ -61,16 +62,18 @@
 	    <div id="mid-container">
 	      <table id="list-table">
 	        <tr>
-	          <th width="80%" id="th-title">제목</th>
+	          <th width="73%" id="th-title">제목</th>
 	          <th width="20%" id="th-date">작성일</th>
+	          <th width="7%" id="th-cnt">조회수</th>
 	        </tr>
 	        <tr th:each="event: ${getBoardList}">
 	          <td class="list-title">
 	          	<a th:text="${event.boardTitle}"
-				   th:href="@{/board/updateBoardCnt/{boardNo} (boardNo=${event.boardNo})}">
+				   th:href="@{/board/updateEventCnt/{boardNo} (boardNo=${event.boardNo})}">
 				</a>
 	          </td>
 	          <td class="list-date" th:text="${event.boardRegdate eq null ? '' : #strings.substring(event.boardRegdate, 0, 10)}"></td>
+	          <td class="list-cnt" th:text="${event.boardCnt}"></td>
 	        </tr>
 	      </table>
 	      <br/>

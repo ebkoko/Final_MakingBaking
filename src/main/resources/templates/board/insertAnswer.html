@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Making Baking</title>  <!-- 관리자 Q&A 답변 작성 페이지 -->
+<html lang="ko"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head> <!-- 관리자 Q&A 답변 작성 페이지 -->
+  <th:block layout:fragment="css">
+		<link rel="stylesheet" th:href="@{/css/board/insetAnswer.css}"/>
+	</th:block> 
   <style>
     * {
       font-family: sans-serif;

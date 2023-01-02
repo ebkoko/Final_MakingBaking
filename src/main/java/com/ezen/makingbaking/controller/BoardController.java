@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ezen.makingbaking.dto.BoardDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.entity.Board;
+import com.ezen.makingbaking.entity.CustomUserDetails;
 import com.ezen.makingbaking.service.board.BoardService;
 
 @RestController
@@ -227,25 +229,25 @@ public class BoardController {
 	public void updateQnaCnt(@PathVariable int boardNo, HttpServletResponse response) throws IOException {
 		boardService.updateBoardCnt(boardNo);
 		
-		response.sendRedirect("/board/qna/1" + boardNo);	
+		response.sendRedirect("/board/qna/" + boardNo);
 	}
 	
 	@GetMapping("/updateNoticeCnt/{boardNo}")
 	public void updateNoticeCnt(@PathVariable int boardNo, HttpServletResponse response) throws IOException {
 		boardService.updateBoardCnt(boardNo);
 		
-		response.sendRedirect("/board/notice/3" + boardNo);	
+		response.sendRedirect("/board/notice/" + boardNo);	
 	}
 	
 	@GetMapping("/updateEventCnt/{boardNo}")
 	public void updateEventCnt(@PathVariable int boardNo, HttpServletResponse response) throws IOException {
 		boardService.updateBoardCnt(boardNo);
 		
-		response.sendRedirect("/board/event/4" + boardNo);	
+		response.sendRedirect("/board/event/" + boardNo);	
 	}
 	
 	@GetMapping("/qna/{boardNo}")
-	public ModelAndView getBoard(@PathVariable int boardNo){
+	public ModelAndView getQna(@PathVariable int boardNo){
 		Board board = boardService.getBoard(boardNo);
 		
 		BoardDTO boardDTO = BoardDTO.builder()
@@ -268,4 +270,58 @@ public class BoardController {
 		return mv;
 	}
 	
+	@GetMapping("/notice/{boardNo}")
+	public ModelAndView getNotice(@PathVariable int boardNo){
+		Board board = boardService.getBoard(boardNo);
+		
+		BoardDTO boardDTO = BoardDTO.builder()
+									.boardNo(board.getBoardNo())
+									.boardTitle(board.getBoardTitle())
+									.boardContent(board.getBoardContent())
+									.boardWriter(board.getBoardWriter())
+									.boardRegdate(
+												board.getBoardRegdate() == null?
+												null :
+												board.getBoardRegdate().toString()) // .toString 수정 
+									.boardCnt(board.getBoardCnt())
+									.build();	
+				
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("board/getBoard.html");
+		mv.addObject("getBoard", boardDTO);
+
+		return mv;
+	}
+	
+	@GetMapping("/event/{boardNo}")
+	public ModelAndView getEvent(@PathVariable int boardNo){
+		Board board = boardService.getBoard(boardNo);
+		
+		BoardDTO boardDTO = BoardDTO.builder()
+									.boardNo(board.getBoardNo())
+									.boardTitle(board.getBoardTitle())
+									.boardContent(board.getBoardContent())
+									.boardWriter(board.getBoardWriter())
+									.boardRegdate(
+												board.getBoardRegdate() == null?
+												null :
+												board.getBoardRegdate().toString()) // .toString 수정 
+									.boardCnt(board.getBoardCnt())
+									.build();	
+				
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("board/getBoard.html");
+		mv.addObject("getBoard", boardDTO);
+
+		return mv;
+	}
+	/*
+	@GetMapping("/qna/insertQna")
+	public ModelAndView insertBoardView(@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
+		System.out.println(customUser.getUsername());
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("board/insertBoard.html");
+		return mv;
+	}
+	*/
 }
