@@ -12,5 +12,5 @@ public interface CartService {
 	
 	void deleteCart(Cart cart);
 	
-//	void deleteCartItem(List<Cart> cartItemList);
+	void deleteCartItem(List<Cart> cartItemList);
 }

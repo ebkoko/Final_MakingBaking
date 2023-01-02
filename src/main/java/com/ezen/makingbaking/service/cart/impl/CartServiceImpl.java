@@ -3,13 +3,11 @@ package com.ezen.makingbaking.service.cart.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Cart;
-import com.ezen.makingbaking.entity.CustomUserDetails;
 import com.ezen.makingbaking.repository.CartRepository;
 import com.ezen.makingbaking.service.cart.CartService;
 
@@ -57,11 +55,12 @@ public class CartServiceImpl implements CartService {
 		cartRepository.delete(cart);
 	}
 	
-//	@Override
-//	public void deleteCartItem(List<Cart> cartItemList) {
-//		for(int i = 0; i < cartItemList.size(); i++) {
-//			cartRepository.updateCartStatus(cartItemList.get(i).getCartNo(), cartItemList.get(i).getItemNo());
-//			
-//		}
-//	}
+	@Override
+	public void deleteCartItem(List<Cart> cartItemList) {
+		for(int i = 0; i < cartItemList.size(); i++) {
+			cartRepository.updateCartStatus(cartItemList.get(i));
+			cartRepository.flush();
+			cartRepository.updateItemStock(cartItemList.get(i).getItemNo(), cartItemList.get(i).getCartItemCnt());
+		}
+	}
 }
