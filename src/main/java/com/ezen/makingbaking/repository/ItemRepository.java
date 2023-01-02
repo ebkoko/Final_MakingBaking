@@ -14,8 +14,8 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	//관리자 상품 검색_선민
 	Page<Item> findByItemNameContaining(String searchKeyword, Pageable pageable); //이름
 	Page<Item> findByItemCateContaining(String searchKeyword, Pageable pageable); //카테
-	Page<Item> findByItemStatusContaining(String searchKeyword, Pageable pageable); //상태
-	Page<Item> findByItemNameContainingOrItemCateContainingOrItemStatusContaining(String searchKeyword1, String searchKeyword2, String searchKeyword3, Pageable pageable);
+	Page<Item> findByItemStatus(char searchKeyword, Pageable pageable); //상태
+	Page<Item> findByItemNameContainingOrItemCateContainingOrItemStatus(String searchKeyword1, String searchKeyword2, char searchKeyword3, Pageable pageable);
 	
 	// 관리자 상품리스트&이미지파일 조인_선민
 	@Query(value="SELECT COUNT(*) FROM (SELECT A.*, B.* FROM A.ITEM_NO = B.FILE_NO AND FILE_NO =:fileNo) C", 

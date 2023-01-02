@@ -17,5 +17,8 @@ public interface AdminService {
 	
 	void insertItem(Item item, List<ImgFile> uploadFileList);
 	
+	Item getItem(int itemNo);
+	List<ImgFile> getItemFileList(int itemNo);
+	
 	void deleteItem(int ItemNo);
 }

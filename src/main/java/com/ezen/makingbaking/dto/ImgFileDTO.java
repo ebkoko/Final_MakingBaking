@@ -1,7 +1,5 @@
 package com.ezen.makingbaking.dto;
 
-import javax.persistence.Id;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,4 +16,6 @@ public class ImgFileDTO {
 	private String fileName;		// 파일명
 	private String fileOriginName;		// 원본파일명
 	private String filePath;		// 파일 경로
+	private String fileStatus;		//파일상태
+	private String newFileName;		//새로운파일명
 }
