@@ -58,4 +58,12 @@ $(function() {
 		})
 	});
 	*/
+	// 비회원 클릭시 뜨는 창
+	$("#login-btn a").on("click", function(e) {
+		const isAuthenticated = $(".header > input[name='authenticate']").val();
+		if(isAuthenticated == "false") {
+			e.preventDefault();
+			$('.login-form-container').toggleClass('active');
+		}
+	});
 });

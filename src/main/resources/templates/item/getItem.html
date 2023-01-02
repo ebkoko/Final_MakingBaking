@@ -37,6 +37,14 @@
 						}
 						
 					});
+					//겹칠시 하나씩 작성
+					$("#itemGetBtn, #itemCartBtn, #itemLikeBtn").on("click", function() {
+						const isAuthenticated = $(".header > input[name='authenticate']").val();
+						if(isAuthenticated == "false") {
+							$('.login-form-container').toggleClass('active');
+							return history.back();
+						}
+					});
 				});
 			</script>
 		</th:block>
@@ -69,9 +77,9 @@
 	              </div>
 	              <div class="itbanner_explain_btn">	             
 	                <span><button type="button" id="itemGetBtn" value="itemGet">바로구매  
-	                </button><a href=""></a></span>
+	                </button></span>
 	          		<span><button type="button" id="itemCartBtn" value="itemCart">장바구니  
-	                </button><a href=""></a></span>
+	                </button></span>
 	                <span><button type="button" id="itemLikeBtn" th:value="@{itemLike}">♡<!--<span 
 	                id="likeTd">${itemLikeCnt }</span>--></button></span>
 	              </div>

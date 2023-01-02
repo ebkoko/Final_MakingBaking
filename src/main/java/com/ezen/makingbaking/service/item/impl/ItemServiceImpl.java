@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ezen.makingbaking.common.CamelHashMap;
+import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.repository.ItemRepository;
 import com.ezen.makingbaking.service.item.ItemService;
 
@@ -22,5 +23,10 @@ public class ItemServiceImpl implements ItemService {
 	@Override
 	public Page<CamelHashMap> getItemList(Pageable pageable) {
 		return itemRepository.findItemAndFile(pageable);
+	}
+	
+	@Override
+	public Page<Item> getPageItemList(Pageable pageable) {
+		return itemRepository.findAll(pageable);
 	}
 }

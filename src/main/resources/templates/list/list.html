@@ -7,25 +7,25 @@
 	<th:block layout:fragment="script">
 		<script th:inline="javascript">
 				$(function(){
-		      	  let htmlStr = "";
 		      	  const itemList = /*[[${itemList}]]*/;
-		      	  
+		      	  //console.log(itemList);
 			      $("#more").click(function(e){
-					  console.log(content[i])
 					  $.ajax({
 						  url:"/item/list",
 						  type: "post",
 						  data: {
 							  searchKeyword: $("#searchKeyword").val(),
-							  page: itemList.pageable.pageNum + 1
+							  page: $(".card").parent().length/4
 						  },
 						  success: function(obj) {
+							  let htmlStr = "";
+							  //console.log(obj.pageItems.content);
 							  for(let i = 0; i < obj.pageItems.content.length; i++) {
 						        htmlStr += 
 						        `
-						          <div id="prod">
+						          <div>
 						            <div class="card">
-						              <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg" class="card_img">
+						              <img th:src="@{'/item/' + ${obj.pageItems.content[i].fileName}}" alt="NoImg" class="card_img">
 						            </div>
 						            <div class="text">
 						              <h3><a href="{/item/item/${obj.pageItems.content[i].itemNo}}">${obj.pageItems.content[i].itemName}</a></h3>
@@ -33,16 +33,45 @@
 						            </div>
 						          </div>
 						        `;
-								  
 							  }
 							  $("#prod").append(htmlStr);
+							  
+							  //console.log(obj.pageItems);
+							  if(obj.pageItems.totalElements == $(".card").parent().length) {
+								  $('#more').hide();
+							  }
 						  },
 						  error: function(e) {
 							  console.log(e);
 						  }
 					  })
 			      });
+			      $(document).ready(function() {
+					 
+					 $("#sub-navbar").click(function() {
+						 let form = $("<form>").attr("action", "/item/list")
+						 					   .attr("class", "sub-navbar")
+						 					   .attr("method", "post").appendTo("body")
+						 					   
+						 let input = $("<input>").attr("name", "itemCate")
+					 							 .attr("value", "빵").appendTo("body")
+					 })
+				  });
 		    });
+		    //탑버튼
+		    $(window).scroll(function() {
+		      if ($(this).scrollTop() > 10) {
+		      	$('#topBtn').fadeIn();
+		        } else {
+		        $('#topBtn').fadeOut();
+		      }
+		     });
+		     $("#topBtn").click(function() {   
+		     $('html, body').animate({
+		       scrollTop : 0
+		      }, 10);
+		      return false;
+		      });
 		</script>
 	</th:block>
 	<th:block layout:fragment="css">
@@ -53,19 +82,36 @@
 <body>
 	<div layout:fragment="content">
 	  <main class="centre">
+	  <!--
 	    <div class="search">
 	      <input type="text" id="searchKeyword" class="search-bar" placeholder="검색어 입력">
 	      <a><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" id="search-icon"></a>
 	    </div>
-	    <nav class="sub-navbar">
-	      <a href="#">빵</a>
-	      <a href="#">케이크</a>
-	      <a href="#">쿠키</a>
-	      <a href="#">비건</a>
-	      <a href="#">디저트</a>
-	      <a href="#">sub-nav6</a>
-	      <a href="#">sub-nav7</a>
-	      <a href="#">sub-nav8</a>
+	    -->
+	    <nav>
+		    <ul id="sub-navbar" class="sub-navbar"> 
+		    	<li style="--clr:red"> 
+			      <a href="#" data-text="&nbsp;All"&nbsp; value="All">&nbsp;All&nbsp;</a> 
+			    </li> 
+			    <li style="--clr:orange"> 
+			      <a href="#" data-text="&nbsp;Bread"&nbsp; value="빵">&nbsp;Bread&nbsp;</a> 
+			    </li> 
+			    <li style="--clr:rgb(255,223,0);"> 
+			      <a href="#" data-text="&nbsp;Cake" value="케이크">&nbsp;Cake&nbsp;</a> 
+			    </li> 
+			    <li style="--clr:green"> 
+			      <a href="#" data-text="&nbsp;Cookie" value="쿠키">&nbsp;Cookie&nbsp;</a> 
+			    </li> 
+			    <li style="--clr:rgb(0, 103, 163);"> 
+			      <a href="#" data-text="&nbsp;Vegan" value="비건">&nbsp;Vegan&nbsp;</a> 
+			    </li> 
+			    <li style="--clr:rgb(0, 0, 128);"> 
+			      <a href="#" data-text="&nbsp;Dessert" value="디저트">&nbsp;Dessert&nbsp;</a> 
+			    </li>
+			    <li style="--clr:purple"> 
+			      <a href="#" data-text="&nbsp;Etc" value="Etc">&nbsp;Etc&nbsp;</a> 
+			    </li>
+			</ul>
 	    </nav>
 	    <div id="prod">
 	      <div th:each="item : ${itemList}">
@@ -80,8 +126,12 @@
     	</div>
 	    <div id="more">
 	      <!-- <a href="/footer">더보기+</a> -->
-	      <button type="button" class="show-more">더보기+</button>
+	      <button type="button" id="show-more" class="show-more">더보기+</button>
 	    </div>
+	    <a id="topBtn" href="#">
+           <img src="https://widit2.knu.ac.kr/~kiyang/teaching/IT/stPrj/happydpqhs/jam/%ED%83%91%EB%B2%84%ED%8A%BC.png"
+           style="width:2.5rem; height:2.5rem">
+        </a>
   		</main>
 	</div>
 </body>
