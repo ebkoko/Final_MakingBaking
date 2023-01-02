@@ -56,4 +56,12 @@ public class CartServiceImpl implements CartService {
 	public void deleteCart(Cart cart) {
 		cartRepository.delete(cart);
 	}
+	
+//	@Override
+//	public void deleteCartItem(List<Cart> cartItemList) {
+//		for(int i = 0; i < cartItemList.size(); i++) {
+//			cartRepository.updateCartStatus(cartItemList.get(i).getCartNo(), cartItemList.get(i).getItemNo());
+//			
+//		}
+//	}
 }

@@ -328,71 +328,112 @@
 				const userInfo = /*[[${userInfo}]]*/;
 				
 				$(function() {
-					
 					// 우편번호 input 클릭했을 때
 					$("#addr1").on('click', function() {
 						findAddr();
 					});
 					
 					// 결제하기 버튼 클릭했을 때 유효성 검사
-					$("#btnPayment").on('click', function() {
+					$("#orderForm").on('submit', function(e) {
+						
+						
 						if(!$("#recipient").val()) {
+							e.preventDefault();
 							alert("수령인을 입력해주세요.");
 							$("#recipient").focus();
 							return;
 						}
 						if(!$("#addr1").val()) {
+							e.preventDefault();
 							alert("우편번호 찾기로 주소를 입력해주세요.");
 							return;
 						}
 						if(!$("#addr3").val()) {
+							e.preventDefault();
 							alert("상세주소를 입력해주세요.");
 							$("#addr3").focus();
 							return;
 						}
 						if(!$("#reciTel2").val()) {
+							e.preventDefault();
 							alert("수령인 휴대폰 번호를 입력해주세요.");
 							$("#reciTel2").focus();
 							return;
 						}
 						if(!$("#reciTel3").val()) {
+							e.preventDefault();
 							alert("수령인 휴대폰 번호를 입력해주세요.");
 							$("#reciTel3").focus();
 							return;
 						}
 						if(!$("#orderer").val()) {
+							e.preventDefault();
 							alert("주문자명을 입력해주세요.");
 							$("#orderer").focus();
 							return;
 						}
 						if(!$("#orderTel2").val()) {
+							e.preventDefault();
 							alert("주문자 휴대폰 번호를 입력해주세요.");
 							$("#orderTel2").focus();
 							return;
 						}
 						if(!$("#orderTel3").val()) {
+							e.preventDefault();
 							alert("주문자 휴대폰 번호를 입력해주세요.");
 							$("#orderTel3").focus();
 							return;
 						}						
 						if($("#orderTel2").val().length < 4 || $("#orderTel3").val().length < 4 || $("#reciTel2").val().length < 4 || $("#reciTel3").val().length < 4) {
+							e.preventDefault();
 							alert("휴대폰 번호를 정확히 입력해주세요.");
 							return;
 						}
 						if($("#bankPayment").css("display") == "block") {
 							if(!$("#depositor").val()) {
+								e.preventDefault();
 								alert("입금자명을 입력하세요.");
 								$("#depositor").focus();
 								return;
 							}
 						}
 						if(!pushbankTransfer && !pushKakaoPay) {
+							e.preventDefault();
 							alert("결제방법을 선택해주세요.");
 							return;
 						}
 						
-						$("#orderForm").submit();
+						const itemList = /*[[${itemList}]]*/;
+						const transferItemList = [];
+						console.log(itemList);
+						let item_PriceSum = parseInt($(".item_PriceSum")[0].textContent.replace(',',''));
+						let deliFee = parseInt($(".deliFee").text().replace(/,/g,''));
+						let totalPrice = parseInt($(".totalPrice").text().replace(/,/g,''));
+						let orderTelNums = [$("#orderTel1").val(), $("#orderTel2").val(), $("#orderTel3").val()];
+						let orderTel = orderTelNums.join('-');
+						let reciTelNums = [$("#reciTel1").val(), $("#reciTel2").val(), $("#reciTel3").val()];
+						let reciTel = reciTelNums.join('-');
+						
+						for(let i = 0; i < itemList.length; i++) {
+							const item = {
+								itemNo: itemList[i].itemNo,
+								itemPrice: itemList[i].itemPrice,
+								orderItemCnt: itemList[i].cartItemCnt
+							}
+							
+							transferItemList.push(item);
+						}
+						
+						$("#totalPayPrice").val(totalPrice);
+						$("#orderTel").val(orderTel);
+						$("#reciTel").val(reciTel);
+						$("input[name='itemList']").val(JSON.stringify(transferItemList));
 					});
+					
+					// 우편번호가 입력되었으면 주소 입력창 readonly(상세주소만 변경 가능)
+					if($("#addr1").val() != null || $("#addr1").val() != '') {
+						$("#addr2").attr("readonly", true);
+					}
 					
 					// 배송지를 직접입력 체크했을 때
 					$("input[name='deliDestination']").change(function() {
@@ -409,6 +450,7 @@
 							$("#addr1").val('');
 							$("#addr2").val('');
 							$("#addr3").val('');
+							$("#extraAddr").val('');
 							$("#reciTel2").val('');
 							$("#reciTel3").val('');
 						} else {
@@ -446,10 +488,14 @@
 							$("#btnbankTransfer").css("color", "white").css("background", "#28693F");
 							$("#btnkakaoPay").css("color", "#28693F").css("background", "white");
 							pushbankTransfer = true;
+							$("#orderPayment").val("무통장입금");
+							$("#orderStatus").val("입금대기");
 						} else {
 							$("#bankPayment").css("display", "none");
 							$("#btnbankTransfer").css("color", "#28693F").css("background", "white");
 							pushbankTransfer = false;
+							$("#orderPayment").val('');
+							$("#orderStatus").val('');
 						}	
 					});					
 					
@@ -468,38 +514,37 @@
 						
 						// 카카오페이 API 실행
 						// 필수 입력값 확인
-						var orderer = $("#orderer").val();
-						var telNums = [$("#orderTel1").val(), $("#orderTel2").val(), $("#orderTel3").val()];
-						var tel = telNums.join('-');
+						let orderer = $("#orderer").val();
+						let telNums = [$("#orderTel1").val(), $("#orderTel2").val(), $("#orderTel3").val()];
+						let tel = telNums.join('-');
 						console.log(tel);
-						var email = $("#orderMail").val();
+						let email = $("#orderMail").val();
 						
 						// 결제 정보를 form에 저장
 						let item_PriceSum = parseInt($(".item_PriceSum").text().replace(/,/g,''));
 						let deliFee = parseInt($(".deliFee").text().replace(/,/g,''));
 						let totalPrice = parseInt($(".totalPrice").text().replace(/,/g,''));
 						
+						
 						// 카카오페이 결제전송
 						$.ajax({
-							type: 'post',
 							url:'/order/pay',
+							type: 'post',
 							data:{
-								total_amount: totalPrice
-								,payUserName: orderer
-								,sumPrice: item_PriceSum
-								,deliFee: deliFee
-								,totalPrice: totalPrice
-								,tel: tel
-								,email: email
+								total_amount: totalPrice,
+								payUserName: orderer,
+								sumPrice: item_PriceSum,
+								deliFee: deliFee,
+								totalPrice: totalPrice,
+								tel: tel,
+								email: email
 							},
 							success: function(response) {
 								location.href = response.next_redirect_pc_url
 							}
 						});
-						
 					});
-				});
-				
+				});				
 			</script>
 		</th:block>
 	</head>
@@ -507,9 +552,6 @@
 	
 	<body>
 		<div layout:fragment="content">
-		<input type="hidden" name="itemList" th:value="${itemList}">
-		<input type="hidden" name="totalItemPrice" th:value="${totalItemPrice}">
-		<input type="hidden" name="deliFee" th:value="${deliFee}">
 			<div id="container">
 	            <h1 id="order_title">주문결제</h1>
 	            <div id="process">
@@ -523,24 +565,32 @@
 	                <span class="title_itemInfo">상품정보</span><span class="title_itemPrice">상품금액</span><span class="title_itemQuantity">수량</span><span class="title_totalPrice">합계금액</span>
 	            </div>
 	            <hr>
-	            <div id="order_item">
-	                <div class="itemView" th:each="itemList : ${itemList}">
-	                    <div class="item_Detail">
-	                        <img class="item_Img" th:src="@{'/item/' + ${itemList.fileName}}">
-	                        <div class="detailName"><a th:text="${itemList.itemName}"></a></div>    
-	                    </div>
-	                    <div class="item_Price"><span class="itemPrice" th:text="${#numbers.formatInteger(itemList.itemPrice, 3, 'COMMA')}"></span></div><span>원</span>  
-	                    <div class="item_Quantity" th:text="${itemList.cartItemCnt}"></div>                    
-	                    <div class="item_totalPrice"><span th:text="${#numbers.formatInteger((T(java.lang.Integer).parseInt(itemList.itemPrice) * T(java.lang.Integer).parseInt(itemList.cartItemCnt)), 3, 'COMMA')}"></span></div><span>원</span>
-	                </div>            
-	                <hr>
-	                <div id="totalPrice">
-	                    <span>상품 총 금액: </span> <span class="item_PriceSum" th:text="${#numbers.formatInteger(totalItemPrice, 3, 'COMMA')}"></span><span >원</span> <span>&#43;</span> <span>배송비: </span> <span class="deliFee" th:text="${deliFee != 0 ? #numbers.formatInteger(deliFee, 3, 'COMMA') : 0}"></span><span >원</span> <span>&#61;</span> <span>총 결제금액: </span> <span class="totalPrice" 
-	                    th:text="${#numbers.formatInteger((T(java.lang.Integer).parseInt(totalItemPrice)+T(java.lang.Integer).parseInt(deliFee)), 3, 'COMMA')}"></span><span >원</span>
-	                </div>
-	                <hr>
-	            </div>          
 	            <form id="orderForm" action="/order/orderComplete" method="post">  
+	            	<input type="hidden" name="orderTotalPayPrice" id="totalPayPrice">
+	            	<input type="hidden" name="orderTel" id="orderTel">
+	            	<input type="hidden" name="reciTel" id="reciTel">
+	            	<input type="hidden" name="itemList" th:value="${itemList}">
+					<input type="hidden" name="orderTotalPrice" th:value="${totalItemPrice}">
+					<input type="hidden" name="orderDeliFee" th:value="${deliFee}">
+					<input type="hidden" name="orderStatus" id="orderStatus">
+					<input type="hidden" name="orderPayment" id="orderPayment">
+		            <div id="order_item">
+		                <div class="itemView" th:each="itemList : ${itemList}">
+		                    <div class="item_Detail">
+		                        <img class="item_Img" th:src="@{'/item/' + ${itemList.fileName}}">
+		                        <div class="detailName"><a th:text="${itemList.itemName}"></a></div>    
+		                    </div>
+		                    <div class="item_Price"><span class="itemPrice" th:text="${#numbers.formatInteger(itemList.itemPrice, 3, 'COMMA')}"></span></div><span>원</span>  
+		                    <div class="item_Quantity" th:text="${itemList.cartItemCnt}"></div>                    
+		                    <div class="item_totalPrice"><span th:text="${#numbers.formatInteger((T(java.lang.Integer).parseInt(itemList.itemPrice) * T(java.lang.Integer).parseInt(itemList.cartItemCnt)), 3, 'COMMA')}"></span></div><span>원</span>
+		                </div>            
+		                <hr>
+		                <div id="totalPrice">
+		                    <span>상품 총 금액: </span> <span class="item_PriceSum" th:text="${#numbers.formatInteger(totalItemPrice, 3, 'COMMA')}"></span><span >원</span> <span>&#43;</span> <span>배송비: </span> <span class="deliFee" th:text="${deliFee != 0 ? #numbers.formatInteger(deliFee, 3, 'COMMA') : 0}"></span><span >원</span> <span>&#61;</span> 
+		                    <span>총 결제금액: </span> <span class="totalPrice" th:text="${#numbers.formatInteger((T(java.lang.Integer).parseInt(totalItemPrice)+T(java.lang.Integer).parseInt(deliFee)), 3, 'COMMA')}"></span><span >원</span>
+		                </div>
+		                <hr>
+		            </div>          
 		            <div id="delivery">
 		                <p class="deliInfo">배송정보</p>&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span>
 		                <hr>
@@ -552,20 +602,20 @@
 		                        </tr>
 		                        <tr>
 		                            <th>수령인<span class="essential">&#42;</span></th>
-		                            <td><input type="text" name="recipient" id="recipient" th:value="${userInfo.userName}"></td>
+		                            <td><input type="text" name="reciName" id="recipient" th:value="${userInfo.userName}"></td>
 		                        </tr>
 		                        <tr>
 		                            <th>배송주소<span class="essential">&#42;</span></th>
 		                            <td>
-		                                <input type="text" name="addr1" id="addr1" placeholder="우편번호" th:value="${userInfo.userAddr1}"><input type="button" id="btnZipcode" onclick="findAddr();" value="우편번호 찾기"><br>
-		                                <input type="text" name="addr2" id="addr2" placeholder="주소" th:value="${userInfo.userAddr2}"><br>
-		                                <input type="text" name="addr3" id="addr3" placeholder="상세주소" th:value="${userInfo.userAddr3}">&ensp;<input type="text" name="extraAddr" id="extraAddr">
+		                                <input type="text" name="shippingAddr1" id="addr1" placeholder="우편번호" th:value="${userInfo.userAddr1}"><input type="button" id="btnZipcode" onclick="findAddr();" value="우편번호 찾기"><br>
+		                                <input type="text" name="shippingAddr2" id="addr2" placeholder="주소" th:value="${userInfo.userAddr2}"><br>
+		                                <input type="text" name="shippingAddr3" id="addr3" placeholder="상세주소" th:value="${userInfo.userAddr3}">&ensp;<input type="text" name="extraAddr" id="extraAddr">
 		                            </td>
 		                        </tr>
 		                        <tr>
 		                            <th>휴대폰<span class="essential">&#42;</span></th>
 		                            <td>
-		                                <select id="reciTel1">
+		                                <select id="reciTel1" name="reciTel1">
 		                                    <option value="010" selected>010</option>
 		                                    <option value="011">011</option>
 		                                    <option value="016">016</option>
@@ -579,7 +629,7 @@
 		                        <tr>
 		                            <th style="vertical-align: top;">배송메세지<br>(<span class="textCnt">0</span>/<span class="textTotal">200</span>)</th>
 		                            <td>
-		                                <textarea name="message" id="message" cols="50" rows="8" maxlength="200" placeholder="배송메세지를 입력해주세요."></textarea>
+		                                <textarea name="orderMessage" id="message" cols="50" rows="8" maxlength="200" placeholder="배송메세지를 입력해주세요."></textarea>
 		                            </td>
 		                        </tr>
 		                    </table>
@@ -587,12 +637,12 @@
 		                        <caption>주문자 정보</caption>
 		                        <tr>
 		                            <th>주문자<span class="essential">&#42;</span></th>
-		                            <td><input type="text" name="orderer" id="orderer" th:value="${userInfo.userName}"></td>
+		                            <td><input type="text" name="orderName" id="orderer" th:value="${userInfo.userName}"></td>
 		                        </tr>
 		                        <tr>
 		                            <th>휴대폰<span class="essential">&#42;</span></th>
 		                            <td>
-		                                <select id="orderTel1">
+		                                <select id="orderTel1" name="orderTel1">
 		                                    <option value="010">010</option>
 		                                    <option value="011">011</option>
 		                                    <option value="016">016</option>
@@ -617,8 +667,8 @@
 		            <div id="paymentOption">
 		                <p id="payment_title">결제방법</p><hr>
 		                <div id="btns">
-		                    <input type="button" name="bankTransfer" id="btnbankTransfer" value="무통장입금">&emsp;
-		                    <input type="button" name="kakaoPay" id="btnkakaoPay" value="카카오페이">
+		                    <input type="button" name="paymentOption" id="btnbankTransfer" value="무통장입금">&emsp;
+		                    <input type="button" name="paymentOption" id="btnkakaoPay" value="카카오페이">
 		                </div>
 		                <div id="bankPayment">
 	                        <span>국민은행 799502-04-026913</span>&emsp;&emsp;

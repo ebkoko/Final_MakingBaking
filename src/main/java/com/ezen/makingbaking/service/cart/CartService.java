@@ -11,4 +11,6 @@ public interface CartService {
 	List<CamelHashMap> getCartList(String userId);
 	
 	void deleteCart(Cart cart);
+	
+//	void deleteCartItem(List<Cart> cartItemList);
 }

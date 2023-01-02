@@ -81,19 +81,19 @@
 	            </div>
 	            <hr>
 	            <div id="completeMent">
-	                <p class="orderNumber">주문번호: 221207172500001</p>
+	                <span class="orderNumber">주문번호: </span><span>221207172500001</span>
 	                <p class="orderCompleteMent">주문 완료되었습니다!</p>
 	                <div id="bankPayment">
 	                    <span>입금계좌: 국민은행 799502-04-026913 예금주: 메이킹베이킹</span>
-	                    <p class="deposit"><span>입금액: </span><span class="totalPrice" >원</span>&emsp;
+	                    <p class="deposit"><span>입금액: </span><span class="totalPrice" th:text="${totalPayPrice}"></span><span>원</span>&emsp;
 	                    <span>입금기한: </span><span class="deadline" ></span><span>오후 11시 59분 59초</span></p>
 	                </div>
 	                <div id="kakaoPay">
-	                    <span>카카오페이 결제</span><span> &#124; 결제금액: </span><span class="totalPrice" th:text="${totalPrice}">원</span>
+	                    <span>카카오페이 결제</span><span> &#124; 결제금액: </span><span class="totalPrice" th:text="${totalPayPrice}"></span><span>원</span>
 	                </div>
 	                <div id="btns">
-	                    <input type="button" id="btnMypage" value="마이페이지" onclick="location.href='mypage'">
-	                    <input type="button" id="btnMain" value="메인으로" onclick="location.href='/home'">
+	                    <input type="button" id="btnMypage" value="마이페이지" onclick="location.href='/mypage/myPage'">
+	                    <input type="button" id="btnMain" value="메인으로" onclick="location.href='/home/main'">
 	                </div>
 	            </div>
 	            <hr>            
