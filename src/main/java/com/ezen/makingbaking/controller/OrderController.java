@@ -19,9 +19,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ezen.makingbaking.dto.OrderDTO;
 import com.ezen.makingbaking.entity.Cart;
 import com.ezen.makingbaking.entity.CustomUserDetails;
+import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.entity.Order;
 import com.ezen.makingbaking.entity.OrderItem;
 import com.ezen.makingbaking.service.cart.CartService;
+import com.ezen.makingbaking.service.item.ItemService;
 import com.ezen.makingbaking.service.order.OrderService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -36,6 +38,9 @@ public class OrderController {
 	
 	@Autowired
 	private CartService cartService;
+	
+	@Autowired
+	private ItemService itemService;
 	
 	@GetMapping("/order")
 	public ModelAndView orderView() {
@@ -116,12 +121,13 @@ public class OrderController {
 			Cart cart = Cart.builder()
 							.cartNo(Integer.parseInt(itemMapList.get(i).get("cartNo").toString()))
 							.itemNo(Integer.parseInt(itemMapList.get(i).get("itemNo").toString()))
+							.cartItemCnt(Integer.parseInt(itemMapList.get(i).get("orderItemCnt").toString()))
 							.build();
 			
 			cartItemList.add(cart);
 		}
 		
-//		cartService.deleteCartItem(cartItemList);
+		cartService.deleteCartItem(cartItemList);
 		
 		mv.setViewName("order/orderComplete.html");
 		return mv;

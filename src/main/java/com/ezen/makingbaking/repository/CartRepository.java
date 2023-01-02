@@ -46,7 +46,11 @@ public interface CartRepository extends JpaRepository<Cart, CartId> {
 			+ "    AND D.FILE_TYPE = 'ITEM'", nativeQuery = true)
 	List<CamelHashMap> findAllItemInfoinCart(@Param("userId") String userId);
 	
-//	@Modifying
-//	@Query(value = "UPDATE CART_STATUS SET 'D' FROM T_MB_CART WHERE CART_NO = :cartNo AND ITEM_NO = :itemNo")
-//	void updateCartStatus(@Param("cartNo") int cartNo, @Param("itemNo") int itemNo);
+	@Modifying
+	@Query(value = "UPDATE T_MB_CART SET CART_STATUS = 'D' WHERE CART_NO = :#{#cart.cartNo} AND ITEM_NO = :#{#cart.itemNo}", nativeQuery=true)
+	void updateCartStatus(@Param("cart") Cart cart);
+	
+	@Modifying
+	@Query(value = "UPDATE T_MB_ITEM SET ITEM_STOCK = ITEM_STOCK - :cartItemCnt WHERE ITEM_NO = :itemNo", nativeQuery=true)
+	void updateItemStock(@Param("itemNo") int itemNo, @Param("cartItemCnt") int cartItemCnt);
 }
