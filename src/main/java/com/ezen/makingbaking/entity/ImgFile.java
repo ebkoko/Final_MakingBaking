@@ -3,9 +3,8 @@ package com.ezen.makingbaking.entity;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicInsert;
 
@@ -32,4 +31,8 @@ public class ImgFile {		// 상품, 클래스, 리뷰에서 쓰는 파일 테이�
 	private String fileName;		// 파일명
 	private String fileOriginName;		// 원본파일명
 	private String filePath;		// 파일 경로
+	@Transient
+	private String fileStatus;		//파일 상태
+	@Transient
+	private String newFileName;		//새로운파일명
 }

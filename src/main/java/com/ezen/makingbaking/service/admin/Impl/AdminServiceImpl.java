@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
-import com.ezen.makingbaking.repository.FileRepository;
+import com.ezen.makingbaking.repository.ImgFileRepository;
 import com.ezen.makingbaking.repository.ItemRepository;
 import com.ezen.makingbaking.service.admin.AdminService;
 
@@ -19,11 +19,12 @@ public class AdminServiceImpl implements AdminService {
 	private ItemRepository itemRepository;
 	
 	@Autowired
-	private FileRepository fileRepository;
+	private ImgFileRepository imgFileRepository;
+	
 
+	//item
 	@Override
 	public List<Item> getItemList(Item item) {
-		// TODO Auto-generated method stub
 		return itemRepository.findAll();
 	}
 
@@ -31,17 +32,17 @@ public class AdminServiceImpl implements AdminService {
 	public Page<Item> getPageItemList(Item item, Pageable pageable) {
 		if(item.getSearchKeyword() != null && !item.getSearchKeyword().equals("")) {
 			if(item.getSearchCondition().equals("ALL")) {
-				return itemRepository.findByItemNameContainingOrItemCateContainingOrItemStatusContaining
+				return itemRepository.findByItemNameContainingOrItemCateContainingOrItemStatus
 			               (item.getSearchKeyword(), 
 			            	item.getSearchKeyword(),
-			            	item.getSearchKeyword(),
+			            	item.getSearchKeyword().charAt(0),
 			            	pageable);
 			      } else if (item.getSearchCondition().equals("ITEMNAME")) {
 			         return itemRepository.findByItemNameContaining(item.getSearchKeyword(), pageable);
 			      } else if (item.getSearchCondition().equals("ITEMCATE")) {
 			    	  return itemRepository.findByItemCateContaining(item.getSearchKeyword(), pageable);
 			      }  else if (item.getSearchCondition().equals("ITEMSTATUS")) {
-				         return itemRepository.findByItemStatusContaining(item.getSearchKeyword(), pageable);
+				         return itemRepository.findByItemStatus(item.getSearchKeyword().charAt(0), pageable);
 				  } else {
 			    	  return itemRepository.findAll(pageable);
 			      }
@@ -60,12 +61,22 @@ public class AdminServiceImpl implements AdminService {
 		for(ImgFile imgFile : uploadFileList) {
 			imgFile.setFileReferNo(item.getItemNo());
 			
-			int imgFileNo = fileRepository.getMaxFileNo(item.getItemNo());
+			int imgFileNo = imgFileRepository.getMaxFileNo(item.getItemNo());
 			imgFile.setFileNo(imgFileNo);
 			imgFile.setFileType("item");
-			fileRepository.save(imgFile);
+			imgFileRepository.save(imgFile);
 		}
 		
+	}
+	
+	@Override
+	public Item getItem(int itemNo) {
+		return itemRepository.findById(itemNo).get();
+	}
+
+	@Override
+	public List<ImgFile> getItemFileList(int itemNo) {
+		return imgFileRepository.findByFileReferNoAndFileType(itemNo, "item");
 	}
 	
 	
@@ -74,6 +85,8 @@ public class AdminServiceImpl implements AdminService {
 		itemRepository.deleteById(itemNo);
 		
 	}
+
+	
 
 	
 	

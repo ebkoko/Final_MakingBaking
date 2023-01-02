@@ -4,15 +4,19 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,10 +29,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.makingbaking.common.FileUtils;
+import com.ezen.makingbaking.dto.BoardDTO;
+import com.ezen.makingbaking.dto.ImgFileDTO;
 import com.ezen.makingbaking.dto.ItemDTO;
+import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.service.admin.AdminService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 
@@ -102,7 +111,7 @@ public class AdminController {
 	}
 	
 	
-	//insert
+	//상품등록
 	@GetMapping("/insertItemView")
 	public ModelAndView insertItemView() {
 		
@@ -164,74 +173,215 @@ public class AdminController {
 		response.sendRedirect("/admin/itemList");
 	}
 	
+	
+	//상품상세보기
 	@GetMapping("/item/{itemNo}")
-//	public ModelAndView getItem(@PathVariable int itemNo) {
-//		Item item = adminService.getItem(itemNo);
+	public ModelAndView getItem(@PathVariable int itemNo) {
+		Item item = adminService.getItem(itemNo);
+		
+		ItemDTO itemDTO = ItemDTO.builder()
+									.itemNo(item.getItemNo())
+									.itemName(item.getItemName())
+									.itemPrice(item.getItemPrice())
+									.itemRegdate(
+											item.getItemRegdate() == null ?
+											null :
+											item.getItemRegdate().toString())
+									.itemStatus(item.getItemStatus())
+									.build();
+		
+		List<ImgFile> itemFileList = adminService.getItemFileList(itemNo);
+		
+		//itemFileDTO를 담는 List
+		List<ImgFileDTO> imgFileDTOList = new ArrayList<ImgFileDTO>();
+		
+		for(ImgFile imgFile : itemFileList) {
+			ImgFileDTO imgFileDTO = ImgFileDTO.builder()
+													.fileReferNo(itemNo)
+													.fileNo(itemNo)
+													.fileNo(imgFile.getFileNo())
+													.fileName(imgFile.getFileName())
+													.fileOriginName(imgFile.getFileOriginName())
+													.filePath(imgFile.getFilePath())
+													.fileType(imgFile.getFileType())
+													.build();
+			
+			imgFileDTOList.add(imgFileDTO);
+		}
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("admin/itemUpdate.html");
+		mv.addObject("getItem", itemDTO);
+		mv.addObject("itemFileList", imgFileDTOList);
+		
+		return mv;
+	}
+	
+	
+	//상품 수정
+	@Transactional
+	@PutMapping("/updateItem")
+//	public ResponseEntity<?> updateItem(ItemDTO itemDTO,
+//			HttpServletResponse response, MultipartFile[] uploadFiles,
+//			MultipartFile[] changedFiles, HttpServletRequest request,
+//			@RequestParam("originFiles") String originFiles) throws IOException { 
+//		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
 //		
-//		ItemDTO itemDTO = ItemDTO.builder()
-//									.itemNo(item.getItemNo())
-//									.itemTitle(item.getItemTitle())
-//									.itemContent(item.getItemContent())
-//									.itemWriter(item.getItemWriter())
-//									.itemRegdate(
-//											item.getItemRegdate() == null ?
-//											null :
-//											item.getItemRegdate().toString())
-//									.itemCnt(item.getItemCnt())
-//									.build();
+//		List<ImgFileDTO> originFileList = new ObjectMapper().readValue(originFiles, 
+//												new TypeReference<List<ImgFileDTO>>() {});
 //		
-//		List<ImgFile> itemFileList = adminService.getItemFileList(itemNo);
+//		String attachPath = request.getSession().getServletContext().getRealPath("/") +
+//					"/item/";
 //		
-//		//itemFileDTO를 담는 List
-//		List<ImgFileDTO> imgFileDTOList = new ArrayList<ImgFileDTO>();
+//		File directory = new File(attachPath);
 //		
-//		for(ImgFile imgFile : imgFileList) {
-//			ImgFileDTO imgFileDTO = ImgFileDTO.builder()
-//													.itemFileNo(itemNo)
-//													.itemFileNo(imgFile.getItemFileNo())
-//													.itemFileNm(imgFile.getItemFileNm())
-//													.itemOriginFileNm(imgFile.getItemOriginFileNm())
-//													.itemFilePath(imgFile.getItemFilePath())
-//													.itemFileRegdate(imgFile.getItemFileRegdate().toString())
-//													.itemFileCate(imgFile.getItemFileCate())
-//													.build();
-//			
-//			imgFileDTOList.add(imgFileDTO);
+//		if(!directory.exists()) {
+//			directory.mkdir();
 //		}
 //		
-//		ModelAndView mv = new ModelAndView();
-//		mv.setViewName("item/getItem.html");
-//		mv.addObject("getItem", itemDTO);
-//		mv.addObject("itemFileList", imgFileDTOList);
+//		//DB에서 수정, 삭제, 추가 될 파일 정보
+//		List<ImgFile> uFileList = new ArrayList<ImgFile>();
 //		
-//		return mv;
-//	}
-	
-	//상품 상세보기
-//	public ModelAndView getItem(@PathVariable int itemNo) {
-//		Item item = adminService.getItem(itemNo);
-//		
-//		ItemDTO itemDTO = ItemDTO.builder()
-//									.itemNo(item.getItemNo())
-//									.itemName(item.getItemName())
-//									.itemPrice(item.getItemPrice())
-//									.itemRegdate(
-//											item.getItemRegdate() == null ?
+//		try {
+//			Item item = Item.builder()
+////					상품상태, 카테고리, 등록일, 이름, 소제목, 설명, 가격, 유통기한, 원산지, 알레르기정보, 첨부파일, 재고
+//							.itemNo(itemDTO.getItemNo())
+//							.itemStatus(itemDTO.getItemStatus())
+//							.itemCate(itemDTO.getItemCate())
+//							.itemRegdate(
+//									itemDTO.getItemRegdate() == null ||
+//									itemDTO.getItemRegdate().equals("") ?
 //											null :
-//											item.getItemRegdate().toString())
-//									.itemStatus(item.getItemStatus())
-//									.build();
+//												LocalDateTime.parse(itemDTO.getItemRegdate()))
+//							.itemName(itemDTO.getItemName())
+//							.itemMinName(itemDTO.getItemMinName())
+//							.itemDetails(itemDTO.getItemDetails())
+//							.itemPrice(itemDTO.getItemPrice())
+//							.itemExpDate(itemDTO.getItemExpDate())
+//							.itemOrigin(itemDTO.getItemOrigin())
+//							.itemAllergyInfo(itemDTO.getItemAllergyInfo())
+//							.itemStock(itemDTO.getItemStock())
+//							.build();
+//					
+//			//파일 처리
+//			for(int i = 0; i < originFileList.size(); i++) {
+//				//수정되는 파일 처리
+//				if(originFileList.get(i).getFileStatus().equals("U")) {
+//					for(int j = 0; j < changedFiles.length; j++) {
+//						if(originFileList.get(i).getNewFileName().equals(
+//								changedFiles[j].getOriginalFilename())) {
+//							ImgFile imgFile = new ImgFile();
+//							
+//							MultipartFile file = changedFiles[j];
+//							
+//							imgFile = FileUtils.parseFileInfo(file, attachPath);
+//							
+//							//imgFile.setFileReferNo();
+//							imgFile.setFileNo(originFileList.get(i).getFileNo());
+//							imgFile.setFileStatus("U");
+//							
+//							uFileList.add(imgFile);
+//						}
+//					}
+//				//삭제되는 파일 처리
+//				} else if (originFileList.get(i).getFileStatus().equals("D")) {
+//					ImgFile boardFile = new ImgFile();
+//					
+//					boardFile.setBoard(board);
+//					boardFile.setFileNo(originFileList.get(i).getFileNo());
+//					boardFile.setFileStatus("D");
+//					
+//					//실제 파일 삭제
+//					File dFile = new File(attachPath + originFileList.get(i).getFileName());
+//					dFile.delete();
+//					
+//					uFileList.add(boardFile);
+//				}
+//			}
+//			
+//			//추가된 파일 처리
+//			if(uploadFiles.length > 0) {
+//				for(int i = 0; i < uploadFiles.length; i++) {
+//					MultipartFile file = uploadFiles[i];
+//					
+//					if(file.getOriginalFilename() != null && 
+//							!file.getOriginalFilename().equals("")) {
+//						ImgFile boardFile = new ImgFile();
+//						
+//						boardFile = FileUtils.parseFileInfo(file, attachPath);
+//						
+//						boardFile.setBoard(board);
+//						boardFile.setFileStatus("I");
+//						
+//						uFileList.add(boardFile);
+//					}
+//				}
+//			}
+//
+//			adminService.updateBoard(item, uFileList);
+//			
+//			//board = boardService.getBoard(boardDTO.getBoardNo());
+//			
+//			BoardDTO returnBoard = BoardDTO.builder()
+//											.boardNo(board.getBoardNo())
+//											.boardTitle(board.getBoardTitle())
+//											.boardContent(board.getBoardContent())
+//											.boardWriter(board.getBoardWriter())
+//											.boardRegdate(
+//													board.getBoardRegdate() == null ?
+//													null :
+//													board.getBoardRegdate().toString())
+//											.boardCnt(board.getBoardCnt())
+//											.build();
+//			
+//			List<BoardFile> boardFileList = boardService.getBoardFileList(board.getBoardNo());
+//			
+//			List<BoardFileDTO> boardFileDTOList = new ArrayList<BoardFileDTO>();
+//			
+//			for(BoardFile boardFile : boardFileList) {
+//				BoardFileDTO boardFileDTO = BoardFileDTO.builder()
+//												.boardNo(board.getBoardNo())
+//												.boardFileNo(boardFile.getBoardFileNo())
+//												.boardFileNm(boardFile.getBoardFileNm())
+//												.boardOriginFileNm(boardFile.getBoardOriginFileNm())
+//												.boardFilePath(boardFile.getBoardFilePath())
+//												.boardFileRegdate(boardFile.getBoardFileRegdate().toString())
+//												.boardFileCate(boardFile.getBoardFileCate())
+//												.build();
+//				
+//				boardFileDTOList.add(boardFileDTO);
+//			}
+//			
+//			Map<String, Object> returnMap = new HashMap<String, Object>();
+//			
+//			returnMap.put("getBoard", returnBoard);
+//			returnMap.put("boardFileList", boardFileDTOList);
+//			
+//			responseDTO.setItem(returnMap);
+//			
+//			return ResponseEntity.ok().body(responseDTO);
+//		} catch(Exception e) {
+//			responseDTO.setErrorMessage(e.getMessage());
+//			
+//			return ResponseEntity.badRequest().body(responseDTO);
+//		}
 //		
+//		//response.sendRedirect("/board/board/" + boardDTO.getBoardNo());
+//	}
+	
+	
+	//상품수정 상세보기
+	@GetMapping("/updateBoardCnt/{boardNo}")
+//	public void updateBoardCnt(@PathVariable int boardNo,
+//			HttpServletResponse response) throws IOException {
+//		boardService.updateBoardCnt(boardNo);
+//		
+//		response.sendRedirect("/board/board/" + boardNo);
 //		
 //	}
 	
 	
-	
-	
-	
-	@PutMapping("/updateItem")
-//	public ResponseEntity<?> updateItem(ItemDTO itemDTO, HttpServletResponse response)
-	
+	//상품 삭제
 	@DeleteMapping("/delItem")
 	public void deleteItem(@RequestParam("itemNo") int itemNo) {
 		adminService.deleteItem(itemNo);
@@ -243,62 +393,7 @@ public class AdminController {
 	
 	//dayclass
 	//원데이클래스 리스트
-//	@GetMapping("/dayclassList")
-//	public ModelAndView getDayclassList(DayclassDTO dayclassDTO,
-//			@PageableDefault(page = 0, size = 10) Pageable pageable) {
-//		Dayclass dayclass = Dayclass.builder()
-//									.searchCondition(dayclassDTO.getSearchCondition())
-//									.searchKeyword(dayclassDTO.getSearchKeyword())
-//									.build();
-//		List<Dayclass> dayclassList = adminService.getDayclassList(dayclass);
-//		
-//		Page<Dayclass> pageDayclassList = adminService.getPageItemList(item, pageable);
-//	      
-//	      Page<ItemDTO> pageItemDTOList = pageItemList.map(pageItem -> 
-//	                                             ItemDTO.builder()
-//	                                                      .itemNo(pageItem.getItemNo())
-//	                                                      .itemName(pageItem.getItemName())
-//	                                                      .itemPrice(pageItem.getItemPrice())
-//	                                                      .itemRegdate(
-//	                                                                     pageItem.getItemRegdate() == null?
-//	                                                               null :
-//	                                                               pageItem.getItemRegdate().toString())
-//	                                                      .itemStatus(pageItem.getItemStatus())
-//	                                                      .build()
-//	                                             );
-//		
-//		List<ItemDTO> getItemList = new ArrayList<ItemDTO>();
-//		for(int i = 0; i < itemList.size(); i++) {
-//			ItemDTO returnItem = ItemDTO.builder()
-//											.itemNo(itemList.get(i).getItemNo())
-//											.itemName(itemList.get(i).getItemName())
-//											.itemPrice(itemList.get(i).getItemPrice())
-//											.itemRegdate(
-//													itemList.get(i).getItemRegdate() == null ?
-//													null :
-//													itemList.get(i).getItemRegdate().toString())
-//
-//											.itemStatus(itemList.get(i).getItemStatus())
-//											.build();
-//
-//			getItemList.add(returnItem);
-//		}
-//		
-//		ModelAndView mv = new ModelAndView();
-//		mv.setViewName("admin/itemList.html");
-//		mv.addObject("getItemList", pageItemDTOList);
-//		
-//		if(itemDTO.getSearchCondition() != null && !itemDTO.getSearchCondition().equals("")) {
-//			mv.addObject("searchCondition", itemDTO.getSearchCondition());
-//		}
-//		
-//		if(itemDTO.getSearchKeyword() != null && !itemDTO.getSearchKeyword().equals("")) {
-//			mv.addObject("searchKeyword", itemDTO.getSearchKeyword());
-//		}
-//		
-//		return mv;
-//	}
-//	
+
 	
 	
 	
@@ -323,7 +418,16 @@ public class AdminController {
 	
 	
 	
-	
+	//임시보기
+	@GetMapping("/pre")
+	public ModelAndView preView() {
+		
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("admin/itemUpdate.html");
+			
+		return mv;
+	}
 	
 	
 	//@GetMapping("/")
