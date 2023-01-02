@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class OrderDTO {
-	private int orderNo;
+	private Long orderNo;
 	private String userId;
 	private String orderDate;
 	private String orderStatus;
@@ -21,5 +21,11 @@ public class OrderDTO {
 	private String shippingAddr3;
 	private int orderDeliFee;
 	private int orderTotalPrice;
+	private int orderTotalPayPrice;
 	private String orderPayment;
+	private String reciName;
+	private String reciTel;
+	private String orderMail;
+	private String orderMessage;
+	private String depositor;
 }

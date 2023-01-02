@@ -309,6 +309,7 @@
 						if($("#chk" + index).is(":checked")) {
 							totalItemPrice += $(this).val() * $(this).attr("data-default-price");
 							const item = {
+								cartNo: getCartList[index].cartNo,
 								itemNo: getCartList[index].itemNo,
 								itemName: getCartList[index].itemName,
 								cartItemCnt: $(this).val(),

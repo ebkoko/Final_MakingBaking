@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @IdClass(OrderItemId.class)
 public class OrderItem {	// 주문아이템 테이블, ORDER 테이블에 들어가는 상품정보(+회원이 선택한 수량)
 	@Id
-	private int orderNo;	// 주문번호
+	private long orderNo;	// 주문번호
 	@Id
 	private int itemNo;		// 상품번호
 	private int orderItemCnt;	// 주문수량

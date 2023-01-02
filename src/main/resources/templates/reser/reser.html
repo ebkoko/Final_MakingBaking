@@ -65,31 +65,31 @@
 				#list_title+hr {
 					margin-bottom: 15px;
 				}
-				#class_Img {
+				.class_Img {
 				    margin-left: 80px;
 				    width: 100px;
 				}
-				#class_Detail {
+				.class_Detail {
 				    display: inline-block;
 				    width: 58%;
 				    vertical-align: middle;
 				}
-				#detailName {
+				.detailName {
 				    display: inline-block;
 				    margin-left: 10px;
 				    vertical-align: top;
 				}
-				#class_Price {
+				.class_Price {
 				    display: inline-block;
 				    width: 10%;
 				    text-align: right;
 				}
-				#class_Quantity {
+				.class_Quantity {
 				    display: inline-block;
 				    width: 11%;
 				    text-align: right;
 				}
-				#class_totalPrice {
+				.class_totalPrice {
 				    display: inline-block;
 				    width: 19%;
 				    text-align: right;
@@ -103,7 +103,7 @@
 				#totalPrice+hr {
 				    clear: both;
 				}
-				#classView+hr {
+				.classView+hr {
 					margin-top: 15px;
 					margin-bottom: 5px;
 				}
@@ -172,6 +172,7 @@
 				textarea {
 					border: 1px solid #DCDCDC;
 					resize: none;
+					padding: 2px;
 				}
 				#reservation+hr {
 				    clear: both;
@@ -301,6 +302,23 @@
 						$("#reserForm").submit();
 					});
 					
+					// 요청사항 글자수 세기, 글자수 제한
+					$("#request").keyup(function(e) {
+						let msg = $(this).val();
+						
+						// 글자수 세기
+						if(msg.length == 0 || msg == '') {
+							$(".textCnt").text(0);
+						} else {
+							$(".textCnt").text(msg.length);
+						}
+						
+						// 글자수 제한
+						if(msg.length > 200) {
+							$(this).val($(this).val().substring(0, 200));
+						}
+					});
+					
 					// 무통장입금 버튼을 클릭했을 때
 					$("#btnbankTransfer").on('click', function() {
 						isKakaoPay = false;
@@ -354,18 +372,18 @@
 	            </div>
 	            <hr>
 	            <div id="reser_class">
-	                <div id="classView">
-	                    <div id="class_Detail">
-	                        <img id="class_Img" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
-	                        <div id="detailName"><a th:text="${className}"></a>클래스명</div>    
+	                <div class="classView">
+	                    <div class="class_Detail">
+	                        <img class="class_Img" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
+	                        <div class="detailName"><a th:text="${className}"></a>클래스명</div>    
 	                    </div>
-	                    <div  id="class_Price">원</div>  
-	                    <div  id="class_Quantity">2</div>                    
-	                    <div  id="class_totalPrice">원</div>
+	                    <div  class="class_Price"><span class="classPrice" ></span></div><span>원</span>  
+	                    <div  class="class_Quantity">2</div>                    
+	                    <div  class="class_totalPrice"><span></span></div><span>원</span>
 	                </div>            
 	                <hr>
 	                <div id="totalPrice">
-	                    <span>총 결제금액: </span><span >원</span>
+	                    <span>총 결제금액: </span> <span class="totalPrice" ></span><span >원</span>
 	                </div>
 	                <hr>
 	            </div>     
@@ -385,7 +403,7 @@
 		                        <tr>
 		                            <th>휴대폰<span class="essential">&#42;</span></th>
 		                            <td>
-		                                <select id="orderTel1">
+		                                <select id="orderTel1" name="orderTel1">
 		                                    <option value="010">010</option>
 		                                    <option value="011">011</option>
 		                                    <option value="016">016</option>
@@ -407,7 +425,7 @@
 		                        <tr>
 		                            <th>휴대폰<span class="essential">&#42;</span></th>
 		                            <td>
-		                                <select id="reciTel1">
+		                                <select id="reciTel1" name="reciTel1">
 		                                    <option value="010">010</option>
 		                                    <option value="011">011</option>
 		                                    <option value="016">016</option>
@@ -419,9 +437,9 @@
 		                            </td>
 		                        </tr>
 		                        <tr>
-		                            <th style="vertical-align: top;">요청사항</th>
+		                            <th style="vertical-align: top;">요청사항<br>(<span class="textCnt">0</span>/<span class="textTotal">200</span>)</th>
 		                            <td>
-		                                <textarea name="request" id="request" cols="50" rows="8" placeholder="요청사항을 입력해주세요."></textarea>
+		                                <textarea name="request" id="request" cols="50" rows="8" maxlength="200" placeholder="요청사항을 입력해주세요."></textarea>
 		                            </td>
 		                        </tr>
 		                    </table>   
