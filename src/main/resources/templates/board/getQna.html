@@ -1,151 +1,59 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Making Baking</title>  <!-- 회원 Q&A 작성 페이지 -->
-  <style>
-    * {
-      font-family: sans-serif;
-      margin: 0; padding: 0;
-      box-sizing: border-box;
-      outline: none; 
-      border: none;
-      text-decoration: none;
-    }
-    #container {
-      width: 1200px; margin: 0 auto;
-    }
-    #high-nav {
-      margin-top: 100px;
-    }
-    #high-nav:first-child { margin-left: 20px;}
-    #high-nav>#qna-button {
-      width: 130px; height: 50px;
-      display: inline-block;
-      font-size: 18px; font-weight: bold; 
-      color: white; 
-      background-color: #DC143C;
-    }
-    #high-nav>#event-button, #high-nav>#notice-button {
-      width: 130px; height: 50px;
-      display: inline-block;
-      font-size: 18px; font-weight: bold; 
-      color: black; 
-      background-color: #fff;
-      border: 1px solid #DC143C;
-    }
-    #high-container {
-      width: 100%; height: fit-content;
-      background-color: #FFFAF0;
-      padding: 30px;
-    }
-    #mid-container{
-      width: 100%; height: fit-content;
-      background-color: #fff;
-      padding: 30px;
-    }
-    #question-title { 
-      width: 100%; height: 40px;
-    }
-    h3 {
-      font-size: 22px;
-      margin-right: 20px;
-      display: inline-block;
-    }
-    #question-content {
-      width: 100%; height: fit-content;
-      border: 1px solid lightgray;
-      border-radius: 10px;
-      font-size: 18px;
-      padding: 15px;
-      margin: 10px 0;
-    }
-    hr {
-      height: 1px;
-      background-color: black;
-      margin: 30px 0;
-    }
-    #answer-content {
-      width: 100%; height: fit-content;
-      border: 1px solid lightgray;
-      border-radius: 10px;
-      padding: 15px;
-      margin: 10px 0;
-      margin-bottom: 50px;
-    }
-    #answer-text {
-      padding: 15px;
-      font-size: 20px;
-    }
-    #btn-container {
-      text-align: right;
-    }
-    #left-btn {
-      float: left;
-    }
-    #right-btn {
-      float: right;
-    }
-    #listbtn {
-      width: 100px; height: 40px;
-      font-size: 15px; font-weight: bold; 
-      color: white; 
-      background-color: #696969;
-      border-radius: 5px;
-    }
-    #insertbtn {
-      width: 100px; height: 40px;
-      font-size: 15px; font-weight: bold; 
-      color: white; 
-      background-color: #DC143C;
-      border-radius: 5px;
-    }
-    #btn-container:after{
-      content:'';
-      display:block;
-      clear:both;
-    }
-  </style>
+<html lang="ko"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head> <!-- Q&A 상세 페이지 -->
+	<th:block layout:fragment="css">
+		<link rel="stylesheet" th:href="@{/css/board/getBoard.css}"/>
+	</th:block>
 </head>
 <body>
-<div id="container">
-  <div id="high-nav">
-    <button id="qna-button">
-      Q&A
-    </button>
-    <button id="notice-button">
-      공지사항
-    </button>
-    <button id="event-button">
-      이벤트
-    </button>
-  </div>
-  <div id="high-container">
-    <div id="mid-container">
-      <div id="question-title">
-        <h3>Q. 교환하고 싶은데 배송비는 얼마나 부과되나요?</h3>
-      </div>
-      <div id="question-content">
-        <p>12월 12일에 물건을 구매했는데, 제가 원하는 상품이 아니예요.. 12월 12일에 물건을 구매했는데, 제가 원하는 상품이 아니예요.. </p>
-      </div>
-      <hr>
-      <div id="answer-content">        
-        <p id="answer-text">
-          안녕하세요 고객님, Making Baking 상담원 ooo입니다. 재판매가 불가한 상품의 특성 상 단순변심에 의한 교환/반품은 어려운 점 양해 부탁드립니다. 감사합니다.
-        </p>
-      </div>
-      <div id="btn-container">
-        <div id="left-btn">
-          <input type="button" id="listbtn" value="목록">
-        </div>
-        <div id="right-btn">
-          <input type="submit" id="insertbtn" value="등록">
-        </div>
-      </div>      
-    </div>
-  </div>
+<div layout:fragment="content">
+	<div id="container" style="height: 800px;">
+	  <div id="high-nav">
+	    <button id="qna-button" style="background-color: #28693F; color: white; ">
+	      문의사항
+	    </button>
+	    <button id="notice-button">
+	      공지사항
+	    </button>
+	    <button id="event-button">
+	      이벤트
+	    </button>
+	  </div>
+	  <div id="high-container">
+	    <div id="mid-container">
+	      <div id="question-title">
+	        <h3 th:text="${getBoard.boardTitle}"></h3>
+	      </div>
+	      <div id="question-content">
+	        <p th:text="${getBoard.boardContent}"></p>
+	      </div>
+	      <hr>
+	      <th:block th:if="${getBoard.boardReply}">
+		      <div id="answer-content" style="border: 1px solid red;">        
+		        <p id="answer-text" th:text="${getBoard.boardReply}"></p>
+		      </div>
+	      </th:block>
+	      <th:block th:unless="${getBoard.boardReply}">
+	     	 <div id="answer-content">        
+		        <p id="answer-text">
+		        	답변없음
+		        </p>
+		      </div>
+	      </th:block>
+	      <div id="btn-container">
+	        <div id="left-btn">
+	          <input type="button" id="listbtn" value="목록">
+	        </div>
+	        <div id="right-btn">
+	          <input type="submit" id="insertbtn" value="등록">
+	        </div>
+	      </div>      
+	    </div>
+	  </div>
+	</div>
 </div>
 </body>
 </html>

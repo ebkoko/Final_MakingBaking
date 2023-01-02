@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko"
 	xmlns:th="http://www.thymeleaf.org"
@@ -14,7 +13,7 @@
 				$(".pagination_button a").on("click", function(e) {
 					e.preventDefault();
 					$.ajax({
-						url: '/board/qna/1',
+						url: '/board/qnaList/1',
 						type: 'post',
 						data: {	page: $(e.target).attr("data-page-num")},
 						success: function(obj) {
@@ -26,13 +25,14 @@
 								htmlStr += `
 									<tr>
 										<td class="list-title">
-											<a href="/board/updateBoardCnt/${obj.pageItems.content[i].boardNo}">
+											<a href="/board/updateQnaCnt/${obj.pageItems.content[i].boardNo}">
 											${obj.pageItems.content[i].boardTitle}
 											</a>
 										</td>			
 										<td class="list-writer">${obj.pageItems.content[i].boardWriter}</td>
 										<td class="list-answer">${obj.pageItems.content[i].boardReply == null ? '답변대기' : '답변완료'}</td>
 										<td class="list-date">${obj.pageItems.content[i].boardRegdate == null ? '' : obj.pageItems.content[i].boardRegdate.substring(0, 10)}</td>
+										<td class="list-cnt">${obj.pageItems.content[i].boardCnt}</td>
 									</tr>
 								`;
 							}
@@ -99,20 +99,22 @@
 	    <div id="mid-container">
 	      <table id="list-table">
 	        <tr>
-	          <th width="50%" id="th-title">제목</th>
+	          <th width="48%" id="th-title">제목</th>
 	          <th width="15%" id="th-writer">작성자</th>
 	          <th width="15%" id="th-answer">답변여부</th>
-	          <th width="20%" id="th-date">작성일</th>
+	          <th width="15%" id="th-date">작성일</th>
+	          <th width="7%" id="th-cnt">조회수</th>
 	        </tr>
 	        <tr th:each="qna: ${getQnaList}">
 				<td class="list-title">
 					<a th:text="${qna.boardTitle}"
-					   th:href="@{/board/updateBoardCnt/{boardNo} (boardNo=${qna.boardNo})}">
+					   th:href="@{/board/updateQnaCnt/{boardNo} (boardNo=${qna.boardNo})}">
 					</a>
 				</td>			
 				<td class="list-writer" th:text="${qna.boardWriter}"></td>
 				<td class="list-answer" th:text="${qna.boardReply eq null ? '답변대기' : '답변완료'}"></td>
 				<td class="list-date" th:text="${qna.boardRegdate eq null ? '' : #strings.substring(qna.boardRegdate, 0, 10)}"></td>
+				<td class="list-cnt" th:text="${qna.boardCnt}"></td>
 			</tr>
 	      </table>
 	      <br/>
@@ -134,15 +136,15 @@
 					<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
 						<a th:data-page-num="${pageNumber + 1}">></a>
 					</li>
-				</ul>
-			</div>
-		  <!-- <th:block  th:if="${session.userId == 'admin'}">
-	      <div id="btn-container">
+			  </ul>
+		  </div>
+		  <th:block sec:authorize="hasRole('ROLE_ADMIN')" th:remove="tag">
+	      <div id="btn-container" >
 		    <div id="right-btn">
 		      <input type="button" id="insertQna" value="등록" onclick="">
 		    </div>
 		  </div>    
-		  </th:block> -->
+		  </th:block>
 	    </div>
 	  </div>
 	</div>

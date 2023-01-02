@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.ezen.makingbaking.entity.Board;
 
@@ -17,7 +18,7 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
 
 	@Modifying
 	@Query(value="UPDATE T_MB_BOARD SET BOARD_CNT = BOARD_CNT + 1 WHERE BOARD_NO = :boardNo", nativeQuery=true)
-	void updateBoardCnt(int boardNo);
+	void updateBoardCnt(@Param(value = "boardNo") int boardNo);
 	
 	
 	
