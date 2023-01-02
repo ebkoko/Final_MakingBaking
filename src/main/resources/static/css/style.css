@@ -3,7 +3,7 @@
   box-sizing: border-box;
   outline: none; border:none;
   text-decoration: none;
-  
+  list-style: none;
 }
 html, body {
   height: 100%;
@@ -34,7 +34,7 @@ html, body {
 }
 .header .navbar a{
   margin:0 1rem;
-  font-size: 1.7rem;
+  font-size: 2rem;
   color:black;
   font-weight: 600;
 }
