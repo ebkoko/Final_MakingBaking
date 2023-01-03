@@ -3,6 +3,7 @@ package com.ezen.makingbaking.service.user.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ezen.makingbaking.dto.UserDTO;
 import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.repository.UserRepository;
 import com.ezen.makingbaking.service.user.UserService;
@@ -24,5 +25,10 @@ public class UserServiceImpl implements UserService {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public String findid(UserDTO userDTO) {
+		return null;
 	}
 }

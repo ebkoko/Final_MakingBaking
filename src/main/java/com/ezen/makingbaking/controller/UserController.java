@@ -25,6 +25,8 @@ import com.ezen.makingbaking.dto.UserDTO;
 import com.ezen.makingbaking.entity.CustomUserDetails;
 import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.service.user.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/user")
@@ -128,6 +130,25 @@ public class UserController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("user/findID.html");
 		return mv;
+	}
+	
+	@PostMapping("/findID")
+	public String findID(UserDTO userDTO) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, String> resultMap = new HashMap<String, String>();
+			
+			String findId = userService.findid(userDTO);
+			
+			if(findId != null) {
+				resultMap.put("msg", "ok");
+				resultMap.put("findID", findId);
+			} else {
+				resultMap.put("msg", "fail");
+			}
+			
+			String jsonStr = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(resultMap);
+			
+			return jsonStr;
 	}
 	
 	@GetMapping("/findPW")

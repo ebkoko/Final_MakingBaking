@@ -35,6 +35,7 @@
   border-radius: 0.5rem
 }
 .login2 {
+  font-size: 16px;
   background: white;
   color: #28693F;
   border: 1px solid #28693F;
@@ -50,7 +51,7 @@
   border-radius: .5rem;
 }
 
-.findPw {
+.findPw2 {
 	display: flex;
     font-size: 12px;
     margin: 0 0 2rem 21rem;

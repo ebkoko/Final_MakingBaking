@@ -11,16 +11,19 @@
   			<script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
 			<script th:inline="javascript">
 				$(function() {
-					$('#userGender option:selected').val();
-					$('#userGender option:selected').text();
+					let userId = false;
 					let checkId = false;
-					var pw = false;
+					let userPw = false;
 					let pwRecheck = false;
 					let name = false;
 					let birth = false;
 					let tel = false;
 					let mail = false;
 					let addr3 = false;
+					
+					$('#userGender option:selected').val();
+					$('#userGender option:selected').text();
+					
 					$("#IdCheck").on("click", function() {
 						$.ajax({
 							url: "/user/idcheck",
@@ -49,28 +52,141 @@
 						$("#IdCheck").attr("disabled", false);
 					});
 					
+						
+					$("#userPw").on("keyup", function(e) {
+				        let password = document.querySelector('#userPw').value;
+				
+				        let strength = Strength(password);
+				        if(strength <= 2) {
+				          $(".pw-check").addClass('weak');
+				          $(".pw-check").removeClass('normal');
+				          $(".pw-check").removeClass('strong');
+				        } else if(strength > 2 && strength < 4 ) {
+				          $(".pw-check").removeClass('weak');
+				          $(".pw-check").addClass('normal');
+				          $(".pw-check").removeClass('strong');
+				        } else {
+				          $(".pw-check").removeClass('weak');
+				          $(".pw-check").removeClass('normal');
+				          $(".pw-check").addClass('strong');
+				        }
+				      });
+				     
+				      
+						//비밀번호 입력될때마다 유효성 검사
+						$("#userPw").on("change", function() {
+							//비밀번호 유효성 처리
+							if(!Strength($("#userPw").val())) {
+								userPw = false;
+								$("#userPwCheck").hide();
+								$("#userPw").focus();
+							} else {
+								userPw = true;
+								$("#userPwCheck").show();
+							}
+							
+							//비밀번호 확인까지 입력한 후 다시 비밀번호 재설정
+							if($("#userPw").val() == $("#userPwCheck").val()) {
+								userPwCheck = true;
+								$("#pwRecheck").css("color", "#0f0");
+								$("#pwRecheck").text("비밀번호가 일치합니다.");
+							} else {
+								userPwCheck = false;
+								$("#pwRecheck").css("color", "#f00");
+								$("#pwRecheck").text("비밀번호가 일치하지 않습니다.");
+							}
+						});
+				      
+				      $("#userPwCheck").on("change", function() {
+							
+				        $("#pwRecheck").show();
+				        if($("#userPw").val() == $("#userPwCheck").val()) {
+				          pwRecheck = true;
+				          $("#pwRecheck").css("color", "#0f0");
+				          $("#pwRecheck").text("비밀번호가 일치합니다.");
+				        } else {
+				          pwRecheck = false;
+				          $("#pwRecheck").css("color", "#f00");
+				          $("#pwRecheck").text("비밀번호가 일치하지 않습니다.");
+				        }
+				      });
+				      
+					});
+					
+					//갯수제한
+					function Strength(password) {
+				        let i = 0;
+				        if(password.length > 5) {
+				          i++;
+				        }
+				        if(password.length >= 10) {
+				          i++;
+				        }
+				        if(/^(?=.*[a-zA-Z])/.test(password)) {
+				          i++;
+				        }
+				        if(/(?=.*[!@#$%^&*+=-])/.test(password)) {
+				          i++
+				        }
+				        if(/(?=.*[0-9]$).{6,15}/.test(password)) {
+				          i++
+				        }
+				        return i;
+			        }
+			        
+			        //이름 유효성
+			        $("#userNm").on("change", function() {
+						if(!userName($("#userNm").val())) {
+							userNm = false;
+							$("#userNm").hide();
+							$("#userNm").focus();
+						} else {
+							userNm = true;
+							$("#userNm").show();
+						}
+					});
+			        
+			        //이름
+			        function userName(name) {
+						return /^[a-zA-Zㄱ-힣]$/.test(name);
+					}
+			        //생일
+			        function userBirth(birth) {
+			        	return /^[0-9]*$/.test(birth);
+					}
+			        //핸드폰번호
+			        function userTel(tel){
+						return /^(010)[0-9]{3,4}[0-9]{4}$/.test(tel);
+					}
+					//이메일
+					function userMail(character) {
+						return /^[A-z|0-9]([A-z|0-9]*)(@)([A-z]*)(\.)([A-z]*)$/.test(character);
+					}
+					
 					
 					$("#joinForm").on("submit", function(e) {
 						e.preventDefault();
 						
+						if(!userId) {
+							alert("아이디를 입력해주세요.");
+							$("#userId").focus();
+							return;
+						}
 						if(!checkId) {
 							alert("중복체크를 눌러주세요.");
 							$("#userId").focus();
 							return;
 						}
-						/*
-						if(!pw) {
+						if(!userPw) {
 							alert("비밀번호를 다시 입력해주세요.");
-							$("#pw").focus();
+							$("#userPw").focus();
 							return;
 						}
-						
-						if(!pw2) {
+						if(!pwRecheck) {
 							alert("비밀번호가 일치하지 않습니다.");
-							$("#pw2").focus();
+							$("#userPwCheck").focus();
 							return;
 						}
-						
 						if(!name) {
 							alert("이름을 입력해주세요.");
 							$("#userNm").focus();
@@ -93,10 +209,10 @@
 						}
 						if(!addr3) {
 							alert("상세주소를 입력해주세요.");
-							$("#detail-addr").focus();
+							$("#userAddr3").focus();
 							return;
 						}
-						*/
+						
 						
 						$.ajax({
 							url: '/user/join',
@@ -117,85 +233,11 @@
 							}
 						})
 					});
-						
-					$("#pw").on("keyup", function(e) {
-				        let password = document.querySelector('#pw').value;
-				
-				        let strength = Strength(password);
-				        if(strength <= 2) {
-				          $(".pw-check").addClass('weak');
-				          $(".pw-check").removeClass('normal');
-				          $(".pw-check").removeClass('strong');
-				        } else if(strength > 2 && strength < 5 ) {
-				          $(".pw-check").removeClass('weak');
-				          $(".pw-check").addClass('normal');
-				          $(".pw-check").removeClass('strong');
-				        } else {
-				          $(".pw-check").removeClass('weak');
-				          $(".pw-check").removeClass('normal');
-				          $(".pw-check").addClass('strong');
-				        }
-				      });
-				     
-				      
-						//비밀번호 입력될때마다 유효성 검사
-						$("#pw").on("change", function() {
-							//비밀번호 유효성 처리
-							if(!Strength($("#pw").val())) {
-								pw = false;
-								$("#pw2").hide();
-								$("#pw").focus();
-							} else {
-								pw = true;
-								$("#pw2").show();
-							}
-							
-							//비밀번호 확인까지 입력한 후 다시 비밀번호 재설정
-							if($("#pw").val() == $("#pw2").val()) {
-								pw2 = true;
-								$("#pwRecheck").css("color", "#0f0");
-								$("#pwRecheck").text("비밀번호가 일치합니다.");
-							} else {
-								pw2 = false;
-								$("#pwRecheck").css("color", "#f00");
-								$("#pwRecheck").text("비밀번호가 일치하지 않습니다.");
-							}
-						});
-				      
-				      $("#pw2").on("change", function() {
-							
-				        $("#pwRecheck").show();
-				        if($("#pw").val() == $("#pw2").val()) {
-				          pwRecheck = true;
-				          $("#pwRecheck").css("color", "#0f0");
-				          $("#pwRecheck").text("비밀번호가 일치합니다.");
-				        } else {
-				          pwRecheck = false;
-				          $("#pwRecheck").css("color", "#f00");
-				          $("#pwRecheck").text("비밀번호가 일치하지 않습니다.");
-				        }
-				      });
-					});
 					
-					function Strength(password) {
-				        let i = 0;
-				        if(password.length > 6) {
-				          i++;
-				        }
-				        if(password.length >= 10) {
-				          i++;
-				        }
-				        if(/^(?=.*[a-zA-Z])/.test(password)) {
-				          i++;
-				        }
-				        if(/(?=.*[!@#$%^&*+=-])/.test(password)) {
-				          i++
-				        }
-				        if(/(?=.*[0-9]$)/.test(password)) {
-				          i++
-				        }
-				        return i;
-			        }
+					
+					
+					
+					
 					
 					//작동
 				    function findAddr(){
@@ -207,14 +249,14 @@
 				          if(addr1 !== ''){
 				          document.getElementById("addr").value = addr1;
 				          } else if(addr2 !== '') {
-				            document.getElementById("detail-addr").value = addr2;
+				            document.getElementById("userAddr3").value = addr2;
 				          }
 				        }
 				      }).open();
 				    }
 				    
 				    function fnPwShow(div) {
-						let pswrd = document.querySelector('#pw');
+						let pswrd = document.querySelector('#userPw');
 				        if(pswrd.type === 'password') {
 				          pswrd.setAttribute('type', 'text');
 				          div.classList.replace('show', 'hide');
@@ -245,7 +287,7 @@
 		
 		        <div class="pw-check">
 		          <div class="inputBox light">
-		            <input type="password" id="pw" name="userPw" required class="input" placeholder="비밀번호"><label for="pw" class="input-label"></label>
+		            <input type="password" id="userPw" name="userPw" required class="input" placeholder="비밀번호"><label for="userPw" class="input-label"></label>
 		            <div id="show" class="show" onclick="fnPwShow(this);"></div>
 		          </div>
 		          <div class="check-light"></div>
@@ -253,7 +295,7 @@
 		
 		        <div class=" check2">
 		          <div class="inputBox light">
-		            <input type="password" id="pw2" name="userPwCheck" required class="input" placeholder="비밀번호확인" style="margin-top: 12px;"><label for="pw2" class="input-label"></label>
+		            <input type="password" id="userPwCheck" name="userPwCheck" required class="input" placeholder="비밀번호확인" style="margin-top: 12px;"><label for="userPwCheck" class="input-label"></label>
 		          </div>
 		          <div class="check-light"></div>
 		          <p id="pwRecheck" style="font-size: 11px; text-align: left;"></p>
@@ -271,7 +313,7 @@
 		        <input type="text" id="userMail" name="userMail" placeholder="이메일 ex)xxx@xxx.com" th:value="${socialUser != null ? socialUser.userMail : ''}" class="box">
 		        <input id="post"  name="userAddr1" type="text" value="우편번호" readonly onclick="findAddr()">
 		        <input id="addr" name="userAddr2" type="text" placeholder="주소" readonly> <br>
-		        <input id="detail-addr" name="userAddr3" type="text" placeholder="상세주소">
+		        <input id="userAddr3" name="userAddr3" type="text" placeholder="상세주소">
 		        <input type="submit" value="가입하기" class="btn2 size">
 		      </form>
 		    </div>
