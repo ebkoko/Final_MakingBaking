@@ -138,11 +138,16 @@
 					</li>
 			  </ul>
 		  </div>
-		  <th:block sec:authorize="hasRole('ROLE_ADMIN')" th:remove="tag">
+		  <!--<th:block sec:authorize="hasRole('ROLE_ADMIN')" th:remove="tag">
 	      <div id="btn-container" >
 		    <div id="right-btn">
 		      <input type="button" id="insertQna" value="등록" onclick="">
 		    </div>
+		  </div>    
+		  </th:block>-->
+		  <th:block sec:authorize="hasRole('ROLE_USER')" th:remove="tag">
+	      <div id="btn-container" >
+		    <a href='/board/insertBoard' id="right-btn">등록</a>
 		  </div>    
 		  </th:block>
 	    </div>
