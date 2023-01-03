@@ -63,11 +63,30 @@
 				$(function() {
 					// 비회원이 예약하기 버튼 클릭시 로그인창 
 					$("#moveRsrvtBtn").on("click", function() {
-                  
+                 	
+                 	var offset = $("#dayclass_hr1").offset();
                   	const isAuthenticated = $(".header > input[name='authenticate']").val();
-		                  if(isAuthenticated == "false") {
+                  	
+		                  if(isAuthenticated == "false") { // false면 로그인 창 띄우기
 		                     $('.login-form-container').toggleClass('active');
-		                  }
+		                  } else { // 아니면 예약페이지 위치로 이동
+							  $('html').animate({scrollTop : offset.top}, 300);
+						  }
+					});
+					
+					// 
+					$("#rvw_writeBtn").on("click", function(){
+						
+					var offset = $("#dayclass_hr2").offset();
+                  	const isAuthenticated = $(".header > input[name='authenticate']").val();
+                  	
+		                  if(isAuthenticated == "false") { // false면 로그인 창 띄우기
+		                     $('.login-form-container').toggleClass('active');
+		                  } else { // 아니면 예약페이지 위치로 이동
+							  $('html').animate({scrollTop : offset.top}, 300);
+						  }
+					});
+						
 					});
 					
 					// 취소 환불 문의 자세히 보기
@@ -118,8 +137,7 @@
 					//$("#rsrvtDate").datepicker('setDate', 'today');
 					
 					
-					
-					
+				
 					// 예약 인원
 					$("#peopleNm_plus").on("click", function(){
 						$("#peopleNm_cnt").val(parseInt($("#peopleNm_cnt").val()) + 1);
@@ -290,7 +308,7 @@
 	            
 				<hr class="dayclass_hr" id="dayclass_hr1">
 	            <div class="c_apply" id="classApply" >
-	             <form id="rsvtForm" action="/reser/reser" method="post">
+	             <form id="rsvtForm" action="/reser/reserDayclass" method="post">
 	              <ul style="padding-left: 0;">
 	                <li><img src="/images/class_day.png" width="17px"> 예약 날짜  <input type="text" id="rsrvtDate"></li>
 	           
@@ -340,7 +358,7 @@
 	              				<textarea placeholder=" 로그인 후 상품 및 클래스 후기를 작성해주세요."></textarea>
 	              			</p>
 	              			<div class=""> 
-	              			<button class="rvw_writeBtn" type="submit">등록</button>
+	              			<button class="rvw_writeBtn" id="rvw_writeBtn" type="submit">등록</button>
 	              			</div>
 	              		</form>
 	              	</div>
