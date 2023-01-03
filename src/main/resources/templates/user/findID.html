@@ -6,24 +6,35 @@
 <head>
 	<th:block layout:fragment="script">
 		<script th:inline="javascript">
-			$("#btn2").on("click", function() {
-				$.ajax({
-					url: "/user/findID",
-					type: "post",
-					data: $("#form").serialize(),
-					success: function(obj) {
-						const data = UserDTO(obj);
-						
-						$("#resultId").show();
-						
-						if(data.msg == "ok") {
-							$("#searchIdResult").text("아이디는 " + data.findID +" 입니다.");
-						} else{
-							$("#searchIdResult").text("아이디가 존재하지 않습니다.");
+			$(function() {
+				$("#btn2").on("click", function() {
+					$.ajax({
+						url: "/user/findID",
+						type: "post",
+						data: $("#form").serialize,
+						success: function(obj) {
+							const data = JSON.parse(obj);
+							console.log(data);
+							
+							$("#resultId").show();
+							
+							if(data.msg == "idOk") {
+								$("#searchIdResult").text("아이디는 " + data.findID + " 입니다.");
+							} else{
+								$("#searchIdResult").text("아이디가 존재하지 않습니다.");
+							}
+						},
+						error: function(e) {
+							console.log(e);
 						}
-					},
-					error: function(e) {
-						console.log(e);
+					});
+				});
+				
+				$("#login2").on("click", function(e) {
+					const isAuthenticated = $(".header > input[name='authenticate']").val();
+					if(isAuthenticated == "false") {
+						e.preventDefault();
+						$('.login-form-container').toggleClass('active');
 					}
 				});
 			});
@@ -38,18 +49,17 @@
 	<div layout:fragment="content" class="container">
 		<main>
 		    <div class="c1">
-		      <form action="" if="form" class="form" method="post">
+		      <form action="/user/findID" id="form" class="form">
 		        <h3>아이디 찾기</h3>
 		        <input type="text" placeholder="이름" class="box">
-		        <input type="text" placeholder="이메일" class="box">
-		        <input type="password" placeholder="핸드폰번호" class="box">
-		        <a th:href="@{/user/findPW}" class="findPw">비밀번호찾기</a>
+		        <input type="text" placeholder="핸드폰번호" class="box">
+		        <a th:href="@{/user/findPW}" class="findPw2">비밀번호찾기</a>
 		        <div id="resultId">
-					<p id="searchIdResult"></p>
+					<p id="searchIdResult" style="color: red;"></p>
 				</div>
-		        <input type="button" value="확인" id="btn2" class="btn2 size">
+		        	<button type="button" id="btn2" class="btn2 size">확인</button>
 		        <div class="buttons">
-		          <a href="#" class="btn2 login2">로그인</a>
+		          <button type="button" id="login2" class="btn2 login2">로그인</button>
 		        </div>
 		      </form>
 		    </div>
