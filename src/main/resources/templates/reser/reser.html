@@ -165,7 +165,7 @@
 				    width: 120px;
 				    height: 25px;
 				}
-				#reciTel1, #reciTel2, #reciTel3 {
+				#partiTel1, #partiTel2, #partiTel3 {
 				    width: 50px;
 				    height: 25px;
 				}
@@ -273,17 +273,17 @@
 							$("#participant").focus();
 							return;
 						}
-						if(!$("#reciTel2").val()) {
+						if(!$("#partiTel2").val()) {
 							alert("예약자 휴대폰 번호를 입력해주세요.");
-							$("#reciTel2").focus();
+							$("#partiTel2").focus();
 							return;
 						}
-						if(!$("#reciTel3").val()) {
+						if(!$("#partiTel3").val()) {
 							alert("예약자 휴대폰 번호를 입력해주세요.");
-							$("#reciTel3").focus();
+							$("#partiTel3").focus();
 							return;
 						}
-						if($("#orderTel2").val().length < 4 || $("#orderTel3").val().length < 4 || $("#reciTel2").val().length < 4 || $("#reciTel3").val().length < 4) {
+						if($("#orderTel2").val().length < 4 || $("#orderTel3").val().length < 4 || $("#partiTel2").val().length < 4 || $("#partiTel3").val().length < 4) {
 							alert("휴대폰 번호를 정확히 입력해주세요.");
 							return;
 						}
@@ -425,15 +425,15 @@
 		                        <tr>
 		                            <th>휴대폰<span class="essential">&#42;</span></th>
 		                            <td>
-		                                <select id="reciTel1" name="reciTel1">
+		                                <select id="partiTel1" name="partiTel1">
 		                                    <option value="010">010</option>
 		                                    <option value="011">011</option>
 		                                    <option value="016">016</option>
 		                                    <option value="017">017</option>
 		                                    <option value="018">018</option>
 		                                </select> - 
-		                                <input type="text" name="reciTel2" id="reciTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4"> - 
-		                                <input type="text" name="reciTel3" id="reciTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4">
+		                                <input type="text" name="partiTel2" id="partiTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4"> - 
+		                                <input type="text" name="partiTel3" id="partiTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4">
 		                            </td>
 		                        </tr>
 		                        <tr>

@@ -42,6 +42,7 @@ public class Order {	// 주문정보 테이블
 	private String orderMessage;	// 배송메세지
 	@Nullable
 	private String orderMail;		// 주문자 이메일
+	@Nullable
 	private String depositor;		// 무통장입금 입금자명
 	private int orderTotalPayPrice; // 배송비 포함 총 결제가격
 }

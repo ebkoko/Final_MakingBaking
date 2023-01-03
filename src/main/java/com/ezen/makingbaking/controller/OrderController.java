@@ -1,29 +1,32 @@
 package com.ezen.makingbaking.controller;
 
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ezen.makingbaking.dto.ApproveResponseDTO;
 import com.ezen.makingbaking.dto.OrderDTO;
+import com.ezen.makingbaking.dto.ReadyResponseDTO;
 import com.ezen.makingbaking.entity.Cart;
 import com.ezen.makingbaking.entity.CustomUserDetails;
-import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.entity.Order;
 import com.ezen.makingbaking.entity.OrderItem;
 import com.ezen.makingbaking.service.cart.CartService;
-import com.ezen.makingbaking.service.item.ItemService;
+import com.ezen.makingbaking.service.kakaopay.KakaoPayService;
 import com.ezen.makingbaking.service.order.OrderService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -40,7 +43,7 @@ public class OrderController {
 	private CartService cartService;
 	
 	@Autowired
-	private ItemService itemService;
+	private KakaoPayService kakaoPayService;
 	
 	@GetMapping("/order")
 	public ModelAndView orderView() {
@@ -52,23 +55,24 @@ public class OrderController {
 	
 	@PostMapping("/orderComplete")
 	public ModelAndView insertOrder(OrderDTO orderDTO, @AuthenticationPrincipal CustomUserDetails customUser,
-			@RequestParam("itemList") String itemList) throws JsonMappingException, JsonProcessingException {
-		
-		List<Map<String, Object>> itemMapList = new ObjectMapper().readValue(itemList, new TypeReference<List<Map<String, Object>>>() {});
-		// 주문번호 생성
-		Calendar cal = Calendar.getInstance();
-		int year = cal.get(Calendar.YEAR);
-		String ym = year + new DecimalFormat("00").format(cal.get(Calendar.MONTH) + 1);
-		String ymd = ym + new DecimalFormat("00").format(cal.get(Calendar.DATE));
-		String subNum = "";
-		
-		for(int i = 1; i <= 6; i++) {
-			subNum += (int)(Math.random() * 10);
+			@RequestParam("itemList") String itemList, Model model) throws JsonMappingException, JsonProcessingException {
+		if(model.getAttribute("itemList") != null) {
+			itemList = model.getAttribute("itemList").toString();
 		}
 		
-		long orderNo = orderService.getNextOrderNo();
+		if(model.getAttribute("orderNo") != null) {
+			orderDTO.setOrderNo(Long.parseLong(model.getAttribute("orderNo").toString()));
+		}
+		
+		List<Map<String, Object>> itemMapList = new ObjectMapper().readValue(itemList, new TypeReference<List<Map<String, Object>>>() {});
+			
+		long orderNo = 0;
+		if(orderDTO.getOrderNo() == 0) {
+			orderNo = orderService.getNextOrderNo();
+		} else {
+			orderNo = orderDTO.getOrderNo();
+		}
 		orderDTO.setOrderNo(orderNo);
-		System.out.println(orderNo);
 		
 		List<OrderItem> orderItemList = new ArrayList<OrderItem>();
 		
@@ -110,10 +114,10 @@ public class OrderController {
 		
 		orderService.insertOrder(order);
 		orderService.insertOrderItem(orderItemList);
-		System.out.println("11111111111111");
 		
 		mv.addObject("totalPayPrice", orderDTO.getOrderTotalPayPrice());
 		mv.addObject("orderNo", orderNo);
+		mv.addObject("orderPayment", orderDTO.getOrderPayment());
 		
 		List<Cart> cartItemList = new ArrayList<Cart>();
 		
@@ -140,4 +144,37 @@ public class OrderController {
 		mv.setViewName("order/order.html");
 		return mv;
 	}
+	
+	@PostMapping("/pay")
+	public ReadyResponseDTO payReady(@RequestParam(name = "total_amount") int totalAmount, Order order,
+			@RequestParam("itemList") String itemList, Model model, HttpSession session) throws JsonMappingException, JsonProcessingException {
+		// 카카오페이 결제 준비: 결제요청 service 실행
+		ReadyResponseDTO readyResponseDTO = kakaoPayService.payReady(totalAmount, itemList);
+		// 요청처리 후 받아온 결제 고유번호(tid)를 모델에 저장
+		model.addAttribute("tid", readyResponseDTO.getTid());
+		session.setAttribute("tid", readyResponseDTO.getTid());
+		// Order 정보를 모델에 저장
+		model.addAttribute("order", order);
+		
+		model.addAttribute("itemList", itemList);
+		
+		return readyResponseDTO;
+	}
+	
+	// 결제승인요청
+	@GetMapping("/kakaoOrderComplete")
+	public String payCompleted(@RequestParam("pg_token") String pgToken, @RequestParam("orderNo") long orderNo,
+			@ModelAttribute("order") Order order, @ModelAttribute("itemList") String itemList,
+			Model model, HttpSession session) {
+		
+		// 카카오 결재 요청하기
+		ApproveResponseDTO approveResponse = kakaoPayService.payApprove(session.getAttribute("tid").toString(), pgToken, orderNo);
+		
+		model.addAttribute("orderNo", orderNo);
+		
+		model.addAttribute("itemList", itemList);
+		
+		return "redirect:/order/orderComplete";
+	}
+	
 }

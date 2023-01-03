@@ -326,8 +326,22 @@
 				let pushbankTransfer = false;
 				let pushKakaoPay = false;
 				const userInfo = /*[[${userInfo}]]*/;
+				const itemList = /*[[${itemList}]]*/;
+				const transferItemList = [];
 				
 				$(function() {
+					for(let i = 0; i < itemList.length; i++) {
+						const item = {
+							itemNo: itemList[i].itemNo,
+							itemName: itemList[i].itemName,
+							cartNo: itemList[i].cartNo,
+							itemPrice: itemList[i].itemPrice,
+							orderItemCnt: itemList[i].cartItemCnt
+						}
+						
+						transferItemList.push(item);
+					}
+					
 					// 우편번호 input 클릭했을 때
 					$("#addr1").on('click', function() {
 						findAddr();
@@ -403,8 +417,7 @@
 							return;
 						}
 						
-						const itemList = /*[[${itemList}]]*/;
-						const transferItemList = [];
+						
 						console.log(itemList);
 						let item_PriceSum = parseInt($(".item_PriceSum")[0].textContent.replace(',',''));
 						let deliFee = parseInt($(".deliFee").text().replace(/,/g,''));
@@ -414,16 +427,6 @@
 						let reciTelNums = [$("#reciTel1").val(), $("#reciTel2").val(), $("#reciTel3").val()];
 						let reciTel = reciTelNums.join('-');
 						
-						for(let i = 0; i < itemList.length; i++) {
-							const item = {
-								itemNo: itemList[i].itemNo,
-								cartNo: itemList[i].cartNo,
-								itemPrice: itemList[i].itemPrice,
-								orderItemCnt: itemList[i].cartItemCnt
-							}
-							
-							transferItemList.push(item);
-						}
 						
 						$("#totalPayPrice").val(totalPrice);
 						$("#orderTel").val(orderTel);
@@ -502,6 +505,7 @@
 					
 					// 카카오페이 버튼을 클릭했을 때
 					$("#btnkakaoPay").on('click', function() {
+						
 						isKakaoPay = !isKakaoPay;
 						$("#bankPayment").css("display", "none");
 						$("#btnbankTransfer").css("color", "#28693F").css("background", "white");
@@ -511,6 +515,8 @@
 						} else {
 							$("#btnkakaoPay").css("color", "white").css("background", "#28693F");
 							pushKakaoPay = true;
+							$("#orderPayment").val("카카오페이");
+							$("#orderStatus").val("결제완료");
 						}
 						
 						// 카카오페이 API 실행
@@ -532,6 +538,7 @@
 							url:'/order/pay',
 							type: 'post',
 							data:{
+								itemList: JSON.stringify(transferItemList),
 								total_amount: totalPrice,
 								payUserName: orderer,
 								sumPrice: item_PriceSum,
@@ -541,7 +548,7 @@
 								email: email
 							},
 							success: function(response) {
-								location.href = response.next_redirect_pc_url
+								location.href = response.next_redirect_pc_url + "?tid=" + response.tid;
 							}
 						});
 					});

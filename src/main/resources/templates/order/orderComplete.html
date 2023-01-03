@@ -66,7 +66,27 @@
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
-				
+				$(function() {
+					const orderNo = /*[[${orderNo}]]*/;
+					console.log(typeof String(orderNo)); // number
+					console.log(String(orderNo).substring(0,8)); // 20230102000029
+					let orderDateYMD = String(orderNo).substring(0,8); // 20230102
+					let orderDateYear = orderDateYMD.substr(0,4); // 2023
+					let orderDateMonth = orderDateYMD.substr(4,2); // 01
+					let orderDateDate = orderDateYMD.substr(6,2); // 02
+					let orderDate = orderDateYear + "/" + orderDateMonth + "/" + orderDateDate; // 2023-01-02
+					console.log(new Date(orderDate)); // Mon Jan 02 2023 09:00:00 GMT+0900 (한국 표준시)
+					let orderD = new Date(orderDate);
+					orderD.setDate(orderD.getDate()+1);
+					let deadline = orderD.toLocaleDateString('ko-KR', {
+					    year: 'numeric',
+					    month: 'long',
+					    day: 'numeric',
+					});
+					console.log(deadline);
+					$(".deadline").text(deadline);
+					
+				});
 			</script>
 		</th:block>
 	</head>
@@ -81,14 +101,14 @@
 	            </div>
 	            <hr>
 	            <div id="completeMent">
-	                <span class="orderNumber">주문번호: </span><span th:text="${orderNo}"></span>
+	                <div class="orderNumber">주문번호: <span th:text="${orderNo}"></span></div>
 	                <p class="orderCompleteMent">주문 완료되었습니다!</p>
-	                <div id="bankPayment">
+	                <div id="bankPayment" th:if="${orderPayment == '무통장입금'}">
 	                    <span>입금계좌: 국민은행 799502-04-026913 예금주: 메이킹베이킹</span>
-	                    <p class="deposit"><span>입금액: </span><span class="totalPrice" th:text="${totalPayPrice}"></span><span>원</span>&emsp;
-	                    <span>입금기한: </span><span class="deadline" ></span><span>오후 11시 59분 59초</span></p>
+	                    <p class="deposit"><span>입금액: </span><span class="totalPrice" th:text="${totalPayPrice}"></span><span>원</span>&ensp;
+	                    <span>입금기한: </span><span class="deadline"></span><span> 오후 11시 59분 59초</span></p>
 	                </div>
-	                <div id="kakaoPay">
+	                <div id="kakaoPay" th:unless="${orderPayment == '무통장입금'}">
 	                    <span>카카오페이 결제</span><span> &#124; 결제금액: </span><span class="totalPrice" th:text="${totalPayPrice}"></span><span>원</span>
 	                </div>
 	                <div id="btns">
