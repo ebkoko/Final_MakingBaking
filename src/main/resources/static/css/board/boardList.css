@@ -165,3 +165,15 @@ td { font-size: 15px;}
   float: left;
   margin-left: 5px;
 }
+
+#right-btn {
+  width: 100px; height: 40px;
+  font-size: 15px; font-weight: bold; 
+  color: white; 
+  text-align: center;
+  line-height: 40px;
+  background-color: #28693F;
+  border-radius: 5px;
+  float: right;
+  margin-bottom: 20px;
+}
