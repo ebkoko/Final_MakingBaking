@@ -219,9 +219,9 @@
 			<div id="item_search">
 				<select name="searchCondition" id="searchCondition">
 					<option value="ALL" th:selected="${searchCondition == 'ALL' || searchCondition == '' || searchCondition == null}">전체</option>
-					<option value="ITEMNAME" th:selected="${searchCondition == 'ITEMNAME'}">이름</option>
-					<option value="ITEMCATE" th:selected="${searchCondition == 'ITEMCATE'}">카테고리</option>
-					<option value="ITEMSTATUS" th:selected="${searchCondition == 'ITEMSTATUS'}">상태</option>
+					<option value="ITEMNAME" th:selected="${searchCondition} == 'ITEMNAME'">이름</option>
+					<option value="ITEMCATE" th:selected="${searchCondition} == 'ITEMCATE'">카테고리</option>
+					<option value="ITEMSTATUS" th:selected="${searchCondition} == 'ITEMSTATUS'">상태</option>
 	            </select>
 	            <input type="text" name="searchKeyword" th:value="${searchKeyword}" id="inputSearch" 
 	            	th:style="${ searchCondition != 'ITEMCATE' && searchCondition != 'ITEMSTATUS'  ? 'display: inline-block;' : 'display: none;'}"
@@ -229,18 +229,18 @@
 	            <select name="searchKeyword" id="selectSearch1" th:style="${searchCondition == 'ITEMCATE' ? 'display: inline-block;' : 'display: none;'}"
 	            		th:disabled="${searchCondition == 'ITEMCATE'} ? false : true">
 	            	<option>선택하세요.</option>
-	            	<option value="케이크" th:selected="${searchKeyword == '케이크'}">케이크</option>
-	              	<option value="빵" th:selected="${searchKeyword == '빵'}">빵</option>
-	              	<option value="쿠키" th:selected="${searchKeyword == '쿠키'}">쿠키</option>
-	              	<option value="디저트" th:selected="${searchKeyword == '디저트'}">디저트</option>
-	              	<option value="비건" th:selected="${searchKeyword == '비건'}">비건</option>
+	            	<option value="케이크" th:selected="${searchKeyword} == '케이크'">케이크</option>
+	              	<option value="빵" th:selected="${searchKeyword} == '빵'">빵</option>
+	              	<option value="쿠키" th:selected="${searchKeyword} == '쿠키'">쿠키</option>
+	              	<option value="디저트" th:selected="${searchKeyword} == '디저트'">디저트</option>
+	              	<option value="비건" th:selected="${searchKeyword} == '비건'">비건</option>
 	            </select>
 	            <select name="searchKeyword" id="selectSearch2" th:style="${searchCondition == 'ITEMSTATUS' ? 'display: inline-block;' : 'display: none;'}"
 	            		th:disabled="${searchCondition == 'ITEMSTATUS'} ? false : true">
 	            <option>선택하세요.</option>
-	            	<option value="Y" th:selected="${searchKeyword == 'Y'}">재고있음(Y)</option>
-	              	<option value="S" th:selected="${searchKeyword == 'S'}">재고없음(S)</option>
-	              	<option value="N" th:selected="${searchKeyword == 'N'}">판매중지(N)</option>
+	            	<option value="Y" th:selected="${searchKeyword} == 'Y'">재고있음(Y)</option>
+	              	<option value="S" th:selected="${searchKeyword} == 'S'">재고없음(S)</option>
+	              	<option value="N" th:selected="${searchKeyword} == 'N'">판매중지(N)</option>
 	            </select>
 	            
 	            <button type="button" id="btnSearch">검색</input>
@@ -271,7 +271,7 @@
 		        	<td th:text="${item.itemPrice >= 1000 ? #numbers.formatInteger(item.itemPrice , 3, 'COMMA') : item.itemPrice}"></td>
 		        	<td th:text="${item.itemRegdate eq null ? '' : #strings.substring(item.itemRegdate, 0, 10)}"></td>
 		        	<td th:text="${item.itemStatus}"></td>
-		        	<td><a href="/admin/updateItem"><input type="button" value="수정" id="itemMod"></a></td>
+		        	<td><a href="/admin/itemUpdate/itemNo"><input type="button" value="수정" id="itemMod"></a></td>
 		     	 </tr>
 		    </table>
 		</div>
