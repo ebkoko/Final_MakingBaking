@@ -24,7 +24,7 @@ public class ReserController {
 	}
 	
 	@PostMapping("/reserComplete")
-	public ModelAndView reserCompleteView() {
+	public ModelAndView insertReser() {
 		ModelAndView mv = new ModelAndView();
 		
 		mv.setViewName("reser/reserComplete.html");

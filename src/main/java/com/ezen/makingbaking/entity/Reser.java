@@ -3,13 +3,11 @@ package com.ezen.makingbaking.entity;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.lang.Nullable;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,28 +17,27 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="T_MB_RESER")
 @Data
-@SequenceGenerator(
-		name="ReserSequenceGenerator",
-		sequenceName="Reser_SEQ",
-		initialValue=1,
-		allocationSize=1
-)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @DynamicInsert
 public class Reser {
 	@Id
-	@GeneratedValue(
-			strategy=GenerationType.SEQUENCE,
-			generator="ReserSequenceGenerator"
-	)
-	private int reserNo;
-	private int classNo;
+	private long reserNo;
 	private String userId;
-	private String reserName;
-	private LocalDateTime reserDate;
-	private String reserTime;
+	private LocalDateTime reserDate = LocalDateTime.now();
+	@Builder.Default
+	private String reserStatus = "입금대기";
+	private String partiName;
+	private String partiTel;
+	private String partiTime;
+	private int classNo;
 	private int reserPersonCnt;
-	private String reserStatus;
+	private String orderName;
+	private String orderTel;
+	@Nullable
+	private String request;
+	private String reserPayment;
+	@Nullable
+	private String depositor;
 }

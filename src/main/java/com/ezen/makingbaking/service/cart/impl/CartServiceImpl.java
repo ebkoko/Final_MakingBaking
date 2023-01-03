@@ -23,6 +23,7 @@ public class CartServiceImpl implements CartService {
 			cart = cartRepository.findByItemNoAndUserId(cart.getItemNo(), cart.getUserId()).get();
 			
 			cart.setCartItemCnt(cart.getCartItemCnt() + 1);
+			cart.setCartStatus('C');
 
 			//3. 있으면 수량 +1
 			cartRepository.save(cart);
