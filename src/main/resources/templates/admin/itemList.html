@@ -75,12 +75,19 @@
 					height: 80px;
 				}
 				
-
+				/* 상품이름 a태그 */
+				#a_itemName {
+					text-decoration: none;
+				}
+ 
 				/* 수정버튼 */
 			    #itemMod {
 					width:80px;
 					height: 25px;
+					border: 1.2px solid #28693F;
+					color: #28693F;
 					margin-left: 22px;
+					cursor: pointer;
 			    }
 			    
 			    /* 상품삭제&등록 버튼 div */
@@ -107,6 +114,7 @@
 					background-color: #28693F;
 					color: white;
 					font-weight: 550;
+					cursor: pointer;
 				}
 				/* 상품등록버튼 */
 			    #itemRegistration {
@@ -126,6 +134,7 @@
 					background-color: #28693F;
 					color: white;
 					font-weight: 550;
+					cursor: pointer;
 				}
 				
 				
@@ -267,11 +276,17 @@
 	      		<tr th:each="item: ${getItemList.content}">
 	      			<td><input type="checkbox" name="select_item"></td>
 		        	<td th:text="${item.itemNo}"></td>
-		        	<td th:text="${item.itemName}"></td>
+		        	
+		        	<td>
+						<a id="a_itemName" th:text="${item.itemName}"
+							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">
+						</a>
+					</td>
+					<!--<td th:text="${item.itemName}"></td>-->
 		        	<td th:text="${item.itemPrice >= 1000 ? #numbers.formatInteger(item.itemPrice , 3, 'COMMA') : item.itemPrice}"></td>
 		        	<td th:text="${item.itemRegdate eq null ? '' : #strings.substring(item.itemRegdate, 0, 10)}"></td>
 		        	<td th:text="${item.itemStatus}"></td>
-		        	<td><a href="/admin/itemUpdate/itemNo"><input type="button" value="수정" id="itemMod"></a></td>
+		        	<td><a href="/admin/itemUpdate/{itemNo}"><input type="button" value="수정" id="itemMod"></a></td>
 		     	 </tr>
 		    </table>
 		</div>
