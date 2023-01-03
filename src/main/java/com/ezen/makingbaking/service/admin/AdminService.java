@@ -11,7 +11,7 @@ import com.ezen.makingbaking.entity.Item;
 
 public interface AdminService {
 	//Page<CamelHashMap> getItemFileList(Pageable pageable);
-	
+	//item
 	List<Item> getItemList(Item item);
 	Page<Item> getPageItemList(Item item, Pageable pageable);
 	
@@ -19,6 +19,10 @@ public interface AdminService {
 	
 	Item getItem(int itemNo);
 	List<ImgFile> getItemFileList(int itemNo);
+	
+	Item updateItem(Item item, List<ImgFile> uFileList);
+	
+	void getUpdateItem(int itemNo);
 	
 	void deleteItem(int ItemNo);
 }

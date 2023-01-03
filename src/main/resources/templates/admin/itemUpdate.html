@@ -24,7 +24,7 @@
 				}
 			    #itemReg_T {
 					width: 1000px;
-					height:900px;
+					height:800px;
 					border-collapse: collapse;
 					
 					margin: 0 auto;
@@ -58,15 +58,22 @@
 					width: 100px;
 				}
 				#itemRegTextarea {
-					width: 600px;
+					width: 650px;
 					font-size: 15px;
+					padding: 10px;
 				}
 				/* 상품이름 입력창 */
 				#input_itemName {
 					width: 600px;
 				}
+				/* 알레르기 정보 */
+				#input_itemAllergyInfo {
+					width: 650px;
+					height: 80px;
+					font-size: 15px;
+				}
 				#input_itemMinName, #input_itemExpDate,
-				#input_itemOrigin, #input_itemAllergyInfo {
+				#input_itemOrigin, #itemRegdateText {
 					width: 600px;
 					font-size: 15px;
 				}
@@ -77,6 +84,11 @@
 				      accent-color:rgb(64, 128, 128);
 				      border: 2px solid #808080;
 					}
+				
+				/* 등록일 */
+				#itemRegdateText {
+					padding-left: 20px;
+				}
 				
 				/* 파일 첨부 */
 				#attZone {
@@ -125,10 +137,12 @@
 		         }
 				
 				/* 상품등록 버튼 div */
-			    #div_itemRegBtn {
-					display: flex;
-					justify-content:center;
+			    #div_itemBtn {
+					text-align:right;
+					margin: 50px auto;
+					margin-right: 100px;
 				}
+
 				/* 상품수정 버튼 */
 			    #itemUpdateBtn {
 					width: 150px;
@@ -142,10 +156,28 @@
 					font-size: 18px;
 					font-weight: 550;
 					letter-spacing:1px;
-					margin: 0 auto;
-					margin-top: 50px;
 			    }
 			    #itemUpdateBtn:hover {
+					background-color: #28693F;
+					color: white;
+					font-weight: 550;
+				}
+				/* 목록으로 버튼 */
+			    #itemListBtn {
+					width: 150px;
+					height: 50px;
+					border: 1.2px solid #28693F;
+					border-radius: 4px;
+					background-color: white;
+					text-align: center;
+					display: inline-block;
+					color: #28693F;
+					font-size: 18px;
+					font-weight: 550;
+					letter-spacing:1px;
+					margin-right: 30px;
+			    }
+			    #itemListBtn:hover {
 					background-color: #28693F;
 					color: white;
 					font-weight: 550;
@@ -344,7 +376,7 @@
 		         }
 		         
 		         
-		         function fnUpdateBoard() {
+		         function fnUpdateItem() {
 					dt = new DataTransfer();
 		               
 		           for(f in uploadFiles) {
@@ -373,7 +405,7 @@
 		           //multipart/form-data형식을 전송하기 위해서는
 		           //new FormData()를 사용하여 직접 폼데이터 객체를 만들어 준다.
 		           //form.serialize()는 multipart/form-data 전송불가
-		           let formData = new FormData($("#updateForm")[0]);
+		           let formData = new FormData($("#itemUpdateForm")[0]);
 		           
 		           //ajax에 enctype: multipart/form-data, processData: false, contentType: false로 설정
 		           $.ajax({
@@ -388,7 +420,7 @@
 		                 alert("수정되었습니다.");
 		                 $("#itemNo").val(obj.item.getItem.itemNo);
 		                 $("#itemSearchCondition").val(obj.item.getItem.itemCate);
-		                 $("#itemdRegdateText").text(obj.item.getItem.itemRegdate == null ?
+		                 $("#itemRegdateText").text(obj.item.getItem.itemRegdate == null ?
 		                    '' :
 		                    obj.item.itemRegdate.substring(0, 10));
 		                 ("#input_itemName").val(obj.item.getItem.itemName);
@@ -468,8 +500,6 @@
 							}
 			         });
 				 });
-				 sdfsd
-
 
 				//가격 천단위 콤마
 				function inputNumberFormat(obj) {
@@ -527,133 +557,135 @@
 		
 	    <!-- 상품등록내용 -->
 	    <form id="itemUpdateForm" enctype="multipart/form-data">
-	    <input type="hidden" name="itemNo" id="boardNo" th:value="${getItem.itemNo}">
-		<input type="hidden" name="itemRegdate" id="boardRegdate" th:value="${getItem.itemRegdate}">
-		<input type="hidden" name="originFiles" id="originFiles">
-		<div id="div_itemReg">
-			<table border="1" id="itemReg_T">
-		        <tr>
-		          <th id="itemStatus_Th">상품 상태</th>
-		          <td>&ensp;&ensp;
-		            <select name="itemStatus" id="itemSearchCondition" >
-		              <option value="Y" th:selected="${searchCondition == 'Y'}">판매중</option>
-		              <option value="S" th:selected="${searchCondition == 'S'}">재고없음</option>
-		              <option value="N" th:selected="${searchCondition == 'N'}">판매종료</option>
-		            </select>
-		          </td>
-		        </tr>
-		        <tr>
-		          <th id="itemCate_Th">카테고리</th>
-		          <td>
-		          <div id="div_itemRadio">&ensp;&ensp;
-		          	<input type="radio" name="itemCate" value="케이크"><label for="케이크">케이크&ensp;&ensp;</label>
-		          	<input type="radio" name="itemCate" value="빵" checked><label for="빵">빵&ensp;&ensp;</label>
-		          	<input type="radio" name="itemCate" value="쿠키"><label for="쿠키">쿠키&ensp;&ensp;</label>
-		          	<input type="radio" name="itemCate" value="디저트"><label for="디저트">디저트&ensp;&ensp;</label>
-		          	<input type="radio" name="itemCate" value="비건"><label for="비건">비건</label>
-		          </div>
-		          </td>
-		        </tr>
-		        <tr>
-		        	<th>등록일</th>
-					<td name="itemRegdate" id="itemdRegdateText"
-						th:text="${getItem.itemRegdate eq null ? '' : #strings.substring(getItem.itemRegdate, 0, 10)}">
-					</td>
-				</tr>
-		        <tr>
-		          <th>이름</th>
-		          <td>&ensp;&ensp;<input type="text" name="itemName" class="inputH" id="input_itemName" th:text="${getItem.itemName}">&ensp;&ensp;</td>
-		        </tr>
-		        <tr>
-		          <th>소제목</th>
-		          <td>&ensp;&ensp;<input type="text" name="itemMinName" class="inputH" id="input_itemMinName" th:text="${getItem.itemMinName}">&ensp;&ensp;</td>
-		        </tr>
-		        <tr>
-		          <th>설명</th>
-		          <td>&ensp;&ensp;<textarea cols="100" name="itemDetails" rows="10" id="itemRegTextarea" th:text="${getItem.itemDetails}"></textarea></td>
-		        </tr>
-		        <tr>
-		          <th>가격</th>
-		          <td>&ensp;&ensp;
-		          	<input type="text" name="itemPrice" class="inputH" id="input_itemPrice"
-		          	onkeyup="inputNumberFormat(this)" maxlength="8" th:text="${getItem.itemPrice}">원
-		          </td>
-		        </tr>
-		        <tr>
-		          <th>유통기한</th>
-		          <td>&ensp;&ensp;<input type="text" name="itemExpDate" class="inputH"  id="input_itemExpDate" th:text="${getItem.itemExpDate}"></td>
-		        </tr>
-		        <tr>
-		          <th>원산지</th>
-		          <td>&ensp;&ensp;<input type="text" name="itemOrigin" class="inputH" id="input_itemOrigin" th:text="${getItem.itemOrigin}"></td>
-		        </tr>
-		        <tr>
-		          <th>알레르기 정보</th>
-		          <td>&ensp;&ensp;<textarea name="itemAllergyInfo" id="input_itemAllergyInfo" class="inputH" th:text="${getItem.itemAllergyInfo}"></textarea></td>
-		        </tr>
-		        <tr>
-		          <th>영양정보</th>
-		          <td>
-		            <div>
-		              &ensp;&ensp;<input type="file" id="btnAtt" name="uploadFiles" multiple="multiple">
-		              <input type="file" id="changedFiles" name="changedFiles" style="display: none;" 
-		              	multiple="multiple">
-		              <p style="color: red; font-size: 0.9rem;">상품 영양정보를 변경하려면 이미지를 클릭하고, 영양정보를 다운로드하려면 이미지 파일명을 클릭하세요.</p>
-		              <div id="attZone">
-		              	<div th:each="imgFile : ${itemFileList}" style="display: inline-block; position: relative; 
-							width: 150px; height: 120px; margin: 5px; border: 1px solid #00f; z-index: 1;">
-							<input type="hidden" th:id="'fileNo' + ${imgFileStat.index}" 
-								th:name="'fileNo' + ${imgFileStat.index}" 
-								th:value="${imgFile.fileNo}">
-							<input type="hidden" th:id="'fileName' + ${itemStat.index}" 
-								th:name="'fileName' + ${itemStat.index}" 
-								th:value="${imgFile.fileName}">
-							<input type="file" th:id="'changedFile' + ${imgFile.fileNo}"
-								th:name="'changedFile' + ${imgFile.fileNo}" 
-								style="display: none;"
-								th:onchange="fnGetChangedFileInfo([[${imgFile.fileNo}]], event)">
-							<input th:if="${itemStat.last}" type="hidden" id="itemFileCnt"
-								name="itemFileCnt" th:value="${itemStat.count}">
-		
-							<img th:if="${boardFile.boardFileCate} == 'img'" 
-								th:id="'img' + ${imgFile.fileNo}" 
-								th:src="@{'/item/' + ${imgFile.fileName}}"
-								style="width: 100%; height: 100%; z-index: none; cursor: pointer;"
-								class="fileImg" 
-								th:onclick="fnImgChange([[${boardFile.boardFileNo}]])">
-								
-							<input type="button" class="btnDel" 
-								value="x" th:data-del-file="${imgFile.fileNo}" 
-								style="width: 30px; height: 30px; position: absolute; right: 0px; bottom: 0px; 
-								z-index: 999; background-color: rgba(255, 255, 255, 0.1); color: #f00;"
-								onclick="fnImgDel(event)">
-							<p th:id="'fileName' + ${imgFile.fileNo}" style="display: inline-block; font-size: 8px;
-								cursor: pointer;" th:onclick="fnFileDown([[${item.itemNo}]], [[${imgFile.fileNo}]])"
-								th:text="${imgFile.fileOriginName}">
-							</p>
+		    <input type="hidden" name="itemNo" id="boardNo" th:value="${getItem.itemNo}">
+			<input type="hidden" name="itemRegdate" id="boardRegdate" th:value="${getItem.itemRegdate}">
+			<input type="hidden" name="originFiles" id="originFiles">
+			<div id="div_itemReg">
+				<table border="1" id="itemReg_T">
+			        <tr>
+			          <th id="itemStatus_Th">상품 상태</th>
+			          <td>&ensp;&ensp;
+			            <select name="itemStatus" id="itemSearchCondition" >
+			              <option value="Y" th:selected="${getItem.itemStatus} == 'Y'">판매중</option>
+			              <option value="S" th:selected="${getItem.itemStatus} == 'S'">재고없음</option>
+			              <option value="N" th:selected="${getItem.itemStatus} == 'N'">판매종료</option>
+			            </select>
+			          </td>
+			        </tr>
+			        <tr>
+			          <th id="itemCate_Th">카테고리</th>
+			          <td>
+			          <div id="div_itemRadio">&ensp;&ensp;
+			          	<input type="radio" name="itemCate" value="케이크" th:checked="${getItem.itemCate} == '케이크'"><label for="케이크">케이크&ensp;&ensp;</label>
+			          	<input type="radio" name="itemCate" value="빵"  th:checked="${getItem.itemCate} == '빵'"><label for="빵">빵&ensp;&ensp;</label>
+			          	<input type="radio" name="itemCate" value="쿠키" th:checked="${getItem.itemCate} == '쿠키'"><label for="쿠키">쿠키&ensp;&ensp;</label>
+			          	<input type="radio" name="itemCate" value="디저트" th:checked="${getItem.itemCate} == '디저트'"><label for="디저트">디저트&ensp;&ensp;</label>
+			          	<input type="radio" name="itemCate" value="비건" th:checked="${getItem.itemCate} == '비건'"><label for="비건">비건</label>
+			          </div>
+			          </td>
+			        </tr>
+			        <tr>
+			        	<th>등록일</th>
+						<td name="itemRegdate" id="itemRegdateText" class="inputH"
+							th:text="${getItem.itemRegdate eq null ? '' : #strings.substring(getItem.itemRegdate, 0, 10)}">
+						</td>
+					</tr>
+			        <tr>
+			          <th>이름</th>
+			          <td>&ensp;&ensp;<input type="text" name="itemName" class="inputH" id="input_itemName" th:value="${getItem.itemName}">&ensp;&ensp;</td>
+			        </tr>
+			        <tr>
+			          <th>소제목</th>
+			          <td>&ensp;&ensp;<input type="text" name="itemMinName" class="inputH" id="input_itemMinName" th:value="${getItem.itemMinName}">&ensp;&ensp;</td>
+			        </tr>
+			        <tr>
+			          <th>설명</th>
+			          <td>&ensp;&ensp;<textarea cols="100" name="itemDetails" rows="10" id="itemRegTextarea" th:text="${getItem.itemDetails}"></textarea></td>
+			        </tr>
+			        <tr>
+			          <th>가격</th>
+			          <td>&ensp;&ensp;
+			          	<input type="text" name="itemPrice" class="inputH" id="input_itemPrice"
+			          	onkeyup="inputNumberFormat(this)" maxlength="8" th:value="${getItem.itemPrice}">원
+			          </td>
+			        </tr>
+			        <tr>
+			          <th>유통기한</th>
+			          <td>&ensp;&ensp;<input type="text" name="itemExpDate" class="inputH"  id="input_itemExpDate" th:value="${getItem.itemExpDate}"></td>
+			        </tr>
+			        <tr>
+			          <th>원산지</th>
+			          <td>&ensp;&ensp;<input type="text" name="itemOrigin" class="inputH" id="input_itemOrigin" th:value="${getItem.itemOrigin}"></td>
+			        </tr>
+			        <tr>
+			          <th>알레르기 정보</th>
+			          <td>&ensp;&ensp;<textarea name="itemAllergyInfo" id="input_itemAllergyInfo" class="inputH" th:text="${getItem.itemAllergyInfo}"></textarea></td>
+			        </tr>
+			        <tr>
+			          <th>영양정보</th>
+			          <td>
+			            <div>
+			              &ensp;&ensp;<input type="file" id="btnAtt" name="uploadFiles" multiple="multiple">
+			              <input type="file" id="changedFiles" name="changedFiles" style="display: none;" 
+			              	multiple="multiple">
+			              <p style="color: red; font-size: 0.9rem;">상품 영양정보를 변경하려면 이미지를 클릭하고, 영양정보를 다운로드하려면 이미지 파일명을 클릭하세요.</p>
+			              <div id="attZone">
+			              	<div th:each="imgFile : ${itemFileList}" style="display: inline-block; position: relative; 
+								width: 150px; height: 120px; margin: 5px; border: 1px solid #00f; z-index: 1;">
+								<input type="hidden" th:id="'fileNo' + ${imgFileStat.index}" 
+									th:name="'fileNo' + ${imgFileStat.index}" 
+									th:value="${imgFile.fileNo}">
+								<input type="hidden" th:id="'fileName' + ${imgFileStat.index}" 
+									th:name="'fileName' + ${imgFileStat.index}" 
+									th:value="${imgFile.fileName}">
+								<input type="file" th:id="'changedFile' + ${imgFile.fileNo}"
+									th:name="'changedFile' + ${imgFile.fileNo}" 
+									style="display: none;"
+									th:onchange="fnGetChangedFileInfo([[${imgFile.fileNo}]], event)">
+								<input th:if="${imgFileStat.last}" type="hidden" id="itemFileCnt"
+									name="itemFileCnt" th:value="${imgFileStat.count}">
+			
+								<img th:id="'img' + ${imgFile.fileNo}" 
+									th:src="@{'/item/' + ${imgFile.fileName}}"
+									style="width: 100%; height: 100%; z-index: none; cursor: pointer;"
+									class="fileImg" 
+									th:onclick="fnImgChange([[${imgFile.fileNo}]])">
+									
+								<input type="button" class="btnDel" 
+									value="x" th:data-del-file="${imgFile.fileNo}" 
+									style="width: 30px; height: 30px; position: absolute; right: 0px; bottom: 0px; 
+									z-index: 999; background-color: rgba(255, 255, 255, 0.1); color: #f00;"
+									onclick="fnImgDel(event)">
+								<p th:id="'fileName' + ${imgFile.fileNo}" style="display: inline-block; font-size: 8px;
+									cursor: pointer;" th:onclick="fnFileDown([[${getItem.itemNo}]], [[${imgFile.fileNo}]])"
+									th:text="${imgFile.fileOriginName}">
+								</p>
+							</div>
+			              </div>
+			            </div>
+			          </td>
+			        </tr>
+			        <tr>
+			          <th>재고</th>
+			          <td>&ensp;&ensp;
+			          	<div id="itemStockNm">
+							<button type="button" name="재고내리기" id="itemStockNm_minus">－</button>
+							<input type="number" name="itemStock" id="itemStockNm_cnt" class="inputH" th:value="${getItem.itemStock}">
+							<button type="button" name="재고올리기" id="itemStockNm_plus">＋</button>
 						</div>
-		              </div>
-		            </div>
-		          </td>
-		        </tr>
-		        <tr>
-		          <th>재고</th>
-		          <td>&ensp;&ensp;
-		          	<div id="itemStockNm">
-						<button type="button" name="재고내리기" id="itemStockNm_minus">－</button>
-						<input type="number" name="itemStock" id="itemStockNm_cnt" class="inputH" value="30">
-						<button type="button" name="재고올리기" id="itemStockNm_plus">＋</button>
-					</div>
-		          </td>
-		        </tr>
-			</table>
-		</div>
-      
-		<!-- 상품수정 버튼 -->
-		<div id="div_itemRegBtn">
-			<button type="button" id="itemUpdateBtn" onclick="fnUpdateBoard(); return false;">수정</button>
-		</div>
-      </form>
+			          </td>
+			        </tr>
+				</table>
+			</div>
+	      
+	      	<!-- 목록으로 버튼 -->
+			<div id="div_itemBtn">
+				<button type="button" id="itemListBtn">목록으로</button>
+			
+			<!-- 상품수정 버튼 -->
+				<button type="button" id="itemUpdateBtn" onclick="fnUpdateItem();">수정</button>
+			</div>
+		</form>
   </div>
 </body>
 </html>

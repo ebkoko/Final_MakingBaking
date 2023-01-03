@@ -79,12 +79,50 @@ public class AdminServiceImpl implements AdminService {
 		return imgFileRepository.findByFileReferNoAndFileType(itemNo, "item");
 	}
 	
+	@Override
+	public Item updateItem(Item item, List<ImgFile> uFileList) {
+		itemRepository.save(item);
+	      
+	      if(uFileList.size() > 0) {
+	    	  for(int i = 0; i < uFileList.size() ; i++) {
+	    		  if(uFileList.get(i).getFileStatus().equals("U")) {
+	    			  imgFileRepository.save(uFileList.get(i));
+	    		  } else if(uFileList.get(i).getFileStatus().equals("D")) {
+	    			  imgFileRepository.delete(uFileList.get(i));
+	    		  } else if (uFileList.get(i).getFileStatus().equals("I")) {
+	    			  //추가한 파일들은 boardNo은 가지고 있지만 boardFileNo가 없는 상태라
+	    			  //boardFileNo를 추가
+	    			  int itemFileNo = imgFileRepository.getMaxFileNo(
+	    					  uFileList.get(i).getFileReferNo());
+	    			  
+	    			  uFileList.get(i).setFileNo(itemFileNo);
+	    			  
+	    			  imgFileRepository.save(uFileList.get(i));
+	    		  }
+	    	  }
+	      }
+	      
+	      itemRepository.flush();
+	      
+	      System.out.println(item.toString());
+	      return item;
+	   }
+	
+	@Override
+	public void getUpdateItem(int itemNo) {
+		itemRepository.getUpdateItem(itemNo);
+		
+	}
 	
 	@Override
 	public void deleteItem(int itemNo) {
 		itemRepository.deleteById(itemNo);
 		
 	}
+
+	
+
+	
 
 	
 
