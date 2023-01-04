@@ -37,6 +37,7 @@ dependencies {
 	implementation 'org.mybatis:mybatis:3.5.11'
 	implementation 'org.mybatis:mybatis-spring:3.0.0'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	
 }
 

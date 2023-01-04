@@ -8,16 +8,18 @@
 		<script th:inline="javascript">
 			$(function() {
 				$("#btn2").on("click", function() {
+					console.log($("#form").serialize());
 					$.ajax({
 						url: "/user/findID",
 						type: "post",
-						data: $("#form").serialize,
+						data: $("#form").serialize(),
 						success: function(obj) {
 							const data = JSON.parse(obj);
+							console.log(data);
 							
 							$("#resultId").show();
 							
-							if(data.msg == "idOk") {
+							if(data.msg == "ok") {
 								$("#searchIdResult").text("아이디는 " + data.findID + " 입니다.");
 							} else{
 								$("#searchIdResult").text("아이디가 존재하지 않습니다.");
@@ -50,8 +52,8 @@
 		    <div class="c1">
 		      <form action="/user/findID" id="form" class="form" method="post">
 		        <h3>아이디 찾기</h3>
-		        <input type="text" placeholder="이름" class="box">
-		        <input type="text" placeholder="핸드폰번호" class="box">
+		        <input type="text" name="userNm" placeholder="이름" class="box">
+		        <input type="text" name="userTel" placeholder="핸드폰번호" class="box">
 		        <a th:href="@{/user/findPW}" class="findPw2">비밀번호찾기</a>
 		        <div id="resultId">
 					<p id="searchIdResult" style="color: red;"></p>

@@ -6,9 +6,49 @@
 <head>
 	<th:block layout:fragment="script">
 		<script th:inline="javascript">
-		
+			$(function() {
+				/*
+				$("#btn2").on("click", function() {
+					let userId = $("#userId").val();
+					let userMail = $("#userMail").val();
+					let userTel = $("#userTel").val();
+					
+					$.ajax({
+						url: "/user/findPW",
+						type: "get",
+						data: {
+							"userId": userId,
+							"userMail": userMail,
+							"userTel": userTel
+							},
+						success: function(res) {
+							if(res['check']) {
+								swal("임시번호 발송이 되었습니다.", "success").then((ok) => {
+									if(ok) {
+										$.ajax({
+											url: "/user/findPW/sendMail",
+											type: "post",
+											data: {
+												"userId": userId,
+												"userMail": userMail,
+												"userTel": userTel
+											}
+										})
+										window.location.href="/main/main?msg=" + obj.item.joinMsg;
+									}
+								})
+								$('#checkMsg').html('<p style="color:darkblue"></p>');
+							} else {
+								$('#checkMsg').html('<p style="color:red">일치하는 정보가 없습니다.</p>');
+							}
+						}
+					});
+				});
+				*/
+			});
 		</script>
 	</th:block>
+	
 	<th:block layout:fragment="css">
 		<link rel="stylesheet" th:href="@{/css/user/findPW.css}"/>
 	</th:block>
@@ -18,18 +58,22 @@
 	<div layout:fragment="content" class="container">
 	<main>
 	    <div class="c1">
-		      <form action="" class="form" method="post">
-		        <h3>비밀번호 찾기</h3>
-		        <input type="text" placeholder="아이디" class="box">
-		        <input type="text" placeholder="이메일" class="box">
-		        <input type="password" placeholder="핸드폰번호" class="box">
-		        <a th:href="@{/user/findID}" class="findId">아이디찾기</a>
-				<button type="button" id="btn2" class="btn2 size">확인</button>
-		        <div class="buttons">
-		          <button type="button" id="login2" class="btn2 login2">로그인</button>
-		        </div>
-		      </form>
-		    </div>
+	      <form action="" class="form" method="post">
+	        <h3>비밀번호 찾기</h3>
+	        <input type="text" id="userId" name="userId" placeholder="아이디" class="box">
+	        <div style="display: flex;">
+		        <input type="password" id="userTel" name="userTel" placeholder="핸드폰번호" class="box" style="width: 70%;">
+		        <button type="button" id="memberPhoneCheck" class="check" >인증번호받기</button>
+	        </div>
+	        <input type="text" placeholder="인증번호" class="box" style="height: 20px">
+	        <a th:href="@{/user/findID}" class="findId">아이디찾기</a>
+			<button type="button" id="btn2" class="btn2 size">확인</button>
+			<div id="checkMsg" style="color: red"></div>
+	        <div class="buttons">
+	          <button type="button" id="login2" class="btn2 login2">로그인</button>
+	        </div>
+	      </form>
+	    </div>
 	  </main>
 	</div>
 </body>

@@ -8,6 +8,22 @@ public interface UserService {
 
 	User idcheck(User user);
 
-	String findid(UserDTO userDTO);
-	
+	User findid(UserDTO userDTO);
+
+	/*
+	public boolean userCheck(String userId, String userMail, String userTel) {
+		
+		User user = userRepository.findUserByUserId(userEmail);
+		if(user!=null && user.getUserName().equals(userName)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+	};
+
+	void mailSend(UserDTO userDTO);
+
+	UserDTO createMailAndChangePassword(String userId, String userMail, String userTel);
+	*/
 }

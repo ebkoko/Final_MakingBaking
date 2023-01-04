@@ -64,3 +64,18 @@
       font-size: 2.5rem;
       color:black;
     }
+    .check {
+      width: 28%;
+      height: 3.3rem;
+      margin: 0.6rem 0;
+      margin-left: 0.7rem;
+      background: white;
+  	  color: #28693F;
+  	  border: 1px solid #28693F;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
