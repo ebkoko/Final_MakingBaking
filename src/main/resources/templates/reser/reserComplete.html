@@ -66,7 +66,27 @@
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
-				
+				$(function() {
+					const reserNo = /*[[${reserNo}]]*/;
+					console.log(typeof String(reserNo)); // number
+					console.log(String(reserNo).substring(0,8)); // 20230102000029
+					let reserDateYMD = String(reserNo).substring(0,8); // 20230102
+					let reserDateYear = reserDateYMD.substr(0,4); // 2023
+					let reserDateMonth = reserDateYMD.substr(4,2); // 01
+					let reserDateDate = reserDateYMD.substr(6,2); // 02
+					let reserDate = reserDateYear + "/" + reserDateMonth + "/" + reserDateDate; // 2023-01-02
+					console.log(new Date(reserDate)); // Mon Jan 02 2023 09:00:00 GMT+0900 (한국 표준시)
+					let reserD = new Date(reserDate);
+					reserD.setDate(reserD.getDate()+1);
+					let deadline = reserD.toLocaleDateString('ko-KR', {
+					    year: 'numeric',
+					    month: 'long',
+					    day: 'numeric',
+					});
+					console.log(deadline);
+					$(".deadline").text(deadline);
+					
+				});
 			</script>
 		</th:block>
 	</head>
@@ -81,15 +101,15 @@
 	            </div>
 	            <hr>
 	            <div id="completeMent">
-	                <span class="reserNumber">예약번호: </span><span>221207172500001</span>
+	                <div class="reserNumber">예약번호: <span th:text="${reserNo}"></span></div>
 	                <p class="reserCompleteMent">예약 완료되었습니다!</p>
-	                <div id="bankPayment">
+	                <div id="bankPayment" th:if="${reserPayment == '무통장입금'}">
 	                    <span>입금계좌: 국민은행 799502-04-026913 예금주: 메이킹베이킹</span>
-	                    <p class="deposit">입금액: <span class="totalPrice" ></span><span>원</span>&emsp;
-	                    <span>입금기한: </span><span class="deadline" ></span><span>오후 11시 59분 59초</span></p>
+	                    <p class="deposit"><span>입금액: </span><span class="totalPrice" th:text="${totalPayPrice}"></span><span>원</span>&emsp;
+	                    <span>입금기한: </span><span class="deadline"></span><span>오후 11시 59분 59초</span></p>
 	                </div>
-	                <div id="kakaoPay">
-	                    <span>카카오페이 결제</span><span> &#124; 결제금액: </span><span class="totalPrice" th:text="${totalPrice}"></span><span>원</span>
+	                <div id="kakaoPay" th:unless="${reserPayment == '무통장입금'}">
+	                    <span>카카오페이 결제</span><span> &#124; 결제금액: </span><span class="totalPrice" th:text="${totalPayPrice}"></span><span>원</span>
 	                </div>
 	                <div id="btns">
 	                    <input type="button" id="btnMypage" value="마이페이지" onclick="location.href='/mypage/myPage'">

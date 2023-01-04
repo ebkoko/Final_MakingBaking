@@ -23,21 +23,22 @@ import lombok.NoArgsConstructor;
 @DynamicInsert
 public class Reser {
 	@Id
-	private long reserNo;
-	private String userId;
-	private LocalDateTime reserDate = LocalDateTime.now();
+	private long reserNo;									// 예약번호
+	private String userId;									// 회원 아이디
+	private LocalDateTime reserDate = LocalDateTime.now();	// 예약일
 	@Builder.Default
-	private String reserStatus = "입금대기";
-	private String partiName;
-	private String partiTel;
-	private String partiTime;
-	private int classNo;
-	private int reserPersonCnt;
-	private String orderName;
-	private String orderTel;
+	private String reserStatus = "입금대기";					// 예약상태(입금대기, 결제완료 등..)
+	private String partiName;								// 예약자명
+	private String partiTel;								// 예약자 전화번호
+	private String partiTime;								// 예약시간
+	private int classNo;									// 클래스번호
+	private int reserPersonCnt;								// 예약인원수
+	private String orderName;								// 주문자명
+	private String orderTel;								// 주문자 전화번호
 	@Nullable
-	private String request;
-	private String reserPayment;
+	private String request;									// 요청사항
+	private String reserPayment;							// 결제방법(무통장입금, 카카오페이)
 	@Nullable
-	private String depositor;
+	private String depositor;								// 무통장입금 입금자명
+	private int reserTotalPrice;							// 총 결제금액
 }

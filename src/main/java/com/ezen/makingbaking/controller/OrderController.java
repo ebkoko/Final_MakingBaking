@@ -174,7 +174,7 @@ public class OrderController {
 		
 		model.addAttribute("itemList", itemList);
 		
-		return "redirect:/order/orderComplete";
+		return "redirect:/order/orderComplete.html";
 	}
 	
 }
