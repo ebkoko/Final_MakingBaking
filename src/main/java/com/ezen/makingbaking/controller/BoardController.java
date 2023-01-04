@@ -1,7 +1,9 @@
 package com.ezen.makingbaking.controller;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,7 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
+	// qna 글 목록 보여주기
 	@GetMapping("/qnaList/{cateCode}")
 	public ModelAndView getQnaList(BoardDTO boardDTO, @PathVariable("cateCode") int cateCode,
 			@PageableDefault(page=0, size=10) Pageable pageable) {
@@ -62,6 +65,7 @@ public class BoardController {
 		return mv;
 	}
 	
+	// qna - ajax로 처리한 페이징 글 목록 보여주기
 	@PostMapping("/qnaList/{cateCode}")
 	public ResponseEntity<?> getQnaPageList(@PathVariable("cateCode") int cateCode,
 			@PageableDefault(page=0, size=10) Pageable pageable) {
@@ -95,6 +99,7 @@ public class BoardController {
 		}
 	}
 	
+	// 공지사항 글 목록 보여주기
 	@GetMapping("/noticeList/{cateCode}")
 	public ModelAndView getNoticeList(BoardDTO boardDTO, @PathVariable("cateCode") int cateCode,
 			@PageableDefault(page=0, size=10) Pageable pageable) {
@@ -127,6 +132,7 @@ public class BoardController {
 		return mv;
 	}
 	
+	// 공지사항 - ajax로 처리한 페이징 글 목록 보여주기
 	@PostMapping("/noticeList/{cateCode}")
 	public ResponseEntity<?> getNoticePageList(@PathVariable("cateCode") int cateCode,
 			@PageableDefault(page=0, size=10) Pageable pageable) {
@@ -160,6 +166,7 @@ public class BoardController {
 		}
 	}
 	
+	// 이벤트 글 목록 보여주기
 	@GetMapping("/eventList/{cateCode}")
 	public ModelAndView getEventList(BoardDTO boardDTO, @PathVariable("cateCode") int cateCode,
 			@PageableDefault(page=0, size=10) Pageable pageable) {
@@ -192,6 +199,7 @@ public class BoardController {
 		return mv;
 	}
 	
+	// 이벤트 - ajax로 처리한 페이징 글 목록 보여주기
 	@PostMapping("/eventList/{cateCode}")
 	public ResponseEntity<?> getEventPageList(@PathVariable("cateCode") int cateCode,
 			@PageableDefault(page=0, size=10) Pageable pageable) {
@@ -225,6 +233,7 @@ public class BoardController {
 		}
 	}
 	
+	// qna 글 조회수 증가 -> qna 글 상세보기로 이동
 	@GetMapping("/updateQnaCnt/{boardNo}")
 	public void updateQnaCnt(@PathVariable int boardNo, HttpServletResponse response) throws IOException {
 		boardService.updateBoardCnt(boardNo);
@@ -232,6 +241,7 @@ public class BoardController {
 		response.sendRedirect("/board/qna/" + boardNo);
 	}
 	
+	// 공지사항 글 조회수 증가 -> 공지사항 글 상세보기로 이동
 	@GetMapping("/updateNoticeCnt/{boardNo}")
 	public void updateNoticeCnt(@PathVariable int boardNo, HttpServletResponse response) throws IOException {
 		boardService.updateBoardCnt(boardNo);
@@ -239,6 +249,7 @@ public class BoardController {
 		response.sendRedirect("/board/notice/" + boardNo);	
 	}
 	
+	// 이벤트 글 조회수 증가 -> 이벤트 글 상세보기로 이동
 	@GetMapping("/updateEventCnt/{boardNo}")
 	public void updateEventCnt(@PathVariable int boardNo, HttpServletResponse response) throws IOException {
 		boardService.updateBoardCnt(boardNo);
@@ -246,6 +257,7 @@ public class BoardController {
 		response.sendRedirect("/board/event/" + boardNo);	
 	}
 	
+	// qna 글 상세보기
 	@GetMapping("/qna/{boardNo}")
 	public ModelAndView getQna(@PathVariable int boardNo){
 		Board board = boardService.getBoard(boardNo);
@@ -270,6 +282,7 @@ public class BoardController {
 		return mv;
 	}
 	
+	// 공지사항 글 상세보기
 	@GetMapping("/notice/{boardNo}")
 	public ModelAndView getNotice(@PathVariable int boardNo){
 		Board board = boardService.getBoard(boardNo);
@@ -293,6 +306,7 @@ public class BoardController {
 		return mv;
 	}
 	
+	// 이벤트 글 상세보기
 	@GetMapping("/event/{boardNo}")
 	public ModelAndView getEvent(@PathVariable int boardNo){
 		Board board = boardService.getBoard(boardNo);
@@ -315,13 +329,101 @@ public class BoardController {
 
 		return mv;
 	}
-	/*
-	@GetMapping("/qna/insertQna")
-	public ModelAndView insertBoardView(@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
+	
+	// [user] qna 질문 글 작성 페이지 이동
+	@GetMapping("/qna/insertQna/{cateCode}/{boardNo}")
+	public ModelAndView insertQnaView(@PathVariable("cateCode") int cateCode, @PathVariable int boardNo, @AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
 		System.out.println(customUser.getUsername());
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("board/insertBoard.html");
+		mv.addObject("cateCode", cateCode);
+		mv.setViewName("board/insertQna.html");
 		return mv;
 	}
-	*/
+
+	// [admin] getQna에서 user가 작성한 질문 데이터를 가지고 답글 작성 페이지로 이동
+	@GetMapping("/qna/insertAnswer/{cateCode}/")
+	public ModelAndView insertAnswerView(@PathVariable("cateCode") int cateCode, @AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
+		System.out.println(customUser.getUsername());
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("board/insertAnswer.html");
+		return mv;
+	}
+	
+	// [admin] 공지사항 작성 페이지 이동
+	@GetMapping("/notice/insertNotice/{cateCode}")
+	public ModelAndView insertNoticeView(@PathVariable("cateCode") int cateCode, @AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
+		System.out.println(customUser.getUsername());
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("board/insertNotice.html");
+		return mv;
+	}
+	
+	// [admin] 이벤트 글 작성 페이지 이동
+	@GetMapping("/event/insertEvent/{cateCode}")
+	public ModelAndView insertEventView(@PathVariable("cateCode") int cateCode, @AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
+		System.out.println(customUser.getUsername());
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("board/insertEvent.html");
+		return mv;
+	}
+	
+	// [user] qna 글 작성
+	@PostMapping("/qna/{cateCode}")
+	public void insertQna(BoardDTO boardDTO, @PathVariable("cateCode") int cateCode, HttpServletResponse response, HttpServletRequest request,
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException { // response 다시 게시글 목록으로 갈 수 있게
+		Board board = Board.builder()
+						   .boardTitle(boardDTO.getBoardTitle())
+						   .boardContent(boardDTO.getBoardContent())
+						   .boardWriter(customUser.getUsername())
+						   .boardRegdate(LocalDateTime.now())
+						   .cateCode(cateCode)
+						   .build();
+		
+		boardService.insertBoard(board);
+		
+		response.sendRedirect("/board/qnaList/" + cateCode);
+	}
+	
+	// [admin] 공지사항 글 작성
+	@PostMapping("/notice/{cateCode}")
+	public void insertNotice(BoardDTO boardDTO, @PathVariable("cateCode") int cateCode, HttpServletResponse response, HttpServletRequest request,
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException { // response 다시 게시글 목록으로 갈 수 있게
+		Board board = Board.builder()
+						   .boardTitle(boardDTO.getBoardTitle())
+						   .boardContent(boardDTO.getBoardContent())
+						   .boardWriter(customUser.getUsername())
+						   .boardRegdate(LocalDateTime.now())
+						   .cateCode(cateCode)
+						   .build();
+		
+		boardService.insertBoard(board);
+		
+		response.sendRedirect("/board/noticeList/" + cateCode);
+	}
+	
+	// [admin] 이벤트 글 작성
+	@PostMapping("/event/{cateCode}")
+	public void insertEvent(BoardDTO boardDTO, @PathVariable("cateCode") int cateCode, HttpServletResponse response, HttpServletRequest request,
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException { // response 다시 게시글 목록으로 갈 수 있게
+		Board board = Board.builder()
+						   .boardTitle(boardDTO.getBoardTitle())
+						   .boardContent(boardDTO.getBoardContent())
+						   .boardWriter(customUser.getUsername())
+						   .boardRegdate(LocalDateTime.now())
+						   .cateCode(cateCode)
+						   .build();
+		
+		boardService.insertBoard(board);
+		
+		response.sendRedirect("/board/eventList/" + cateCode);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

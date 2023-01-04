@@ -11,17 +11,6 @@
 <body>
 <div layout:fragment="content">
 	<div id="container" style="height: 800px;">
-	  <div id="high-nav">
-	    <button id="qna-button" style="background-color: #28693F; color: white; ">
-	      문의사항
-	    </button>
-	    <button id="notice-button">
-	      공지사항
-	    </button>
-	    <button id="event-button">
-	      이벤트
-	    </button>
-	  </div>
 	  <div id="high-container">
 	    <div id="mid-container">
 	      <div id="question-title">
@@ -45,10 +34,10 @@
 	      </th:block>
 	      <div id="btn-container">
 	        <div id="left-btn">
-	          <input type="button" id="listbtn" value="목록">
+	          <input type="button" id="listbtn" value="목록" onclick="history.back()">
 	        </div>
 	        <div id="right-btn">
-	          <input type="submit" id="insertbtn" value="등록">
+	          <input type="submit" id="insertbtn" vcalue="등록">
 	        </div>
 	      </div>      
 	    </div>

@@ -13,5 +13,7 @@ public interface BoardService {
 
 	Board getBoard(int boardNo);
 
+	void insertBoard(Board board);
+
 
 }

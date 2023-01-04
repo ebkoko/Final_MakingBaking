@@ -97,6 +97,11 @@
 					</li>
 				</ul>
 			</div>
+			<th:block sec:authorize="hasRole('ROLE_ADMIN')" th:remove="tag">
+		      <div id="btn-container">
+			    <a th:href='@{/board/notice/insertNotice/{cateCode} (cateCode=${cateCode})}' id="right-btn">등록</a>
+			  </div>    
+			</th:block>
 	    </div>
 	  </div>
 	</div>
