@@ -107,4 +107,26 @@ public class CartController {
 		mv.setViewName("/order/order.html");
 		return mv;
 	}
+	
+	@GetMapping("/orderCartList")
+	public ModelAndView orderCartListKakaoCancel(@RequestParam Map<String, String> paramMap, @AuthenticationPrincipal CustomUserDetails customUser) throws JsonMappingException, JsonProcessingException {
+		String itemList = paramMap.get("itemList").toString();
+		
+		User user = customUser.getUser();
+		
+		List<Map<String, Object>> returnItemList = new ObjectMapper().readValue(itemList, 
+																new TypeReference<List<Map<String, Object>>>() {});
+		
+		ModelAndView mv = new ModelAndView();
+		
+		user = userService.idcheck(user);
+		
+		mv.addObject("userInfo", user);
+		mv.addObject("itemList", returnItemList);
+		mv.addObject("totalItemPrice", Integer.parseInt(paramMap.get("totalItemPrice")));
+		mv.addObject("deliFee", Integer.parseInt(paramMap.get("deliFee")));
+		
+		mv.setViewName("/order/order.html");
+		return mv;
+	}
 }

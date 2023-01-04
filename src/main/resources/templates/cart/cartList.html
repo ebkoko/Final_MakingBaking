@@ -385,7 +385,7 @@
 		                    <div class="itemView">
 		                        <img class="item_Img" th:src="@{'/item/' + ${cart.fileName}}">
 		                        <div class="item_Detail">
-		                            <div class="detailName"><a th:href="@{/}" th:text="${cart.itemName}"></a></div>
+		                            <div class="detailName"><a th:href="@{/item/item/{itemNo} (itemNo=${cart.itemNo})}" th:text="${cart.itemName}"></a></div>
 		                            <div class="detailPrice" th:text="${#numbers.formatInteger(cart.itemPrice, 3, 'COMMA')}"></div><span>원</span>
 		                        </div>    
 		                    </div>

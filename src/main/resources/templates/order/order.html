@@ -512,6 +512,8 @@
 						if(!isKakaoPay) {						
 							$("#btnkakaoPay").css("color", "#28693F").css("background", "white");
 							pushKakaoPay = false;
+							$("#orderPayment").val('');
+							$("#orderStatus").val('');
 						} else {
 							$("#btnkakaoPay").css("color", "white").css("background", "#28693F");
 							pushKakaoPay = true;
