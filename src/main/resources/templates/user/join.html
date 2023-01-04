@@ -11,12 +11,12 @@
   			<script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
 			<script th:inline="javascript">
 				$(function() {
-					let userId = false;
 					let checkId = false;
 					let userPw = false;
 					let pwRecheck = false;
 					let name = false;
 					let birth = false;
+					let gender = false;
 					let tel = false;
 					let mail = false;
 					let addr3 = false;
@@ -55,7 +55,7 @@
 						
 					$("#userPw").on("keyup", function(e) {
 				        let password = document.querySelector('#userPw').value;
-				
+						/*
 				        let strength = Strength(password);
 				        if(strength <= 2) {
 				          $(".pw-check").addClass('weak');
@@ -70,89 +70,117 @@
 				          $(".pw-check").removeClass('normal');
 				          $(".pw-check").addClass('strong');
 				        }
-				      });
+				        */
+				        let strength = Strength(password);
+				        if(strength <= 2) {
+				          $(".pw-check").addClass('weak');
+				          $(".pw-check").removeClass('strong');
+				        } else {
+				          $(".pw-check").removeClass('weak');
+				          $(".pw-check").addClass('strong');
+				        }
+				    });
 				     
 				      
-						//비밀번호 입력될때마다 유효성 검사
-						$("#userPw").on("change", function() {
-							//비밀번호 유효성 처리
-							if(!Strength($("#userPw").val())) {
-								userPw = false;
-								$("#userPwCheck").hide();
-								$("#userPw").focus();
-							} else {
-								userPw = true;
-								$("#userPwCheck").show();
-							}
-							
-							//비밀번호 확인까지 입력한 후 다시 비밀번호 재설정
-							if($("#userPw").val() == $("#userPwCheck").val()) {
-								userPwCheck = true;
-								$("#pwRecheck").css("color", "#0f0");
-								$("#pwRecheck").text("비밀번호가 일치합니다.");
-							} else {
-								userPwCheck = false;
-								$("#pwRecheck").css("color", "#f00");
-								$("#pwRecheck").text("비밀번호가 일치하지 않습니다.");
-							}
-						});
-				      
-				      $("#userPwCheck").on("change", function() {
-							
-				        $("#pwRecheck").show();
-				        if($("#userPw").val() == $("#userPwCheck").val()) {
-				          pwRecheck = true;
-				          $("#pwRecheck").css("color", "#0f0");
-				          $("#pwRecheck").text("비밀번호가 일치합니다.");
-				        } else {
-				          pwRecheck = false;
-				          $("#pwRecheck").css("color", "#f00");
-				          $("#pwRecheck").text("비밀번호가 일치하지 않습니다.");
-				        }
-				      });
-				      
+					//비밀번호 입력될때마다 유효성 검사
+					$("#userPw").on("change", function() {
+						//비밀번호 유효성 처리
+						if(!Strength($("#userPw").val())) {
+							userPw = false;
+							$("#userPwCheck").hide();
+							$("#userPw").focus();
+						} else {
+							userPw = true;
+							$("#userPwCheck").show();
+						}
+						
+						//비밀번호 확인까지 입력한 후 다시 비밀번호 재설정
+						if($("#userPw").val() == $("#userPwCheck").val()) {
+							userPwCheck = true;
+							$("#pwRecheck").css("color", "#0f0");
+							$("#pwRecheck").text("비밀번호가 일치합니다.");
+						} else {
+							userPwCheck = false;
+							$("#pwRecheck").css("color", "#f00");
+							$("#pwRecheck").text("비밀번호가 일치하지 않습니다.");
+						}
+					 });
+  
+					$("#userPwCheck").on("change", function() {
+						$("#pwRecheck").show();
+					    if($("#userPw").val() == $("#userPwCheck").val()) {
+					      pwRecheck = true;
+					      $(".check2").addClass('right1');
+				          $(".check2").removeClass('wrong1');
+					      $("#pwRecheck").css("color", "#0f0");
+					      $("#pwRecheck").text("비밀번호가 일치합니다.");
+						} else {
+					      pwRecheck = false;
+					      $(".check2").removeClass('right1');
+				          $(".check2").addClass('wrong1');
+					      $("#pwRecheck").css("color", "#f00");
+					      $("#pwRecheck").text("비밀번호가 일치하지 않습니다.");
+					    }
+					});
+				    //이름 유효성
+			        $("#userNm").on("change", function() {
+						if(!userName($("#userNm").val())) {
+							name = false;
+							$("#userNm").focus();
+						} else {
+							name = true;
+						}
+					});
+					//생일 유효성
+					$("#userBirth").on("change", function() {
+						if(!userBirth($("#userBirth").val())) {
+							birth = false;
+							$("#userBirth").focus();
+						} else {
+							birth = true;
+						}
+					});
+					//번호 유효성
+					$("#userTel").on("change", function() {
+						if(!userTel($("#userTel").val())) {
+							tel = false;
+							$("#userTel").focus();
+						} else {
+							tel = true;
+						}
+					});
+					//이메일 유효성
+					$("#userMail").on("change", function() {
+						if(!userMail($("#userMail").val())) {
+							mail = false;
+							$("#userMail").focus();
+						} else {
+							mail = true;
+						}
 					});
 					
-					//갯수제한
+					//갯수제한(작동이상)
 					function Strength(password) {
 				        let i = 0;
 				        if(password.length > 5) {
 				          i++;
 				        }
-				        if(password.length >= 10) {
+				        if(password.length = 15) {
 				          i++;
 				        }
-				        if(/^(?=.*[a-zA-Z])/.test(password)) {
-				          i++;
-				        }
-				        if(/(?=.*[!@#$%^&*+=-])/.test(password)) {
-				          i++
-				        }
-				        if(/(?=.*[0-9]$).{6,15}/.test(password)) {
-				          i++
-				        }
+				        if(/^(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=-])(?=.*[0-9]).{6,15}$/.test(password)) {
+							i++;
+						}
 				        return i;
 			        }
-			        
-			        //이름 유효성
-			        $("#userNm").on("change", function() {
-						if(!userName($("#userNm").val())) {
-							userNm = false;
-							$("#userNm").hide();
-							$("#userNm").focus();
-						} else {
-							userNm = true;
-							$("#userNm").show();
-						}
-					});
-			        
 			        //이름
 			        function userName(name) {
 						return /^[a-zA-Zㄱ-힣]$/.test(name);
 					}
 			        //생일
 			        function userBirth(birth) {
-			        	return /^[0-9]*$/.test(birth);
+			        	return /^(19|20)\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[0-1])$/.test(birth); 
+			        	//return true;
 					}
 			        //핸드폰번호
 			        function userTel(tel){
@@ -160,18 +188,12 @@
 					}
 					//이메일
 					function userMail(character) {
-						return /^[A-z|0-9]([A-z|0-9]*)(@)([A-z]*)(\.)([A-z]*)$/.test(character);
+						return /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/.test(character);
 					}
-					
-					
-					$("#joinForm").on("submit", function(e) {
+				      
+				      
+			      	$("#joinForm").on("submit", function(e) {
 						e.preventDefault();
-						
-						if(!userId) {
-							alert("아이디를 입력해주세요.");
-							$("#userId").focus();
-							return;
-						}
 						if(!checkId) {
 							alert("중복체크를 눌러주세요.");
 							$("#userId").focus();
@@ -187,11 +209,6 @@
 							$("#userPwCheck").focus();
 							return;
 						}
-						if(!name) {
-							alert("이름을 입력해주세요.");
-							$("#userNm").focus();
-							return;
-						}
 						if(!birth) {
 							alert("생년월일을 입력해주세요.");
 							$("#userBirth").focus();
@@ -205,11 +222,6 @@
 						if(!mail) {
 							alert("이메일을 입력해주세요.");
 							$("#userMail").focus();
-							return;
-						}
-						if(!addr3) {
-							alert("상세주소를 입력해주세요.");
-							$("#userAddr3").focus();
 							return;
 						}
 						
@@ -233,39 +245,36 @@
 							}
 						})
 					});
+				});
+				
 					
-					
-					
-					
-					
-					
-					//작동
-				    function findAddr(){
-				      new daum.Postcode({
-				        oncomplete: function(data) {
-				          let addr1 = data.roadAddress;
-				          let addr2 = data.jibunAddress;
-				          document.getElementById('post').value = data.zonecode;
-				          if(addr1 !== ''){
-				          document.getElementById("addr").value = addr1;
-				          } else if(addr2 !== '') {
-				            document.getElementById("userAddr3").value = addr2;
-				          }
-				        }
-				      }).open();
-				    }
-				    
-				    function fnPwShow(div) {
-						let pswrd = document.querySelector('#userPw');
-				        if(pswrd.type === 'password') {
-				          pswrd.setAttribute('type', 'text');
-				          div.classList.replace('show', 'hide');
-				        }
-				        else {
-				          pswrd.setAttribute('type', 'password');
-				          div.classList.replace('hide', 'show');
-				        }
-					}
+				//작동
+			    function findAddr(){
+			      new daum.Postcode({
+			        oncomplete: function(data) {
+			          let addr1 = data.roadAddress;
+			          let addr2 = data.jibunAddress;
+			          document.getElementById('post').value = data.zonecode;
+			          if(addr1 !== ''){
+			          document.getElementById("addr").value = addr1;
+			          } else if(addr2 !== '') {
+			            document.getElementById("userAddr3").value = addr2;
+			          }
+			        }
+			      }).open();
+			    }
+			    
+			    function fnPwShow(div) {
+					let pswrd = document.querySelector('#userPw');
+			        if(pswrd.type === 'password') {
+			          pswrd.setAttribute('type', 'text');
+			          div.classList.replace('show', 'hide');
+			        }
+			        else {
+			          pswrd.setAttribute('type', 'password');
+			          div.classList.replace('hide', 'show');
+			        }
+				}
 			</script>
 		</th:block>
 		
@@ -298,7 +307,7 @@
 		            <input type="password" id="userPwCheck" name="userPwCheck" required class="input" placeholder="비밀번호확인" style="margin-top: 12px;"><label for="userPwCheck" class="input-label"></label>
 		          </div>
 		          <div class="check-light"></div>
-		          <p id="pwRecheck" style="font-size: 11px; text-align: left;"></p>
+		          <p id="pwRecheck" style="font-size: 12px; font-weight: bolder; margin-left: 5px; text-align: left;"></p>
 		        </div>
 		
 		        <input type="text" id="userNm" name="userNm" placeholder="이름" class="box">

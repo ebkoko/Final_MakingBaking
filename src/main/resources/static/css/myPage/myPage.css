@@ -1,8 +1,9 @@
     .centre {
       display: flex;
-      justify-content: center;
+      /* justify-content: center; */
       /* align-items: center; */
       /* height:100% */
+      margin-left: 35rem;
     }
 
     /* 사이드 바 */
@@ -12,15 +13,17 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: rgba(39, 39, 39, 0.425);
+      background: #28693F;
       margin-top: 1.5rem;
     }
+    .centre .left-nav-bar .mypage2 h2 a{
+		color:white;
+	}
 
     .menu {
       width: 170px;
       height: 400px;
       border: 1px solid rgba(0,0,0,.1);
-      background: rgba(0,0,0,.1);
     }
     
     .menu-group, .menu-name {
@@ -34,7 +37,7 @@
 	
     .centre .left-nav-bar .menu .sub-menu .menu-group .menu-name a:hover,
     .centre .left-nav-bar .menu .sub-menu .menu-group a:hover {
-		color: red;
+		color: #28693F;
 	}
     
     .centre .left-nav-bar .menu .sub-menu{
