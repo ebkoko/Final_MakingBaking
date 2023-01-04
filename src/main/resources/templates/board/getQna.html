@@ -10,7 +10,7 @@
 </head>
 <body>
 <div layout:fragment="content">
-	<div id="container" style="height: 800px;">
+	<div id="container" style="height: 100%; margin: 100px auto 200px;">
 	  <div id="high-container">
 	    <div id="mid-container">
 	      <div id="question-title">
@@ -21,7 +21,7 @@
 	      </div>
 	      <hr>
 	      <th:block th:if="${getBoard.boardReply}">
-		      <div id="answer-content" style="border: 1px solid red;">        
+		      <div id="answer-content">        
 		        <p id="answer-text" th:text="${getBoard.boardReply}"></p>
 		      </div>
 	      </th:block>
@@ -36,9 +36,14 @@
 	        <div id="left-btn">
 	          <input type="button" id="listbtn" value="목록" onclick="history.back()">
 	        </div>
+	        <!--<div id="right-btn">
+	          <input type="submit" id="insertbtn" value="등록">
+	        </div>-->
+	        <th:block sec:authorize="hasRole('ROLE_ADMIN')" th:remove="tag">
 	        <div id="right-btn">
-	          <input type="submit" id="insertbtn" vcalue="등록">
-	        </div>
+			  <a th:href='@{/board/qna/insertAnswer/{cateCode}/{boardNo} (cateCode=${getBoard.cateCode}, boardNo=${getBoard.boardNo})}' id="insertbtn">답변등록</a>   
+			</div>
+			</th:block>
 	      </div>      
 	    </div>
 	  </div>

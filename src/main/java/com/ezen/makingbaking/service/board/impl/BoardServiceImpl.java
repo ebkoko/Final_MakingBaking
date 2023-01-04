@@ -34,6 +34,12 @@ public class BoardServiceImpl implements BoardService {
 		boardRepository.save(board);		
 	}
 
+	@Override
+	public void updateBoard(Board board) {
+		boardRepository.updateAnswer(board.getBoardNo(), board.getBoardReply());
+		
+	}
+
 
 	
 

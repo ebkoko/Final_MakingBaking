@@ -15,5 +15,7 @@ public interface BoardService {
 
 	void insertBoard(Board board);
 
+	void updateBoard(Board board);
 
+	
 }
