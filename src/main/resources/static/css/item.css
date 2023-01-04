@@ -7,7 +7,7 @@
 		      position: relative;
 		      width: 950px;
 		      margin: 0 auto;
-		      margin-top: 100px;
+		      margin: 100px auto 180px;
 		      padding-top: 30px;
 		    }	
 		    #item_hr{
@@ -100,7 +100,40 @@
 		      font-weight: 520;
 		    }
 		    
-		
+			/* 상품 갯수*/
+			.itemNm {
+				float: left;
+			    position: relative;
+			    min-width: 114px;
+			    height: 34px;
+			    border: solid 1px #dde0e3;
+			}
+			.itemNm_minus, .itemNm_plus{
+				position: relative;
+			    width: 34px;
+			    height: 100%;
+			    background-color: #f1f2f4;
+			    border: none;
+			}
+			.itemNm_cnt{
+				width: 40px;
+			    height: 100%;
+			    border-width: 0 1px;
+			    vertical-align: top;
+			    color: #333333;
+			    font-size: 14px;
+			    font-weight: bold;
+			    line-height: 34px;
+			    text-align: center;  
+			}
+			
+			/* 인원수량 우측 화살표 없애기*/
+			input[type="number"]::-webkit-outer-spin-button,
+			input[type="number"]::-webkit-inner-spin-button {
+    			-webkit-appearance: none;
+    			margin: 0;
+			}
+			
 		    /* 메뉴바 dc_menu */
 		    .it_menu {
 		      margin-top: 60px;
@@ -201,16 +234,17 @@
 		    }
 		    #it_rvw_array {
 			 border: 1px solid rgb(102, 102, 102);
-			 width: 100px;
+			 width: 110px;
 			 height: 28px;			 
 			}
-		    table {
+		    .it_rvw_list {
 		      width: 100%;
 		      border-collapse: collapse;
 		      border-spacing: 2px;
 		      text-align: center;
+		      height: 25px;
 		    }
-		    table th{
+		    .it_rvw_list th{
 		      border:1px solid rgb(102, 102, 102);
 		      border-left: none;
 		      border-right: none;
@@ -218,7 +252,7 @@
 		      font-size: 14.5px;
 		      color: rgb(102, 102, 102);
 		    }
-		    table td{
+		    .it_rvw_list td{
 		      border:1px solid rgb(102, 102, 102);
 		      border-left: none;
 		      border-right: none;
@@ -226,11 +260,6 @@
 		      font-size: 13.5px;
 		      color: rgb(102, 102, 102);
 		    }		 
-		    .it_rvw_list{
-		      width: 100%;
-		      text-align: center;
-		      height: 25px;
-		    }
 		    .it_rvw_pasing{
 		      margin-top: 30px;
 		      margin-bottom: 50px;
@@ -250,9 +279,7 @@
 		      font-size: 16px;      
 		    }
 		    .it_pasing a:hover {
-		      font-weight: 600;
-		      /* border: 1.2px solid #28693F;
-		      background-color: rgb(234, 234, 234); */
+		      font-weight: 600;		   
 		      color: #28693F;
 		    }
 		
@@ -301,6 +328,9 @@
 		    }
 		
 		    /* 안내 **/
+		    #refundGuide {
+			  display:none;
+			}
 		    .c_refundGuide {
 		      display: flex;
 		      position: relative;
@@ -314,6 +344,9 @@
 		      font-size: 14px;
 		      
 		    }
+		    #cancelGuide {
+			  display:none;
+			}
 		    .c_cancelGuide {
 		      display: flex;
 		      position: relative;
@@ -390,8 +423,7 @@
 			    color: rgb(102, 102, 102);
 			    line-height: 25px;
 			}
-			.c_refundG_02text {
-				
+			.c_refundG_02text {				
 			 	padding: 2px 20px 0 0;
 			    font-weight: 300;
 			    font-size: 14px;

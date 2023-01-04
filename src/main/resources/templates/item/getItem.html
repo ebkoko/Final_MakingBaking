@@ -37,12 +37,82 @@
 						}
 						
 					});
-					//겹칠시 하나씩 작성
-					$("#itemGetBtn, #itemCartBtn, #itemLikeBtn").on("click", function() {
+					
+					// 비회원이 바로구매 클릭시 로그인 창 띄우기
+					$("#itemGetBtn").on("click", function() {
 						const isAuthenticated = $(".header > input[name='authenticate']").val();
 						if(isAuthenticated == "false") {
 							$('.login-form-container').toggleClass('active');
-							return history.back();
+							
+						} 
+						if(confirm("상품 수량 : " + $("#itemNm_cnt").val() +"개를 구매하시겠습니까?" )) {						
+								
+						$("#itemForm").submit();
+						} else {
+							alert("취소되었습니다.");
+							return;
+						}
+					});
+					
+					// 비회원이 장바구니 클릭시
+					$("#itemCartBtn").on("click", function() {
+						let cartClick = false;
+						
+						const isAuthenticated = $(".header > input[name='authenticate']").val();
+						if(isAuthenticated == "false") {
+							$('.login-form-container').toggleClass('active');
+						
+						}
+						
+						if(!cartClick) {
+							$.ajax({
+								url: '/cart/orderCartList',
+								type: 'post',
+								data: {itemNo},
+								success: function(obj) {
+									console.log(obj);
+									cartClick = true;
+								}, error: function(e) {
+									console.log(e);
+								}
+							});							
+						} else {
+							alert("장바구니는 1초에 한 번씩 클릭 가능합니다.");	
+							console.log('noclick');
+							setTimeout(function() {
+								cartClick = false;
+							}, 1000);
+						}
+					
+					});
+					
+					// 비회원이 좋아요 클릭시 로그인 창 띄우기
+					$("#itemLikeBtn").on("click", function() {
+						const isAuthenticated = $(".header > input[name='authenticate']").val();
+						if(isAuthenticated == "false") {
+							$('.login-form-container').toggleClass('active');
+						
+						}
+					});
+					
+					// 수량 선택
+					$("#itemNm_plus").on("click", function(){
+						$("#itemNm_cnt").val(parseInt($("#itemNm_cnt").val()) + 1);
+						
+						if($("#itemNm_cnt").val() > 4) {
+							$("#itemNm_cnt").val(4);
+							alert("최대 인원은 4명입니다.");
+							return;
+						}
+					});
+						
+					$("#itemNm_minus").on("click", function(){
+						$("#itemNm_cnt").val(parseInt($("#itemNm_cnt").val()) - 1);
+						
+						if($("#itemNm_cnt").val() < 1) {
+							$("#itemNm_cnt").val(1);
+							alert("최소 인원은 1명입니다.");
+							return;
 						}
 					});
 				});
@@ -58,18 +128,20 @@
 	      <section class="it_banner"> 
 	        <div class="it_banner_container">
 	          <div class="it_banner">
-	            <div class="itbanner_mainImg">
-	              <img class="itbanner_main_img" th:src="@{/images/class_main.jpg}"
-	              width="350px">
-	            </div>
-	            <div class="itbanner_explain">        
-	              <h2>타이틀 ${item.dayclassTitle }</h2>
-	              <div class="itbanner_explain_sTitle">
-	              <p>소제목 ${}</p>
-	              </div>
-	              <div class="itbanner_explain_KRW">
-	                <span>KRW ${}</span>
-	              </div> 
+				<form id="itemForm" action="/cart/orderCartList" method="post">	          
+		            <div class="itbanner_mainImg">
+		              <img class="itbanner_main_img" th:src="@{/images/class_main.jpg}"
+		              width="350px">
+		            </div>
+		            <div class="itbanner_explain">        
+		              <h2>타이틀 ${item.dayclassTitle }</h2>
+		              <div class="itbanner_explain_sTitle">
+		              <p>영양 정보</p>
+		              </div>
+		              <div class="itbanner_explain_KRW">
+		                <span>KRW ${}</span>
+		              </div> 
+	             </form>
 	              <div class="itbanner_explain_details">
 	                <span>&ensp;&ensp;</span>  
 	                <span>&ensp;3시간&ensp;</span>
@@ -80,8 +152,16 @@
 	                </button></span>
 	          		<span><button type="button" id="itemCartBtn" value="itemCart">장바구니  
 	                </button></span>
-	                <span><button type="button" id="itemLikeBtn" th:value="@{itemLike}">♡<!--<span 
-	                id="likeTd">${itemLikeCnt }</span>--></button></span>
+	                <span><button type="button" id="itemLikeBtn" th:value="@{itemLike}">♡
+	                </button></span>
+	              	<span>
+						<div class="itemNm">
+							<button type="button" name="수량내리기" id="itemNm_minus" class="itemNm_minus">－</button>
+							<input type="number" id="itemNm_cnt" class="itemNm_cnt" min="1" max="4" value="1">
+							<button type="button" name="수량올리기" id="itemNm_plus" class="itemNm_plus">＋</button>
+						</div>
+					</span>
+	              
 	              </div>
 	            </div>  
 	          </div>
@@ -179,44 +259,38 @@
 	                        </tr>
 	                      </thead>
 	                      <tbody>
-	                        <tr>
-	                          <td>⭐⭐⭐⭐⭐</td>
-	                          <td>국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있다.</td>
-	                          <td>2022/12/25</td>
-	                          <td>abcde***</td>
-	                        </tr>
-	                        <tr>
-	                          <td>⭐⭐</td>
-	                          <td>국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있다.</td>
-	                          <td>2022/12/25</td>
-	                          <td>abcde***</td>
-	                        </tr>
-	                        <tr>
-	                          <td>⭐⭐⭐⭐⭐</td>
-	                          <td>국회의원은 법률이 정하는 직을 겸할 수 없다. </td>
-	                          <td>2022/12/25</td>
-	                          <td>abcde***</td>
-	                        </tr>
-	                        <tr>
-	                          <td>⭐⭐⭐</td>
-	                          <td>국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있다.</td>
-	                          <td>2022/12/25</td>
-	                          <td>abcde***</td>
-	                        </tr>
+	                      <!--컨트롤러
+	                      	<tr th:each="review : ${reviewList}">
+	                          <td>
+	                          	<span th:each="num : ${#numbers.sequence(1, review.rvwScore)}">⭐</span>
+                          	  </td>
+	                          <td th:text="${review.rvwContent}"></td>
+	                          <td th:text="${review.rvwRegdate eq null ? '' : #strings.substring(review.rvwRegdate, 0, 10)}"></td>
+	                          <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${review.rvwWriter}"></td>
+	                          <td sec:authorize="!hasRole('ROLE_ADMIN')" th:text="${review.rvwWriter.substring(0, review.rvwWriter.length()-3) + '***'}"></td>
+	                        </tr> -->
 	                      </tbody>
 	                    </table>
 	                    <div class="it_rvw_pasing">
-	                      <div class="it_pasing">
-	                        <a href="" title="첫 페이지" class="firstPage" onclick="">《</a>
-	                        <a href="" title="이전 페이지" class="prevPage" onclick="">〈</a>
-	                        <a href="" title="1 페이지" class="Page1" onclick="">1</a>
-	                        <a href="" title="2 페이지" class="Page2" onclick="">2</a>
-	                        <a href="" title="3 페이지" class="Page3" onclick="">3</a>
-	                        <a href="" title="4 페이지" class="Page4" onclick="">4</a>
-	                        <a href="" title="5 페이지" class="Page5" onclick="">5</a>
-	                        <a href="" title="다음 페이지" class="nextPage" onclick="">〉</a>
-	                        <a href="" title="마지막 페이지" class="endPage" onclick="">》</a>
-	                      </div>
+	                    <!-- 페이징 컨트롤러
+	                      <ul class="paging" style="display: flex; justify-content: center;" 
+							th:if="${reviewList.totalElements > 0}"
+							th:with="pageNumber = ${reviewList.pageable.pageNumber},
+												pageSize = ${reviewList.pageable.pageSize},
+												totalPages = ${reviewList.totalPages},
+												startPage =${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+												tempEndPage = ${startPage + pageSize -1}, 
+												endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+								<li class="paging_btn" th:if="${pageNumber > 0}">
+									<a th:href="@{${pageNumber - 1}}">◀</a>
+								</li>
+								<li class="paging_btn" th:each="page : ${#numbers.sequence(startPage, endPage)}">
+									<a th:href="@{${page - 1}}" th:text="${page}"></a>
+								</li>
+								<li class="paging_btn" th:if="${pageNumber < totalPages - 1}">
+									<a th:href="@{page=${pageNumber + 1}}">▶</a>
+								</li>
+							</ul> -->
 	                    </div>
 	                  </span>
 	                </div>

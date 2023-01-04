@@ -1,10 +1,7 @@
 package com.ezen.makingbaking.controller;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,7 +61,9 @@ public class DayclassController {
 	public ModelAndView getDayclass(@PathVariable int dayclassNo, @PageableDefault(page = 0, size = 4) Pageable pageable,
 			@AuthenticationPrincipal CustomUserDetails customUser) {
 		
+		
 		Dayclass dayclass = dayclassService.getDayclass(dayclassNo);
+		
 		String loginUserId = "";
 		
 		if(customUser != null)
@@ -114,6 +112,40 @@ public class DayclassController {
 		return mv;
 	}
 	
+	// 페이징
+	@PostMapping("/dayclass/{dayclassNo}")
+	public ResponseEntity<?> getDayclassPage(@PathVariable int dayclassNo, 
+			@PageableDefault(page = 0, size = 4) Pageable pageable, 
+			@AuthenticationPrincipal CustomUserDetails customUser){
+		
+		ResponseDTO<ReviewDTO> response = new ResponseDTO<>();
+		
+		
+		try {
+			
+			Page<Review> pageReviewList = reviewService.getReviewList(dayclassNo, pageable);
+			
+			Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview 
+													-> ReviewDTO.builder()
+																  .rvwNo(pageReview.getRvwNo())
+																  .rvwReferNo(pageReview.getRvwReferNo())
+																  .rvwType(pageReview.getRvwType())
+																  .rvwContent(pageReview.getRvwContent())
+																  .rvwWriter(pageReview.getRvwWriter())
+																  
+																  .rvwRegdate(pageReview.getRvwRegdate().toString())
+																  .rvwScore(pageReview.getRvwScore())
+																  .build()
+									);
+																				  
+			response.setPageItems(pageReviewDTOList);
+			
+			return ResponseEntity.ok().body(response);
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
 	
 	// 좋아요
 	@PostMapping("like")
