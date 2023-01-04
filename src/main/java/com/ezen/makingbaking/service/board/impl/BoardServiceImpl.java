@@ -29,6 +29,11 @@ public class BoardServiceImpl implements BoardService {
 		return boardRepository.findById(boardNo).get();
 	}
 
+	@Override
+	public void insertBoard(Board board) {
+		boardRepository.save(board);		
+	}
+
 
 	
 

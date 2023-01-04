@@ -15,18 +15,7 @@
 </head>
 <body>
 	<div layout:fragment="content">
-		<div id="container" style="height: 100%; margin: 0 auto 100px;">
-		  <div id="high-nav">
-		    <button id="qna-button">
-		      문의사항
-		    </button>
-		    <button id="notice-button">
-		      공지사항
-		    </button>
-		    <button id="event-button">
-		      이벤트
-		    </button>
-		  </div>
+		<div id="container" style="height: 100%; margin: 100px auto 200px;">
 		  <div id="high-container">
 		    <div id="mid-container">
 		      <div id="board-title">
@@ -36,7 +25,7 @@
 		        <p th:text="${getBoard.boardContent}"></p>
 		      </div>
 		      <div id="btn-container">
-		        <input type="button" id="listbtn" value="목록">
+		        <input type="button" id="listbtn" value="목록" onclick="history.back()">
 		      </div>      
 		    </div>
 		  </div>

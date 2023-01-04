@@ -9,40 +9,42 @@
   </th:block> 
 </head>
 <body>
-<div id="container">
-  <div id="high-nav">
-    <button id="qna-button">
-      문의사항
-    </button>
-    <button id="notice-button">
-      공지사항
-    </button>
-    <button id="event-button">
-      이벤트
-    </button>
-  </div>
-  <div id="high-container">
-    <div id="mid-container">
-      <div id="question-title">
-        <h3>Q. 교환하고 싶은데 배송비는 얼마나 부과되나요?</h3>
-      </div>
-      <div id="question-content">
-        <p>12월 12일에 물건을 구매했는데, 제가 원하는 상품이 아니예요.. 12월 12일에 물건을 구매했는데, 제가 원하는 상품이 아니예요.. </p>
-      </div>
-      <hr>
-      <div id="content-container">
-        <textarea name="boardContent" id="answer_boardContent" cols="30" rows="10"></textarea>
-      </div>
-      <div id="btn-container">
-        <div id="left-btn">
-          <input type="button" id="listbtn" value="목록">
-        </div>
-        <div id="right-btn">
-          <input type="submit" id="insertbtn" value="등록">
-        </div>
-      </div>      
-    </div>
-  </div>
+<div layout:fragment="content">
+	<div id="container">
+	  <div id="high-nav">
+	    <button id="qna-button">
+	      문의사항
+	    </button>
+	    <button id="notice-button">
+	      공지사항
+	    </button>
+	    <button id="event-button">
+	      이벤트
+	    </button>
+	  </div>
+	  <div id="high-container">
+	    <div id="mid-container">
+	      <div id="question-title">
+	        <h3>Q. 교환하고 싶은데 배송비는 얼마나 부과되나요?</h3>
+	      </div>
+	      <div id="question-content">
+	        <p>12월 12일에 물건을 구매했는데, 제가 원하는 상품이 아니예요.. 12월 12일에 물건을 구매했는데, 제가 원하는 상품이 아니예요.. </p>
+	      </div>
+	      <hr>
+	      <div id="content-container">
+	        <textarea name="boardContent" id="answer_boardContent" cols="30" rows="10"></textarea>
+	      </div>
+	      <div id="btn-container">
+	        <div id="left-btn">
+	          <input type="button" id="listbtn" value="목록">
+	        </div>
+	        <div id="right-btn">
+	          <input type="submit" id="insertbtn" value="등록">
+	        </div>
+	      </div>      
+	    </div>
+	  </div>
+	</div>
 </div>
 </body>
 </html>
