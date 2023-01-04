@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 
 import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Item;
+import com.ezen.makingbaking.entity.Review;
+
 
 public interface ItemService {
 	int getItemStock(int itemNo);
@@ -12,4 +14,12 @@ public interface ItemService {
 	Page<CamelHashMap> getItemList(Pageable pageable);
 	
 	Page<Item> getPageItemList(Pageable pageable);
+
+	Item getItem(int itemNo);
+
+	Page<Review> getReviewList(int itemNo, Pageable pageable);
+
+	
+	
+	
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Item;
+import com.ezen.makingbaking.entity.Review;
 import com.ezen.makingbaking.repository.ItemRepository;
 import com.ezen.makingbaking.service.item.ItemService;
 
@@ -29,4 +30,16 @@ public class ItemServiceImpl implements ItemService {
 	public Page<Item> getPageItemList(Pageable pageable) {
 		return itemRepository.findAll(pageable);
 	}
+	
+	@Override
+	public Item getItem(int itemNo) {
+		return itemRepository.findById(itemNo).get();
+	}
+
+	@Override
+	public Page<Review> getReviewList(int itemNo, Pageable pageable) {
+//		return itemRepository.findByItemNoAndP(itemNo, pageable);
+		return null;
+	}
+
 }
