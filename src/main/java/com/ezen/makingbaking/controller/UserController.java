@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -103,7 +104,7 @@ public class UserController {
 		ResponseDTO<Map<String, String>> responseDTO = new ResponseDTO<>();
 		Map<String, String> returnMap = new HashMap<String, String>();
 		
-		try {
+			try {
 			User user = User.builder()
 							.userId(userDTO.getUserId())
 							.build();
@@ -137,11 +138,11 @@ public class UserController {
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, String> resultMap = new HashMap<String, String>();
 			
-			String findId = userService.findid(userDTO);
+			User findId = userService.findid(userDTO);
 			
 			if(findId != null) {
 				resultMap.put("msg", "ok");
-				resultMap.put("findID", findId);
+				resultMap.put("findID", findId.getUserId());
 			} else {
 				resultMap.put("msg", "fail");
 			}
@@ -157,6 +158,22 @@ public class UserController {
 		mv.setViewName("user/findPW.html");
 		return mv;
 	}
+	/*
+	@GetMapping("/findPw")
+    public @ResponseBody Map<String, Boolean> findPW(String userId, String userMail, String userTel){
+        Map<String,Boolean> json = new HashMap<>();
+        boolean pwCheck = userService.userCheck(userId, userMail, userTel);
+
+        System.out.println(pwCheck);
+        json.put("check", pwCheck);
+        return json;
+    }
 	
+	@PostMapping("/sendMail")
+    public @ResponseBody void sendEmail(String userId, String userMail, String userTel){
+        UserDTO userDTO = userService.createMailAndChangePassword(userId, userMail, userTel);
+        userService.mailSend(userDTO);
+    }
+	*/
 	
 }
