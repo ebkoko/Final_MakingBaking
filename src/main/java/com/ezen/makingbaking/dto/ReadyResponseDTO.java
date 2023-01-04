@@ -17,4 +17,5 @@ public class ReadyResponseDTO {
 	private String next_redirect_pc_url;
 	private String partner_order_id;
 	private List<Map<String, Object>> itemMapList;
+	public long OrderNo;
 }
