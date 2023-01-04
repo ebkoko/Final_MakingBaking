@@ -78,15 +78,16 @@
 				/* 상품이름 a태그 */
 				#a_itemName {
 					text-decoration: none;
+					color: inherit;
 				}
  
 				/* 수정버튼 */
 			    #itemMod {
-					width:80px;
+					width: 80px;
+					display: inline-block;
 					height: 25px;
 					border: 1.2px solid #28693F;
 					color: #28693F;
-					margin-left: 22px; 
 					cursor: pointer; 
 			    }
 			    
@@ -286,7 +287,14 @@
 		        	<td th:text="${item.itemPrice >= 1000 ? #numbers.formatInteger(item.itemPrice , 3, 'COMMA') : item.itemPrice}"></td>
 		        	<td th:text="${item.itemRegdate eq null ? '' : #strings.substring(item.itemRegdate, 0, 10)}"></td>
 		        	<td th:text="${item.itemStatus}"></td>
-		        	<td><a href="/admin/itemUpdate/{itemNo}"><input type="button" value="수정" id="itemMod"></a></td>
+		        	<td>
+		        		<a id="itemMod" th:text="수정"
+							th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">
+						</a><!--
+		        		<a th:href="@{/admin/itemUpdate/{itemNo}} (itemNo=${item.itemNo})}" >
+		        			<input type="button" value="수정" id="itemMod">
+		        		</a>-->
+		        	</td>
 		     	 </tr>
 		    </table>
 		</div>

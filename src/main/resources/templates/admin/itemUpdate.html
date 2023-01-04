@@ -17,7 +17,7 @@
 				#div_itemReg {
 					margin-top: 80px;
 				}
-				/* 상품상태 */
+				/* 판매상태 */
 				#itemSearchCondition {
 					border: 1px solid black;
 					height: 20px;
@@ -161,6 +161,7 @@
 					background-color: #28693F;
 					color: white;
 					font-weight: 550;
+					cursor: pointer;
 				}
 				/* 목록으로 버튼 */
 			    #itemListBtn {
@@ -181,6 +182,7 @@
 					background-color: #28693F;
 					color: white;
 					font-weight: 550;
+					cursor: pointer;
 				}
 			</style>
 		</th:block>
@@ -552,18 +554,18 @@
 <body>
 	<div id="container" layout:fragment="content">
 		<div>
-			<h1 class="itemAdmin">상품 상세</h1>
+			<h1 class="itemAdmin">상품 수정</h1>
 		</div>
 		
 	    <!-- 상품등록내용 -->
-	    <form id="itemUpdateForm" enctype="multipart/form-data">
+	    <form id="itemUpdateForm" action="admin/updateItem" enctype="multipart/form-data">
 		    <input type="hidden" name="itemNo" id="boardNo" th:value="${getItem.itemNo}">
 			<input type="hidden" name="itemRegdate" id="boardRegdate" th:value="${getItem.itemRegdate}">
 			<input type="hidden" name="originFiles" id="originFiles">
 			<div id="div_itemReg">
 				<table border="1" id="itemReg_T">
 			        <tr>
-			          <th id="itemStatus_Th">상품 상태</th>
+			          <th id="itemStatus_Th">판매 상태</th>
 			          <td>&ensp;&ensp;
 			            <select name="itemStatus" id="itemSearchCondition" >
 			              <option value="Y" th:selected="${getItem.itemStatus} == 'Y'">판매중</option>
@@ -678,11 +680,11 @@
 				</table>
 			</div>
 	      
-	      	<!-- 목록으로 버튼 -->
+	      	
 			<div id="div_itemBtn">
-				<button type="button" id="itemListBtn">목록으로</button>
-			
-			<!-- 상품수정 버튼 -->
+				<!-- 목록으로 버튼 -->
+				<a href="/admin/itemList"><input type="button" value="목록으로" id="itemListBtn"></a>
+				<!-- 상품수정 버튼 -->
 				<button type="button" id="itemUpdateBtn" onclick="fnUpdateItem();">수정</button>
 			</div>
 		</form>
