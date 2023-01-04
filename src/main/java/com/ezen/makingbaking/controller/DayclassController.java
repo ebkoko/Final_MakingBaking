@@ -112,7 +112,7 @@ public class DayclassController {
 		return mv;
 	}
 	
-	// 페이징
+	// 페이징??
 	@PostMapping("/dayclass/{dayclassNo}")
 	public ResponseEntity<?> getDayclassPage(@PathVariable int dayclassNo, 
 			@PageableDefault(page = 0, size = 4) Pageable pageable, 
