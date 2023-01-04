@@ -179,7 +179,7 @@ public class AdminController {
 	public ModelAndView getItem(@PathVariable int itemNo) {
 		Item item = adminService.getItem(itemNo);
 		
-		System.out.println(item.toString());
+		//System.out.println(item.toString());
 		
 		ItemDTO itemDTO = ItemDTO.builder()
 									.itemNo(item.getItemNo())
@@ -201,7 +201,7 @@ public class AdminController {
 		
 		List<ImgFile> itemFileList = adminService.getItemFileList(itemNo);
 		
-		//itemFileDTO를 담는 List
+		//imgFileDTO를 담는 List
 		List<ImgFileDTO> imgFileDTOList = new ArrayList<ImgFileDTO>();
 		
 		for(ImgFile imgFile : itemFileList) {
@@ -219,7 +219,7 @@ public class AdminController {
 		}
 		
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("admin/itemUpdate.html");
+		mv.setViewName("admin/itemDetail.html");
 		mv.addObject("getItem", itemDTO);
 		mv.addObject("itemFileList", imgFileDTOList);
 		
@@ -386,13 +386,53 @@ public class AdminController {
 	
 	//상품수정 상세보기
 	@GetMapping("/itemUpdate/{itemNo}")
-	public void getUpdateItem(@PathVariable int itemNo,
-			HttpServletResponse response) throws IOException {
-		adminService.getUpdateItem(itemNo);
+	public ModelAndView getUpdateItem(@PathVariable int itemNo) {
+		Item item = adminService.getItem(itemNo);
 		
-		response.sendRedirect("/admin/updateItem/" + itemNo);
+		ItemDTO itemDTO = ItemDTO.builder()
+									.itemNo(item.getItemNo())
+									.itemName(item.getItemName())
+									.itemMinName(item.getItemMinName())
+									.itemDetails(item.getItemDetails())
+									.itemExpDate(item.getItemExpDate())
+									.itemAllergyInfo(item.getItemAllergyInfo())
+									.itemOrigin(item.getItemOrigin())
+									.itemPrice(item.getItemPrice())
+									.itemRegdate(
+											item.getItemRegdate() == null ?
+											null :
+											item.getItemRegdate().toString())
+									.itemStatus(item.getItemStatus())
+									.itemCate(item.getItemCate())
+									.itemStock(item.getItemStock())
+									.build();
 		
-	}
+		List<ImgFile> itemFileList = adminService.getItemFileList(itemNo);
+		
+		//imgFileDTO를 담는 List
+		List<ImgFileDTO> imgFileDTOList = new ArrayList<ImgFileDTO>();
+		
+		for(ImgFile imgFile : itemFileList) {
+			ImgFileDTO imgFileDTO = ImgFileDTO.builder()
+													.fileReferNo(itemNo)
+													.fileNo(itemNo)
+													.fileNo(imgFile.getFileNo())
+													.fileName(imgFile.getFileName())
+													.fileOriginName(imgFile.getFileOriginName())
+													.filePath(imgFile.getFilePath())
+													.fileType(imgFile.getFileType())
+													.build();
+			
+			imgFileDTOList.add(imgFileDTO);
+		}
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("admin/itemUpdate.html");
+		mv.addObject("getItem", itemDTO);
+		mv.addObject("itemFileList", imgFileDTOList);
+		
+		return mv;
+	}	
 	
 	
 	//상품 삭제
@@ -400,15 +440,6 @@ public class AdminController {
 	public void deleteItem(@RequestParam("itemNo") int itemNo) {
 		adminService.deleteItem(itemNo);
 	}
-	
-	
-	
-	
-	
-	//dayclass
-	//원데이클래스 리스트
-
-	
 	
 	
 	
@@ -433,19 +464,14 @@ public class AdminController {
 	
 	
 	//임시보기
-	@GetMapping("/pre")
+	@GetMapping("/main")
 	public ModelAndView preView() {
 		
 		ModelAndView mv = new ModelAndView();
 		
-		mv.setViewName("admin/itemUpdate.html");
+		mv.setViewName("admin/main.html");
 			
 		return mv;
 	}
 	
-	
-	//@GetMapping("/")
-	//public ModelAndView getItemFileList(Page pageable) { 
-		//admin
-	//}
 }

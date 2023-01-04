@@ -82,6 +82,8 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public Item updateItem(Item item, List<ImgFile> uFileList) {
 		itemRepository.save(item);
+		
+		itemRepository.flush();
 	      
 	      if(uFileList.size() > 0) {
 	    	  for(int i = 0; i < uFileList.size() ; i++) {
@@ -92,8 +94,7 @@ public class AdminServiceImpl implements AdminService {
 	    		  } else if (uFileList.get(i).getFileStatus().equals("I")) {
 	    			  //추가한 파일들은 boardNo은 가지고 있지만 boardFileNo가 없는 상태라
 	    			  //boardFileNo를 추가
-	    			  int itemFileNo = imgFileRepository.getMaxFileNo(
-	    					  uFileList.get(i).getFileReferNo());
+	    			  int itemFileNo = imgFileRepository.getMaxFileNo(item.getItemNo());
 	    			  
 	    			  uFileList.get(i).setFileNo(itemFileNo);
 	    			  
@@ -102,17 +103,16 @@ public class AdminServiceImpl implements AdminService {
 	    	  }
 	      }
 	      
-	      itemRepository.flush();
 	      
 	      System.out.println(item.toString());
 	      return item;
 	   }
 	
-	@Override
-	public void getUpdateItem(int itemNo) {
-		itemRepository.getUpdateItem(itemNo);
-		
-	}
+//	@Override
+//	public Item getUpdateItem(int itemNo) {
+//		return itemRepository.findById(itemNo).get();
+//		
+//	}
 	
 	@Override
 	public void deleteItem(int itemNo) {

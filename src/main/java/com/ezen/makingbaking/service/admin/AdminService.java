@@ -22,7 +22,7 @@ public interface AdminService {
 	
 	Item updateItem(Item item, List<ImgFile> uFileList);
 	
-	void getUpdateItem(int itemNo);
+//	Item getUpdateItem(int itemNo);
 	
 	void deleteItem(int ItemNo);
 }
