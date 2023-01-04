@@ -416,10 +416,10 @@
 		                <div class="classView">
 		                    <div class="class_Detail">
 		                        <img class="class_Img" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
-		                        <div class="detailName"><a th:text="${className}"></a>클래스명</div>    
+		                        <div class="detailName"><a th:text="${dayclass.dayclassName}"></a></div>    
 		                    </div>
-		                    <div class="class_Price"><span class="classPrice" ></span></div><span>원</span>  
-		                    <div class="class_Quantity">2</div>                    
+		                    <div class="class_Price"><span class="classPrice" th:text="${dayclass.dayclassPrice}"></span></div><span>원</span>  
+		                    <div class="class_Quantity" th:text="${reserPersonCnt}"></div>                    
 		                    <div class="class_totalPrice"><span class="totalPayPrice"></span></div><span>원</span>
 		                </div>            
 		                <hr>

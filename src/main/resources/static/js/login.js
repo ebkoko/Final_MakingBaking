@@ -66,4 +66,12 @@ $(function() {
 			$('.login-form-container').toggleClass('active');
 		}
 	});
+	
+	if($("#orderMsg").val() != null && $("#orderMsg").val() != "") {
+		if($("#orderMsg").val() == 'fail') {
+			alert("결제에 실패하였습니다.");
+		} else if($("#orderMsg").val() == 'cancel') {
+			alert("결제가 취소되었습니다.");
+		}
+	}
 });

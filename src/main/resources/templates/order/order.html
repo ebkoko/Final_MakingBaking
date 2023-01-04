@@ -336,7 +336,11 @@
 							itemName: itemList[i].itemName,
 							cartNo: itemList[i].cartNo,
 							itemPrice: itemList[i].itemPrice,
-							orderItemCnt: itemList[i].cartItemCnt
+							orderItemCnt: itemList[i].cartItemCnt,
+							totalItemPrice: $("#orderTotalPrice").val(),
+							fileName: itemList[i].fileName,
+							cartItemCnt: itemList[i].cartItemCnt,
+							deliFee: $("#orderDeliFee").val()
 						}
 						
 						transferItemList.push(item);
@@ -523,20 +527,45 @@
 						
 						// 카카오페이 API 실행
 						// 필수 입력값 확인
-						let orderer = $("#orderer").val();
+						let orderName = $("#orderer").val();
 						let telNums = [$("#orderTel1").val(), $("#orderTel2").val(), $("#orderTel3").val()];
 						let tel = telNums.join('-');
 						console.log(tel);
-						let email = $("#orderMail").val();
+						let orderMail = $("#orderMail").val();
+						let orderStatus = $("#orderStatus").val();
+						let orderPayment = $("#orderPayment").val();
+						let orderMessage = $("#message").text();
+						let reciName = $("#recipient").val();
+						let depositor = $("#depositor").val();
+						let shippingAddr1 = $("#addr1").val();
+						let shippingAddr2 = $("#addr2").val();
+						let shippingAddr3 = $("#addr3").val();
+						let orderDeliFee = $("#orderDeliFee").val();
+						let itemPriceSum = $(".item_PriceSum").text();
 						
-						// 결제 정보를 form에 저장
-						let item_PriceSum = parseInt($(".item_PriceSum").text().replace(/,/g,''));
-						let deliFee = parseInt($(".deliFee").text().replace(/,/g,''));
-						let totalPrice = parseInt($(".totalPrice").text().replace(/,/g,''));
+						const formData = new FormData();
 						
+						formData.append("itemList", itemList);
+						formData.append("total_amount", totalPrice);
+						formData.append("payUserName", orderName);
+						formData.append("itemPriceSum", itemPriceSum);
+						formData.append("orderDeliFee", orderDeliFee);
+						formData.append("totalPrice", totalPrice);
+						formData.append("orderTel", orderTel);
+						formData.append("email", orderMail);
+						formData.append("reciTel", reciTel);
+						formData.append("orderStatus", orderStatus);
+						formData.append("orderPayment", orderPayment);
+						formData.append("orderMessage", orderMessage);
+						formData.append("reciName", reciName);
+						formData.append("shippingAddr1", shippingAddr1);
+						formData.append("shippingAddr2", shippingAddr2);
+						formData.append("shippingAddr3", shippingAddr3);
+						formData.append("depositor", depositor);
 						
+						console.log(formData);
 						// 카카오페이 결제전송
-						$.ajax({
+						/*$.ajax({
 							url:'/order/pay',
 							type: 'post',
 							data:{
@@ -552,7 +581,7 @@
 							success: function(response) {
 								location.href = response.next_redirect_pc_url + "?tid=" + response.tid;
 							}
-						});
+						});*/
 					});
 				});				
 			</script>
@@ -580,8 +609,8 @@
 	            	<input type="hidden" name="orderTel" id="orderTel">
 	            	<input type="hidden" name="reciTel" id="reciTel">
 	            	<input type="hidden" name="itemList" th:value="${itemList}">
-					<input type="hidden" name="orderTotalPrice" th:value="${totalItemPrice}">
-					<input type="hidden" name="orderDeliFee" th:value="${deliFee}">
+					<input type="hidden" name="orderTotalPrice" id="orderTotalPrice" th:value="${totalItemPrice}">
+					<input type="hidden" name="orderDeliFee" id="orderDeliFee" th:value="${deliFee}">
 					<input type="hidden" name="orderStatus" id="orderStatus">
 					<input type="hidden" name="orderPayment" id="orderPayment">
 		            <div id="order_item">

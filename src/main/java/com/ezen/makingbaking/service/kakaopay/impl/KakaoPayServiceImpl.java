@@ -58,8 +58,8 @@ public class KakaoPayServiceImpl implements KakaoPayService {
 		parameters.add("total_amount", String.valueOf(totalAmount)); // 상품 총액
 		parameters.add("tax_free_amount", "0"); // 상품 비과세 금액
 		parameters.add("approval_url", "http://localhost:9900/order/kakaoOrderComplete?orderNo=" + orderNo); // 결제승인시 넘어갈 url
-		parameters.add("cancel_url", "http://localhost:9900/order/order"); // 결제취소시 넘어갈 url
-		parameters.add("fail_url", "http://localhost:9900/cart/cartList"); // 결제 실패시 넘어갈 url
+		parameters.add("cancel_url", "http://localhost:9900/order/kakaoOrderCancel"); // 결제취소시 넘어갈 url
+		parameters.add("fail_url", "http://localhost:9900/order/kakaoOrderFail"); // 결제 실패시 넘어갈 url
 		
 		System.out.println("주문번호:"+ parameters.get("partner_order_id")) ;
 		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
@@ -69,8 +69,7 @@ public class KakaoPayServiceImpl implements KakaoPayService {
         // template으로 값을 보내고 받아온 ReadyResponse값 readyResponse에 저장.
 		ReadyResponseDTO readyResponse = template.postForObject(url, requestEntity, ReadyResponseDTO.class);
 		System.out.println("결제준비 응답객체: " + readyResponse);
-		
-		readyResponse.setItemMapList(itemMapList);
+		readyResponse.setOrderNo(orderNo);
 		
         // 받아온 값 return
 		return readyResponse;

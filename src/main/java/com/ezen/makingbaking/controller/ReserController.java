@@ -1,6 +1,7 @@
 package com.ezen.makingbaking.controller;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -8,11 +9,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ezen.makingbaking.dto.DayclassDTO;
 import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.entity.CustomUserDetails;
+import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.Reser;
 import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.service.reser.ReserService;
@@ -78,19 +82,6 @@ public class ReserController {
 		mv.addObject("reserPayment", reserDTO.getReserPayment());
 		
 		mv.setViewName("reser/reserComplete.html");
-		return mv;
-	}
-	
-	@GetMapping("/reserDayclass") // getDayclass에서 예약버튼 기능 되면 PostMapping으로 수정
-	public ModelAndView moveReser(@AuthenticationPrincipal CustomUserDetails customUser) {
-		User user = customUser.getUser();
-		
-		ModelAndView mv = new ModelAndView();
-		
-		user = userService.idcheck(user);
-		
-		mv.addObject("userInfo", user);
-		mv.setViewName("/reser/reser.html");
 		return mv;
 	}
 }
