@@ -5,6 +5,7 @@
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<body>
 		<header th:fragment="header" class="header">
+			<input type="hidden" id="orderMsg" name="orderMsg" th:value="${orderMsg}">
 			<input type="hidden" sec:authorize="isAuthenticated()" name="authenticate" value=true>
 			<input type="hidden" sec:authorize="isAnonymous()" name="authenticate" value=false>
 		    <div id="login-btn">

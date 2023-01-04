@@ -59,7 +59,9 @@
 			</script>
 			
 			<script th:inline="javascript" th:src="@{/js/jquery-ui.min.js}"></script>
-			<script th:inline="javascript">
+			<script th:inline="javascript">	
+				const getDayclass = /*[[${dayclass}]]*/;
+						
 				$(function() {
 					
 					// 비회원이 예약하기 버튼 클릭시 로그인창 
@@ -237,7 +239,6 @@
 					});
 					*/
 
-
 				}); 
 				
 				/*
@@ -289,7 +290,9 @@
 	  <div class="entire-wrap" >	  
 	  <div class="dayclass">
 	    <main > 
-	    	<input type="hidden" id="dayclassNo" name="dayclassNo" th:value="${dayclass.dayclassNo}">
+        <form id="rsvtForm" action="/dayclass/reserDayclass" method="post">
+    	  <input type="hidden" id="dayclassNo" name="dayclassNo" th:value="${dayclass.dayclassNo}">
+    	  <input type="hidden" id="totalPayPrice" name="totalPayPrice">
 	      <section class="dc_banner"> 
 	        <div class="dc_banner_container">
 	          <div class="dc_banner">
@@ -308,7 +311,7 @@
 	                <span><img src="/images/class_location.png" width="18px" th:text="${#strings.substring(dayclass.dayclassAddress, 0, 6)}"></span>
 	              </div>
 	              <div class="banner_explain_KRW">
-	                <span>KRW&nbsp;</span><span th:text="${#numbers.formatInteger(dayclass.dayclassPrice, 3, 'COMMA')}"></span>
+	                <span>KRW&nbsp;</span><span th:text="${#numbers.formatInteger(dayclass.dayclassPrice, 3, 'COMMA')}" class="dayclassPrice"></span>
 	              </div> 
 	              <div class="banner_explain_btn">
 	             
@@ -354,12 +357,11 @@
 	            
 				<hr class="dayclass_hr" id="dayclass_hr1">
 	            <div class="c_apply" id="classApply" >
-	             <form id="rsvtForm" action="/reser/reserDayclass" method="post">
 	              <ul style="padding-left: 0;">
-	                <li><img src="/images/class_day.png" width="17px"> 예약 날짜  <input type="text" id="rsrvtDate"></li>
+	                <li><img src="/images/class_day.png" width="17px"> 예약 날짜  <input type="text" id="rsrvtDate" name="reserDate"></li>
 	           
 	                <li><img src="/images/class_time.png" width="17px"> 예약 시간  
-	                	<select class="c_apply_timeOp">
+	                	<select class="c_apply_timeOp" name="partiTime">
 	                		<option disabled selected>날짜 선택</option>
 	              			<option value="A">오전 09:30~12:30</option>
 	               			<option value="P">오후 14:00~17:00</option>
@@ -368,13 +370,13 @@
 					<li><img src="/images/class_people.png" width="23px"> 예약 인원
 						<div class="peopleNm">
 							<button type="button" name="수량내리기" id="peopleNm_minus" class="peopleNm_minus">－</button>
-							<input type="number" id="peopleNm_cnt" class="peopleNm_cnt" min="1" max="4" value="1">
+							<input type="number" id="peopleNm_cnt" class="peopleNm_cnt" min="1" max="4" value="1" name="reserPersonCnt">
 							<button type="button" name="수량올리기" id="peopleNm_plus" class="peopleNm_plus">＋</button>
 						</div>
 					</li>
 					<li>
 					<div class="apply_btn">
-	                	<span><button type="button" id="dayclassRsrvtBtn" value="dayclassRsrvt">예약하기 
+	                	<span><button type="submit" id="dayclassRsrvtBtn" value="dayclassRsrvt">예약하기 
 	                	</button></span>
 	              	</div>
 					</li>

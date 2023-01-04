@@ -1,10 +1,12 @@
 package com.ezen.makingbaking.controller;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,22 +58,10 @@ public class OrderController {
 	@PostMapping("/orderComplete")
 	public ModelAndView insertOrder(OrderDTO orderDTO, @AuthenticationPrincipal CustomUserDetails customUser,
 			@RequestParam("itemList") String itemList, Model model) throws JsonMappingException, JsonProcessingException {
-		if(model.getAttribute("itemList") != null) {
-			itemList = model.getAttribute("itemList").toString();
-		}
-		
-		if(model.getAttribute("orderNo") != null) {
-			orderDTO.setOrderNo(Long.parseLong(model.getAttribute("orderNo").toString()));
-		}
-		
 		List<Map<String, Object>> itemMapList = new ObjectMapper().readValue(itemList, new TypeReference<List<Map<String, Object>>>() {});
 			
-		long orderNo = 0;
-		if(orderDTO.getOrderNo() == 0) {
-			orderNo = orderService.getNextOrderNo();
-		} else {
-			orderNo = orderDTO.getOrderNo();
-		}
+	
+		long orderNo = orderService.getNextOrderNo();
 		orderDTO.setOrderNo(orderNo);
 		
 		List<OrderItem> orderItemList = new ArrayList<OrderItem>();
@@ -138,43 +128,114 @@ public class OrderController {
 	}
 	
 	@GetMapping("/orderComplete")
-	public ModelAndView orderCompleteView() {
+	public ModelAndView orderCompleteView(HttpSession session, @AuthenticationPrincipal CustomUserDetails customUser) throws JsonMappingException, JsonProcessingException {
+		Order order = (Order)session.getAttribute("order");
+		String itemList = session.getAttribute("itemList").toString();
+		
+		List<Map<String, Object>> itemMapList = new ObjectMapper().readValue(itemList, new TypeReference<List<Map<String, Object>>>() {});
+		
+		long orderNo = order.getOrderNo();
+		
+		List<OrderItem> orderItemList = new ArrayList<OrderItem>();
+		
+		for(int i = 0; i < itemMapList.size(); i++) {
+			System.out.println(itemMapList.get(i).toString());
+			OrderItem orderItem = OrderItem.builder()
+										   .orderNo(orderNo)
+										   .itemNo(Integer.parseInt(itemMapList.get(i).get("itemNo").toString()))
+										   .orderItemCnt(Integer.parseInt(itemMapList.get(i).get("orderItemCnt").toString()))
+										   .orderItemPrice(Integer.parseInt(itemMapList.get(i).get("orderItemCnt").toString()) * Integer.parseInt(itemMapList.get(i).get("itemPrice").toString()))
+										   .build();
+			
+			orderItemList.add(orderItem);
+		}
+		
+		
 		ModelAndView mv = new ModelAndView();
 		
-		mv.setViewName("order/order.html");
+		Order returnOrder = Order.builder()
+							.userId(customUser.getUsername())
+							.orderNo(orderNo)
+							.orderDate(LocalDateTime.now())
+							.orderStatus(order.getOrderStatus())
+							.orderName(order.getOrderName())
+							.orderTel(order.getOrderTel())
+							.shippingAddr1(order.getShippingAddr1())
+							.shippingAddr2(order.getShippingAddr2())
+							.shippingAddr3(order.getShippingAddr3())
+							.orderDeliFee(order.getOrderDeliFee())
+							.orderTotalPrice(order.getOrderTotalPrice())
+							.orderPayment(order.getOrderPayment())
+							.reciName(order.getReciName())
+							.reciTel(order.getReciTel())
+							.orderMail(order.getOrderMail())
+							.orderMessage(order.getOrderMessage())
+							.depositor(order.getDepositor())
+							.orderTotalPayPrice(order.getOrderTotalPayPrice())
+							.build();
+		
+		orderService.insertOrder(order);
+		orderService.insertOrderItem(orderItemList);
+		
+		mv.addObject("totalPayPrice", order.getOrderTotalPayPrice());
+		mv.addObject("orderNo", orderNo);
+		mv.addObject("orderPayment", order.getOrderPayment());
+		
+		List<Cart> cartItemList = new ArrayList<Cart>();
+		
+		for(int i=0; i < itemMapList.size(); i++) {
+			Cart cart = Cart.builder()
+							.cartNo(Integer.parseInt(itemMapList.get(i).get("cartNo").toString()))
+							.itemNo(Integer.parseInt(itemMapList.get(i).get("itemNo").toString()))
+							.cartItemCnt(Integer.parseInt(itemMapList.get(i).get("orderItemCnt").toString()))
+							.build();
+			
+			cartItemList.add(cart);
+		}
+		
+		cartService.deleteCartItem(cartItemList);
+		
+		mv.setViewName("order/orderComplete.html");
 		return mv;
 	}
 	
 	@PostMapping("/pay")
 	public ReadyResponseDTO payReady(@RequestParam(name = "total_amount") int totalAmount, Order order,
-			@RequestParam("itemList") String itemList, Model model, HttpSession session) throws JsonMappingException, JsonProcessingException {
+			@RequestParam("itemList") String itemList, HttpSession session) throws JsonMappingException, JsonProcessingException {
 		// 카카오페이 결제 준비: 결제요청 service 실행
 		ReadyResponseDTO readyResponseDTO = kakaoPayService.payReady(totalAmount, itemList);
 		// 요청처리 후 받아온 결제 고유번호(tid)를 모델에 저장
-		model.addAttribute("tid", readyResponseDTO.getTid());
 		session.setAttribute("tid", readyResponseDTO.getTid());
-		// Order 정보를 모델에 저장
-		model.addAttribute("order", order);
 		
-		model.addAttribute("itemList", itemList);
+		order.setOrderNo(readyResponseDTO.getOrderNo());
+		
+		// Order 정보를 모델에 저장
+		session.setAttribute("order", order);
+		
+		session.setAttribute("itemList", itemList);
 		
 		return readyResponseDTO;
 	}
 	
 	// 결제승인요청
 	@GetMapping("/kakaoOrderComplete")
-	public String payCompleted(@RequestParam("pg_token") String pgToken, @RequestParam("orderNo") long orderNo,
-			@ModelAttribute("order") Order order, @ModelAttribute("itemList") String itemList,
-			Model model, HttpSession session) {
-		
+	public void payCompleted(@RequestParam("pg_token") String pgToken,
+			HttpSession session, HttpServletResponse response) throws IOException {
+		long orderNo = ((Order)session.getAttribute("order")).getOrderNo();
 		// 카카오 결재 요청하기
 		ApproveResponseDTO approveResponse = kakaoPayService.payApprove(session.getAttribute("tid").toString(), pgToken, orderNo);
 		
-		model.addAttribute("orderNo", orderNo);
-		
-		model.addAttribute("itemList", itemList);
-		
-		return "redirect:/order/orderComplete.html";
+		response.sendRedirect("/order/orderComplete");
 	}
 	
+	@GetMapping("/kakaoOrderFail")
+	public void payFail(HttpServletResponse response) throws IOException {
+		response.sendRedirect("/cart/cartList?msg=fail");
+	}
+	
+	@GetMapping("/kakaoOrderCancel")
+	public void payCancel(HttpServletResponse response) throws IOException {
+		
+		response.sendRedirect("/cart/orderCartList?msg=cancel");
+	}
 }

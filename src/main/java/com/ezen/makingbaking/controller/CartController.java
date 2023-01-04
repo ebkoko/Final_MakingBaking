@@ -3,6 +3,9 @@ package com.ezen.makingbaking.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -38,10 +41,13 @@ public class CartController {
 	private UserService userService;
 	
 	@GetMapping("/cartList")
-	public ModelAndView cartListView(@AuthenticationPrincipal CustomUserDetails customUser) {
+	public ModelAndView cartListView(@AuthenticationPrincipal CustomUserDetails customUser, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		
 		List<CamelHashMap> cartList = cartService.getCartList(customUser.getUsername());
+		
+		if(request.getParameter("msg") != null && !request.getParameter("msg").equals(""))
+			mv.addObject("orderMsg", request.getParameter("msg"));
 		
 		mv.addObject("getCartList", cartList);
 		
@@ -109,24 +115,28 @@ public class CartController {
 	}
 	
 	@GetMapping("/orderCartList")
-	public ModelAndView orderCartListKakaoCancel(@RequestParam Map<String, String> paramMap, @AuthenticationPrincipal CustomUserDetails customUser) throws JsonMappingException, JsonProcessingException {
-		String itemList = paramMap.get("itemList").toString();
+	public ModelAndView orderCartListKakaoCancel(@AuthenticationPrincipal CustomUserDetails customUser, 
+			@RequestParam("msg") String msg, HttpSession session) throws JsonMappingException, JsonProcessingException {
+		String itemList = session.getAttribute("itemList").toString();
+		
+		List<Map<String, Object>> returnItemList = new ObjectMapper().readValue(itemList, 
+				new TypeReference<List<Map<String, Object>>>() {});
 		
 		User user = customUser.getUser();
 		
-		List<Map<String, Object>> returnItemList = new ObjectMapper().readValue(itemList, 
-																new TypeReference<List<Map<String, Object>>>() {});
-		
 		ModelAndView mv = new ModelAndView();
-		
-		user = userService.idcheck(user);
 		
 		mv.addObject("userInfo", user);
 		mv.addObject("itemList", returnItemList);
-		mv.addObject("totalItemPrice", Integer.parseInt(paramMap.get("totalItemPrice")));
-		mv.addObject("deliFee", Integer.parseInt(paramMap.get("deliFee")));
+		mv.addObject("totalItemPrice", Integer.parseInt(returnItemList.get(0).get("totalItemPrice").toString()));
+		mv.addObject("deliFee", Integer.parseInt(returnItemList.get(0).get("deliFee").toString()));
 		
 		mv.setViewName("/order/order.html");
+		
+		session.removeAttribute("itemList");
+		session.removeAttribute("order");
+		session.removeAttribute("tid");
+		
 		return mv;
 	}
 }
