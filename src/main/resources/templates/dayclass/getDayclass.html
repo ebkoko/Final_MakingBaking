@@ -61,6 +61,7 @@
 			<script th:inline="javascript" th:src="@{/js/jquery-ui.min.js}"></script>
 			<script th:inline="javascript">
 				$(function() {
+					
 					// 비회원이 예약하기 버튼 클릭시 로그인창 
 					$("#moveRsrvtBtn").on("click", function() {
                  	
@@ -74,7 +75,7 @@
 						  }
 					});
 					
-					// 
+					// 리뷰 작성
 					$("#rvw_writeBtn").on("click", function(){
 						
 					var offset = $("#dayclass_hr2").offset();
@@ -87,7 +88,7 @@
 						  }
 					});
 						
-					});
+				
 					
 					// 취소 환불 문의 자세히 보기
 					$(".refundGuideBtn").on("click", function(){
@@ -228,11 +229,56 @@
 						}
 						});
 					}
-
+					
+					/*
+					$(".paging_btn a").on("click", function(e) {
+						e.preventDefault();
+						reviewPagingAndOrder($(e.target).attr("href"), $("#rvw_array").val());
+					});
+					*/
 
 
 				}); 
+				
+				/*
+				function reviewPagingAndOrder(page, condition) {
 
+						$.ajax({
+						url: '/dayclass/dayclass/1',
+						type: 'post',
+						data: {
+							page: page,
+							searchCondition: condition
+						},
+						success: function(obj) {
+							console.log(obj);
+							
+							let htmlStr = "";
+							
+							for(let i=0; i<obj.pageItems.content.length; i++) {
+								htmlStr += `
+									<tr>
+			                          <td>
+			                          	<span th:each="num : ${#numbers.sequence(1, obj.pageItems.content[i].rvwScore)}">⭐</span>
+		                          	  </td>
+			                          <td th:text="${obj.pageItems.content[i].rvwContent}"></td>
+			                          <td th:text="${obj.pageItems.content[i].rvwRegdate eq null ? '' : #strings.substring(obj.pageItems.content[i].rvwRegdate, 0, 10)}"></td>
+			                       
+			                          <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${obj.pageItems.content[i].rvwWriter}"></td>
+			                          <td sec:authorize="!hasRole('ROLE_ADMIN')" th:text="${obj.pageItems.content[i].rvwWriter.substring(0, obj.pageItems.content[i].rvwWriter.length()-3) + '***'}"></td>			                  
+									 
+									</tr>
+								`;
+							}
+						},
+						error: function(e) {
+							console.log(e);
+						}
+					}); 
+					
+					
+				}); */
+				
 			</script>
 		</th:block>
 	</head>
@@ -319,7 +365,7 @@
 	               			<option value="P">오후 14:00~17:00</option>
 						</select>
 					</li>
-					<li><img src="/images/class_people.png" width="23px">
+					<li><img src="/images/class_people.png" width="23px"> 예약 인원
 						<div class="peopleNm">
 							<button type="button" name="수량내리기" id="peopleNm_minus" class="peopleNm_minus">－</button>
 							<input type="number" id="peopleNm_cnt" class="peopleNm_cnt" min="1" max="4" value="1">
