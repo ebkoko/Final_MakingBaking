@@ -182,9 +182,15 @@
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
 				$(function() {
+					// 상품카테고리 라디오버튼 수정막기
 					$("input[name='itemCate']").on("click", function(e) {
 						e.preventDefault();
 					})
+					
+					//
+					function priceToString(price) {
+					    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+					}
 				});
 			</script>
 		</th:block>
@@ -248,7 +254,7 @@
 			          <th>가격</th>
 			          <td>&ensp;&ensp;
 			          	<input type="text" name="itemPrice" class="inputH" id="input_itemPrice"
-			          	onkeyup="inputNumberFormat(this)" maxlength="8" th:value="${#numbers.formatInteger(getItem.itemPrice, 3, 'COMMA')}" readonly>원
+			          			maxlength="8" th:value="${getItem.itemPrice}" readonly>원
 			          	
 			          </td>
 			        </tr>

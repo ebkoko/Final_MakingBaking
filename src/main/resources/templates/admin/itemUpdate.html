@@ -188,14 +188,118 @@
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
-				let itemPrice = 0;
+				//let itemPrice = 0;
 				// 추가된 파일들을 담아줄 배열. File 객체로 하나씩 담음
 				let uploadFiles = [];
 				//기존 첨부파일 배열
 				let originFiles = [];
 				//변경된 첨부파일 배열
 				let changedFiles = [];
-		   
+				
+				$(function() {
+					 $("#itemUpdateForm").on("submit", function(e) {
+						 // 상품등록 버튼 클릭 시 유효성 검사
+			             if(!$("#input_itemName").val()) {
+								alert("상품 이름을 입력해주세요.");
+								e.preventDefault();
+								$("#input_itemName").focus();
+								return;
+							}
+							if(!$("#input_itemMinName").val()) {
+								alert("상품 소제목을 입력해주세요.");
+								e.preventDefault();
+								$("#input_itemMinName").focus();
+								return;
+							}
+							if(!$("#itemRegTextarea").val()) {
+								alert("상품 설명을 입력해주세요.");
+								e.preventDefault();
+								$("#itemRegTextarea").focus();
+								return;
+							}
+							if(!$("#input_itemPrice").val()) {
+								alert("상품 가격을 입력해주세요.");
+								e.preventDefault();
+								$("#input_itemPrice").focus();
+								return;
+							} else {
+								$("#input_itemPrice").val(itemPrice);
+							}
+							if(!$("#input_itemExpDate").val()) {
+								alert("상품 유통기한을 입력해주세요.");
+								e.preventDefault();
+								$("#input_itemExpDate").focus();
+								return;
+							}
+							if(!$("#input_itemOrigin").val()) {
+								alert("상품 원산지를 입력해주세요.");
+								e.preventDefault();
+								$("#input_itemOrigin").focus();
+								return;
+							}
+							if(!$("#input_itemAllergyInfo").val()) {
+								alert("상품 알레르기 정보를 입력해주세요.");
+								e.preventDefault();
+								$("#input_itemAllergyInfo").focus();
+								return;
+							}
+							if(confirm("등록하시겠습니까?")) {
+								alert("상품이 등록되었습니다.");
+								return;
+							} else {
+								e.preventDefault();
+								alert("상품등록이 취소되었습니다.");
+								return;
+							}
+			         });
+				 });
+
+				//가격 천단위 콤마
+				let itemPrice = 0;
+				function inputNumberFormat(obj) {
+					itemPrice = obj.value.replace(",", "");
+					obj.value = comma(uncomma(obj.value));
+				};
+				function comma(str) {
+					str = String(str);
+					return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+				};
+				function uncomma(str) {
+					str = String(str);
+					return str.replace(/[^\d]+/g, '');
+				};
+				  
+				  
+				//가격 숫자만입력가능
+				$(function() {
+					$("#input_itemPrice").on("keyup", function(event) {
+						if (event.which && ((event.which  > 47 && event.which  < 58) || (event.which > 95 && event.which < 106) || event.which == 8)) {
+				            
+				        }else{
+							alert('숫자만 입력해주세요.');
+				            $(this).val($(this).val().replace(/[^0-9]/g,""));
+				        }
+				    });
+				});
+				  
+				//재고
+				$(function() {
+					$("#itemStockNm_plus").on("click", function(){
+						$("#itemStockNm_cnt").val(parseInt($("#itemStockNm_cnt").val()) + 1);
+                    });
+                    	
+					$("#itemStockNm_minus").on("click", function(){
+						$("#itemStockNm_cnt").val(parseInt($("#itemStockNm_cnt").val()) - 1);
+						
+						if($("#itemStockNm_cnt").val() < 0) {
+							$("#itemStockNm_cnt").val(0);
+                     		alert("최소 재고수량은 0입니다.");
+                    	 	return;
+                    	 }
+                    });
+				});
+				
+				
 				$(function () {
 					$("#itemName").attr("readonly", true);
 					$("#itemRegdate").attr("readonly", true);
@@ -216,11 +320,11 @@
 		            for(let i = 0; i < $("#itemFileCnt").val(); i++) {
 		               const originFileObj = {
 		                  itemNo: $("#itemNo").val(),
-		                  imgFileNo: $("#fileNo" + i).val(),
-		                  imgFileNm: $("#fileName" + i).val(),
+		                  fileNo: $("#fileNo" + i).val(),
+		                  fileName: $("#fileName" + i).val(),
 		                  //업로드 파일 경로가 각각 다를때는 boardFilePath 속성도 추가
 		                  //파일 상태값(수정되거나 삭제된 파일은 변경)
-		                  itemStatus: "N"
+		                  fileStatus: "N"
 		               };
 		               
 		               originFiles.push(originFileObj);
@@ -332,7 +436,7 @@
 		            
 		            reader.onload = function(ee) {
 		               const img = document.getElementById("img" + boardFileNo);
-		               const p = document.getElementById("fileNm" + boardFileNo);
+		               const p = document.getElementById("fileName" + boardFileNo);
 		               
 		               p.textContent = fileArr[0].name;
 		               
@@ -349,7 +453,7 @@
 		            for(let i = 0; i < originFiles.length; i++) {
 		               if(boardFileNo == originFiles[i].boardFileNo) {
 		                  originFiles[i].boardFileStatus = "U";
-		                  originFiles[i].newFileNm = fileArr[0].name;
+		                  originFiles[i].newFileName = fileArr[0].name;
 		               }
 		            }
 		         }
@@ -374,7 +478,7 @@
 		         
 		         function fnFileDown(boardNo, boardFileNo) {
 		            window.location="/admin/fileDown.do?itemNo=" //BoardController.java에 fileDonw.do 만들어주기
-		                  + itemNo + "&imgFileNo=" + fileNo;
+		                  + itemNo + "&fileNo=" + fileNo;
 		         }
 		         
 		         
@@ -434,7 +538,7 @@
 		                 ("#input_itemAllergyInfo").val(obj.item.getItem.itemAlllergyInfo);
 		                 ("#itemStockNm_cnt").val(obj.item.getItem.itemStock);
 		              },
-		              error: function (e) {s
+		              error: function (e) {
 		                 console.log(e);
 		              },
 		              done: function(result) {
@@ -445,107 +549,7 @@
 				 }
 				 
 				 
-				 $(function() {
-					 $("#itemRegForm").on("submit", function(e) {
-						 // 상품등록 버튼 클릭 시 유효성 검사
-			             if(!$("#input_itemName").val()) {
-								alert("상품 이름을 입력해주세요.");
-								e.preventDefault();
-								$("#input_itemName").focus();
-								return;
-							}
-							if(!$("#input_itemMinName").val()) {
-								alert("상품 소제목을 입력해주세요.");
-								e.preventDefault();
-								$("#input_itemMinName").focus();
-								return;
-							}
-							if(!$("#itemRegTextarea").val()) {
-								alert("상품 설명을 입력해주세요.");
-								e.preventDefault();
-								$("#itemRegTextarea").focus();
-								return;
-							}
-							if(!$("#input_itemPrice").val()) {
-								alert("상품 가격을 입력해주세요.");
-								e.preventDefault();
-								$("#input_itemPrice").focus();
-								return;
-							} else {
-								$("#input_itemPrice").val(itemPrice);
-							}
-							if(!$("#input_itemExpDate").val()) {
-								alert("상품 유통기한을 입력해주세요.");
-								e.preventDefault();
-								$("#input_itemExpDate").focus();
-								return;
-							}
-							if(!$("#input_itemOrigin").val()) {
-								alert("상품 원산지를 입력해주세요.");
-								e.preventDefault();
-								$("#input_itemOrigin").focus();
-								return;
-							}
-							if(!$("#input_itemAllergyInfo").val()) {
-								alert("상품 알레르기 정보를 입력해주세요.");
-								e.preventDefault();
-								$("#input_itemAllergyInfo").focus();
-								return;
-							}
-							if(confirm("등록하시겠습니까?")) {
-								alert("상품이 등록되었습니다.");
-								return;
-							} else {
-								e.preventDefault();
-								alert("상품등록이 취소되었습니다.");
-								return;
-							}
-			         });
-				 });
-
-				//가격 천단위 콤마
-				function inputNumberFormat(obj) {
-					itemPrice = obj.value.replace(",", "");
-					obj.value = comma(uncomma(obj.value));
-				};
-				function comma(str) {
-					str = String(str);
-					return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
-				};
-				function uncomma(str) {
-					str = String(str);
-					return str.replace(/[^\d]+/g, '');
-				};
-				  
-				  
-				//가격 숫자만입력가능
-				$(function() {
-					$("#input_itemPrice").on("keyup", function(event) {
-						if (event.which && ((event.which  > 47 && event.which  < 58) || (event.which > 95 && event.which < 106) || event.which == 8)) {
-				            
-				        }else{
-							alert('숫자만 입력해주세요.');
-				            $(this).val($(this).val().replace(/[^0-9]/g,""));
-				        }
-				    });
-				});
-				  
-				//재고
-				$(function() {
-					$("#itemStockNm_plus").on("click", function(){
-						$("#itemStockNm_cnt").val(parseInt($("#itemStockNm_cnt").val()) + 1);
-                    });
-                    	
-					$("#itemStockNm_minus").on("click", function(){
-						$("#itemStockNm_cnt").val(parseInt($("#itemStockNm_cnt").val()) - 1);
-						
-						if($("#itemStockNm_cnt").val() < 0) {
-							$("#itemStockNm_cnt").val(0);
-                     		alert("최소 재고수량은 0입니다.");
-                    	 	return;
-                    	 }
-                    });
-				});
+				 
 			</script>
 		</th:block>
 	</head>
@@ -558,7 +562,7 @@
 		</div>
 		
 	    <!-- 상품등록내용 -->
-	    <form id="itemUpdateForm" action="admin/updateItem" enctype="multipart/form-data">
+	    <form id="itemUpdateForm" enctype="multipart/form-data">
 		    <input type="hidden" name="itemNo" id="boardNo" th:value="${getItem.itemNo}">
 			<input type="hidden" name="itemRegdate" id="boardRegdate" th:value="${getItem.itemRegdate}">
 			<input type="hidden" name="originFiles" id="originFiles">
@@ -685,7 +689,7 @@
 				<!-- 목록으로 버튼 -->
 				<a href="/admin/itemList"><input type="button" value="목록으로" id="itemListBtn"></a>
 				<!-- 상품수정 버튼 -->
-				<button type="button" id="itemUpdateBtn" onclick="fnUpdateItem();">수정</button>
+				<button type="submit" id="itemUpdateBtn" onclick="fnUpdateItem();">수정</button>
 			</div>
 		</form>
   </div>
