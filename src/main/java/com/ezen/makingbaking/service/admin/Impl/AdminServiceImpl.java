@@ -108,11 +108,6 @@ public class AdminServiceImpl implements AdminService {
 	      return item;
 	   }
 	
-//	@Override
-//	public Item getUpdateItem(int itemNo) {
-//		return itemRepository.findById(itemNo).get();
-//		
-//	}
 	
 	@Override
 	public void deleteItem(int itemNo) {

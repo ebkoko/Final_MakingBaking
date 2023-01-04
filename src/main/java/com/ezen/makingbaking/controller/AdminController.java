@@ -356,7 +356,6 @@ public class AdminController {
 			for(ImgFile imgFile : imgFileList) {
 				ImgFileDTO imgFileDTO = ImgFileDTO.builder()
 													.fileReferNo(item.getItemNo())
-													.fileNo(item.getItemNo())
 													.fileNo(imgFile.getFileNo())
 													.fileName(imgFile.getFileName())
 													.fileOriginName(imgFile.getFileOriginName())
