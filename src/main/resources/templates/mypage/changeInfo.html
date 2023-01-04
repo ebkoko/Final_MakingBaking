@@ -7,18 +7,7 @@
 	<th:block layout:fragment="script">
 		<script th:inline="javascript">
 			function findAddr(){
-		      new daum.Postcode({
-		        oncomplete: function(data) {
-		          let addr1 = data.roadAddress;
-		          let addr2 = data.jibunAddress;
-		          document.getElementById('post').value = data.zonecode;
-		          if(addr1 !== ''){
-		          document.getElementById("addr").value = addr1;
-		          } else if(addr2 !== '') {
-		            document.getElementById("detail-addr").value = addr2;
-		          }
-		        }
-		      }).open();
+		      
 		    }
 		</script>
 	</th:block>
@@ -30,36 +19,85 @@
 
 <body>
 <div layout:fragment="content">
-  <main style="height:100%">
-    <div class="c1">
-      <form action="" class="form">
-        <h3>정보수정</h3>
-        <input type="text" placeholder="readonly" readonly class="box">
-        <div style="display: flex;">
-          <input type="text" placeholder="닉네임" class="box" style=" width: 70%;">
-          <button  class="check">중복체크</button>
-        </div>
-        <input type="password" placeholder="비밀번호" class="box">
-        <input type="password" placeholder="비밀번호 확인" class="box">
-        <input type="text" placeholder="이름" class="box">
-        <input type="text" placeholder="생년월일" class="box">
-        <select class="box">
-          <option value="체크안함">체크안함</option>
-          <option value="남자">남자</option>
-          <option value="여자">여자</option>
-        </select>
-        <input type="text" placeholder="전화번호" class="box">
-        <input type="text" placeholder="이메일" class="box">
-        <input id="post"  type="text" value="우편번호" readonly onclick="findAddr()">
-        <input id="addr" type="text" placeholder="주소" readonly> <br>
-        <input id="detail-addr" type="text" placeholder="상세주소">
-        <div class="buttons">
-          <button class="btn">수정하기</button>
-          <button class="btn">취소</button>
-          <button class="btn">탈퇴</button>
-        </div>
-      </form>
-    </div>
+  <main class="centre">
+  		<!-- 사이드 바 -->
+	    <div class="left-nav-bar">
+	      <div class="mypage2">
+	        <h2><a href="/mypage/myPage">마이페이지<a></h2>
+	      </div>
+	      <div class="menu">
+	        <div class="sub-menu">
+	          <h3>My 쇼핑</h3>
+	          <ul class="menu-group">
+	            <li class="menu-name"><a href="#">구매내역</a></li>
+	            <li class="menu-name"><a href="#">예약확인</a></li>
+	            <li class="menu-name"><a href="#">장바구니</a></li>
+	            <li class="menu-name"><a href="#">찜목록</a></li>
+	          </ul>
+	        </div>
+	        <div class="sub-menu">
+	          <ul class="menu-group">
+	            <h3>My 할동</h3>
+	            <li class="menu-name"><a href="#">나의 리뷰</a></li>
+	          </ul>
+	        </div>
+	        <div class="sub-menu">
+	          <ul class="menu-group">
+	            <h3>My 정보</h3>
+	            <li class="menu-name"><a th:href="@{/mypage/changeInfo}">개인정보확인/수정</a></li>
+	          </ul>
+	        </div>
+	        <div class="sub-menu">
+	          <ul class="menu-group">
+	            <li><a href="#"><h3>나의 QnA</h3></a></li>
+	          </ul>
+	        </div>
+	      </div>
+	    </div>
+	    
+	    <div class="c1" style="margin:24px 50px">
+	      <form action="/user/join" id="joinForm" class="form" method="post">
+	        <h3 class="changeInfo">회원정보수정</h3>
+	        <div style="display: flex;">
+	          <input type="text" readonly class="box" id="userId" name="userId" th:value="${socialUser != null ? socialUser.userId : ''}">
+	        </div>
+	
+	        <div class="pw-check">
+	          <div class="inputBox light">
+	            <input type="password" id="userPw" name="userPw" required class="input" placeholder="비밀번호"><label for="userPw" class="input-label"></label>
+	            <div id="show" class="show" onclick="fnPwShow(this);"></div>
+	          </div>
+	          <div class="check-light"></div>
+	        </div>
+	
+	        <div class=" check2">
+	          <div class="inputBox light">
+	            <input type="password" id="userPwCheck" name="userPwCheck" required class="input" placeholder="비밀번호확인" style="margin-top: 12px;"><label for="userPwCheck" class="input-label"></label>
+	          </div>
+	          <div class="check-light"></div>
+	          <p id="pwRecheck" style="font-size: 12px; font-weight: bolder; margin-left: 5px; text-align: left;"></p>
+	        </div>
+	
+	        <input type="text" id="userNm" name="userNm" placeholder="이름" class="box">
+	        <input type="text" id="userBirth" name="userBirth" placeholder="생년월일 ex)19901010" class="box">
+	        <select id="userGender" name="userGender" class="box">
+	          <option selected disabled>성별</option>
+	          <option value="m">남자</option>
+	          <option value="f">여자</option>
+	          <option value="n">선택 안함</option>
+	        </select>
+	        <input type="text" id="userTel" name="userTel" placeholder="전화번호 ex)01012345678" class="box">
+	        <input type="text" id="userMail" name="userMail" placeholder="이메일 ex)xxx@xxx.com" th:value="${socialUser != null ? socialUser.userMail : ''}" class="box">
+	        <input id="post"  name="userAddr1" type="text" value="우편번호" readonly onclick="findAddr()">
+	        <input id="addr" name="userAddr2" type="text" placeholder="주소" readonly> <br>
+	        <input id="userAddr3" name="userAddr3" type="text" placeholder="상세주소">
+	        <div class="buttons">
+	          <input type="button" value="수정하기" class="btn">
+	          <input type="reset" value="취소" class="btn">
+	          <input type="button" value="탈퇴" class="btn">
+	        </div>
+	      </form>
+	    </div>
   </main>
 </div>
 </body>
