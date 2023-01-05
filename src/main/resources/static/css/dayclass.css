@@ -305,6 +305,7 @@
 		      border-collapse: collapse;
 		      border-spacing: 2px;
 		      text-align: center;
+		      height: 25px;
 		    }
 		    .rvw_list th{
 		      border:1px solid rgb(102, 102, 102);
@@ -322,11 +323,7 @@
 		      font-size: 13.5px;
 		      color: rgb(102, 102, 102);
 		    }		 
-		    .rvw_list{
-		      width: 100%;
-		      text-align: center;
-		      height: 25px;
-		    }
+
 		    .rvw_paging{
 		      margin:50px 0 50px 0;
 		    }

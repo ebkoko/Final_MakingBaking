@@ -1,11 +1,17 @@
 package com.ezen.makingbaking.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,7 +52,7 @@ public class ItemController {
 	}
 	
 	@GetMapping("/item")
-	public ModelAndView dayclassVeiw() {
+	public ModelAndView itemVeiw() {
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("item/getItem.html");
@@ -83,8 +89,13 @@ public class ItemController {
 	
 	@GetMapping("/item/{itemNo}")
 	public ModelAndView getItem(@PathVariable int itemNo, @PageableDefault(page = 0, size = 4) Pageable pageable,
-			@AuthenticationPrincipal CustomUserDetails customUser) {
+			@AuthenticationPrincipal CustomUserDetails customUser, HttpServletRequest request) {
 		
+		String searchCondition = "";
+		
+		if(request.getParameter("searchCondition") != null) {
+			searchCondition = request.getParameter("searchCondition");
+		}
 		
 		Item item = itemService.getItem(itemNo);
 		
@@ -107,7 +118,7 @@ public class ItemController {
 								 .itemAllergyInfo(item.getItemAllergyInfo())
 								 .build();
 		
-		Page<Review> pageReviewList = reviewService.itemReviewList(itemNo, pageable);
+		Page<Review> pageReviewList = reviewService.itemReviewList(itemNo, pageable, searchCondition);
 		
 		Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(review -> ReviewDTO.builder()
 																		  .rvwNo(review.getRvwNo())
@@ -121,17 +132,108 @@ public class ItemController {
 																		  .build()
 		);
 		
-	
+		String likeYn = "N";
+		
+		if(!loginUserId.equals(""))
+			likeYn = itemService.getLikeYn(loginUserId, itemNo);
+		
+		int likeCnt = itemService.getLikeCnt(itemNo);
+		
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("item/getItem.html");
+		mv.setViewName("item/getItem.html");		
 		
 		mv.addObject("item", itemDTO);
-		mv.addObject("pageReviewList", pageReviewDTOList);
-	
+		mv.addObject("pageReviewList", pageReviewDTOList);		
+		mv.addObject("likeYn", likeYn);
+		mv.addObject("likeCnt", likeCnt);
+		mv.addObject("searchCondition", searchCondition);
+		
 		
 	
 		return mv;
 	}
+	// 페이징
+	@PostMapping("/item/{itemNo}")
+	public ResponseEntity<?> getDayclassPage(@PathVariable int itemNo, 
+			@PageableDefault(page = 0, size = 4) Pageable pageable, 
+			@AuthenticationPrincipal CustomUserDetails customUser,
+			HttpServletRequest request){
+		
+		ResponseDTO<ReviewDTO> response = new ResponseDTO<>();
+		
+		
+		try {
+			String searchCondition = "";
+			
+			if(request.getParameter("searchCondition") != null) {
+				searchCondition = request.getParameter("searchCondition");
+			}
+			
+			Page<Review> pageReviewList = reviewService.getReviewList(itemNo, pageable, searchCondition);
+			
+			Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview 
+													-> ReviewDTO.builder()
+																  .rvwNo(pageReview.getRvwNo())
+																  .rvwReferNo(pageReview.getRvwReferNo())
+																  .rvwType(pageReview.getRvwType())
+																  .rvwContent(pageReview.getRvwContent())
+																  .rvwWriter(pageReview.getRvwWriter())
+																  
+																  .rvwRegdate(pageReview.getRvwRegdate().toString())
+																  .rvwScore(pageReview.getRvwScore())
+																  .build()
+									);
+																				  
+			response.setPageItems(pageReviewDTOList);
+			
+			return ResponseEntity.ok().body(response);
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
 	
+	// 좋아요
+	@PostMapping("like")
+	public ResponseEntity<?> insertLike(@RequestParam("itemNo") int itemNo,
+			@AuthenticationPrincipal CustomUserDetails customUser) {
+		ResponseDTO<Map<String, Object>> response = new ResponseDTO<>();
+		
+		try {
+			itemService.insertLike(itemNo, customUser.getUsername());			
+			
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			returnMap.put("likeYn", "Y");
+			returnMap.put("likeCnt", itemService.getLikeCnt(itemNo));
+			
+			response.setItem(returnMap);
+			
+			return ResponseEntity.ok().body(response);
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+
+	@DeleteMapping("like")
+	public ResponseEntity<?> deleteLike(@RequestParam("itemNo") int itemNo,
+			@AuthenticationPrincipal CustomUserDetails customUser) {
+		ResponseDTO<Map<String, Object>> response = new ResponseDTO<>();
+		
+		try {
+			itemService.deleteLike(itemNo, customUser.getUsername());			
+			
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			returnMap.put("likeYn", "Y");
+			returnMap.put("likeCnt", itemService.getLikeCnt(itemNo));
+			
+			response.setItem(returnMap);
+			
+			return ResponseEntity.ok().body(response);
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
 	
 }

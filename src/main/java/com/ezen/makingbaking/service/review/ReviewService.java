@@ -9,7 +9,7 @@ public interface ReviewService {
 
 	Page<Review> getReviewList(int dayclassNo, Pageable pageable, String searchCondition);
 
-	Page<Review> itemReviewList(int itemNo, Pageable pageable);
+	Page<Review> itemReviewList(int itemNo, Pageable pageable, String searchCondition);
 
 	
 }
