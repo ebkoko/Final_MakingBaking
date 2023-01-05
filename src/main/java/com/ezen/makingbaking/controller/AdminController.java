@@ -234,10 +234,15 @@ public class AdminController {
 			HttpServletResponse response, MultipartFile[] uploadFiles,
 			MultipartFile[] changedFiles, HttpServletRequest request,
 			@RequestParam("originFiles") String originFiles) throws IOException { 
+		System.out.println("itemDTO.getItemPrice()==================================" + itemDTO.getItemPrice());
 		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
 		
 		List<ImgFileDTO> originFileList = new ObjectMapper().readValue(originFiles, 
 												new TypeReference<List<ImgFileDTO>>() {});
+		
+		for(int i = 0; i < originFileList.size(); i++) {
+			System.out.println(originFileList.get(i).toString());
+		}
 		
 		String attachPath = request.getSession().getServletContext().getRealPath("/") +
 					"/item/";
@@ -288,6 +293,7 @@ public class AdminController {
 							imgFile.setFileReferNo(itemDTO.getItemNo());
 							imgFile.setFileNo(originFileList.get(i).getFileNo());
 							imgFile.setFileStatus("U");
+							imgFile.setFileType("item");
 							
 							uFileList.add(imgFile);
 						}
@@ -297,8 +303,10 @@ public class AdminController {
 					ImgFile imgFile = new ImgFile();
 					
 					//boardFile.setBoard(board);
+					imgFile.setFileReferNo(itemDTO.getItemNo());
 					imgFile.setFileNo(originFileList.get(i).getFileNo());
 					imgFile.setFileStatus("D");
+					imgFile.setFileType("item");
 					
 					//실제 파일 삭제
 					File dFile = new File(attachPath + originFileList.get(i).getFileName());
@@ -321,6 +329,7 @@ public class AdminController {
 						
 						imgFile.setFileReferNo(itemDTO.getItemNo());
 						imgFile.setFileStatus("I");
+						imgFile.setFileType("item");
 						
 						uFileList.add(imgFile);
 					}
@@ -338,7 +347,7 @@ public class AdminController {
 										.itemRegdate(
 												item.getItemRegdate() == null ?
 														null :
-														item.getItemRegdate().toString())
+												item.getItemRegdate().toString())
 										.itemName(item.getItemName())
 										.itemMinName(item.getItemMinName())
 										.itemDetails(item.getItemDetails())
@@ -368,7 +377,7 @@ public class AdminController {
 			
 			Map<String, Object> returnMap = new HashMap<String, Object>();
 			
-			returnMap.put("getBoard", returnItem);
+			returnMap.put("getItem", returnItem);
 			returnMap.put("imgFileList", imgFileDTOList);
 			
 			responseDTO.setItem(returnMap);
@@ -439,6 +448,72 @@ public class AdminController {
 	public void deleteItem(@RequestParam("itemNo") int itemNo) {
 		adminService.deleteItem(itemNo);
 	}
+	
+	
+	
+	//dayclass
+	//상품등록
+//	@GetMapping("/insertDatclassView")
+//	public ModelAndView insertDayclassView() {
+//		
+//		ModelAndView mv = new ModelAndView();
+//		
+//		mv.setViewName("admin/dayclassReg.html");
+//			
+//		return mv;
+//	}
+//	
+//	@PostMapping("/insertDayclass")
+//	public void insertDayclass(ItemDTO itemDTO, MultipartFile[] uploadFiles, 
+//			HttpServletResponse response, HttpServletRequest request) throws IOException {
+//		System.out.println(itemDTO.getItemStatus());
+//		
+//		Item item = Item.builder()
+//						.itemStatus(itemDTO.getItemStatus())
+//						.itemStock(itemDTO.getItemStock())
+//						.itemCate(itemDTO.getItemCate())
+//						.itemName(itemDTO.getItemName())
+//						.itemMinName(itemDTO.getItemMinName())
+//						.itemDetails(itemDTO.getItemDetails())
+//						.itemPrice(itemDTO.getItemPrice())
+//						.itemExpDate(itemDTO.getItemExpDate())
+//						.itemOrigin(itemDTO.getItemOrigin())
+//						.itemAllergyInfo(itemDTO.getItemAllergyInfo())
+//						.build();
+//	
+//		//DB에 입력될 파일 정보 리스트
+//		List<ImgFile> uploadFileList = new ArrayList<ImgFile>();
+//		
+//		if(uploadFiles.length > 0) {
+//			String attachPath = request.getSession().getServletContext().getRealPath("/")
+//					+ "/item/";
+//			
+//			File directory = new File(attachPath);
+//			
+//			if(!directory.exists()) {
+//				directory.mkdir();
+//			}
+//			
+//			//multipartFile 형식의 데이터를 DB 테이블에 맞는 구조로 변경
+//			for(int i = 0; i < uploadFiles.length; i++) {
+//				MultipartFile file = uploadFiles[i];
+//				
+//				if(!file.getOriginalFilename().equals("") &&
+//					file.getOriginalFilename() != null) {
+//					ImgFile itemFile = new ImgFile();
+//					
+//					itemFile = FileUtils.parseFileInfo(file, attachPath);
+//					
+//					uploadFileList.add(itemFile);
+//				}
+//			}
+//		}
+//		
+//		adminService.insertItem(item, uploadFileList);
+//		
+//		response.sendRedirect("/admin/itemList");
+//	}
+		
 	
 	
 	
