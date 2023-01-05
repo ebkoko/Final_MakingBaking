@@ -68,7 +68,7 @@
 							$.ajax({
 								url: '/cart/orderCartList',
 								type: 'post',
-								data: {itemNo},
+								data: { itemNo },
 								success: function(obj) {
 									console.log(obj);
 									cartClick = true;
@@ -116,7 +116,7 @@
 		              width="350px">
 		            </div>
 		            <div class="itbanner_explain">        
-		              <h2>타이틀 ${item.dayclassTitle }</h2>
+		              <h2 th:text="${item.itemName}">타이틀 ${item.dayclassTitle }</h2>
 		              <div class="itbanner_explain_sTitle">
 		              <p>영양 정보</p>
 		              </div>

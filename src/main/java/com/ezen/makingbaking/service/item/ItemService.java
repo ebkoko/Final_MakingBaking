@@ -17,7 +17,7 @@ public interface ItemService {
 
 	Item getItem(int itemNo);
 
-	Page<Review> getReviewList(int itemNo, Pageable pageable);
+	
 
 	
 	

@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Item;
+import com.ezen.makingbaking.entity.Review;
 
 @Transactional
 public interface ItemRepository extends JpaRepository<Item, Integer> {
@@ -56,5 +57,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 					+ "			 ) C",
 			nativeQuery = true)
 	Page<CamelHashMap> findItemAndFile(Pageable pageable);
+	
+	//Page<Review> findByItemNoAndPageble(int itemNo, Pageable pageable);
 
 }

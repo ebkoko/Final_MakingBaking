@@ -36,10 +36,6 @@ public class ItemServiceImpl implements ItemService {
 		return itemRepository.findById(itemNo).get();
 	}
 
-	@Override
-	public Page<Review> getReviewList(int itemNo, Pageable pageable) {
-//		return itemRepository.findByItemNoAndP(itemNo, pageable);
-		return null;
-	}
+
 
 }
