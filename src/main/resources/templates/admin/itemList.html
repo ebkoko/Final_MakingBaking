@@ -96,27 +96,6 @@
 					 text-align:right;
 					 margin: 50px auto;
 				}
-			    /* 상품삭제버튼 */
-			    #itemDelete {
-					width: 150px;
-			      	height: 50px;
-			     	border: 1.2px solid #28693F;
-					border-radius: 4px;
-					background-color: white;
-					text-align: center;
-					display: inline-block;
-					color: #28693F;
-					font-size: 18px;
-					font-weight: 550;
-					letter-spacing:1px;
-					margin-right: 30px;
-			    }
-			    #itemDelete:hover {
-					background-color: #28693F;
-					color: white;
-					font-weight: 550;
-					cursor: pointer;
-				}
 				/* 상품등록버튼 */
 			    #itemRegistration {
 			     	width: 150px;
@@ -130,6 +109,7 @@
 					font-size: 18px;
 					font-weight: 550;
 					letter-spacing:1px;
+					margin-right: 30px;
 			    }
 			    #itemRegistration:hover {
 					background-color: #28693F;
@@ -137,7 +117,26 @@
 					font-weight: 550;
 					cursor: pointer;
 				}
-				
+			    /* 상품삭제버튼 */
+			    #itemDelete {
+					width: 150px;
+			      	height: 50px;
+			     	border: 1.2px solid #28693F;
+					border-radius: 4px;
+					background-color: white;
+					text-align: center;
+					display: inline-block;
+					color: #28693F;
+					font-size: 18px;
+					font-weight: 550;
+					letter-spacing:1px;
+			    }
+			    #itemDelete:hover {
+					background-color: #28693F;
+					color: white;
+					font-weight: 550;
+					cursor: pointer;
+				}
 				
 				/* 페이징처리 */
 			    .pagination {
@@ -283,17 +282,13 @@
 							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">
 						</a>
 					</td>
-					<!--<td th:text="${item.itemName}"></td>-->
 		        	<td th:text="${item.itemPrice >= 1000 ? #numbers.formatInteger(item.itemPrice , 3, 'COMMA') : item.itemPrice}"></td>
 		        	<td th:text="${item.itemRegdate eq null ? '' : #strings.substring(item.itemRegdate, 0, 10)}"></td>
 		        	<td th:text="${item.itemStatus}"></td>
 		        	<td>
 		        		<a id="itemMod" th:text="수정"
 							th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">
-						</a><!--
-		        		<a th:href="@{/admin/itemUpdate/{itemNo}} (itemNo=${item.itemNo})}" >
-		        			<input type="button" value="수정" id="itemMod">
-		        		</a>-->
+						</a>
 		        	</td>
 		     	 </tr>
 		    </table>
@@ -301,8 +296,8 @@
 		
 		<!-- 삭제/등록버튼 -->
 	    <div id="itemTotalBtn">
-	    	<a href="/admin/delItem"><input type="button" value="상품삭제" id="itemDelete"></a>
 	    	<a href="/admin/insertItemView"><input type="button" value="상품등록" id="itemRegistration"></a>
+	    	<a href="/admin/delItem"><input type="button" value="상품삭제" id="itemDelete"></a>
 	    </div>
 	</div>
 

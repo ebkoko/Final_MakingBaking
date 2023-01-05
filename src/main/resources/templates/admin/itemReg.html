@@ -13,27 +13,21 @@
 				.itemAdmin {
 					font-size: 40px;
 				}
+				
 				/* 상품등록Table div*/
 				#div_itemReg {
 					margin-top: 80px;
 				}
-				/* 상품상태 */
-				#itemSearchCondition {
-					border: 1px solid black;
-					height: 20px;
-				}
-			    #itemReg_T {
+			    #T_itemReg {
 					width: 1000px;
-					height:900px;
 					border-collapse: collapse;
-					
 					margin: 0 auto;
 			    }
-			    #itemReg_T td {
+			    #T_itemReg td {
 					border: 1.2px solid #28693F;
 					border-right: hidden;
 				}
-			    #itemReg_T th {
+			    #T_itemReg th {
 					width: 30%;
 					border: 1.2px solid #28693F;
 					background-color:rgb(239, 239, 239);
@@ -41,48 +35,85 @@
 					border-left: hidden;
 				}
 				
+				/* 판매상태 */
 				#itemStatus_Th {
-					height:40px;
+					height: 50px;
 				}
+				#itemStatus {
+					border: 1px solid black;
+				}
+				
+				/* 카테고리 */
 				#itemCate_Th {
-					height:40px;
+					height:50px;
 				}
-				
-				/* 입력창 */
-				.inputH {
-					width: 200px;
-					height: 35px;
-					font-size: 20px;
-				}
-				#input_itemPrice {
-					width: 100px;
-				}
-				#itemRegTextarea {
-					width: 600px;
-					font-size: 15px;
-				}
-				/* 상품이름 입력창 */
-				#input_itemName {
-					width: 600px;
-				}
-				#input_itemMinName, #input_itemExpDate,
-				#input_itemOrigin, #input_itemAllergyInfo {
-					width: 600px;
-					font-size: 15px;
-				}
-				
-				/* 상품카테 라디오버튼 */
+				/* 카테고리 라디오버튼 */
 				#div_itemRadio 
 					input[type='radio']{
 				      accent-color:rgb(64, 128, 128);
 				      border: 2px solid #808080;
 					}
 				
+				/* 등록일 */
+				#itemRegdate {
+					height:50px;
+					font-size: 15px;
+					padding-left: 20px;
+				}
+				/* 상품이름 */
+				#itemName {
+					width: 650px;
+					height:50px;
+					font-size: 18px;
+					font-weight: bold;
+				}
+				/* 소제목 */
+				#itemMinName {
+					width: 650px;
+					height: 50px;
+					font-size: 15px;
+				}
+				/* 상품설명 */
+				#itemDetails {
+					width: 650px;
+					font-size: 15px;
+					padding-top: 10px;
+					padding-bottom: 10px;
+				}
+				/* 상품가격 */
+				#itemPrice {
+					width: 50px;
+					height: 50px;
+					text-align: right;
+					font-size: 15px;
+				}
+				/* 상품유통기한 */
+				#itemExpDate {
+					width: 650px;
+					height: 50px;
+					font-size: 15px;
+				}
+				/* 상품원산지 */
+				#itemOrigin {
+					width: 650px;
+					height: 50px;
+					font-size: 15px;
+				}
+				/* 알레르기 정보 */
+				#itemAllergyInfo {
+					width: 650px;
+					height: 80px;
+					font-size: 15px;
+					padding-top: 10px;
+					padding-bottom: 10px;
+				}
+				
 				/* 파일 첨부 */
 				#attZone {
 					width: 660px;
 					min-height: 150px;
 					padding: 10px;
+					margin: 10px;
 					border: 1px dotted lightgreen;
 				}
 				#attZone:empty:before {
@@ -184,48 +215,48 @@
 			             $("#btnAtt")[0].files = dt.files;
 			             
 			             // 상품등록 버튼 클릭 시 유효성 검사
-			             if(!$("#input_itemName").val()) {
+			             if(!$("#itemName").val()) {
 								alert("상품 이름을 입력해주세요.");
 								e.preventDefault();
-								$("#input_itemName").focus();
+								$("#itemName").focus();
 								return;
 							}
-							if(!$("#input_itemMinName").val()) {
+							if(!$("#itemMinName").val()) {
 								alert("상품 소제목을 입력해주세요.");
 								e.preventDefault();
-								$("#input_itemMinName").focus();
+								$("#itemMinName").focus();
 								return;
 							}
-							if(!$("#itemRegTextarea").val()) {
+							if(!$("#itemDetails").val()) {
 								alert("상품 설명을 입력해주세요.");
 								e.preventDefault();
-								$("#itemRegTextarea").focus();
+								$("#itemDetails").focus();
 								return;
 							}
-							if(!$("#input_itemPrice").val()) {
+							if(!$("#itemPrice").val()) {
 								alert("상품 가격을 입력해주세요.");
 								e.preventDefault();
-								$("#input_itemPrice").focus();
+								$("#itemPrice").focus();
 								return;
 							} else {
-								$("#input_itemPrice").val(itemPrice);
+								$("#itemPrice").val(itemPrice);
 							}
-							if(!$("#input_itemExpDate").val()) {
+							if(!$("#itemExpDate").val()) {
 								alert("상품 유통기한을 입력해주세요.");
 								e.preventDefault();
-								$("#input_itemExpDate").focus();
+								$("#itemExpDate").focus();
 								return;
 							}
-							if(!$("#input_itemOrigin").val()) {
+							if(!$("#itemOrigin").val()) {
 								alert("상품 원산지를 입력해주세요.");
 								e.preventDefault();
-								$("#input_itemOrigin").focus();
+								$("#itemOrigin").focus();
 								return;
 							}
-							if(!$("#input_itemAllergyInfo").val()) {
+							if(!$("#itemAllergyInfo").val()) {
 								alert("상품 알레르기 정보를 입력해주세요.");
 								e.preventDefault();
-								$("#input_itemAllergyInfo").focus();
+								$("#itemAllergyInfo").focus();
 								return;
 							}
 							if(confirm("등록하시겠습니까?")) {
@@ -348,7 +379,7 @@
 				  
 				  //가격 숫자만입력가능
 				  $(function() {
-					  $("#input_itemPrice").on("keyup", function(event) {
+					  $("#itemPrice").on("keyup", function(event) {
 				        if (event.which && ((event.which  > 47 && event.which  < 58) || (event.which > 95 && event.which < 106) || event.which == 8)) {
 				            
 				        }else{
@@ -389,11 +420,11 @@
 	    <!-- 상품등록내용 -->
 	    <form id="itemRegForm" method="post" action="/admin/insertItem" enctype="multipart/form-data">
 	    <div id="div_itemReg">
-	      <table border="1" id="itemReg_T">
+	      <table border="1" id="T_itemReg">
 	        <tr>
-	          <th id="itemStatus_Th">상품 상태</th>
+	          <th id="itemStatus_Th">판매 상태</th>
 	          <td>&ensp;&ensp;
-	            <select name="itemStatus" id="itemSearchCondition">
+	            <select name="itemStatus" id="itemStatus">
 	              <option value="Y" th:selected="${searchCondition == 'Y'}">판매중</option>
 	              <option value="S" th:selected="${searchCondition == 'S'}">재고없음</option>
 	              <option value="N" th:selected="${searchCondition == 'N'}">판매종료</option>
@@ -414,34 +445,34 @@
 	        </tr>
 	        <tr>
 	          <th>이름</th>
-	          <td>&ensp;&ensp;<input type="text" name="itemName" class="inputH" id="input_itemName">&ensp;&ensp;</td>
+	          <td>&ensp;&ensp;<input type="text" name="itemName" id="itemName">&ensp;&ensp;</td>
 	        </tr>
 	        <tr>
 	          <th>소제목</th>
-	          <td>&ensp;&ensp;<input type="text" name="itemMinName" class="inputH" id="input_itemMinName">&ensp;&ensp;</td>
+	          <td>&ensp;&ensp;<input type="text" name="itemMinName" id="itemMinName">&ensp;&ensp;</td>
 	        </tr>
 	        <tr>
 	          <th>설명</th>
-	          <td>&ensp;&ensp;<textarea cols="100" name="itemDetails" rows="10" id="itemRegTextarea"></textarea></td>
+	          <td>&ensp;&ensp;<textarea cols="100" name="itemDetails" rows="10" id="itemDetails"></textarea></td>
 	        </tr>
 	        <tr>
 	          <th>가격</th>
 	          <td>&ensp;&ensp;
-	          	<input type="text" name="itemPrice" class="inputH" id="input_itemPrice"
-	          	onkeyup="inputNumberFormat(this)" maxlength="8">원
+	          	<input type="text" name="itemPrice" id="itemPrice"
+	          			onkeyup="inputNumberFormat(this)" maxlength="8">원
 	          </td>
 	        </tr>
 	        <tr>
 	          <th>유통기한</th>
-	          <td>&ensp;&ensp;<input type="text" name="itemExpDate" class="inputH"  id="input_itemExpDate"></td>
+	          <td>&ensp;&ensp;<input type="text" name="itemExpDate" id="itemExpDate"></td>
 	        </tr>
 	        <tr>
 	          <th>원산지</th>
-	          <td>&ensp;&ensp;<input type="text" name="itemOrigin" class="inputH" id="input_itemOrigin"></td>
+	          <td>&ensp;&ensp;<input type="text" name="itemOrigin" id="itemOrigin"></td>
 	        </tr>
 	        <tr>
 	          <th>알레르기 정보</th>
-	          <td>&ensp;&ensp;<textarea name="itemAllergyInfo" id="input_itemAllergyInfo" class="inputH"></textarea></td>
+	          <td>&ensp;&ensp;<textarea name="itemAllergyInfo" id="itemAllergyInfo"></textarea></td>
 	        </tr>
 	        <tr>
 	          <th>영양정보</th>
@@ -458,7 +489,7 @@
 	          <td>&ensp;&ensp;
 	          	<div id="itemStockNm">
 					<button type="button" name="재고내리기" id="itemStockNm_minus">－</button>
-					<input type="number" name="itemStock" id="itemStockNm_cnt" class="inputH" value="30">
+					<input type="number" name="itemStock" id="itemStockNm_cnt" value="30">
 					<button type="button" name="재고올리기" id="itemStockNm_plus">＋</button>
 				</div>
 	          </td>

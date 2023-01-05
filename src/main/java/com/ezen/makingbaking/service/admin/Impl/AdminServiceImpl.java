@@ -87,6 +87,7 @@ public class AdminServiceImpl implements AdminService {
 	      
 	      if(uFileList.size() > 0) {
 	    	  for(int i = 0; i < uFileList.size() ; i++) {
+	    		  System.out.println("uFileList==================================================" + uFileList.get(i).toString());
 	    		  if(uFileList.get(i).getFileStatus().equals("U")) {
 	    			  imgFileRepository.save(uFileList.get(i));
 	    		  } else if(uFileList.get(i).getFileStatus().equals("D")) {

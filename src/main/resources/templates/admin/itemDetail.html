@@ -9,31 +9,25 @@
 	<head>
 		<th:block layout:fragment="css">
 			<style>
-				/* '상품등록' 타이틀 */
+				/* '상품상세' 타이틀 */
 				.itemAdmin {
 					font-size: 40px;
 				}
-				/* 상품등록Table div*/
-				#div_itemReg {
+				
+				/* 상품상세Table div*/
+				#div_itemDtl {
 					margin-top: 80px;
 				}
-				/* 상품상태 */
-				#itemSearchCondition {
-					height: 20px;
-					font-size: 15px;
-				}
-			    #itemReg_T {
+			    #T_itemDtl {
 					width: 1000px;
-					height:800px;
 					border-collapse: collapse;
-					
 					margin: 0 auto;
 			    }
-			    #itemReg_T td {
+			    #T_itemDtl td {
 					border: 1.2px solid #28693F;
 					border-right: hidden;
 				}
-			    #itemReg_T th {
+			    #T_itemDtl th {
 					width: 30%;
 					border: 1.2px solid #28693F;
 					background-color:rgb(239, 239, 239);
@@ -41,44 +35,18 @@
 					border-left: hidden;
 				}
 				
-				#itemStatus_Th {
-					height:40px;
+				
+				/* 판매상태 */
+				#itemStatus {
+					height: 50px;
+					font-size: 15px;
 				}
+				
+				/* 카테고리_th */
 				#itemCate_Th {
-					height:40px;
+					height:50px;
 				}
-				
-				/* 입력창 */
-				.inputH {
-					width: 200px;
-					height: 35px;
-					font-size: 20px;
-				}
-				#input_itemPrice {
-					width: 100px;
-				}
-				#itemRegTextarea {
-					width: 650px;
-					font-size: 15px;
-					padding: 10px;
-				}
-				/* 상품이름 입력창 */
-				#input_itemName {
-					width: 600px;
-				}
-				/* 알레르기 정보 */
-				#input_itemAllergyInfo {
-					width: 650px;
-					height: 80px;
-					font-size: 15px;
-				}
-				#input_itemMinName, #input_itemExpDate,
-				#input_itemOrigin, #itemRegdateText {
-					width: 600px;
-					font-size: 15px;
-				}
-				
-				/* 상품카테 라디오버튼 */
+				/* 카테고리 라디오버튼 */
 				#div_itemRadio 
 					input[type='radio']{
 				      accent-color:rgb(64, 128, 128);
@@ -86,8 +54,57 @@
 					}
 				
 				/* 등록일 */
-				#itemRegdateText {
+				#itemRegdate {
+					height:50px;
+					font-size: 15px;
 					padding-left: 20px;
+				}
+				/* 상품이름 */
+				#itemName {
+					width: 650px;
+					height:50px;
+					font-size: 18px;
+					font-weight: bold;
+				}
+				/* 소제목 */
+				#itemMinName {
+					width: 650px;
+					height: 50px;
+					font-size: 15px;
+				}
+				/* 상품설명 */
+				#itemDetails {
+					width: 650px;
+					font-size: 15px;
+					padding-top: 10px;
+					padding-bottom: 10px;
+				}
+				/* 상품가격 */
+				#itemPrice {
+					width: 50px;
+					height: 50px;
+					text-align: right;
+					font-size: 15px;
+				}
+				/* 상품유통기한 */
+				#itemExpDate {
+					width: 650px;
+					height: 50px;
+					font-size: 15px;
+				}
+				/* 상품원산지 */
+				#itemOrigin {
+					width: 650px;
+					height: 50px;
+					font-size: 15px;
+				}
+				/* 알레르기 정보 */
+				#itemAllergyInfo {
+					width: 650px;
+					height: 80px;
+					font-size: 15px;
+					padding-top: 10px;
+					padding-bottom: 10px;
 				}
 				
 				/* 파일 첨부 */
@@ -95,6 +112,7 @@
 					width: 660px;
 					min-height: 150px;
 					padding: 10px;
+					margin: 10px;
 					border: 1px dotted lightgreen;
 				}
 				#attZone:empty:before {
@@ -108,19 +126,14 @@
 		            float: left;
 		            position: relative;
 		            min-width: 114px;
-		            height: 34px;
-		            margin-left: 20px;
+		            height: 50px;
 		         }
-		         
 		         #itemStockNm_cnt{
 		            width: 40px;
 		            height: 100%;
-		            border-width: 0 1px;
-		            vertical-align: top;
 		            color: #333333;
 		            font-size: 15px;
 		            font-weight: bold;
-		            line-height: 34px;
 		            text-align: center;  
 		         }
 		         input[type="number"]::-webkit-outer-spin-button,
@@ -133,28 +146,7 @@
 			    #div_itemBtn {
 					text-align:right;
 					margin: 50px auto;
-					margin-right: 100px;
-				}
-
-				/* 상품수정 버튼 */
-			    #itemUpdateBtn {
-					width: 150px;
-					height: 50px;
-					border: 1.2px solid #28693F;
-					border-radius: 4px;
-					background-color: white;
-					text-align: center;
-					display: inline-block;
-					color: #28693F;
-					font-size: 18px;
-					font-weight: 550;
-					letter-spacing:1px;
-			    }
-			    #itemUpdateBtn:hover {
-					background-color: #28693F;
-					color: white;
-					font-weight: 550;
-					cursor: pointer;
+					margin-right: 70px;
 				}
 				/* 목록으로 버튼 */
 			    #itemListBtn {
@@ -177,6 +169,28 @@
 					font-weight: 550;
 					cursor: pointer;
 				}
+				
+				/* 삭제버튼 */
+				#itemDelBtn {
+					width: 150px;
+					height: 50px;
+					border: 1.2px solid #28693F;
+					border-radius: 4px;
+					background-color: white;
+					text-align: center;
+					display: inline-block;
+					color: #28693F;
+					font-size: 18px;
+					font-weight: 550;
+					letter-spacing:1px;
+					margin-right: 30px;
+			    }
+			    #itemDelBtn:hover {
+					background-color: #28693F;
+					color: white;
+					font-weight: 550;
+					cursor: pointer;
+				}
 			</style>
 		</th:block>
 		<th:block layout:fragment="script">
@@ -187,11 +201,24 @@
 						e.preventDefault();
 					})
 					
-					//
-					function priceToString(price) {
-					    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-					}
+					//상품 삭제
+					$("#itemDelBtn").on('click', function(e) {
+						e.preventDefault(); //a태그가 이벤트가 동작하지 않도록.
+
+						$.ajax({
+							url: '/admin/delItem/',
+							type: 'delete',
+							data: {itemNo: $("#itemNo").val()},
+							success: function () {
+								alert("삭제되었습니다.");
+								window.location.href = "/admin/itemList";
+							}, error: function (e) {
+								console.log(e);
+							}
+						});
+					});
 				});
+				
 			</script>
 		</th:block>
 	</head>
@@ -208,17 +235,11 @@
 		    <input type="hidden" name="itemNo" id="boardNo" th:value="${getItem.itemNo}">
 			<input type="hidden" name="itemRegdate" id="boardRegdate" th:value="${getItem.itemRegdate}">
 			<input type="hidden" name="originFiles" id="originFiles">
-			<div id="div_itemReg">
-				<table border="1" id="itemReg_T">
+			<div id="div_itemDtl">
+				<table border="1" id="T_itemDtl">
 			        <tr>
 			          <th id="itemStatus_Th">판매 상태</th>
-			          <td>&ensp;&ensp;<input type="text" name="itemStatus" id="itemSearchCondition" th:value="${getItem.itemStatus}" readonly></td>
-			            <!--<select name="itemStatus" id="itemSearchCondition" readonly>
-			              <option value="Y" th:selected="${getItem.itemStatus} == 'Y'">판매중</option>
-			              <option value="S" th:selected="${getItem.itemStatus} == 'S'">재고없음</option>
-			              <option value="N" th:selected="${getItem.itemStatus} == 'N'">판매종료</option>
-			            </select>-->
-			          </td>
+			          <td>&ensp;&ensp;<input type="text" name="itemStatus" id="itemStatus" th:value="${getItem.itemStatus}" readonly></td>
 			        </tr>
 			        <tr>
 			          <th id="itemCate_Th">카테고리</th>
@@ -234,75 +255,76 @@
 			        </tr>
 			        <tr>
 			        	<th>등록일</th>
-						<td name="itemRegdate" id="itemRegdateText" class="inputH"
+						<td name="itemRegdate" id="itemRegdate"
 							th:text="${getItem.itemRegdate eq null ? '' : #strings.substring(getItem.itemRegdate, 0, 10)}" readonly>
 						</td>
 					</tr>
 			        <tr>
 			          <th>이름</th>
-			          <td>&ensp;&ensp;<input type="text" name="itemName" class="inputH" id="input_itemName" th:value="${getItem.itemName}" readonly></td>
+			          <td>&ensp;&ensp;<input type="text" name="itemName" id="itemName" th:value="${getItem.itemName}" readonly></td>
 			        </tr>
 			        <tr>
 			          <th>소제목</th>
-			          <td>&ensp;&ensp;<input type="text" name="itemMinName" class="inputH" id="input_itemMinName" th:value="${getItem.itemMinName}" readonly></td>
+			          <td>&ensp;&ensp;<input type="text" name="itemMinName" id="itemMinName" th:value="${getItem.itemMinName}" readonly></td>
 			        </tr>
 			        <tr>
 			          <th>설명</th>
-			          <td>&ensp;&ensp;<textarea cols="100" name="itemDetails" rows="10" id="itemRegTextarea" th:text="${getItem.itemDetails}" readonly></textarea></td>
+			          <td>&ensp;&ensp;<textarea name="itemDetails" id="itemDetails" cols="100"  rows="10" th:text="${getItem.itemDetails}" readonly></textarea></td>
 			        </tr>
 			        <tr>
 			          <th>가격</th>
 			          <td>&ensp;&ensp;
-			          	<input type="text" name="itemPrice" class="inputH" id="input_itemPrice"
-			          			maxlength="8" th:value="${getItem.itemPrice}" readonly>원
-			          	
+			          	<input type="text" name="itemPrice" id="itemPrice" maxlength="8" th:value="${getItem.itemPrice>= 1000 ? #numbers.formatInteger(getItem.itemPrice , 3, 'COMMA') : getItem.itemPrice}" readonly> 원
 			          </td>
 			        </tr>
 			        <tr>
 			          <th>유통기한</th>
-			          <td>&ensp;&ensp;<input type="text" name="itemExpDate" class="inputH"  id="input_itemExpDate" th:value="${getItem.itemExpDate}" readonly></td>
+			          <td>&ensp;&ensp;<input type="text" name="itemExpDate" id="itemExpDate" th:value="${getItem.itemExpDate}" readonly></td>
 			        </tr>
 			        <tr>
 			          <th>원산지</th>
-			          <td>&ensp;&ensp;<input type="text" name="itemOrigin" class="inputH" id="input_itemOrigin" th:value="${getItem.itemOrigin}" readonly></td>
+			          <td>&ensp;&ensp;<input type="text" name="itemOrigin" id="itemOrigin" th:value="${getItem.itemOrigin}" readonly></td>
 			        </tr>
 			        <tr>
 			          <th>알레르기 정보</th>
-			          <td>&ensp;&ensp;<textarea name="itemAllergyInfo" id="input_itemAllergyInfo" class="inputH" th:text="${getItem.itemAllergyInfo}" readonly></textarea></td>
+			          <td>&ensp;&ensp;<textarea name="itemAllergyInfo" id="itemAllergyInfo" th:text="${getItem.itemAllergyInfo}" readonly></textarea></td>
 			        </tr>
 			        <tr>
 			          <th>영양정보</th>
 			          <td>
-			              <div id="attZone">
-			              	<div th:each="imgFile : ${itemFileList}" style="display: inline-block; position: relative; 
-								width: 150px; height: 120px; margin: 5px; border: 1px solid #28693F; z-index: 1;">
+			          	<div id="attZone">
+			          		<div th:each="imgFile : ${itemFileList}" style="display: inline-block; position: relative; 
+										width: 150px; height: 120px; margin: 5px; border: 1px solid #28693F; z-index: 1;">
 								<img th:id="'img' + ${imgFile.fileNo}" 
-									th:src="@{'/item/' + ${imgFile.fileName}}"
-									style="width: 100%; height: 100%; z-index: none; cursor: pointer;"
-									class="fileImg">
+										th:src="@{'/item/' + ${imgFile.fileName}}"
+										style="width: 100%; height: 100%; z-index: none; cursor: pointer;"
+										class="fileImg">
 								<p th:id="'fileName' + ${imgFile.fileNo}" style="display: inline-block; font-size: 8px;
-									cursor: pointer;" th:onclick="fnFileDown([[${getItem.itemNo}]], [[${imgFile.fileNo}]])"
+										cursor: pointer;" th:onclick="fnFileDown([[${getItem.itemNo}]], [[${imgFile.fileNo}]])"
 									th:text="${imgFile.fileOriginName}">
 								</p>
 							</div>
-			              </div>
+			             </div>
 			          </td>
 			        </tr>
 			        <tr>
 			          <th>재고</th>
 			          <td>&ensp;&ensp;
 			          	<div id="itemStockNm">
-							<input type="number" name="itemStock" class="inputH" id="itemStockNm_cnt" th:value="${getItem.itemStock}" readonly>
+							<input type="number" name="itemStock" id="itemStockNm_cnt" th:value="${getItem.itemStock}" readonly>
 						</div>
 			          </td>
 			        </tr>
 				</table>
 			</div>
-	      
-	      	
+			
+			<!-- 상품상세 항목 외 버튼 -->
 			<div id="div_itemBtn">
 				<!-- 목록으로 버튼 -->
 				<a href="/admin/itemList"><input type="button" value="목록으로" id="itemListBtn"></a>
+				<!-- 삭제 버튼 -->
+				<a href="#" id="itemDelBtn">삭제</a>
+				<!--<a href="#"><input type="button" value="삭제" id="itemDelBtn"></a> -->
 			</div>
 		</form>
   </div>
