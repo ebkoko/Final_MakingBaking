@@ -24,6 +24,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 	
 	//평점낮은순
 	Page<Review> findByRvwReferNoAndRvwTypeOrderByRvwScoreAsc (@Param("rvwReferNo") int rvwReferNo, @Param("rvwType") String rvwType, Pageable pageable);
+	
 	//Page<Review> findByReferNoAndRvwType (@Param("rvwReferNo") int itemNo, @Param("rvwType") String rvwType, Pageable pageable);
 	
 }

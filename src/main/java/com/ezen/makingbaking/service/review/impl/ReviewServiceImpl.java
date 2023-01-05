@@ -29,8 +29,16 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public Page<Review> itemReviewList(int itemNo, Pageable pageable) {
-		return reviewRepository.findByRvwReferNoAndRvwType(itemNo, "item" ,pageable);		
+	public Page<Review> itemReviewList(int itemNo, Pageable pageable, String searchCondition) {
+		if(searchCondition.equals("HIGH")) {
+			return reviewRepository.findByRvwReferNoAndRvwTypeOrderByRvwScoreDesc(itemNo, "item", pageable);
+		} else if(searchCondition.equals("LOW")) {
+			return reviewRepository.findByRvwReferNoAndRvwTypeOrderByRvwScoreAsc(itemNo, "item", pageable);
+		} else if(searchCondition.equals("OLD")) {
+			return reviewRepository.findByRvwReferNoAndRvwTypeOrderByRvwRegdateAsc(itemNo, "item", pageable);
+		} else {
+			return reviewRepository.findByRvwReferNoAndRvwType(itemNo, "item" ,pageable);	
+		}
+	
 	}
-
 }

@@ -6,5 +6,5 @@ import com.ezen.makingbaking.entity.ItemLike;
 import com.ezen.makingbaking.entity.ItemLikeId;
 
 public interface ItemLikeRepository extends JpaRepository<ItemLike, ItemLikeId> {
-
+	int countByItemNo(int itemNo);
 }

@@ -16,6 +16,15 @@ public interface ItemService {
 	Page<Item> getPageItemList(Pageable pageable);
 
 	Item getItem(int itemNo);
+	
+	String getLikeYn(String loginUserId, int itemNo);
+	
+	int getLikeCnt(int itemNo);
+	
+	void insertLike(int itemNo, String userId);
+
+	void deleteLike(int itemNo, String userId);
+
 
 	
 

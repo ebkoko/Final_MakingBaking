@@ -162,7 +162,6 @@
 		    .it_contents_container {
 		      margin-top: 200px;
 		    }
-		    
 
 
 		    /* 후기 작성  */
@@ -260,25 +259,25 @@
 		      font-size: 13.5px;
 		      color: rgb(102, 102, 102);
 		    }		 
-		    .it_rvw_pasing{
-		      margin-top: 30px;
-		      margin-bottom: 50px;
+		    .it_rvw_paging{
+		      margin:60px 0 60px 0;
 		    }
-		    .it_pasing {
+		    .paging_btn{
+				list-style: none;
+			}
+		    .paging a {
 		      text-decoration: none;
 		      width: 100%;
 		      text-align: center;
 		      height: 25px;
 		    }
-		    .it_pasing a {
+		    .paging_btn a {
 		      text-decoration: none;
-		      /* border: 0.5px solid rgb(102, 102, 102);
-		      border-radius: 2px; */
 		      padding: 3px 10px 3px 10px ;
 		      color: rgb(102, 102, 102);
 		      font-size: 16px;      
 		    }
-		    .it_pasing a:hover {
+		    .paging_btn a:hover {
 		      font-weight: 600;		   
 		      color: #28693F;
 		    }

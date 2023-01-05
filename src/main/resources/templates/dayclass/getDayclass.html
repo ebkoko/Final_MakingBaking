@@ -170,11 +170,11 @@
                   		
 		                  	const isAuthenticated = $(".header > input[name='authenticate']").val();
                   	
-                  			console.log(isAuthenticated);
-		                  if(isAuthenticated == "false") { // false면 로그인 창 띄우기
-		                     $('.login-form-container').toggleClass('active');
-		                     return;
-		                  }
+                  			
+		                  	if(isAuthenticated == "false") { // false면 로그인 창 띄우기
+		                     	$('.login-form-container').toggleClass('active');
+		                    	 return;
+		                  	}
 
 		                  	
 							if(!$("#rsrvtDate").val()) {
@@ -247,6 +247,7 @@
 						reviewPagingAndOrder(0, $("#rvw_array").val());
 					});
 					
+					// 페이징
 					$(".paging_btn a").on("click", function(e) {
 						e.preventDefault();
 						reviewPagingAndOrder($(e.target).attr("href"), $("#rvw_array").val());
@@ -434,12 +435,11 @@
 	              	<hr class="dayclass_hr" >
 	                <div class="rvw_wirte_detail" id="classReviewList">
 	                  <div class="rvw_option"> 
-	                    <select name="rvw_array" id="rvw_array">
-	      
-	                      <option value="HIGH" th:selected="${searchCondition == 'HIGH'}">평점 높은순</option>
-	                      <option value="LOW" th:selected="${searchCondition == 'LOW'}"> 평점 낮은순</option>
+	                    <select name="rvw_array" id="rvw_array">	     
 	                      <option value="NEW" th:selected="${searchCondition == '' || searchCondition == 'NEW'}">최신순</option>
 	                      <option value="OLD" th:selected="${searchCondition == 'OLD'}">오래된순</option>
+	                      <option value="HIGH" th:selected="${searchCondition == 'HIGH'}">평점 높은순</option>
+	                      <option value="LOW" th:selected="${searchCondition == 'LOW'}"> 평점 낮은순</option>
 	                    </select>
 	                  </div>
 	                  <span>
