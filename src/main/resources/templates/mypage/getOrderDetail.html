@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+	  
+	<!-- head 영역 시작 -->
+	<!-- 개별적으로 사용할 css, js 링크를 걸기 위해서 남겨둠 -->
+	<head>
+		<th:block layout:fragment="css">
+			<style>
+				input {
+					border: 1px solid #DCDCDC;
+				}
+				input[type="text"] {
+					padding-left: 5px;
+				}
+				select {
+					border: 1px solid #DCDCDC;
+				}
+				hr {
+					height: 1px;
+					background: black;
+				}
+				#order_title {
+				    font-size: 40px;
+				}
+				#process {
+				    float: right;
+				    font-size: 20px;
+				}
+				#process>span {
+				    margin: 2px 5px;
+				}
+				.process2, .processPointer2 {
+				    font-weight: bold;
+				}
+				#top {
+				    clear: both;
+				    margin-top: 90px;
+				}
+				#top+hr {
+					margin-top: 10px;
+				}
+				#top .item_check {
+				    margin-top: 90px;
+				    margin-bottom: 0px;
+				    font-size: 22px;
+				}
+				#top .freeDeliMent {
+				    margin-top: 0px;
+				    margin-left: 890px;
+				}
+				#list_title {
+				    font-size: 0.9em;
+				}
+				#list_title .title_itemInfo {
+				    margin-left: 100px;
+				}
+				#list_title .title_itemPrice {
+				    margin-left: 605px;
+				}
+				#list_title .title_itemQuantity {
+				    margin-left: 118px;
+				}
+				#list_title .title_totalPrice {
+				    margin-left: 135px;
+				}
+				#list_title+hr {
+					margin-bottom: 15px;
+				}
+				.item_Img {
+				    margin-left: 30px;
+				    width: 100px;
+				}
+				.item_Detail {
+				    display: inline-block;
+				    width: 55%;
+				    vertical-align: middle;
+				}
+				.detailName {
+				    display: inline-block;
+				    margin-left: 10px;
+				    vertical-align: top;
+				}
+				.item_Price {
+				    display: inline-block;
+				    width: 12%;
+				    text-align: right;
+				}
+				.item_Quantity {
+				    display: inline-block;
+				    width: 11%;
+				    text-align: right;
+				}
+				.item_totalPrice {
+				    display: inline-block;
+				    width: 15%;
+				    text-align: right;
+				}
+				#totalPrice {
+				    float: right;
+				    font-size: 0.9em;
+				    margin-bottom: 8px;
+				    margin-right: 5px;
+				}
+				#totalPrice+hr {
+				    clear: both;
+				}
+				.itemView+hr {
+					margin-top: 15px;
+					margin-bottom: 5px;
+				}
+				#delivery {
+				    margin-top: 100px;
+				}
+				.essential {
+					color: dodgerblue;
+					font-weight: bold;
+				}
+				#delivery .deliInfo {
+					display: inline-block;
+				    margin-bottom: 10px;
+				    font-size: 22px;
+				}
+				.essentialMent {
+					font-size: 0.8em;
+					color: red;
+				}
+				.table-wrap {
+				    display: flex;
+				}
+				table {
+				    border-spacing: 3px 13px;
+				    text-align: left;
+				}
+				table td {
+				    padding-left: 10px;
+				}
+				table>caption {
+					margin-top: 10px;
+				    text-align: left;
+				}
+				#delivery #T1 {
+				    display: inline-block;
+				    margin-left: 5px;
+				}
+				#recipient {
+				    width: 120px;
+				    height: 25px;
+				}
+				#addr1 {
+				    width: 70px;
+				    height: 26px;
+				    margin-right: 10px;
+				    margin-bottom: 5px;
+				}
+				#btnZipcode {
+					width: 100px;
+				    height: 26px;
+				    vertical-align: middle;
+				    cursor: pointer;
+				}
+				#addr2 {
+				    margin-bottom: 5px;
+				}
+				#addr2, #addr3 {
+				    width: 400px;
+				    height: 25px;
+				}
+				#extraAddr {
+				    width: 200px;
+				    height: 25px;
+				}
+				#reciTel1, #reciTel2, #reciTel3 {
+				    width: 50px;
+				    height: 25px;
+				}
+				textarea {
+					border: 1px solid #DCDCDC;
+					resize: none;
+					padding: 2px;
+				}
+				#delivery #T2 {
+				    display: inline-block;
+				    margin-left: 100px;
+				}
+				#T2 tr {
+				    height: 30px;
+				}
+				#orderer {
+				    width: 120px;
+				    height: 25px;
+				}
+				#orderTel1, #orderTel2, #orderTel3 {
+				    width: 50px;
+				    height: 25px;
+				}
+				#orderMail {
+				    height: 25px;
+				}
+				#delivary+hr {
+				    clear: both;
+				}
+				#payment_title {
+				    margin-top: 100px;
+				    margin-bottom: 10px;
+				    font-size: 22px;
+				}
+				#btns {
+				    margin: 15px 0 20px 40px;
+				}
+				#btnbankTransfer, #btnkakaoPay {
+				    width: 150px;
+				    height: 35px;
+				}
+				#bankPayment {
+					display: none;
+				    margin-left: 40px;
+				}
+				#bank {
+					width: 100px;
+					height: 25px;
+				    vertical-align: middle;
+				}
+				#accountNo1 {
+				    margin-left: 15px;
+				    width: 200px;
+				    height: 25px;
+				    vertical-align: middle;
+				}
+				#depositorTitle {
+				    margin-top: 15px;
+				}
+				#depositor {
+				    width: 150px;
+				    height: 25px;
+				    vertical-align: middle;
+				    margin-left: 5px;
+				}
+				#btnPayment {
+				    margin-top: 70px;
+				    margin-left: 460px;
+				    width: 260px;
+				    height: 40px;
+				    font-size: 22px;
+					cursor: pointer;
+					border: 1.5px solid #28693F;
+ 					border-radius: 4px;
+ 					background-color: white;
+ 					color: #28693F;
+ 					letter-spacing:1px
+				}
+				#btnPayment:hover {
+					color: white;
+					background: #28693F;
+				}
+				#btns input[type="button"] {
+					cursor: pointer;
+					font-size: 17px;					
+					border: 1.5px solid #28693F;
+ 					border-radius: 4px;
+ 					background-color: white;
+ 					color: #28693F;
+ 					letter-spacing:1px
+				}
+				#btns input[type="button"]:hover {
+					color: white;
+					background: #28693F;
+				}
+			</style>
+		</th:block>
+		<th:block layout:fragment="script">
+			<script th:inline="javascript">
+				let isKakaoPay = false;
+				let pushbankTransfer = false;
+				let pushKakaoPay = false;
+				const userInfo = /*[[${userInfo}]]*/;
+				const itemList = /*[[${itemList}]]*/;
+				const transferItemList = [];
+				
+				$(function() {
+					for(let i = 0; i < itemList.length; i++) {
+						const item = {
+							itemNo: itemList[i].itemNo,
+							itemName: itemList[i].itemName,
+							cartNo: itemList[i].cartNo,
+							itemPrice: itemList[i].itemPrice,
+							orderItemCnt: itemList[i].cartItemCnt,
+							totalItemPrice: $("#orderTotalPrice").val(),
+							fileName: itemList[i].fileName,
+							cartItemCnt: itemList[i].cartItemCnt,
+							deliFee: $("#orderDeliFee").val()
+						}
+						
+						transferItemList.push(item);
+					}
+					
+					
+						
+						console.log(itemList);
+						let item_PriceSum = parseInt($(".item_PriceSum")[0].textContent.replace(',',''));
+						let deliFee = parseInt($(".deliFee").text().replace(/,/g,''));
+						let totalPrice = parseInt($(".totalPrice").text().replace(/,/g,''));
+						let orderTelNums = [$("#orderTel1").val(), $("#orderTel2").val(), $("#orderTel3").val()];
+						let orderTel = orderTelNums.join('-');
+						let reciTelNums = [$("#reciTel1").val(), $("#reciTel2").val(), $("#reciTel3").val()];
+						let reciTel = reciTelNums.join('-');
+						
+						
+						$("#totalPayPrice").val(totalPrice);
+						$("#orderTel").val(orderTel);
+						$("#reciTel").val(reciTel);
+						$("input[name='itemList']").val(JSON.stringify(transferItemList));
+				});
+			</script>
+		</th:block>
+	</head>
+	<!-- head 영역 끝 -->
+	
+	<body>
+		<div layout:fragment="content">
+			<div id="container">
+	            <h1 id="order_title">주문 상세페이지</h1>
+	            <div id="top">
+	                <span class="item_check">상품 확인</span><span class="orderNoMent">주문번호: </span><span class="realOrderNo" th:text="${order.orderNo}"></span><span class="orderStatus" th:text="${order.orderStatus}"></span><span class="freeDeliMent">3만원 이상 구매시 무료배송</span>
+	            </div>
+	            <hr>
+	            <div id="list_title">
+	                <span class="title_itemInfo">상품정보</span><span class="title_itemPrice">상품금액</span><span class="title_itemQuantity">수량</span><span class="title_totalPrice">합계금액</span>
+	            </div>
+	            <hr> 
+            	<input type="hidden" name="orderTotalPayPrice" id="totalPayPrice">
+            	<input type="hidden" name="orderTel" id="orderTel">
+            	<input type="hidden" name="reciTel" id="reciTel">
+            	<input type="hidden" name="itemList" th:value="${itemList}">
+				<input type="hidden" name="orderTotalPrice" id="orderTotalPrice" th:value="${totalItemPrice}">
+				<input type="hidden" name="orderDeliFee" id="orderDeliFee" th:value="${deliFee}">
+				<input type="hidden" name="orderStatus" id="orderStatus">
+				<input type="hidden" name="orderPayment" id="orderPayment">
+	            <div id="order_item">
+	                <div class="itemView" th:each="itemList : ${itemList}">
+	                    <div class="item_Detail">
+	                        <img class="item_Img" th:src="@{'/item/' + ${itemList.fileName}}">
+	                        <div class="detailName"><a th:text="${itemList.itemName}"></a></div>    
+	                    </div>
+	                    <div class="item_Price"><span class="itemPrice" th:text="${#numbers.formatInteger(itemList.itemPrice, 3, 'COMMA')}"></span></div><span>원</span>  
+	                    <div class="item_Quantity" th:text="${itemList.cartItemCnt}"></div>                    
+	                    <div class="item_totalPrice"><span th:text="${#numbers.formatInteger((T(java.lang.Integer).parseInt(itemList.itemPrice) * T(java.lang.Integer).parseInt(itemList.cartItemCnt)), 3, 'COMMA')}"></span></div><span>원</span>
+	                </div>            
+	                <hr>
+	                <div id="totalPrice">
+	                    <span>상품 총 금액: </span> <span class="item_PriceSum" th:text="${#numbers.formatInteger(totalItemPrice, 3, 'COMMA')}"></span><span >원</span> <span>&#43;</span> <span>배송비: </span> <span class="deliFee" th:text="${deliFee != 0 ? #numbers.formatInteger(deliFee, 3, 'COMMA') : 0}"></span><span >원</span> <span>&#61;</span> 
+	                    <span>총 결제금액: </span> <span class="totalPrice" th:text="${#numbers.formatInteger((T(java.lang.Integer).parseInt(totalItemPrice)+T(java.lang.Integer).parseInt(deliFee)), 3, 'COMMA')}"></span><span >원</span>
+	                </div>
+	                <hr>
+	            </div>          
+	            <div id="delivery">
+	                <p class="deliInfo">배송정보</p>
+	                <hr>
+	                <div class="table-wrap">                    
+	                    <table id="T1">
+	                        <tr>
+	                            <th>수령인<span class="essential">&#42;</span></th>
+	                            <td><input type="text" name="reciName" id="recipient" th:value="${order.reciName}" readonly></td>
+	                        </tr>
+	                        <tr>
+	                            <th>배송주소<span class="essential">&#42;</span></th>
+	                            <td>
+	                                <input type="text" name="shippingAddr1" id="addr1" placeholder="우편번호" th:value="${order.shippingAddr1}" readonly>
+	                                <input type="text" name="shippingAddr2" id="addr2" placeholder="주소" th:value="${order.shippingAddr2}" readonly><br>
+	                                <input type="text" name="shippingAddr3" id="addr3" placeholder="상세주소" th:value="${order.shippingAddr3}" readonly>&ensp;<input type="text" name="extraAddr" id="extraAddr" readonly>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <th>휴대폰<span class="essential">&#42;</span></th>
+	                            <td>
+	                                <input type="text" name="reciTel1" id="reciTel1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(order.reciTel).substring(0,3)}" readonly> -
+	                                <input type="text" name="reciTel2" id="reciTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(order.reciTel).substring(3,7)}" readonly> - 
+	                                <input type="text" name="reciTel3" id="reciTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(order.reciTel).substring((order.reciTel).length-4)}" readonly>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <th style="vertical-align: top;">배송메세지<br>(<span class="textCnt">0</span>/<span class="textTotal">200</span>)</th>
+	                            <td>
+	                                <textarea name="orderMessage" id="message" cols="50" rows="8" maxlength="200" th:text="${order.orderMessage}" readonly></textarea>
+	                            </td>
+	                        </tr>
+	                    </table>
+	                    <table id="T2">
+	                        <caption>주문자 정보</caption>
+	                        <tr>
+	                            <th>주문자<span class="essential">&#42;</span></th>
+	                            <td><input type="text" name="orderName" id="orderer" th:value="${order.orderName}" readonly></td>
+	                        </tr>
+	                        <tr>
+	                            <th>휴대폰<span class="essential">&#42;</span></th>
+	                            <td>
+	                                <input type="text" name="orderTel1" id="orderTel1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(order.orderTel).substring(0,3)}" readonly> -
+	                                <input type="text" name="orderTel2" id="orderTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(order.orderTel).substring(3,7)}" readonly> - 
+	                                <input type="text" name="orderTel3" id="orderTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(order.orderTel).substring((order.orderTel).length-4)}" readonly>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <th>이메일</th>
+	                            <td><input type="text" name="orderMail" id="orderMail" th:value="${order.orderMail}" readonly></td>
+	                        </tr>
+	                        <tr></tr>
+	                        <tr></tr>
+	                        <tr></tr>
+	                    </table>                   
+	                </div>
+	            </div>
+	            <hr>
+	            <div id="paymentOption">
+	                <p id="payment_title">취소</p><hr>
+	                <div id="btns">
+	                    <input type="button" name="paymentOption" id="btnbankTransfer" value="주문취소">&emsp;
+	                    <input type="button" name="paymentOption" id="btnkakaoPay" value="결제취소">
+	                </div>
+	            </div>
+	        </div>
+		</div>
+	</body>
+</html>

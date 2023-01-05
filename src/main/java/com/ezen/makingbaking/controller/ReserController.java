@@ -73,6 +73,7 @@ public class ReserController {
 							.reserPayment(reserDTO.getReserPayment())
 							.depositor(reserDTO.getDepositor())
 							.reserTotalPrice(reserDTO.getReserTotalPrice())
+							.partiDate(reserDTO.getPartiDate())
 							.build();
 		
 		reserService.insertReser(reser);
