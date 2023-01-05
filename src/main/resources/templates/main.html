@@ -11,7 +11,6 @@
 			<script th:src="@{https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js}"></script>
 			
 			<script th:inline="javascript">
-				let cartClick = false;
 				$(function() {
 					/* console.log($("#btn-login"));
 					console.log($("#msg").val()); */
@@ -24,28 +23,6 @@
 					      nextEl: ".swiper-button-next",
 					      prevEl: ".swiper-button-prev",
 					    },
-					});
-					
-					$("#cartBtn").on('click', function() {
-						if(!cartClick) {
-							$.ajax({
-								url: '/cart/insertCart',
-								type: 'post',
-								data: {itemNo: 2},
-								success: function(obj) {
-									console.log(obj);
-									cartClick = true;
-								}, error: function(e) {
-									console.log(e);
-								}
-							});							
-						} else {
-							alert("장바구니는 1초에 한 번씩 클릭 가능합니다.");	
-							console.log('noclick');
-							setTimeout(function() {
-								cartClick = false;
-							}, 1000);
-						}
 					});
 				});
 			</script>
@@ -109,7 +86,6 @@
 	        </p>
 	      </div>
 	    </div>
-	    <button type="button" id="cartBtn">장바구니</button>
 	  </main>
 		</div>
 	</body>

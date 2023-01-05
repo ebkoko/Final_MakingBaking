@@ -31,6 +31,7 @@ public class Reser {
 	private String partiName;								// 예약자명
 	private String partiTel;								// 예약자 전화번호
 	private String partiTime;								// 예약시간
+	private String partiDate;								// 예약날짜
 	private int classNo;									// 클래스번호
 	private int reserPersonCnt;								// 예약인원수
 	private String orderName;								// 주문자명

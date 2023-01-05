@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.DayclassLike;
 import com.ezen.makingbaking.entity.DayclassLikeId;
@@ -70,5 +71,10 @@ public class DayclassServiceImpl implements DayclassService {
 		dayclassLikeId.setUserId(userId);
 		
 		dayclassLikeRepository.deleteById(dayclassLikeId);
+	}
+	
+	@Override
+	public CamelHashMap getClassImg(int dayclassNo) {
+		return dayclassRepository.findByFileNoAndDayclassNo(dayclassNo);
 	}
 }

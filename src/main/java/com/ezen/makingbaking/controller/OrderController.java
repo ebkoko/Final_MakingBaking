@@ -130,8 +130,10 @@ public class OrderController {
 	@GetMapping("/orderComplete")
 	public ModelAndView orderCompleteView(HttpSession session, @AuthenticationPrincipal CustomUserDetails customUser) throws JsonMappingException, JsonProcessingException {
 		Order order = (Order)session.getAttribute("order");
-		String itemList = session.getAttribute("itemList").toString();
 		
+		
+		String itemList = session.getAttribute("itemList").toString();
+		System.out.println("itemList=========================================================================" + itemList);
 		List<Map<String, Object>> itemMapList = new ObjectMapper().readValue(itemList, new TypeReference<List<Map<String, Object>>>() {});
 		
 		long orderNo = order.getOrderNo();
@@ -150,30 +152,36 @@ public class OrderController {
 			orderItemList.add(orderItem);
 		}
 		
+		order.setOrderNo(orderNo);
+		order.setUserId(customUser.getUsername());
+		order.setOrderDate(LocalDateTime.now());
+		order.setOrderTotalPayPrice(order.getOrderTotalPrice() + order.getOrderDeliFee());
+		
+		System.out.println("order2======================================================"+order.toString());
 		
 		ModelAndView mv = new ModelAndView();
 		
-		Order returnOrder = Order.builder()
-							.userId(customUser.getUsername())
-							.orderNo(orderNo)
-							.orderDate(LocalDateTime.now())
-							.orderStatus(order.getOrderStatus())
-							.orderName(order.getOrderName())
-							.orderTel(order.getOrderTel())
-							.shippingAddr1(order.getShippingAddr1())
-							.shippingAddr2(order.getShippingAddr2())
-							.shippingAddr3(order.getShippingAddr3())
-							.orderDeliFee(order.getOrderDeliFee())
-							.orderTotalPrice(order.getOrderTotalPrice())
-							.orderPayment(order.getOrderPayment())
-							.reciName(order.getReciName())
-							.reciTel(order.getReciTel())
-							.orderMail(order.getOrderMail())
-							.orderMessage(order.getOrderMessage())
-							.depositor(order.getDepositor())
-							.orderTotalPayPrice(order.getOrderTotalPayPrice())
-							.build();
-		
+//		Order returnOrder = Order.builder()
+//							.userId(customUser.getUsername())
+//							.orderNo(orderNo)
+//							.orderDate(LocalDateTime.now())
+//							.orderStatus(order.getOrderStatus())
+//							.orderName(order.getOrderName())
+//							.orderTel(order.getOrderTel())
+//							.shippingAddr1(order.getShippingAddr1())
+//							.shippingAddr2(order.getShippingAddr2())
+//							.shippingAddr3(order.getShippingAddr3())
+//							.orderDeliFee(order.getOrderDeliFee())
+//							.orderTotalPrice(order.getOrderTotalPrice())
+//							.orderPayment(order.getOrderPayment())
+//							.reciName(order.getReciName())
+//							.reciTel(order.getReciTel())
+//							.orderMail(order.getOrderMail())
+//							.orderMessage(order.getOrderMessage())
+//							.depositor(order.getDepositor())
+//							.orderTotalPayPrice(order.getOrderTotalPayPrice())
+//							.build();
+//		
 		orderService.insertOrder(order);
 		orderService.insertOrderItem(orderItemList);
 		
@@ -196,6 +204,11 @@ public class OrderController {
 		cartService.deleteCartItem(cartItemList);
 		
 		mv.setViewName("order/orderComplete.html");
+		
+		session.removeAttribute("itemList");
+		session.removeAttribute("order");
+		session.removeAttribute("tid");
+		
 		return mv;
 	}
 	
@@ -208,6 +221,7 @@ public class OrderController {
 		session.setAttribute("tid", readyResponseDTO.getTid());
 		
 		order.setOrderNo(readyResponseDTO.getOrderNo());
+		System.out.println("order1======================================================"+order.toString());
 		
 		// Order 정보를 모델에 저장
 		session.setAttribute("order", order);

@@ -328,6 +328,7 @@
 				const userInfo = /*[[${userInfo}]]*/;
 				const itemList = /*[[${itemList}]]*/;
 				const transferItemList = [];
+				let msg = '';
 				
 				$(function() {
 					for(let i = 0; i < itemList.length; i++) {
@@ -473,7 +474,7 @@
 					
 					// 배송메세지 글자수 세기, 글자수 제한
 					$("#message").keyup(function(e) {
-						let msg = $(this).val();
+						msg = $(this).val();
 						
 						// 글자수 세기
 						if(msg.length == 0 || msg == '') {
@@ -513,18 +514,21 @@
 						isKakaoPay = !isKakaoPay;
 						$("#bankPayment").css("display", "none");
 						$("#btnbankTransfer").css("color", "#28693F").css("background", "white");
-						if(!isKakaoPay) {						
+						if(!isKakaoPay) {		
+							console.log(111111);				
 							$("#btnkakaoPay").css("color", "#28693F").css("background", "white");
 							pushKakaoPay = false;
 							$("#orderPayment").val('');
 							$("#orderStatus").val('');
 						} else {
+							console.log(2222222);
 							$("#btnkakaoPay").css("color", "white").css("background", "#28693F");
 							pushKakaoPay = true;
 							$("#orderPayment").val("카카오페이");
 							$("#orderStatus").val("결제완료");
 						}
 						
+						console.log($("#orderStatus").val());
 						// 카카오페이 API 실행
 						// 필수 입력값 확인
 						let orderName = $("#orderer").val();
@@ -533,7 +537,7 @@
 						console.log(tel);
 						let orderMail = $("#orderMail").val();
 						let orderStatus = $("#orderStatus").val();
-						let orderPayment = $("#orderPayment").val();
+						let orderPayment = $("#btnkakaoPay").val();
 						let orderMessage = $("#message").text();
 						let reciName = $("#recipient").val();
 						let depositor = $("#depositor").val();
@@ -542,42 +546,41 @@
 						let shippingAddr3 = $("#addr3").val();
 						let orderDeliFee = $("#orderDeliFee").val();
 						let itemPriceSum = $(".item_PriceSum").text();
+						let totalPrice = $("#orderTotalPrice").val();
+						let orderTelNums = [$("#orderTel1").val(), $("#orderTel2").val(), $("#orderTel3").val()];
+						let orderTel = orderTelNums.join('-');
+						let reciTelNums = [$("#reciTel1").val(), $("#reciTel2").val(), $("#reciTel3").val()];
+						let reciTel = reciTelNums.join('-');
+						
+						console.log(msg);
 						
 						const formData = new FormData();
 						
-						formData.append("itemList", itemList);
-						formData.append("total_amount", totalPrice);
-						formData.append("payUserName", orderName);
-						formData.append("itemPriceSum", itemPriceSum);
-						formData.append("orderDeliFee", orderDeliFee);
-						formData.append("totalPrice", totalPrice);
+						formData.append("itemList", JSON.stringify(transferItemList));
+						formData.append("total_amount", parseInt(totalPrice));
+						formData.append("orderName", orderName);
+						formData.append("itemPriceSum", parseInt(itemPriceSum));
+						formData.append("orderDeliFee", parseInt(orderDeliFee));
+						formData.append("orderTotalPrice", parseInt(totalPrice));
 						formData.append("orderTel", orderTel);
-						formData.append("email", orderMail);
+						formData.append("orderMail", orderMail);
 						formData.append("reciTel", reciTel);
 						formData.append("orderStatus", orderStatus);
 						formData.append("orderPayment", orderPayment);
-						formData.append("orderMessage", orderMessage);
+						formData.append("orderMessage", msg);
 						formData.append("reciName", reciName);
 						formData.append("shippingAddr1", shippingAddr1);
 						formData.append("shippingAddr2", shippingAddr2);
 						formData.append("shippingAddr3", shippingAddr3);
 						formData.append("depositor", depositor);
 						
-						console.log(formData);
 						// 카카오페이 결제전송
 						/*$.ajax({
 							url:'/order/pay',
 							type: 'post',
-							data:{
-								itemList: JSON.stringify(transferItemList),
-								total_amount: totalPrice,
-								payUserName: orderer,
-								sumPrice: item_PriceSum,
-								deliFee: deliFee,
-								totalPrice: totalPrice,
-								tel: tel,
-								email: email
-							},
+							data: formData,
+							processData: false,
+							contentType: false,
 							success: function(response) {
 								location.href = response.next_redirect_pc_url + "?tid=" + response.tid;
 							}

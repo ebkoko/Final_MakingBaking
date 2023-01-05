@@ -17,6 +17,7 @@ public class ReserDTO {
 	private String partiName;
 	private String partiTel;
 	private String partiTime;
+	private String partiDate;
 	private int classNo;
 	private int reserPersonCnt;
 	private String orderName;

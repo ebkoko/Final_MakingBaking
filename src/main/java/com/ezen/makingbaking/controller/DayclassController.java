@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.dto.DayclassDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.dto.ReviewDTO;
@@ -215,20 +216,15 @@ public class DayclassController {
 			@RequestParam Map<String, String> paramMap, @AuthenticationPrincipal CustomUserDetails customUser) {
 		User user = customUser.getUser();
 		
-		Dayclass dayclass = dayclassService.getDayclass(dayclassNo);
-		
-		DayclassDTO dayclassDTO = DayclassDTO.builder()
-									 .dayclassNo(dayclass.getDayclassNo())
-									 .dayclassName(dayclass.getDayclassName())
-									 .dayclassPrice(dayclass.getDayclassPrice())
-									 .build();
+//		Dayclass dayclass = dayclassService.getDayclass(dayclassNo);
+		CamelHashMap dayclass = dayclassService.getClassImg(dayclassNo);
 		
 		ModelAndView mv = new ModelAndView();
 		
 		user = userService.idcheck(user);
 		
 		mv.addObject("userInfo", user);
-		mv.addObject("dayclass", dayclassDTO);
+		mv.addObject("dayclass", dayclass);
 		mv.addObject("reserPersonCnt", paramMap.get("reserPersonCnt"));
 		mv.addObject("reserDate", paramMap.get("reserDate"));
 		mv.addObject("partiTime", paramMap.get("partiTime"));

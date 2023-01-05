@@ -3,6 +3,7 @@ package com.ezen.makingbaking.service.dayclass;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Dayclass;
 
 public interface DayclassService {
@@ -17,4 +18,6 @@ public interface DayclassService {
 	void insertLike(int dayclassNo, String userId);
 	
 	void deleteLike(int dayclassNo, String userId);
+	
+	CamelHashMap getClassImg(int dayclassNo);
 }
