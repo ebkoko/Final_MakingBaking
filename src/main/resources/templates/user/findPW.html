@@ -45,7 +45,53 @@
 					});
 				});
 				*/
+				/*$("#checkMail").click(function () {
+			        const userEmail = $("#userEmail").val();
+			        $.ajax({
+			            type: 'post',
+			            url: '/user/findPw',
+			            data: {
+			                'userMail': userMail
+			            },
+			            dataType: "text",
+			            success: function (result) {
+							console.log(result)
+			                if(result){
+			                    alert('임시비밀번호를 전송 했습니다.');
+			                    
+			                }else {
+			                    alert('가입되지 않은 이메일입니다.');
+			                }
+			
+			            },error: function () {
+							
+			            }
+			        })
+			    });*/
+			    /*
+			    $("#sendForm").on("submit", function(e) {
+					if($("#userMail").val() == "") {
+						e.preventDefault();
+						alert("이메이일");
+						return;
+					}
+					if($("#userId").val() == "") {
+						e.preventDefault();
+						alert("이메이일");
+						return;
+					}
+				});*/
+				
+			    
 			});
+			
+			function search_check(num) {
+		      if (num == '1') {
+		        document.getElementById("searchP").style.display = "none";
+		      } else {
+		        document.getElementById("searchP").style.display = "";
+		      }
+		    }
 		</script>
 	</th:block>
 	
@@ -56,25 +102,52 @@
 
 <body>
 	<div layout:fragment="content" class="container">
-	<main>
-	    <div class="c1">
-	      <form action="" class="form" method="post">
-	        <h3>비밀번호 찾기</h3>
-	        <input type="text" id="userId" name="userId" placeholder="아이디" class="box">
-	        <div style="display: flex;">
-		        <input type="password" id="userTel" name="userTel" placeholder="핸드폰번호" class="box" style="width: 70%;">
-		        <button type="button" id="memberPhoneCheck" class="check" >인증번호받기</button>
-	        </div>
-	        <input type="text" placeholder="인증번호" class="box" style="height: 20px">
-	        <a th:href="@{/user/findID}" class="findId">아이디찾기</a>
-			<button type="button" id="btn2" class="btn2 size">확인</button>
-			<div id="checkMsg" style="color: red"></div>
-	        <div class="buttons">
-	          <button type="button" id="login2" class="btn2 login2">로그인</button>
-	        </div>
-	      </form>
-	    </div>
-	  </main>
+		  <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" class="custom-control-input" id="search_2" name="search_total" selected onclick="search_check(2)"> 
+            <label class="custom-control-label font-weight-bold text-black" for="search_2">비밀번호 찾기</label>
+          </div>
+          <form action="searchPw" id="searchP" name="forgotPw" method="POST">
+                  <div class="form-group" >
+                    <label class="font-weight-bold " for="userId">아이디</label>
+                    <div>
+                      <input type="text" class="form-control searchBox" id="userId" name="userId" required="required" autofocus="autofocus" placeholder="ex) ampawmap">
+                    </div>
+                  </div>
+                  <div class="form-group" >
+                    <label class="font-weight-bold " for="userName">이름</label>
+                    <div>
+                      <input type="text" class="form-control searchBox" id="userName" name="userName" required="required" autofocus="autofocus" placeholder="ex) 고결">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="font-weight-bold " for="userMail">이메일</label>
+                    <div>
+                      <input type="email" class="form-control searchBox" id="userMail"	name="userMail" placeholder="ex) ampawmap@gmail.com">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <button id="searchBtn2" type="submit" class="btn form-control searchIPBtn">확인</button>
+                  <a class="btn  form-control searchCcBtn"	onclick="history.back();">취소</a>
+                </div>
+           </form>
+	<!--<main>
+			<div class="c1">
+		      <form action="/user/sendEmail" class="form" method="post" id="sendForm">
+		        <h3>비밀번호 찾기</h3>
+		        <input type="text" id="userId" name="userId" placeholder="아이디" class="box">
+		        <div style="display: flex;">
+		            <input type="email" id="userMail" name="userMail" class="box" placeholder="이메일" required style="width: 70%;">
+		            <button type="button" id="checkMail" class="check">인증번호받기</button>
+	            </div>
+		        <input type="text" placeholder="인증번호" class="box">
+		        <a th:href="@{/user/findID}" class="findId">아이디찾기</a>
+				<button type="button" id="btn2" class="btn2 size">확인</button>
+		        <div class="buttons">
+		          <button type="button" id="login2" class="btn2 login2">로그인</button>
+		        </div>
+		      </form>
+		    </div> 
+	  </main>-->
 	</div>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.ezen.makingbaking.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,6 +31,9 @@ import com.ezen.makingbaking.service.user.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -158,6 +163,20 @@ public class UserController {
 		mv.setViewName("user/findPW.html");
 		return mv;
 	}
+
+//	@PostMapping("/sendEmail")
+//	public ModelAndView sendMail(MailDTO mailDTO, @RequestParam("userMail") String userMail, 
+//			@RequestParam("userId") String userId){
+//		System.out.println("fdasf");
+//		MailDTO sendMailDTO = userService.createMailAndChangePassword(userMail);
+//		userService.mailSend(sendMailDTO);
+//		ModelAndView mv = new ModelAndView();
+//		mv.setViewName("/main/main");
+//		return mv;
+//	}
+	
+	
+	//passwordEncoder.match("사용자 입력 비밀번호", "암호화된 비밀번호")
 	/*
 	@GetMapping("/findPw")
     public @ResponseBody Map<String, Boolean> findPW(String userId, String userMail, String userTel){
@@ -175,5 +194,41 @@ public class UserController {
         userService.mailSend(userDTO);
     }
 	*/
-	
+    @PostMapping("/userchPw")
+	public String userchPw(@RequestParam Map<String, Object> param , HttpServletResponse response) throws IOException {
+       
+       String userId = (String) param.get("userId");
+       String userName = (String) param.get("userName");
+       String userMail = (String) param.get("userMail");
+       
+       UserDTO user  = userService.searchPwd(userId, userName);
+       
+       PrintWriter out = response.getWriter();
+        if(user == null) {
+          response.setContentType("text/html; charset=UTF-8");
+          
+          // 입력한 정보가 일치하지 않을 때
+          out.println("<script>alert('일치하는 회원이 없습니다'); location.href='searchPw';</script>");
+          
+          out.flush();
+        }else if (!user.getUserMail().equals(userMail)){
+             response.setContentType("text/html; charset=UTF-8");
+             
+             out.println("<script>alert('이메일 정보가 일치하지 않습니다'); location.href='searchPw';</script>");
+             
+             out.flush();
+       } else {
+          response.setContentType("text/html; charset=UTF-8");
+          
+          // 입력한 정보와 회원정보가 일치할 때 
+          out.println("<script>alert('입력하신 메일로 임시 패스워드가 발송되었습니다'); location.href='searchPw';</script>");
+          
+          out.flush();
+          Map<String, Object> findLoginIdRs = userService.findLoginPasswd(param);
+       
+       }
+        
+       return "main";
+       
+    }
 }
