@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+	<th:block layout:fragment="script">
+		<script th:inline="javascript">
+			$(function() {
+				$("#quitBtn").click(function(){
+				    if(confirm("회원탈퇴 하시겠습니까?") == true){
+				        alert("탈퇴되었습니다");
+				        window.location.href="/main/main;
+				    }
+				    else{
+				        return false;
+				    }
+				});
+			});
+		</script>
+	</th:block>
+	
+	<th:block layout:fragment="css">
+		<link rel="stylesheet" th:href="@{/css/myPage/quit.css}"/>
+	</th:block>
+</head>
+
+<body>
+<div layout:fragment="content" style="height: 70%;">
+  <main class="centre">
+  		<!-- 사이드 바 -->
+	    <div class="left-nav-bar">
+	      <div class="mypage2">
+	        <h2><a href="/mypage/myPage">마이페이지<a></h2>
+	      </div>
+	      <div class="menu">
+	        <div class="sub-menu">
+	          <h3>My 쇼핑</h3>
+	          <ul class="menu-group">
+	            <li class="menu-name"><a href="#">구매내역</a></li>
+	            <li class="menu-name"><a href="#">예약확인</a></li>
+	            <li class="menu-name"><a href="#">장바구니</a></li>
+	            <li class="menu-name"><a href="#">찜목록</a></li>
+	          </ul>
+	        </div>
+	        <div class="sub-menu">
+	          <ul class="menu-group">
+	            <h3>My 활동</h3>
+	            <li class="menu-name"><a href="#">나의 리뷰</a></li>
+	          </ul>
+	        </div>
+	        <div class="sub-menu">
+	          <ul class="menu-group">
+	            <h3>My 정보</h3>
+	            <li class="menu-name"><a th:href="@{/mypage/changeInfo}">개인정보확인</a></li>
+	            <li class="menu-name"><a th:href="@{/mypage/quit}">회원탈퇴</a></li>
+	          </ul>
+	        </div>
+	        <div class="sub-menu">
+	          <ul class="menu-group">
+	            <li><a href="#"><h3>나의 QnA</h3></a></li>
+	          </ul>
+	        </div>
+	      </div>
+	    </div>
+	    
+	    <div>
+		    <div class="c1" style="margin:24px 50px;">
+		      <form id="joinForm" class="form" method="post">
+		        <h3 class="changeInfo">회원탈퇴</h3>
+		
+		        <div class="pw-check">
+		            <input type="password" id="userPw" name="userPw" required class="input" placeholder="비밀번호"><label for="userPw" class="input-label"></label>
+		        </div>
+		        
+		        <div class="pw-check">
+		            <input type="password" id="userPw" name="userPw" required class="input" placeholder="비밀번호확인"><label for="userPw" class="input-label"></label>
+		        </div>
+		        
+		        <div class="buttons">
+		          <input type="button" id="quitBtn" value="확인" class="btn2">
+		        </div>
+		      </form>
+		    </div>
+	    </div>
+  </main>
+</div>
+</body>
+</html>

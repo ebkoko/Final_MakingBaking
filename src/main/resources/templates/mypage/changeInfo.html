@@ -6,9 +6,7 @@
 <head>
 	<th:block layout:fragment="script">
 		<script th:inline="javascript">
-			function findAddr(){
-		      
-		    }
+		
 		</script>
 	</th:block>
 	
@@ -44,7 +42,8 @@
 	        <div class="sub-menu">
 	          <ul class="menu-group">
 	            <h3>My 정보</h3>
-	            <li class="menu-name"><a th:href="@{/mypage/changeInfo}">개인정보확인/수정</a></li>
+	            <li class="menu-name"><a th:href="@{/mypage/changeInfo}">개인정보확인</a></li>
+	            <li class="menu-name"><a th:href="@{/mypage/quit}">회원탈퇴</a></li>
 	          </ul>
 	        </div>
 	        <div class="sub-menu">
@@ -56,6 +55,7 @@
 	    </div>
 	    
 	    <div class="c1" style="margin:24px 50px">
+	      
 	      <form action="/user/join" id="joinForm" class="form" method="post">
 	        <h3 class="changeInfo">회원정보수정</h3>
 	        <div style="display: flex;">
@@ -92,9 +92,8 @@
 	        <input id="addr" name="userAddr2" type="text" placeholder="주소" readonly> <br>
 	        <input id="userAddr3" name="userAddr3" type="text" placeholder="상세주소">
 	        <div class="buttons">
-	          <input type="button" value="수정하기" class="btn">
-	          <input type="reset" value="취소" class="btn">
-	          <input type="button" value="탈퇴" class="btn">
+	          <input type="button" id="update" value="수정하기" class="btn">
+	          <input type="reset" id="cancel" value="취소" class="btn">
 	        </div>
 	      </form>
 	    </div>

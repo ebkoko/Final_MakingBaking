@@ -21,4 +21,25 @@ public class MypageController {
 		mv.setViewName("mypage/changeInfo.html");
 		return mv;
 	}
+	
+	@GetMapping("/quit")
+	public ModelAndView quitView() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("mypage/quit.html");
+		return mv;
+	}
+	
+	@GetMapping("/newPw")
+	public ModelAndView newPwView() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("mypage/newPw.html");
+		return mv;
+	}
+	
+	@GetMapping("/checkPwForm")
+	public ModelAndView checkPwFormView() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("mypage/checkPwForm.html");
+		return mv;
+	}
 }

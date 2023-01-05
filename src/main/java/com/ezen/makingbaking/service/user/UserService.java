@@ -1,5 +1,7 @@
 package com.ezen.makingbaking.service.user;
 
+import java.util.Map;
+
 import com.ezen.makingbaking.dto.UserDTO;
 import com.ezen.makingbaking.entity.User;
 
@@ -10,20 +12,17 @@ public interface UserService {
 
 	User findid(UserDTO userDTO);
 
-	/*
-	public boolean userCheck(String userId, String userMail, String userTel) {
-		
-		User user = userRepository.findUserByUserId(userEmail);
-		if(user!=null && user.getUserName().equals(userName)) {
-            return true;
-        }
-        else {
-            return false;
-        }
-	};
+	UserDTO searchPwd(String userId, String userName);
 
-	void mailSend(UserDTO userDTO);
+	Map<String, Object> findLoginPasswd(Map<String, Object> param);
 
-	UserDTO createMailAndChangePassword(String userId, String userMail, String userTel);
-	*/
+//	MailDTO createMailAndChangePassword(String userMail);
+//
+//	void updatePassword(String str, String userMail);
+//
+//	String getTempPassword();
+//
+//	void mailSend(MailDTO mailDTO);
+//
+//	void updatePassWord(String userId, String userPw);
 }
