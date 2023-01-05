@@ -9,7 +9,21 @@ import org.springframework.data.repository.query.Param;
 import com.ezen.makingbaking.entity.Review;
 
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
-	//Page<Review> findByDayclassNo (int dayclassNo, Pageable pageable);
+	//Page<Review> findByRvwReferNo (@Param("rvwReferNo") int rvwReferNo, Pageable pageable);
 	
-	Page<Review> findByRvwReferNoAndRvwType (@Param("rvwReferNo") int dayclassNo, @Param("rvwType") String rvwType, Pageable pageable);
+	Page<Review> findByRvwReferNoAndRvwType (@Param("rvwReferNo") int rvwReferNo, @Param("rvwType") String rvwType, Pageable pageable);
+	
+	//최신순
+	Page<Review> findByRvwReferNoAndRvwTypeOrderByRvwRegdateDesc (@Param("rvwReferNo") int rvwReferNo, @Param("rvwType") String rvwType, Pageable pageable);
+	
+	//오래된순
+	Page<Review> findByRvwReferNoAndRvwTypeOrderByRvwRegdateAsc (@Param("rvwReferNo") int rvwReferNo, @Param("rvwType") String rvwType, Pageable pageable);
+	
+	//평점높은순 
+	Page<Review> findByRvwReferNoAndRvwTypeOrderByRvwScoreDesc (@Param("rvwReferNo") int rvwReferNo, @Param("rvwType") String rvwType, Pageable pageable);
+	
+	//평점낮은순
+	Page<Review> findByRvwReferNoAndRvwTypeOrderByRvwScoreAsc (@Param("rvwReferNo") int rvwReferNo, @Param("rvwType") String rvwType, Pageable pageable);
+	//Page<Review> findByReferNoAndRvwType (@Param("rvwReferNo") int itemNo, @Param("rvwType") String rvwType, Pageable pageable);
+	
 }

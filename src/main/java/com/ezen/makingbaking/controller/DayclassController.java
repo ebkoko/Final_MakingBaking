@@ -3,6 +3,8 @@ package com.ezen.makingbaking.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -64,8 +66,12 @@ public class DayclassController {
 	
 	@GetMapping("/dayclass/{dayclassNo}")
 	public ModelAndView getDayclass(@PathVariable int dayclassNo, @PageableDefault(page = 0, size = 4) Pageable pageable,
-			@AuthenticationPrincipal CustomUserDetails customUser) {
+			@AuthenticationPrincipal CustomUserDetails customUser, HttpServletRequest request) {
+		String searchCondition = "";
 		
+		if(request.getParameter("searchCondition") != null) {
+			searchCondition = request.getParameter("searchCondition");
+		}
 		
 		Dayclass dayclass = dayclassService.getDayclass(dayclassNo);
 		
@@ -85,7 +91,7 @@ public class DayclassController {
 											 .dayclassAddress(dayclass.getDayclassAddress())
 											 .build();
 		
-		Page<Review> reviewList = reviewService.getReviewList(dayclassNo, pageable);
+		Page<Review> reviewList = reviewService.getReviewList(dayclassNo, pageable, searchCondition);
 		
 		Page<ReviewDTO> reviewDTOList = reviewList.map(review -> ReviewDTO.builder()
 																		  .rvwNo(review.getRvwNo())
@@ -112,6 +118,7 @@ public class DayclassController {
 		mv.addObject("reviewList", reviewDTOList);
 		mv.addObject("likeYn", likeYn);
 		mv.addObject("likeCnt", likeCnt);
+		mv.addObject("searchCondition", searchCondition);
 		
 	
 		return mv;
@@ -121,14 +128,20 @@ public class DayclassController {
 	@PostMapping("/dayclass/{dayclassNo}")
 	public ResponseEntity<?> getDayclassPage(@PathVariable int dayclassNo, 
 			@PageableDefault(page = 0, size = 4) Pageable pageable, 
-			@AuthenticationPrincipal CustomUserDetails customUser){
+			@AuthenticationPrincipal CustomUserDetails customUser,
+			HttpServletRequest request){
 		
 		ResponseDTO<ReviewDTO> response = new ResponseDTO<>();
 		
 		
 		try {
+			String searchCondition = "";
 			
-			Page<Review> pageReviewList = reviewService.getReviewList(dayclassNo, pageable);
+			if(request.getParameter("searchCondition") != null) {
+				searchCondition = request.getParameter("searchCondition");
+			}
+			
+			Page<Review> pageReviewList = reviewService.getReviewList(dayclassNo, pageable, searchCondition);
 			
 			Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview 
 													-> ReviewDTO.builder()

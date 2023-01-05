@@ -7,9 +7,9 @@ import com.ezen.makingbaking.entity.Review;
 
 public interface ReviewService {
 
-	Page<Review> getReviewList(int dayclassNo, Pageable pageable);
+	Page<Review> getReviewList(int dayclassNo, Pageable pageable, String searchCondition);
 
-	
+	Page<Review> itemReviewList(int itemNo, Pageable pageable);
 
 	
 }

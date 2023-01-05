@@ -15,11 +15,22 @@ public class ReviewServiceImpl implements ReviewService {
 	private ReviewRepository reviewRepository;
 
 	@Override
-	public Page<Review> getReviewList(int dayclassNo, Pageable pageable) {
+	public Page<Review> getReviewList(int dayclassNo, Pageable pageable, String searchCondition) {
 		// TODO Auto-generated method stub
-		return reviewRepository.findByRvwReferNoAndRvwType(dayclassNo, "class", pageable);
+		if(searchCondition.equals("HIGH")) {
+			return reviewRepository.findByRvwReferNoAndRvwTypeOrderByRvwScoreDesc(dayclassNo, "class", pageable);
+		} else if(searchCondition.equals("LOW")) {
+			return reviewRepository.findByRvwReferNoAndRvwTypeOrderByRvwScoreAsc(dayclassNo, "class", pageable);
+		} else if(searchCondition.equals("OLD")) {
+			return reviewRepository.findByRvwReferNoAndRvwTypeOrderByRvwRegdateAsc(dayclassNo, "class", pageable);
+		} else {
+			return reviewRepository.findByRvwReferNoAndRvwTypeOrderByRvwRegdateDesc(dayclassNo, "class", pageable);
+		}
 	}
 
-
+	@Override
+	public Page<Review> itemReviewList(int itemNo, Pageable pageable) {
+		return reviewRepository.findByRvwReferNoAndRvwType(itemNo, "item" ,pageable);		
+	}
 
 }

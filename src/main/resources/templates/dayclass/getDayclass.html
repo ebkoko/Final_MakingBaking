@@ -61,6 +61,7 @@
 			<script th:inline="javascript" th:src="@{/js/jquery-ui.min.js}"></script>
 			<script th:inline="javascript">	
 				const getDayclass = /*[[${dayclass}]]*/;
+				const principal = /*[[${#authentication.principal}]]*/;
 						
 				$(function() {
 					
@@ -166,7 +167,16 @@
 					// 예약하기 클릭시 (예약날짜, 예약시간, 인원) 	
 					$("#dayclassRsrvtBtn").on("click", function() {
 						let reserTime = "";
+                  		
+		                  	const isAuthenticated = $(".header > input[name='authenticate']").val();
+                  	
+                  			console.log(isAuthenticated);
+		                  if(isAuthenticated == "false") { // false면 로그인 창 띄우기
+		                     $('.login-form-container').toggleClass('active');
+		                     return;
+		                  }
 
+		                  	
 							if(!$("#rsrvtDate").val()) {
 								alert("예약 날짜를 선택하세요.");
 								return;
@@ -184,11 +194,12 @@
 							if(confirm("예약 날짜 : " + $("#rsrvtDate").val() 
 													+ "\n예약 시간 : " + reserTime 
 													+ "\n예약 인원 : " + $("#peopleNm_cnt").val() 
-													+"명\n\n예약하싈?" )) {						
+													+"명\n\n예약하시겠습니까?" )) {						
 								
 								$("#rsvtForm").submit();
 							
-							} else {
+							} 
+							else {
 								alert("취소되었습니다.");
 								return;
 							}
@@ -232,20 +243,25 @@
 						});
 					}
 					
-					/*
+					$("#rvw_array").on("change", function() {
+						reviewPagingAndOrder(0, $("#rvw_array").val());
+					});
+					
 					$(".paging_btn a").on("click", function(e) {
 						e.preventDefault();
 						reviewPagingAndOrder($(e.target).attr("href"), $("#rvw_array").val());
 					});
-					*/
+					
 
 				}); 
 				
-				/*
+				
 				function reviewPagingAndOrder(page, condition) {
+					console.log(page);
+					console.log(condition);
 
 						$.ajax({
-						url: '/dayclass/dayclass/1',
+						url: '/dayclass/dayclass/' + $("#dayclassNo").val(),
 						type: 'post',
 						data: {
 							page: page,
@@ -260,17 +276,22 @@
 								htmlStr += `
 									<tr>
 			                          <td>
-			                          	<span th:each="num : ${#numbers.sequence(1, obj.pageItems.content[i].rvwScore)}">⭐</span>
+			                          	<span>`;
+			                          	for(let j = 0; j < obj.pageItems.content[i].rvwScore; j++) {
+											htmlStr += `⭐`;
+										  }
+								htmlStr +=  `</span>
 		                          	  </td>
-			                          <td th:text="${obj.pageItems.content[i].rvwContent}"></td>
-			                          <td th:text="${obj.pageItems.content[i].rvwRegdate eq null ? '' : #strings.substring(obj.pageItems.content[i].rvwRegdate, 0, 10)}"></td>
-			                       
-			                          <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${obj.pageItems.content[i].rvwWriter}"></td>
-			                          <td sec:authorize="!hasRole('ROLE_ADMIN')" th:text="${obj.pageItems.content[i].rvwWriter.substring(0, obj.pageItems.content[i].rvwWriter.length()-3) + '***'}"></td>			                  
-									 
-									</tr>
+			                          <td>${obj.pageItems.content[i].rvwContent}</td>
+			                          <td>${obj.pageItems.content[i].rvwRegdate}</td>
+			                          <td>${principal != 'anonymousUser' && principal.user.userRole == 'ROLE_ADMIN' 
+			                         	   ? obj.pageItems.content[i].rvwWriter 
+			                         	   : obj.pageItems.content[i].rvwWriter.substring(0, obj.pageItems.content[i].rvwWriter.length - 3) + '***'}</td>
+			                        </tr>
 								`;
 							}
+							
+							$(".rvw_list tbody").html(htmlStr);
 						},
 						error: function(e) {
 							console.log(e);
@@ -278,7 +299,7 @@
 					}); 
 					
 					
-				}); */
+				}; 
 				
 			</script>
 		</th:block>
@@ -297,8 +318,7 @@
 	        <div class="dc_banner_container">
 	          <div class="dc_banner">
 	            <div class="banner_mainImg">
-	              <img class="banner_main_img" th:src="@{/images/class_main.jpg}"
-	              width="350px">
+	              <img class="banner_main_img" th:src="@{/images/class_main.jpg}" width="350px">
 	            </div>
 	            <div class="banner_explain">        
 	              <h1 th:text="${dayclass.dayclassName}"></h1>        
@@ -376,7 +396,7 @@
 					</li>
 					<li>
 					<div class="apply_btn">
-	                	<span><button type="submit" id="dayclassRsrvtBtn" value="dayclassRsrvt">예약하기 
+	                	<span><button type="button" id="dayclassRsrvtBtn" value="dayclassRsrvt">예약하기 
 	                	</button></span>
 	              	</div>
 					</li>
@@ -418,7 +438,7 @@
 	      
 	                      <option value="HIGH" th:selected="${searchCondition == 'HIGH'}">평점 높은순</option>
 	                      <option value="LOW" th:selected="${searchCondition == 'LOW'}"> 평점 낮은순</option>
-	                      <option value="NEW" th:selected="${searchCondition == 'NEW'}">최신순</option>
+	                      <option value="NEW" th:selected="${searchCondition == '' || searchCondition == 'NEW'}">최신순</option>
 	                      <option value="OLD" th:selected="${searchCondition == 'OLD'}">오래된순</option>
 	                    </select>
 	                  </div>

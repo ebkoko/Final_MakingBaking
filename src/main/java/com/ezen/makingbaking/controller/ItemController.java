@@ -22,12 +22,16 @@ import com.ezen.makingbaking.entity.CustomUserDetails;
 import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.entity.Review;
 import com.ezen.makingbaking.service.item.ItemService;
+import com.ezen.makingbaking.service.review.ReviewService;
 
 @RestController
 @RequestMapping("/item")
 public class ItemController {
 	@Autowired
 	private ItemService itemService;
+	
+	@Autowired
+	private ReviewService reviewService;
 	
 	@GetMapping("/list")
 	//ItemDTO 받기 item cate가 null이 
@@ -103,7 +107,7 @@ public class ItemController {
 								 .itemAllergyInfo(item.getItemAllergyInfo())
 								 .build();
 		
-		Page<Review> pageReviewList = itemService.getReviewList(itemNo, pageable);
+		Page<Review> pageReviewList = reviewService.itemReviewList(itemNo, pageable);
 		
 		Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(review -> ReviewDTO.builder()
 																		  .rvwNo(review.getRvwNo())
