@@ -12,17 +12,7 @@ public interface UserService {
 
 	User findid(UserDTO userDTO);
 
-	UserDTO searchPwd(String userId, String userName);
+	User searchPw(String userId, String userName);
 
 	Map<String, Object> findLoginPasswd(Map<String, Object> param);
-
-//	MailDTO createMailAndChangePassword(String userMail);
-//
-//	void updatePassword(String str, String userMail);
-//
-//	String getTempPassword();
-//
-//	void mailSend(MailDTO mailDTO);
-//
-//	void updatePassWord(String userId, String userPw);
 }
