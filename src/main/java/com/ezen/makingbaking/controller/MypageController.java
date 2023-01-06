@@ -42,4 +42,18 @@ public class MypageController {
 		mv.setViewName("mypage/checkPwForm.html");
 		return mv;
 	}
+	
+	@GetMapping("/getOrderDetail")
+	public ModelAndView orderDetailView() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("mypage/getOrderDetail.html");
+		return mv;
+	}
+	
+	@GetMapping("/getReserDetail")
+	public ModelAndView reserDetailView() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("mypage/getReserDetail.html");
+		return mv;
+	}
 }
