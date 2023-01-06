@@ -7,10 +7,10 @@
 	<th:block layout:fragment="script">
 		<script th:inline="javascript">
 			$(function() {
-				$("#quitBtn").click(function(){
+				$("#quitBtn").on("click", function(){
 				    if(confirm("회원탈퇴 하시겠습니까?") == true){
 				        alert("탈퇴되었습니다");
-				        window.location.href="/main/main;
+				        window.location.href="/home/main";
 				    }
 				    else{
 				        return false;
@@ -39,7 +39,6 @@
 	          <ul class="menu-group">
 	            <li class="menu-name"><a href="#">구매내역</a></li>
 	            <li class="menu-name"><a href="#">예약확인</a></li>
-	            <li class="menu-name"><a href="#">장바구니</a></li>
 	            <li class="menu-name"><a href="#">찜목록</a></li>
 	          </ul>
 	        </div>
@@ -73,12 +72,9 @@
 		            <input type="password" id="userPw" name="userPw" required class="input" placeholder="비밀번호"><label for="userPw" class="input-label"></label>
 		        </div>
 		        
-		        <div class="pw-check">
-		            <input type="password" id="userPw" name="userPw" required class="input" placeholder="비밀번호확인"><label for="userPw" class="input-label"></label>
-		        </div>
-		        
 		        <div class="buttons">
-		          <input type="button" id="quitBtn" value="확인" class="btn2">
+		          <input type="button" id="quitBtn" name="quitUser" value="탈퇴" class="btn2">
+		          <input type="button" id="cancel" value="취소" class="btn2" onclick="history.back()";>
 		        </div>
 		      </form>
 		    </div>

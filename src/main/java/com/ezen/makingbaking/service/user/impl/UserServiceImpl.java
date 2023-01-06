@@ -98,4 +98,10 @@ public class UserServiceImpl implements UserService {
 	public User findid(UserDTO userDTO) {
 		return null;
 	}
+
+	@Override
+	public void quitUser(String userPw) {
+		// TODO Auto-generated method stub
+		userRepository.quitUser(userPw);
+	}
 }

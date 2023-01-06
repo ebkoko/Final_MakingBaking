@@ -27,6 +27,7 @@ import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.dto.UserDTO;
 import com.ezen.makingbaking.entity.CustomUserDetails;
 import com.ezen.makingbaking.entity.User;
+import com.ezen.makingbaking.service.mypage.MypageService;
 import com.ezen.makingbaking.service.user.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -163,37 +164,7 @@ public class UserController {
 		mv.setViewName("user/findPW.html");
 		return mv;
 	}
-
-//	@PostMapping("/sendEmail")
-//	public ModelAndView sendMail(MailDTO mailDTO, @RequestParam("userMail") String userMail, 
-//			@RequestParam("userId") String userId){
-//		System.out.println("fdasf");
-//		MailDTO sendMailDTO = userService.createMailAndChangePassword(userMail);
-//		userService.mailSend(sendMailDTO);
-//		ModelAndView mv = new ModelAndView();
-//		mv.setViewName("/main/main");
-//		return mv;
-//	}
 	
-	
-	//passwordEncoder.match("사용자 입력 비밀번호", "암호화된 비밀번호")
-	/*
-	@GetMapping("/findPw")
-    public @ResponseBody Map<String, Boolean> findPW(String userId, String userMail, String userTel){
-        Map<String,Boolean> json = new HashMap<>();
-        boolean pwCheck = userService.userCheck(userId, userMail, userTel);
-
-        System.out.println(pwCheck);
-        json.put("check", pwCheck);
-        return json;
-    }
-	
-	@PostMapping("/sendMail")
-    public @ResponseBody void sendEmail(String userId, String userMail, String userTel){
-        UserDTO userDTO = userService.createMailAndChangePassword(userId, userMail, userTel);
-        userService.mailSend(userDTO);
-    }
-	*/
     @PostMapping(value="/findPW", produces = "text/html; charset=UTF-8;")
 	public ModelAndView userchPw(@RequestParam Map<String, Object> param , HttpServletResponse response) throws IOException {
        
@@ -233,4 +204,30 @@ public class UserController {
 		return mv;
        
     }
+    
+    //회원탈퇴
+    @RequestMapping("/quitUser") //ajax = ResponseEntity, submit = ModelAndView
+	public ModelAndView quitUser(@RequestParam("userPw") String userPw, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+		User user = User.builder()
+						.userId(customUserDetails.getUsername())
+						.build();
+    	
+    	
+    	User dbUser = userService.idcheck(user);
+    	
+    	if(passwordEncoder.matches(userPw, dbUser.getUserPw())) {
+    		
+    	} else {
+    		
+    		ModelAndView mv = new ModelAndView();
+    		mv.setViewName("/mypage/quit");
+    		return mv;
+    	}
+    	
+    	userService.quitUser(userPw);
+		
+    	ModelAndView mv = new ModelAndView();
+		mv.setViewName("/home/main");
+		return mv;
+	}
 }

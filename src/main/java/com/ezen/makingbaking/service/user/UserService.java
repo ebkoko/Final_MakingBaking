@@ -15,4 +15,6 @@ public interface UserService {
 	User searchPw(String userId, String userName);
 
 	Map<String, Object> findLoginPasswd(Map<String, Object> param);
+
+	void quitUser(String userPw);
 }
