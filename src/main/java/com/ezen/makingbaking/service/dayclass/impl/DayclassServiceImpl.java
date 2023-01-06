@@ -9,8 +9,10 @@ import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.DayclassLike;
 import com.ezen.makingbaking.entity.DayclassLikeId;
+import com.ezen.makingbaking.entity.Reser;
 import com.ezen.makingbaking.repository.DayclassLikeRepository;
 import com.ezen.makingbaking.repository.DayclassRepository;
+import com.ezen.makingbaking.repository.ReserRepository;
 import com.ezen.makingbaking.service.dayclass.DayclassService;
 
 @Service
@@ -20,6 +22,9 @@ public class DayclassServiceImpl implements DayclassService {
 	
 	@Autowired
 	private DayclassLikeRepository dayclassLikeRepository;
+	
+	@Autowired
+	private ReserRepository reserRepository;
 
 	@Override
 	public Dayclass getDayclass(int dayclassNo) {
@@ -76,5 +81,10 @@ public class DayclassServiceImpl implements DayclassService {
 	@Override
 	public CamelHashMap getClassImg(int dayclassNo) {
 		return dayclassRepository.findByFileNoAndDayclassNo(dayclassNo);
+	}
+	
+	@Override
+	public int getPersonCnt(Reser reser) {
+		return reserRepository.getPersonCnt(reser);
 	}
 }

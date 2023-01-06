@@ -42,4 +42,5 @@ public class Reser {
 	@Nullable
 	private String depositor;								// 무통장입금 입금자명
 	private int reserTotalPrice;							// 총 결제금액
+	private int classPrice;
 }

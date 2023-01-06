@@ -22,10 +22,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.dto.DayclassDTO;
+import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.dto.ReviewDTO;
 import com.ezen.makingbaking.entity.CustomUserDetails;
 import com.ezen.makingbaking.entity.Dayclass;
+import com.ezen.makingbaking.entity.Reser;
 import com.ezen.makingbaking.entity.Review;
 import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.service.dayclass.DayclassService;
@@ -111,7 +113,7 @@ public class DayclassController {
 			likeYn = dayclassService.getLikeYn(loginUserId, dayclassNo);
 		
 		int likeCnt = dayclassService.getLikeCnt(dayclassNo);
-	
+		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("dayclass/getDayclass.html");
 		
@@ -120,7 +122,6 @@ public class DayclassController {
 		mv.addObject("likeYn", likeYn);
 		mv.addObject("likeCnt", likeCnt);
 		mv.addObject("searchCondition", searchCondition);
-		
 	
 		return mv;
 	}
@@ -232,6 +233,28 @@ public class DayclassController {
 		return mv;
 	}
 	
+	@PostMapping("/getPersonCnt")
+	public ResponseEntity<?> getPersonCnt(ReserDTO reserDTO) {
+		ResponseDTO<Integer> response = new ResponseDTO<>();
+		
+		try {
+			Reser reser = Reser.builder()
+								.classNo(reserDTO.getClassNo())
+								.partiDate(reserDTO.getPartiDate())
+								.partiTime(reserDTO.getPartiTime())
+								.build();
+			
+			int personCnt = dayclassService.getPersonCnt(reser);
+			
+			response.setItem(personCnt);
+			
+			return ResponseEntity.ok().body(response);			
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
 }
 
 

@@ -575,7 +575,7 @@
 						formData.append("depositor", depositor);
 						
 						// 카카오페이 결제전송
-						/*$.ajax({
+						$.ajax({
 							url:'/order/pay',
 							type: 'post',
 							data: formData,
@@ -584,7 +584,7 @@
 							success: function(response) {
 								location.href = response.next_redirect_pc_url + "?tid=" + response.tid;
 							}
-						});*/
+						});
 					});
 				});				
 			</script>
