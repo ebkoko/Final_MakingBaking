@@ -41,4 +41,10 @@ public class ReviewServiceImpl implements ReviewService {
 		}
 	
 	}
+
+	@Override
+	public void insertClassRvw(Review review) {
+		reviewRepository.save(review);
+		
+	}
 }

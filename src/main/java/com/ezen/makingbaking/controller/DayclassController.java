@@ -1,9 +1,12 @@
 package com.ezen.makingbaking.controller;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -83,16 +86,7 @@ public class DayclassController {
 		if(customUser != null)
 			loginUserId = customUser.getUser().getUserId();
 		
-//		DayclassDTO dayclassDTO = DayclassDTO.builder()
-//											 .dayclassNo(dayclass.getDayclassNo())
-//											 .dayclassName(dayclass.getDayclassName())
-//											 .dayclassMinName(dayclass.getDayclassMinName())
-//											 .dayclassPrice(dayclass.getDayclassPrice())
-//											 .dayclassDetails(dayclass.getDayclassDetails())
-//											 .dayclassTime(dayclass.getDayclassTime())
-//											 .dayclassUseYn(dayclass.getDayclassUseYn())
-//											 .dayclassAddress(dayclass.getDayclassAddress())
-//											 .build();
+
 		
 		Page<Review> reviewList = reviewService.getReviewList(dayclassNo, pageable, searchCondition);
 		
@@ -217,7 +211,6 @@ public class DayclassController {
 			@RequestParam Map<String, String> paramMap, @AuthenticationPrincipal CustomUserDetails customUser) {
 		User user = customUser.getUser();
 		
-//		Dayclass dayclass = dayclassService.getDayclass(dayclassNo);
 		CamelHashMap dayclass = dayclassService.getClassImg(dayclassNo);
 		
 		ModelAndView mv = new ModelAndView();
@@ -255,6 +248,26 @@ public class DayclassController {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
+	
+	@PostMapping("/insertClassRvw")
+	public void insertClassRvw(ReviewDTO reviewDTO, HttpServletResponse response, HttpServletRequest request,
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
+		
+		Review review = Review.builder()
+							  .rvwScore(reviewDTO.getRvwScore())
+							  .rvwWriter(customUser.getUsername())
+							  .rvwRegdate(LocalDateTime.now())							 
+							  .rvwContent(reviewDTO.getRvwContent())
+							  .rvwReferNo(reviewDTO.getRvwReferNo())
+							  .rvwType("class")
+							  .build();
+		
+		reviewService.insertClassRvw(review);
+		
+	
+	}
+	
+	
 }
 
 
