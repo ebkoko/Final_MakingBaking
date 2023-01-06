@@ -152,6 +152,8 @@
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
+				let changeRows = [];
+				
 				$(function() {
 					//검색창(상품카테, 판매상태)
 					$("#searchCondition").on("change", function() {
@@ -189,30 +191,87 @@
 					$("#itemSelectAll").click(function() {
 						var chk = $("#itemSelectAll").prop("checked");
 						if(chk) {
-							$("input[name='select_item']").prop("checked", true);
+							$("input[name='chk']").prop("checked", true);
 						} else {
-							$("input[name='select_item']").prop("checked", false);
+							$("input[name='chk']").prop("checked", false);
 						}
 					});
+				});
+				
+				
+				
+				//선택상품 삭제
+				$(function() {
+					//삭제버튼 클릭 시 체크된 게시물들 삭제 상태로 변경
+					$("#itemDelete").on('click', function() {
+						$("input:checkbox[name='chk']").each(function() {
+							const delItem = {
+									itemNo: $(this).attr("data-item-no")
+								};
+								
+								changeRows.push(delItem);
+						});
+						
+						
+						$.ajax({
+							url: '/admin/saveItemList',
+							type: 'post',
+							data: {changeRows: JSON.stringify(changeRows)},
+							success: function(obj) {
+								console.log(obj);
+								let htmlStr = "";
+								for(let i = 0; i < obj.pageItems.content.length; i++) {
+									htmlStr += `
+										<tr>
+											<td>
+												<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].itemNo}"
+												value="${obj.pageItems.content[i].itemNo}">
+											</td>
+											<td>${obj.pageItems.content[i].itemNo}</td>
+											<td>${obj.pageItems.content[i].itemName}</td>
+											<td>${obj.pageItems.content[i].itemPrice}</td>
+											<td>${obj.pageItems.content[i].itemRegdate == null ? '' : obj.pageItems.content[i].itemRegdate.substr(0, 10)}</td>
+											<td>${obj.pageItems.content[i].itemStatus}</td>
+											
+											
+											
+											<td>${obj.pageItems.content[i].itemNo}</td>
+											<td name="boardTitleTd" data-board-title="${obj.pageItems.content[i].boardTitle}"
+												data-board-no="${obj.pageItems.content[i].boardNo}" data-new-title="">
+												<a href="@{/board/updateBoardCnt/${obj.pageItems.content[i].boardNo}}">
+												   ${obj.pageItems.content[i].boardTitle}
+												</a>
+											</td>
+											<td>${obj.pageItems.content[i].boardWriter}</td>
+											<td>
+												${obj.pageItems.content[i].boardRegdate == null ? '' : obj.pageItems.content[i].boardRegdate.substr(0, 10)}
+											</td>
+											<td>${obj.pageItems.content[i].boardCnt}</td>
+											<td style="text-align: center;" name="statusTd" id="statusTd${obj.pageItems.content[i].boardNo}">
+											</td>
+											<input type="hidden" name="status" id="status${obj.pageItems.content[i].boardNo}"	
+												data-board-no="${obj.pageItems.content[i].boardNo}" data-board-title="${obj.pageItems.content[i].boardTitle}" 
+												value="">
+												
+												
+												
+										</tr>
+									`;
+								}
+								
+								$("#itemList_T").children(":first").children().not(':first').remove();
+								$("#itemList_T").children(":first").append(htmlStr);
+							},
+							error: function(e) {
+								console.log(e);
+							},
+						});
+						console.log(changeRows);
+						
+					});
 					
-					
-					//상품삭제 버튼 클릭 시
-					$("#itemDelete").on('click', function (e) {
-		               e.preventDefault();
-		
-		               $.ajax({
-		                  url: '/admin/item/',
-		                  type: 'delete',
-		                  data: {itemNo: $("#itemNo").val()},
-		                  success: function () {
-		                     alert("상품이 삭제되었습니다.");
-		                     window.location.href = "/admin/itemList";
-		                  }, error: function (e) {
-		                     console.log(e);
-		                  }
-		               });
-		            });
-		            
+						
+				
 				});
 			</script>
 		</th:block>
@@ -274,7 +333,7 @@
 			        <th class="itemList_T_10">상품 관리</th>
 	      		</tr>
 	      		<tr th:each="item: ${getItemList.content}">
-	      			<td><input type="checkbox" name="select_item"></td>
+	      			<td><input type="checkbox" name="chk"></td>
 		        	<td th:text="${item.itemNo}"></td>
 		        	
 		        	<td>

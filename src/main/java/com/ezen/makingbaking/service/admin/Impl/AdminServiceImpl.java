@@ -1,6 +1,8 @@
 package com.ezen.makingbaking.service.admin.Impl;
 
+
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +14,7 @@ import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.repository.ImgFileRepository;
 import com.ezen.makingbaking.repository.ItemRepository;
 import com.ezen.makingbaking.service.admin.AdminService;
+
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -115,6 +118,21 @@ public class AdminServiceImpl implements AdminService {
 		itemRepository.deleteById(itemNo);
 		
 	}
+
+	@Override
+	public void saveItemList(List<Map<String, Object>> changeRowsList) {
+		// TODO Auto-generated method stub
+		for(int i = 0; i < changeRowsList.size(); i++) {
+			Item ditem = Item.builder()
+							.itemNo(Integer.parseInt(String.valueOf(changeRowsList.get(i).get("itemNo"))))
+								.build();
+			
+			itemRepository.delete(ditem);
+			 
+		}
+		
+	}
+		
 
 	
 

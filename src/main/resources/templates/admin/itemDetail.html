@@ -232,8 +232,8 @@
 		
 	    <!-- 상품등록내용 -->
 	    <form id="itemDtlForm" enctype="multipart/form-data">
-		    <input type="hidden" name="itemNo" id="boardNo" th:value="${getItem.itemNo}">
-			<input type="hidden" name="itemRegdate" id="boardRegdate" th:value="${getItem.itemRegdate}">
+		    <input type="hidden" name="itemNo" id="itemNo" th:value="${getItem.itemNo}">
+			<input type="hidden" name="itemRegdate" id="itemRegdate" th:value="${getItem.itemRegdate}">
 			<input type="hidden" name="originFiles" id="originFiles">
 			<div id="div_itemDtl">
 				<table border="1" id="T_itemDtl">
@@ -323,8 +323,7 @@
 				<!-- 목록으로 버튼 -->
 				<a href="/admin/itemList"><input type="button" value="목록으로" id="itemListBtn"></a>
 				<!-- 삭제 버튼 -->
-				<a href="#" id="itemDelBtn">삭제</a>
-				<!--<a href="#"><input type="button" value="삭제" id="itemDelBtn"></a> -->
+				<a href="#"><input type="button" value="삭제" id="itemDelBtn"></a>
 			</div>
 		</form>
   </div>
