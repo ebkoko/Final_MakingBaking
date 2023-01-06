@@ -30,4 +30,9 @@ public interface UserRepository extends JpaRepository<User, String> {
 			+ "		USER_NAME = :userName",
 			nativeQuery=true) //jpa에서 개발자 마음대로 함수명을 정하고 쿼리도 추가하려면 nativeQuery=true를 필수적으로 추가해야한다.
 	User searchPw(@Param("userId") String userId, @Param("userName") String userName);
+	
+	@Query (value="DELETE FROM T_MB_USER"
+			+ "    WHERE USER_ID = :userId",
+			nativeQuery=true)
+	void quitUser(@Param("userId") String userId);
 }
