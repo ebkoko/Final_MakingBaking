@@ -76,23 +76,23 @@ public class DayclassController {
 			searchCondition = request.getParameter("searchCondition");
 		}
 		
-		Dayclass dayclass = dayclassService.getDayclass(dayclassNo);
+		CamelHashMap dayclass = dayclassService.getClassImg(dayclassNo);
 		
 		String loginUserId = "";
 		
 		if(customUser != null)
 			loginUserId = customUser.getUser().getUserId();
 		
-		DayclassDTO dayclassDTO = DayclassDTO.builder()
-											 .dayclassNo(dayclass.getDayclassNo())
-											 .dayclassName(dayclass.getDayclassName())
-											 .dayclassMinName(dayclass.getDayclassMinName())
-											 .dayclassPrice(dayclass.getDayclassPrice())
-											 .dayclassDetails(dayclass.getDayclassDetails())
-											 .dayclassTime(dayclass.getDayclassTime())
-											 .dayclassUseYn(dayclass.getDayclassUseYn())
-											 .dayclassAddress(dayclass.getDayclassAddress())
-											 .build();
+//		DayclassDTO dayclassDTO = DayclassDTO.builder()
+//											 .dayclassNo(dayclass.getDayclassNo())
+//											 .dayclassName(dayclass.getDayclassName())
+//											 .dayclassMinName(dayclass.getDayclassMinName())
+//											 .dayclassPrice(dayclass.getDayclassPrice())
+//											 .dayclassDetails(dayclass.getDayclassDetails())
+//											 .dayclassTime(dayclass.getDayclassTime())
+//											 .dayclassUseYn(dayclass.getDayclassUseYn())
+//											 .dayclassAddress(dayclass.getDayclassAddress())
+//											 .build();
 		
 		Page<Review> reviewList = reviewService.getReviewList(dayclassNo, pageable, searchCondition);
 		
@@ -117,7 +117,7 @@ public class DayclassController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("dayclass/getDayclass.html");
 		
-		mv.addObject("dayclass", dayclassDTO);
+		mv.addObject("dayclass", dayclass);
 		mv.addObject("reviewList", reviewDTOList);
 		mv.addObject("likeYn", likeYn);
 		mv.addObject("likeCnt", likeCnt);
