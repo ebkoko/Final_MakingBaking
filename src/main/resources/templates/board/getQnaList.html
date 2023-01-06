@@ -48,6 +48,90 @@
 						$("#list-table").replaceWith(result);
 					});*/
 				});
+				
+				$("#dayclass-button").on("click", function(e) {
+					$("#dayclass-button").css("color", "white").css("background", "#28693F");
+					$("#item-button").css("color", "#28693F").css("background", "white").css("border", "1px solid #28693F");
+					e.preventDefault();
+					$.ajax({
+						url: '/board/qnaList/1',
+						type: 'post',
+						data: {	page: $(e.target).attr("data-page-num")},
+						success: function(obj) {
+							console.log(obj);
+							
+							let htmlStr = "";
+							
+							for(let i=0; i<obj.pageItems.content.length; i++) {
+								htmlStr += `
+									<tr>
+										<td class="list-title">
+											<a href="/board/updateQnaCnt/${obj.pageItems.content[i].boardNo}">
+											${obj.pageItems.content[i].boardTitle}
+											</a>
+										</td>			
+										<td class="list-writer">${obj.pageItems.content[i].boardWriter}</td>
+										<td class="list-answer">${obj.pageItems.content[i].boardReply == null ? '답변대기' : '답변완료'}</td>
+										<td class="list-date">${obj.pageItems.content[i].boardRegdate == null ? '' : obj.pageItems.content[i].boardRegdate.substring(0, 10)}</td>
+										<td class="list-cnt">${obj.pageItems.content[i].boardCnt}</td>
+									</tr>
+								`;
+							}
+							$("#list-table").children(":first").children().not(":first").remove();
+							$("#list-table").children(":first").append(htmlStr);
+						},
+						error: function(e) {
+							console.log(e);
+							console.log($(e.target).attr("data-page-num"));
+						}
+					})
+					/*.done(function(result) {
+						$("#list-table").replaceWith(result);
+					});*/
+				});
+				
+				$("#item-button").on("click", function(e) {
+					$("#dayclass-button").css("color", "#28693F").css("background", "white").css("border", "1px solid #28693F");
+					$("#item-button").css("color", "white").css("background", "#28693F");
+					e.preventDefault();
+					$.ajax({
+						url: '/board/qnaList/2',
+						type: 'post',
+						data: {	
+							page: $(e.target).attr("data-page-num"),
+						},
+						success: function(obj) {
+							console.log(obj);
+							
+							let htmlStr = "";
+							
+							for(let i=0; i<obj.pageItems.content.length; i++) {
+								htmlStr += `
+									<tr>
+										<td class="list-title">
+											<a href="/board/updateQnaCnt/${obj.pageItems.content[i].boardNo}">
+											${obj.pageItems.content[i].boardTitle}
+											</a>
+										</td>			
+										<td class="list-writer">${obj.pageItems.content[i].boardWriter}</td>
+										<td class="list-answer">${obj.pageItems.content[i].boardReply == null ? '답변대기' : '답변완료'}</td>
+										<td class="list-date">${obj.pageItems.content[i].boardRegdate == null ? '' : obj.pageItems.content[i].boardRegdate.substring(0, 10)}</td>
+										<td class="list-cnt">${obj.pageItems.content[i].boardCnt}</td>
+									</tr>
+								`;
+							}
+							$("#list-table").children(":first").children().not(":first").remove();
+							$("#list-table").children(":first").append(htmlStr);
+						},
+						error: function(e) {
+							console.log(e);
+							console.log($(e.target).attr("data-page-num"));
+						}
+					})
+					/*.done(function(result) {
+						$("#list-table").replaceWith(result);
+					});*/
+				});
 			});
 		</script>
 	</th:block>
@@ -63,28 +147,13 @@
 	  <div id="high-container">
 	    <h3 id="oft-qna-title">자주 묻는 질문</h3>
 	    <div id="oft-qna-container">
-	      <div class="oft-qna">
-	        <div class="oft-qna-q">
-	          Q. 오늘 주문한 상품은 언제 배송되나요?
+	      <div class="oft-qna" th:each="faq: ${getFaqList}">
+	      	<div class="oft-qna-q">
+	      	  <h4 th:text="${faq.boardTitle}"></h4>
+	          <p th:text="${faq.boardContent}"></p>
 	        </div>
 	        <div class="oft-qna-a">
-	          A. 영업일 기준 2~3일 내로 배송됩니다.
-	        </div>
-	      </div>
-	      <div class="oft-qna">
-	        <div class="oft-qna-q">
-	          Q. 오늘 주문한 상품은 언제 배송되나요?
-	        </div>
-	        <div class="oft-qna-a">
-	          A. 영업일 기준 2~3일 내로 배송됩니다.
-	        </div>
-	      </div>
-	      <div class="oft-qna">
-	        <div class="oft-qna-q">
-	          Q. 오늘 주문한 상품은 언제 배송되나요?
-	        </div>
-	        <div class="oft-qna-a">
-	          A. 영업일 기준 2~3일 내로 배송됩니다.
+	          <p th:text="${faq.boardReply}"></p>
 	        </div>
 	      </div>
 	    </div>

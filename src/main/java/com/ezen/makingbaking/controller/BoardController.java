@@ -2,6 +2,8 @@ package com.ezen.makingbaking.controller;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,6 +43,20 @@ public class BoardController {
 						   .cateCode(cateCode)
 						   .build();
 		
+		List<Board> faqList = boardService.getFaqList(board);
+		
+		List<BoardDTO> getFaqList = new ArrayList<BoardDTO>();
+		for(int i=0; i<faqList.size(); i++) {
+			BoardDTO returnFaq = BoardDTO.builder()
+										   .boardNo(faqList.get(i).getBoardNo())
+										   .boardTitle(faqList.get(i).getBoardTitle())
+										   .boardContent(faqList.get(i).getBoardContent())
+										   .boardWriter(faqList.get(i).getBoardWriter())
+										   .boardReply(faqList.get(i).getBoardReply())
+										   .build();
+			getFaqList.add(returnFaq);
+		}
+		
 		Page<Board> pageBoardList = boardService.getPageBoardList(board, pageable);
 		
 		Page<BoardDTO> pageBoardDTOList = pageBoardList.map(pageQna -> 
@@ -58,8 +74,10 @@ public class BoardController {
 						   		   .build()
 						   );
 		
+		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("board/getQnaList.html");
+		mv.addObject("getFaqList", getFaqList);
 		mv.addObject("getQnaList", pageBoardDTOList); // content부터 pageable까지만 오게됨
 		
 		return mv;
@@ -332,8 +350,8 @@ public class BoardController {
 	}
 	
 	// [user] qna 질문 글 작성 페이지 이동
-	@GetMapping("/qna/insertQna/{cateCode}/{boardNo}")
-	public ModelAndView insertQnaView(@PathVariable("cateCode") int cateCode, @PathVariable("boardNo") int boardNo, @AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
+	@GetMapping("/qna/insertQna/{cateCode}")
+	public ModelAndView insertQnaView(@PathVariable("cateCode") int cateCode, @AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
 		System.out.println(customUser.getUsername());
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("cateCode", cateCode);
@@ -396,7 +414,8 @@ public class BoardController {
 						   .boardContent(boardDTO.getBoardContent())
 						   .boardWriter(customUser.getUsername())
 						   .boardRegdate(LocalDateTime.now())
-						   .cateCode(cateCode)
+						   //.cateCode(cateCode)
+						   .cateCode(boardDTO.getCateCode())
 						   .build();
 		
 		boardService.insertBoard(board);

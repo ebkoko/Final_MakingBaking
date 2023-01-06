@@ -1,5 +1,7 @@
 package com.ezen.makingbaking.repository;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -23,5 +25,19 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
 	@Modifying
 	@Query(value="UPDATE T_MB_BOARD SET BOARD_REPLY = :boardReply, BOARD_REPLY_REGDATE = now() WHERE BOARD_NO = :boardNo", nativeQuery=true)
 	void updateAnswer(@Param(value="boardNo") int boardNo, @Param(value="boardReply") String boardReply);
+
+	@Query(value="SELECT C.*\r\n"
+			+ "   FROM (\r\n"
+			+ "         SELECT @rownum \\:=@rownum+1 AS ROWNUM\r\n"
+			+ "             , A.*\r\n"
+			+ "            FROM T_MB_BOARD A\r\n"
+			+ "               , (SELECT @ROWNUM \\:= 0 ) B\r\n"
+			+ "                WHERE (A.CATE_CODE = 1\r\n"
+			+ "                OR A.CATE_CODE = 2)\r\n"
+			+ "                AND A.BOARD_REPLY IS NOT NULL\r\n"
+			+ "                ORDER BY A.BOARD_CNT DESC\r\n"
+			+ "      ) C\r\n"
+			+ "   WHERE C.ROWNUM < 4", nativeQuery=true)
+	List<Board> selectFaqList(Board board);
 	
 }

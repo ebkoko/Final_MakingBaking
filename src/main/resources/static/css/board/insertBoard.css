@@ -37,6 +37,13 @@
   padding: 30px;
 }
 
+#cateCodeSelect {
+	width: 150px; height: 35px;
+	margin-bottom: 20px;
+	border: 1px solid lightgray;
+	border-radius: 3px;
+}
+
 #question-title { 
   width: 100%; height: 40px;
 }

@@ -89,15 +89,25 @@ h3 {
 }
 
 .oft-qna-q {
-  font-size: 20px;
   height: 105px;
-  margin-left: 0 10px;
+}
+
+.oft-qna-q h4 {
+  font-size: 20px;
+  margin: 10px;
   font-weight: bold;
+}
+
+.oft-qna-q p {
+  font-size: 15px;
+  margin: 10px;
 }
 
 .oft-qna-a {
   font-size: 18px;
   height: 105px;
+  margin: 10px;
+  font-weight: bold;
 }
 
 #mid-nav {
@@ -117,7 +127,7 @@ h3 {
   width: 130px; height: 50px;
   display: inline-block;
   font-size: 18px; font-weight: bold; 
-  color: black; 
+  color: #28693F; 
   background-color: #fff;
   border: 1px solid #28693F;
 }
