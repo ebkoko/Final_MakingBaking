@@ -59,5 +59,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	Page<CamelHashMap> findItemAndFile(Pageable pageable);
 	
 	//Page<Review> findByItemNoAndPageble(int itemNo, Pageable pageable);
-
+	
+	
+	
 }

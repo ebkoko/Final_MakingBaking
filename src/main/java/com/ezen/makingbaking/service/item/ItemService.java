@@ -1,11 +1,13 @@
 package com.ezen.makingbaking.service.item;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.ezen.makingbaking.common.CamelHashMap;
+import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
-import com.ezen.makingbaking.entity.Review;
 
 
 public interface ItemService {
@@ -25,7 +27,7 @@ public interface ItemService {
 
 	void deleteLike(int itemNo, String userId);
 
-
+	List<ImgFile> getItemImg(int itemNo);
 	
 
 	

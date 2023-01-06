@@ -1,6 +1,8 @@
 package com.ezen.makingbaking.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,10 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.makingbaking.common.CamelHashMap;
+import com.ezen.makingbaking.dto.ImgFileDTO;
 import com.ezen.makingbaking.dto.ItemDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.dto.ReviewDTO;
 import com.ezen.makingbaking.entity.CustomUserDetails;
+import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.entity.Review;
 import com.ezen.makingbaking.service.item.ItemService;
@@ -97,6 +101,8 @@ public class ItemController {
 			searchCondition = request.getParameter("searchCondition");
 		}
 		
+		List<ImgFile> itemImgList = itemService.getItemImg(itemNo);
+		
 		Item item = itemService.getItem(itemNo);
 		
 		String loginUserId = "";
@@ -117,6 +123,21 @@ public class ItemController {
 								 .itemOrigin(item.getItemOrigin())
 								 .itemAllergyInfo(item.getItemAllergyInfo())
 								 .build();
+		
+		List<ImgFileDTO> itemImgDTOList = new ArrayList<ImgFileDTO>();
+		
+		for(int i = 0; i < itemImgList.size(); i++) {
+			ImgFileDTO imgFileDTO = ImgFileDTO.builder()
+											  .fileReferNo(itemImgList.get(i).getFileReferNo())
+											  .fileNo(itemImgList.get(i).getFileNo())
+											  .fileName(itemImgList.get(i).getFileName())
+											  .fileOriginName(itemImgList.get(i).getFileOriginName())
+											  .filePath(itemImgList.get(i).getFilePath())
+											  .fileType(itemImgList.get(i).getFileType())
+											  .build();
+											  
+			itemImgDTOList.add(imgFileDTO);
+		}
 		
 		Page<Review> pageReviewList = reviewService.itemReviewList(itemNo, pageable, searchCondition);
 		
@@ -143,6 +164,7 @@ public class ItemController {
 		mv.setViewName("item/getItem.html");		
 		
 		mv.addObject("item", itemDTO);
+		mv.addObject("itemImgList", itemImgDTOList);
 		mv.addObject("pageReviewList", pageReviewDTOList);		
 		mv.addObject("likeYn", likeYn);
 		mv.addObject("likeCnt", likeCnt);
