@@ -194,41 +194,43 @@ public class UserController {
         userService.mailSend(userDTO);
     }
 	*/
-    @PostMapping("/userchPw")
-	public String userchPw(@RequestParam Map<String, Object> param , HttpServletResponse response) throws IOException {
+    @PostMapping(value="/findPW", produces = "text/html; charset=UTF-8;")
+	public ModelAndView userchPw(@RequestParam Map<String, Object> param , HttpServletResponse response) throws IOException {
        
        String userId = (String) param.get("userId");
        String userName = (String) param.get("userName");
        String userMail = (String) param.get("userMail");
        
-       UserDTO user  = userService.searchPwd(userId, userName);
+       User user  = userService.searchPw(userId, userName);
        
+       response.setCharacterEncoding("UTF-8");
+   	   response.setContentType("text/html; charset=UTF-8");
        PrintWriter out = response.getWriter();
         if(user == null) {
-          response.setContentType("text/html; charset=UTF-8");
+        	
           
           // 입력한 정보가 일치하지 않을 때
-          out.println("<script>alert('일치하는 회원이 없습니다'); location.href='searchPw';</script>");
+          out.println("<script>alert('일치하는 회원이 없습니다.'); location.href='/user/findPW';</script>");
           
           out.flush();
         }else if (!user.getUserMail().equals(userMail)){
-             response.setContentType("text/html; charset=UTF-8");
              
-             out.println("<script>alert('이메일 정보가 일치하지 않습니다'); location.href='searchPw';</script>");
+             out.println("<script>alert('이메일 정보가 일치하지 않습니다.'); location.href='/user/findPW';</script>");
              
              out.flush();
        } else {
-          response.setContentType("text/html; charset=UTF-8");
           
           // 입력한 정보와 회원정보가 일치할 때 
-          out.println("<script>alert('입력하신 메일로 임시 패스워드가 발송되었습니다'); location.href='searchPw';</script>");
+          out.println("<script>alert('입력하신 메일로 임시 패스워드가 발송되었습니다. 마이페이지에서 비밀번호를 변경해주세요.'); location.href='/home/main';</script>");
           
           out.flush();
           Map<String, Object> findLoginIdRs = userService.findLoginPasswd(param);
        
        }
         
-       return "main";
+        ModelAndView mv = new ModelAndView();
+		mv.setViewName("/home/main");
+		return mv;
        
     }
 }
