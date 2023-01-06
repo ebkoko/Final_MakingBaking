@@ -29,14 +29,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.makingbaking.common.FileUtils;
-import com.ezen.makingbaking.dto.BoardDTO;
 import com.ezen.makingbaking.dto.ImgFileDTO;
 import com.ezen.makingbaking.dto.ItemDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.service.admin.AdminService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -448,6 +449,55 @@ public class AdminController {
 	public void deleteItem(@RequestParam("itemNo") int itemNo) {
 		adminService.deleteItem(itemNo);
 	}
+	
+	//관리자가 게시글 삭제하는 경우 ajax를 이용해 백단에 전송
+	@PostMapping("/saveItemList")
+	public ResponseEntity<?> saveBoardList(@RequestParam("changeRows") String changeRows,
+			@PageableDefault(page = 0, size = 50) Pageable pageable) throws JsonMappingException, JsonProcessingException {
+		ResponseDTO<ItemDTO> response = new ResponseDTO<>();
+		List<Map<String, Object>> changeRowsList = new ObjectMapper().readValue(changeRows, 
+											new TypeReference<List<Map<String, Object>>>() {});
+		
+		try {
+			adminService.saveItemList(changeRowsList);
+			
+			Item item = Item.builder()
+							   .searchCondition("")
+							   .searchKeyword("")
+							   .build();
+			
+			Page<Item> pageItemList = adminService.getPageItemList(item, pageable);
+			
+			Page<ItemDTO> pageItemDTOList = pageItemList.map(pageItem -> 
+														ItemDTO.builder()
+																.itemNo(pageItem.getItemNo())
+																.itemName(pageItem.getItemName())
+																.itemMinName(pageItem.getItemMinName())
+																.itemDetails(pageItem.getItemDetails())
+																.itemExpDate(pageItem.getItemExpDate())
+																.itemAllergyInfo(pageItem.getItemAllergyInfo())
+																.itemOrigin(pageItem.getItemOrigin())
+																.itemPrice(pageItem.getItemPrice())
+																.itemRegdate(
+																		pageItem.getItemRegdate() == null ?
+																		null :
+																		pageItem.getItemRegdate().toString())
+																.itemStatus(pageItem.getItemStatus())
+																.itemCate(pageItem.getItemCate())
+																.itemStock(pageItem.getItemStock())
+																.build()
+			);
+			
+			response.setPageItems(pageItemDTOList);
+			
+			
+			return ResponseEntity.ok().body(response);
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+
 	
 	
 	

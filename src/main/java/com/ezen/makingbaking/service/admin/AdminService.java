@@ -2,6 +2,7 @@ package com.ezen.makingbaking.service.admin;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,4 +24,6 @@ public interface AdminService {
 	Item updateItem(Item item, List<ImgFile> uFileList);
 	
 	void deleteItem(int ItemNo);
+	
+	void saveItemList(List<Map<String, Object>> changeRowsList);
 }
