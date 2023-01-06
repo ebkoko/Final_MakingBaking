@@ -91,7 +91,7 @@
 						  }
 					});
 						
-				
+					$("#rvwContent").val($(".rvwContent").text());
 					
 					// 취소 환불 문의 자세히 보기
 					$(".refundGuideBtn").on("click", function(){
@@ -246,6 +246,12 @@
 					if(customUser != null) {
 						// 좋아요 버튼 클릭시
 						$("#dayclassLikeBtn").on("click", function(e) {
+							
+							const isAuthenticated = $(".header > input[name='authenticate']").val();
+							if(isAuthenticated == "false") { // false면 로그인 창 띄우기
+		                     $('.login-form-container').toggleClass('active');
+		                  	} 
+							
 							if($(this).val() == 'Y') {
 							$.ajax({
 								url: '/dayclass/like',
@@ -277,12 +283,33 @@
 						}
 						});
 					}
+					// 리뷰 등록	
+					$("#rvw_writeBtn").on("click", function(){
+						$.ajax({
+							url: '/dayclass/insertClassRvw',
+							type:'post',
+							data:{
+								rvwReferNo: $("#dayclassNo").val(),
+								rvwContent: $("#rvwContent").val(),
+								rvwScore: $("input[type='radio']:checked").val(),
+								rvwType: 'class'
+							}, success: function(obj) {
+								console.log(obj);
+								console.log($("#rvwContent").val());
+								alert("리뷰가 등록되었습니다.");
+							}, error: function(e) {
+								console.log(e);
+								alert("리뷰 등록에 실패하였습니다.");
+							}
+						})
+					}); 
+					
 					
 					$("#rvw_array").on("change", function() {
 						reviewPagingAndOrder(0, $("#rvw_array").val());
 					});
 					
-					// 페이징
+					// 리뷰 페이징
 					$(".paging_btn a").on("click", function(e) {
 						e.preventDefault();
 						reviewPagingAndOrder($(e.target).attr("href"), $("#rvw_array").val());
@@ -445,24 +472,25 @@
 	              <h3 class="c_rvw_title" >클래스 후기</h3>
 	              <div class="c_rvw_write">
 	              	<div class="rvw_write_member">
-	              		<form class="rvw_write_form" action="" method="post" >
+	              		<form class="rvw_write_form" action="/dayclass/insertClassRvw" method="post" >
+	              			<input type="hidden" id="rvwContent" name="rvwContent">
 	              			<fieldset>
-							<input type="radio" name="reviewStar" value="5" id="rate1"><label
+							<input type="radio" name="rvwScore" value="5" class="rvwScore" id="rate1"><label
 								for="rate1">★</label>
-							<input type="radio" name="reviewStar" value="4" id="rate2"><label
+							<input type="radio" name="rvwScore" value="4" class="rvwScore" id="rate2"><label
 								for="rate2">★</label>
-							<input type="radio" name="reviewStar" value="3" id="rate3"><label
+							<input type="radio" name="rvwScore" value="3" class="rvwScore" id="rate3"><label
 								for="rate3">★</label>
-							<input type="radio" name="reviewStar" value="2" id="rate4"><label
+							<input type="radio" name="rvwScore" value="2" class="rvwScore" id="rate4"><label
 								for="rate4">★</label>
-							<input type="radio" name="reviewStar" value="1" id="rate5"><label
-								for="rate5">★</label>
+							<input type="radio" name="rvwScore" value="1" class="rvwScore" id="rate5"><label
+								for="rate5">★</label>							
 							</fieldset>
 							<p>
-	              				<textarea placeholder=" 로그인 후 상품 및 클래스 후기를 작성해주세요."></textarea>
+	              				<textarea class="rvwContent" placeholder=" 로그인 후 상품 및 클래스 후기를 작성해주세요."></textarea>
 	              			</p>
 	              			<div class=""> 
-	              			<button class="rvw_writeBtn" id="rvw_writeBtn" type="submit">등록</button>
+	              			<button class="rvw_writeBtn" id="rvw_writeBtn" type="button">등록</button>
 	              			</div>
 	              		</form>
 	              	</div>
@@ -527,9 +555,10 @@
 	                    </div>
 	                  </span>
 	                </div>
+	                
 	              </div>
 	            </div>
-	          </div>
+
 	          
 	          <hr class="dayclass_hr" id="dayclass_hr3">
 	          <div class="c_cancel" id="classCancle" >
@@ -612,7 +641,7 @@
 		              <p class="c_cancelG_01text">
 		              - [배송준비중] 부터는 취소가 불가하니, 반품으로 진행해주세요.
 		              - 상품에 반품이 불가할 수 있습니다.
-		              - 일부 예약상품은 배송 3~4일 전에만 취소 가능합니다
+		              - 일부 상품은 배송 3~4일 전에만 취소 가능합니다
 		              - 주문상품의 부분취소는 불가능합니다. 전체 주문 취소 후 다시 구매 해주세요.
 		              </p>
 		            </div>
@@ -629,12 +658,11 @@
 		              </p>
 		            </div>
 		          </div>	
-	          </div>          
-	        </div>
-	      </section>  
-	  	</main>
-	    </div>	
-	  </div>
-	</div>
+	          </div>   
+	         </section>  
+	  		</main>       
+	       </div>
+	       </div>
+	       </div>
 	</body>
 </html>

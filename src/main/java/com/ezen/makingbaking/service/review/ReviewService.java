@@ -11,5 +11,7 @@ public interface ReviewService {
 
 	Page<Review> itemReviewList(int itemNo, Pageable pageable, String searchCondition);
 
+	void insertClassRvw(Review review);
+
 	
 }
