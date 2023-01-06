@@ -1,5 +1,7 @@
 package com.ezen.makingbaking.service.board;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,6 +18,8 @@ public interface BoardService {
 	void insertBoard(Board board);
 
 	void updateBoard(Board board);
+
+	List<Board> getFaqList(Board board);
 
 	
 }

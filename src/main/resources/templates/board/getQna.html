@@ -16,6 +16,14 @@
 	      <div id="question-title">
 	        <h3 th:text="${getBoard.boardTitle}"></h3>
 	      </div>
+	      <div id="question-userinfo">
+		      <div id="question-writer">
+		      	<p th:text="'작성자 : ' + ${getBoard.boardWriter}"></p>
+		      </div>
+		      <div id="question-regdate">
+		      	<p th:text="${'작성일 : ' + #strings.substring(getBoard.boardRegdate, 0, 10) + '&nbsp;' + #strings.substring(getBoard.boardRegdate, 11, 19)}"></p>
+		      </div>
+	      </div>
 	      <div id="question-content">
 	        <p th:text="${getBoard.boardContent}"></p>
 	      </div>
