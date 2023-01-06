@@ -15,6 +15,7 @@
 		<script th:inline="javascript" th:src="@{/js/jquery-ui.min.js}"></script>
 			<script th:inline="javascript">
 				let cartClick = false;
+				const principal = /*[[${#authentication.principal}]]*/;
 				$(function() {
 					// 취소환불 문의 자세히 보기
 					$(".refundGuideBtn").on("click", function(){
@@ -197,7 +198,7 @@
 				<form id="itemForm"  method="post">	
 					<input type="hidden" id="itemNo" name="itemNo" th:value="${item.itemNo}">          
 		            <div class="itbanner_mainImg">
-		              <img class="itbanner_main_img" th:src="@{/images/class_main.jpg}"
+		              <img class="itbanner_main_img" th:src="@{'/item/' + ${itemImgList.get(0).fileName}}"
 		              width="350px">
 		            </div>
 		            <div class="itbanner_explain">        
@@ -252,19 +253,9 @@
 	            <hr class="item_hr">
 	            <div class="it_cDetatils" id="itemDetails">
 	              <h3 class="it_cDetatils_title">상세정보</h3>
-	              <p class="it_cDetatils_text">
-	              	${lctr.lctrDetails } 상품 상세 정보(영양정보)
-	              	국회의원은 법률이 정하는 직을 겸할 수 없다. 중앙선거관리위원회는 법령의 범위안에서 선거관리·국
-	                민투표관리 또는 정당사무에 관한 규칙을 제정할 수 있으며, 법률에 저촉되지 아니하는 범위안에서 내
-	                부규율에 관한 규칙을 제정할 수 있다.              
-	                국무총리는 국회의 동의를 얻어 대통령이 임명한다. 헌법개정안이 제2항의 찬성을 얻은 때에는 헌법개 
-	                정은 확정되며, 대통령은 즉시 이를 공포하여야 한다.
-	                위원은 정당에 가입하거나 정치에 관여할 수 없다. 여자의 근로는 특별한 보호를 받으며, 고용·임금 
-	                및 근로조건에 있어서 부당한 차별을 받지 아니한다.
-	                행정권은 대통령을 수반으로 하는 정부에 속한다. 대한민국의 경제질서는 개인과 기업의 경제상의 자
-	                유와 창의를 존중함을 기본으로 한다. 대통령은 법률에서 구체적으로 범위를 정하여 위임받은 사항과 
-	                법률을 집행하기 위하여 필요한 사항에 관하여 대통령령을 발할 수 있다.
-	              </p>
+	              <textarea class="it_cDetatils_text" th:text="${item.itemDetails}"></textarea>
+	              <img th:each="itemImg : ${itemImgList}" class="it_cDetatils_main_img" th:if="${itemImg.fileName.contains('영양정보')}" th:src="@{'/item/' + ${itemImg.fileName}}"
+		              width="350px">
 	            </div>
 	            <hr id="item_hr">
 	            <div class="it_rvw" id="itemReview">

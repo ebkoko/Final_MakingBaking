@@ -1,14 +1,18 @@
 package com.ezen.makingbaking.service.item.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ezen.makingbaking.common.CamelHashMap;
+import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.entity.ItemLike;
 import com.ezen.makingbaking.entity.ItemLikeId;
+import com.ezen.makingbaking.repository.ImgFileRepository;
 import com.ezen.makingbaking.repository.ItemLikeRepository;
 import com.ezen.makingbaking.repository.ItemRepository;
 import com.ezen.makingbaking.service.item.ItemService;
@@ -17,6 +21,9 @@ import com.ezen.makingbaking.service.item.ItemService;
 public class ItemServiceImpl implements ItemService {
 	@Autowired
 	private ItemRepository itemRepository;
+	
+	@Autowired
+	private ImgFileRepository imgFileRepository;
 	
 	@Override
 	public int getItemStock(int itemNo) {
@@ -83,6 +90,11 @@ public class ItemServiceImpl implements ItemService {
 		itemLikeId.setUserId(userId);
 		
 		itemLikeRepository.deleteById(itemLikeId);
+	}
+	
+	@Override
+	public List<ImgFile> getItemImg(int itemNo) {
+		return imgFileRepository.findByFileReferNoAndFileType(itemNo, "item");
 	}
 
 }
