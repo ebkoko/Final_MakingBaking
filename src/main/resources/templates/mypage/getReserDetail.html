@@ -25,16 +25,6 @@
 				#reser_title {
 				    font-size: 40px;
 				}
-				#process {
-				    float: right;
-				    font-size: 20px;
-				}
-				#process>span {
-				    margin: 2px 5px;
-				}
-				.process1, .processPointer1 {
-				    font-weight: bold;
-				}
 				#top {
 				    clear: both;
 				    margin-top: 90px;
@@ -42,10 +32,8 @@
 				#top+hr {
 					margin-top: 10px;
 				}
-				#top .class_check {
-				    margin-top: 90px;
-				    margin-bottom: 0px;
-				    font-size: 22px;
+				#top .reserStatus {
+					margin-left: 20px;
 				}
 				#list_title {
 				    font-size: 0.9em;
@@ -119,18 +107,13 @@
 				#reservation {
 				    margin-top: 100px;
 				}
-				.essential {
-					color: dodgerblue;
-					font-weight: bold;
-				}
 				#reservation .reserInfo {
 					display: inline-block;
 				    margin-bottom: 10px;
 				    font-size: 22px;
 				}
-				.essentialMent {
-					font-size: 0.8em;
-					color: red;
+				.reserInfo+hr {
+					margin-bottom: 5px;
 				}
 				.orderTitle {
 					margin-top: 10px;
@@ -186,10 +169,10 @@
 				#reservation+hr {
 				    clear: both;
 				}
-				#payment_title {
+				#CancelOption {
 				    margin-top: 100px;
 				    margin-bottom: 10px;
-				    font-size: 22px;
+				    text-align: center;
 				}
 				#btns {
 				    margin: 15px 0 20px 40px;
@@ -222,23 +205,6 @@
 				    vertical-align: middle;
 				    margin-left: 5px;
 				}
-				#btnPayment {
-				    margin-top: 70px;
-				    margin-left: 460px;
-				    width: 260px;
-				    height: 40px;
-				    font-size: 22px;
-				    cursor: pointer;
-					border: 1.5px solid #28693F;
- 					border-radius: 4px;
- 					background-color: white;
- 					color: #28693F;
- 					letter-spacing:1px
-				}
-				#btnPayment:hover {
-					color: white;
-					background: #28693F;
-				}
 				input[type="button"] {
 					cursor: pointer;
 					font-size: 17px;
@@ -256,149 +222,7 @@
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
-				$(function() {
-					let isKakaoPay = false;
-					let pushbankTransfer = false;
-					let pushKakaoPay = false;
-					const userInfo = /*[[${userInfo}]]*/;
-					
-					// 결제하기 버튼 클릭했을 때 유효성 검사
-					$("#btnPayment").on('click', function() {
-						if(!$("#orderer").val()) {
-							alert("주문자명을 입력해주세요.");
-							$("#orderer").focus();
-							return;
-						}
-						if(!$("#orderTel2").val()) {
-							alert("주문자 휴대폰 번호를 입력해주세요.");
-							$("#orderTel2").focus();
-							return;
-						}
-						if(!$("#orderTel3").val()) {
-							alert("주문자 휴대폰 번호를 입력해주세요.");
-							$("#orderTel3").focus();
-							return;
-						}
-						if(!$("#participant").val()) {
-							alert("예약자명을 입력해주세요.");
-							$("#participant").focus();
-							return;
-						}
-						if(!$("#partiTel2").val()) {
-							alert("예약자 휴대폰 번호를 입력해주세요.");
-							$("#partiTel2").focus();
-							return;
-						}
-						if(!$("#partiTel3").val()) {
-							alert("예약자 휴대폰 번호를 입력해주세요.");
-							$("#partiTel3").focus();
-							return;
-						}
-						if($("#orderTel2").val().length < 4 || $("#orderTel3").val().length < 4 || $("#partiTel2").val().length < 4 || $("#partiTel3").val().length < 4) {
-							alert("휴대폰 번호를 정확히 입력해주세요.");
-							return;
-						}
-						if($("#bankPayment").css("display") == "block") {
-							if(!$("#depositor").val()) {
-								alert("입금자명을 입력해주세요.");
-								$("#depositor").focus();
-								return;
-							}
-						}
-						if(!pushbankTransfer && !pushKakaoPay) {
-							alert("결제방법을 선택해주세요.");
-							return;
-						}
-						
-						let orderTelNums = [$("#orderTel1").val(), $("#orderTel2").val(), $("#orderTel3").val()];
-						let orderTel = orderTelNums.join('-');
-						let partiTelNums = [$("#partiTel1").val(), $("#partiTel2").val(), $("#partiTel3").val()];
-						let partiTel = partiTelNums.join('-');
-						let classPrice = parseInt($(".classPrice").text().replace(/,/g,''));
-						let reserPerson = parseInt($(".class_Quantity").text());
-						
-						
-						$("#reserTotalPrice").val(classPrice * reserPerson);
-						$("#orderTel").val(orderTel);
-						$("#partiTel").val(partiTel);
-						$("#partiDate").val($(".detailDate").text());
-					});
-					
-					// 주문자와 동일 체크했을 때
-					$("input[name='sameUser']").change(function() {
-						const user = {
-							userName: userInfo.userName,
-							userTel: userInfo.userTel
-						};
-						
-						if($("input[name='sameUser']").prop("checked") == true) {
-							$("#participant").val($("#orderer").val());
-							$("#partiTel2").val($("#orderTel2").val());
-							$("#partiTel3").val($("#orderTel3").val());
-						} else {
-							$("#participant").val('');
-							$("#partiTel2").val('');
-							$("#partiTel3").val('');
-						}
-					})
-					
-					// 요청사항 글자수 세기, 글자수 제한
-					$("#request").keyup(function(e) {
-						let msg = $(this).val();
-						
-						// 글자수 세기
-						if(msg.length == 0 || msg == '') {
-							$(".textCnt").text(0);
-						} else {
-							$(".textCnt").text(msg.length);
-						}
-						
-						// 글자수 제한
-						if(msg.length > 200) {
-							$(this).val($(this).val().substring(0, 200));
-						}
-					});
-					
-					// 무통장입금 버튼을 클릭했을 때
-					$("#btnbankTransfer").on('click', function() {
-						isKakaoPay = false;
-						if($("#bankPayment").css("display") == "none") {
-							$("#bankPayment").css("display", "block");
-							$("#btnbankTransfer").css("color", "white").css("background", "#28693F");
-							$("#btnkakaoPay").css("color", "#28693F").css("background", "white");
-							pushbankTransfer = true;
-							$("#reserPayment").val("무통장입금");
-							$("#reserStatus").val("입금대기");
-						} else {
-							$("#bankPayment").css("display", "none");
-							$("#btnbankTransfer").css("color", "#28693F").css("background", "white");
-							pushbankTransfer = false;
-							$("#reserPayment").val('');
-							$("#reserStatus").val('');
-						}						
-					});
-					
-					// 카카오페이 버튼을 클릭했을 때
-					$("#btnkakaoPay").on('click', function() {
-						isKakaoPay = !isKakaoPay;
-						$("#bankPayment").css("display", "none");
-						$("#btnbankTransfer").css("color", "#28693F").css("background", "white");
-						if(!isKakaoPay) {						
-							$("#btnkakaoPay").css("color", "#28693F").css("background", "white");
-							pushKakaoPay = false;
-							$("#reserPayment").val('');
-							$("#reserStatus").val('');
-						} else {
-							$("#btnkakaoPay").css("color", "white").css("background", "#28693F");
-							pushKakaoPay = true;
-							$("#reserPayment").val("카카오페이");
-							$("#reserStatus").val("결제완료");
-						}
-						// 카카오페이 API 실행
-						
-						
-					});
-				});
+			
 			</script>
 		</th:block>
 	</head>
@@ -407,120 +231,94 @@
 	<body>
 		<div layout:fragment="content">
 			<div id="container">
-	            <h1 id="reser_title">클래스 예약결제</h1>
-	            <div id="process">
-	                <span class="process1">클래스 예약결제</span><span class="processPointer1">&gt;</span><span class="process2">클래스 예약완료</span>
-	            </div>
+	            <h1 id="reser_title">내 예약 내역</h1>
 	            <div id="top">
-	                <span class="class_check">클래스 확인</span>
+	                <span class="reserNoMent">예약번호: </span><span class="realReserNo" >20230106000001</span><span class="reserStatus" >입금대기</span>
 	            </div>
 	            <hr>
 	            <div id="list_title">
 	                <span class="title_classInfo">클래스 정보</span><span class="title_classPrice">클래스 금액</span><span class="title_classQuantity">인원 수</span><span class="title_totalPrice">합계금액</span>
 	            </div>
 	            <hr>
-	            <form id="reserForm" action="/reser/reserComplete" method="post">
-	            	<input type="hidden" name="classNo" th:value="${dayclass.dayclassNo}">
-	            	<input type="hidden" name="orderTel" id="orderTel">
-	            	<input type="hidden" name="partiTel" id="partiTel">  
-	            	<input type="hidden" name="reserStatus" id="reserStatus">
-	            	<input type="hidden" name="reserPayment" id="reserPayment">
-	            	<input type="hidden" name="partiDate" id="partiDate">
-	            	<input type="hidden" name="partiTime" th:value="${partiTime}"> 
-	            	<input type="hidden" name="reserPersonCnt" th:value="${reserPersonCnt}">
-	            	<input type="hidden" name="reserTotalPrice" id="reserTotalPrice">
-		            <div id="reser_class">
-		                <div class="classView">
-		                    <div class="class_Detail">
-		                        <img class="class_Img" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
-		                        <div class="detailName"><a th:text="${dayclass.dayclassName}"></a><br>
-			                        <div class="detailDate" th:text="${reserDate}"></div>
-	                              	<div class="detailTime" th:if="${partiTime == 'A'}">오전 9:30~12:30</div>
-	                              	<div class="detailTime" th:if="${partiTime == 'P'}">오후 14:00~17:00</div>
-		                        </div>
-		                    </div>           
-		                    <div class="class_Price"><span class="classPrice" th:text="${#numbers.formatInteger(dayclass.dayclassPrice, 3, 'COMMA')}"></span></div><span>원</span>  
-		                    <div class="class_Quantity" th:text="${reserPersonCnt}"></div>                    
-		                    <div class="class_totalPrice"><span class="totalPayPrice" th:text="${#numbers.formatInteger((T(java.lang.Integer).parseInt(dayclass.dayclassPrice) * T(java.lang.Integer).parseInt(reserPersonCnt)), 3, 'COMMA')}"></span></div><span>원</span>
-		                </div>
-		                <hr>
-		                <div id="totalPrice">
-		                    <span>총 결제금액: </span> <span class="totalPrice" th:text="${#numbers.formatInteger((T(java.lang.Integer).parseInt(dayclass.dayclassPrice) * T(java.lang.Integer).parseInt(reserPersonCnt)), 3, 'COMMA')}"></span><span >원</span>
-		                </div>
-		                <hr> 
-			        </div>  
-		            <div id="reservation">
-		                <p class="reserInfo">예약 정보</p>&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span>
-		                <hr>
-		                <div id="infoTitle">
-		                    <span class="orderTitle">주문자 정보</span><span class="reserTitle">예약자 정보</span><input type="checkbox" name="sameUser" id="sameUser" value="sameUser"> <span class="sameUser">주문자와 동일</span>
-		                </div>
-		                <div class="table-wrap">
-		                    <table id="T1">
-		                        <tr>
-		                            <th>주문자<span class="essential">&#42;</span></th>
-		                            <td><input type="text" name="orderName" id="orderer" th:value="${userInfo.userName}"></td>
-		                        </tr>
-		                        <tr>
-		                            <th>휴대폰<span class="essential">&#42;</span></th>
-		                            <td>
-		                                <select id="orderTel1" name="orderTel1">
-		                                    <option value="010">010</option>
-		                                    <option value="011">011</option>
-		                                    <option value="016">016</option>
-		                                    <option value="017">017</option>
-		                                    <option value="018">018</option>
-		                                </select> - 
-		                                <input type="text" name="orderTel2" id="orderTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(userInfo.userTel).substring(3,7)}"> - 
-		                                <input type="text" name="orderTel3" id="orderTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(userInfo.userTel).substring((userInfo.userTel).length-4)}">
-		                            </td>
-		                        </tr>
-		                    </table>
-		                    <table id="T2">
-		                        <tr>
-		                            <th>예약자<span class="essential">&#42;</span></th>
-		                            <td>
-		                                <input type="text" name="partiName" id="participant">
-		                            </td>
-		                        </tr>
-		                        <tr>
-		                            <th>휴대폰<span class="essential">&#42;</span></th>
-		                            <td>
-		                                <select id="partiTel1" name="partiTel1">
-		                                    <option value="010">010</option>
-		                                    <option value="011">011</option>
-		                                    <option value="016">016</option>
-		                                    <option value="017">017</option>
-		                                    <option value="018">018</option>
-		                                </select> - 
-		                                <input type="text" name="partiTel2" id="partiTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4"> - 
-		                                <input type="text" name="partiTel3" id="partiTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4">
-		                            </td>
-		                        </tr>
-		                        <tr>
-		                            <th style="vertical-align: top;">요청사항<br>(<span class="textCnt">0</span>/<span class="textTotal">200</span>)</th>
-		                            <td>
-		                                <textarea name="request" id="request" cols="50" rows="8" maxlength="200" placeholder="요청사항을 입력해주세요."></textarea>
-		                            </td>
-		                        </tr>
-		                    </table>   
-		                </div>             
-		            </div>
-		            <hr>
-		            <div id="paymentOption">
-		                <p id="payment_title">결제방법</p><hr>
-		                <div id="btns">
-		                    <input type="button" name="paymentOption" id="btnbankTransfer" value="무통장입금">&emsp;
-		                    <input type="button" name="paymentOption" id="btnkakaoPay" value="카카오페이">
-		                </div>
-		                <div id="bankPayment">
-		                    <span>국민은행 799502-04-026913</span>&emsp;&emsp;
-		                    <span id="accountName">예금주: 메이킹베이킹</span><br>
-		                    <div id="depositorTitle">입금자명<span class="essential">&#42;</span>: <input type="text" name="depositor" id="depositor" placeholder="입금자명을 입력하세요.">&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span></div>
-		                </div>
-		            </div>
-	            	<button type="submit" id="btnPayment">결제하기</button>
-	            </form>
+            	<input type="hidden" name="classNo" >
+            	<input type="hidden" name="orderTel" id="orderTel">
+            	<input type="hidden" name="partiTel" id="partiTel">  
+            	<input type="hidden" name="reserStatus" id="reserStatus">
+            	<input type="hidden" name="reserPayment" id="reserPayment">
+            	<input type="hidden" name="partiDate" id="partiDate">
+            	<input type="hidden" name="partiTime" > 
+            	<input type="hidden" name="reserPersonCnt" >
+            	<input type="hidden" name="reserTotalPrice" id="reserTotalPrice">
+	            <div id="reser_class">
+	                <div class="classView">
+	                    <div class="class_Detail">
+	                        <img class="class_Img" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
+	                        <div class="detailName"><a ></a><br>
+		                        <div class="detailDate" ></div>
+                              	<div class="detailTime" >오전 9:30~12:30</div>
+                              	<div class="detailTime" >오후 14:00~17:00</div>
+	                        </div>
+	                    </div>           
+	                    <div class="class_Price"><span class="classPrice" ></span></div><span>원</span>  
+	                    <div class="class_Quantity" ></div>                    
+	                    <div class="class_totalPrice"><span class="totalPayPrice" ></span></div><span>원</span>
+	                </div>
+	                <hr>
+	                <div id="totalPrice">
+	                    <span>총 결제금액: </span> <span class="totalPrice" ></span><span >원</span>
+	                </div>
+	                <hr> 
+		        </div>  
+	            <div id="reservation">
+	                <p class="reserInfo">예약 정보</p>
+	                <hr>
+	                <div id="infoTitle">
+	                    <span class="orderTitle">주문자 정보</span><span class="reserTitle">예약자 정보</span>
+	                </div>
+	                <div class="table-wrap">
+	                    <table id="T1">
+	                        <tr>
+	                            <th>주문자</th>
+	                            <td><input type="text" name="orderName" id="orderer" readonly></td>
+	                        </tr>
+	                        <tr>
+	                            <th>휴대폰</th>
+	                            <td>
+	                                <input type="text" name="orderTel1" id="orderTel1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" readonly> -
+	                                <input type="text" name="orderTel2" id="orderTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" readonly> - 
+	                                <input type="text" name="orderTel3" id="orderTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" readonly>
+	                            </td>
+	                        </tr>
+	                    </table>
+	                    <table id="T2">
+	                        <tr>
+	                            <th>예약자</th>
+	                            <td>
+	                                <input type="text" name="partiName" id="participant" readonly>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <th>휴대폰</th>
+	                            <td>
+	                                <input type="text" name="orderTel1" id="orderTel1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" readonly> -
+	                                <input type="text" name="partiTel2" id="partiTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" readonly> - 
+	                                <input type="text" name="partiTel3" id="partiTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" readonly>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <th style="vertical-align: top;">요청사항</th>
+	                            <td>
+	                                <textarea name="request" id="request" cols="50" rows="8" maxlength="200" placeholder="요청사항을 입력해주세요." readonly></textarea>
+	                            </td>
+	                        </tr>
+	                    </table>   
+	                </div>             
+	            </div>
+	            <hr>		            
+	            <div id="CancelOption">
+                    <input type="button" name="CancelOption" id="btnbankTransfer" value="주문취소">&emsp;
+                    <input type="button" name="CancelOption" id="btnkakaoPay" value="결제취소">
+	            </div>
 	        </div>
 		</div>
 	</body>
