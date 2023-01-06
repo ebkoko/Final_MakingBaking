@@ -163,47 +163,82 @@
 						}
 					});
 					
+					$("#rsrvtDate").on('change', function() {
+						$("#dayclassRsrvtBtn").attr("disabled", false);
+						$("#dayclassRsrvtBtn").text("예약하기");
+					});
+					
+					$("select[name='partiTime']").on('change', function() {
+						$("#dayclassRsrvtBtn").attr("disabled", false);
+						$("#dayclassRsrvtBtn").text("예약하기");
+					})
 	
 					// 예약하기 클릭시 (예약날짜, 예약시간, 인원) 	
 					$("#dayclassRsrvtBtn").on("click", function() {
-						let reserTime = "";
-                  		
-		                  	const isAuthenticated = $(".header > input[name='authenticate']").val();
-                  	
-                  			
-		                  	if(isAuthenticated == "false") { // false면 로그인 창 띄우기
-		                     	$('.login-form-container').toggleClass('active');
-		                    	 return;
-		                  	}
-
-		                  	
-							if(!$("#rsrvtDate").val()) {
-								alert("예약 날짜를 선택하세요.");
-								return;
-							}
-							if($(".c_apply_timeOp").val() != "A" && $(".c_apply_timeOp").val() != "P") {
-								alert("예약 시간을 선택하세요.");
-								return;
-							}
-							if($(".c_apply_timeOp").val() == "A") {
-								reserTime = "오전 09:30~12:30";
-							} else if($(".c_apply_timeOp").val() == "P") {
-								reserTime = "오후 14:00~17:00";
-							}
-			
-							if(confirm("예약 날짜 : " + $("#rsrvtDate").val() 
-													+ "\n예약 시간 : " + reserTime 
-													+ "\n예약 인원 : " + $("#peopleNm_cnt").val() 
-													+"명\n\n예약하시겠습니까?" )) {						
+						
+						const isAuthenticated = $(".header > input[name='authenticate']").val();
+              	
+              			
+	                  	if(isAuthenticated == "false") { // false면 로그인 창 띄우기
+	                     	$('.login-form-container').toggleClass('active');
+	                    	 return;
+	                  	}
+	                  	
+						if(!$("#rsrvtDate").val() || !$("select[name='partiTime']").val()) {
+							alert("예약 날짜와 시간을 선택하세요.");
+							return;
+						}
+						
+						let returnYN = 'N';
+						$.ajax({
+							url: '/dayclass/getPersonCnt',
+							type: 'post',
+							data: {
+								classNo: getDayclass.dayclassNo,
+								partiDate: $("#rsrvtDate").val(),
+								partiTime: $("select[name='partiTime']").val()
+							}, success: function(obj) {
+								console.log(obj);
 								
-								$("#rsvtForm").submit();
-							
-							} 
-							else {
-								alert("취소되었습니다.");
-								return;
+								if(obj.item > 4) {
+									alert("예약인원이 찼습니다.");
+									returnYN = 'Y';
+									$("#dayclassRsrvtBtn").attr("disabled", true);
+									$("#dayclassRsrvtBtn").text("정원초과");
+									
+								} else {
+									let reserTime = "";
+			                  		
+			                  		if($(".c_apply_timeOp").val() != "A" && $(".c_apply_timeOp").val() != "P") {
+										alert("예약 시간을 선택하세요.");
+										returnYN = 'Y';
+									}
+									if($(".c_apply_timeOp").val() == "A") {
+										reserTime = "오전 09:30~12:30";
+									} else if($(".c_apply_timeOp").val() == "P") {
+										reserTime = "오후 14:00~17:00";
+									}
+					
+									if(confirm("예약 날짜 : " + $("#rsrvtDate").val() 
+															+ "\n예약 시간 : " + reserTime 
+															+ "\n예약 인원 : " + $("#peopleNm_cnt").val() 
+															+"명\n\n예약하시겠습니까?" )) {						
+										
+										$("#rsvtForm").submit();
+									
+									} 
+									else {
+										alert("취소되었습니다.");
+										returnYN = 'Y';
+									}
+								}
 							}
-
+						});
+						
+						console.log(returnYN);
+						if(returnYN == 'Y') {
+							return;
+						}
 					});	
 					
 					const customUser = /*[[${#authentication.principal}]]*/;
@@ -319,7 +354,7 @@
 	        <div class="dc_banner_container">
 	          <div class="dc_banner">
 	            <div class="banner_mainImg">
-	              <img class="banner_main_img" th:src="@{/images/class_main.jpg}" width="350px">
+	              <img class="banner_main_img" th:src="@{'/class/' + ${dayclass.fileName}}" width="350px">
 	            </div>
 	            <div class="banner_explain">        
 	              <h1 th:text="${dayclass.dayclassName}"></h1>        

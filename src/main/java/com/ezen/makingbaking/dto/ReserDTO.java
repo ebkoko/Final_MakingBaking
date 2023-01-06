@@ -26,4 +26,5 @@ public class ReserDTO {
 	private String reserPayment;
 	private String depositor;
 	private int reserTotalPrice;
+	private int classPrice;
 }

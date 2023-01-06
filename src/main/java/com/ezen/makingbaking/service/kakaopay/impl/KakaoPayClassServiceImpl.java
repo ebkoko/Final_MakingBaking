@@ -1,6 +1,5 @@
 package com.ezen.makingbaking.service.kakaopay.impl;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,53 +12,36 @@ import org.springframework.web.client.RestTemplate;
 
 import com.ezen.makingbaking.dto.ApproveResponseDTO;
 import com.ezen.makingbaking.dto.ReadyResponseDTO;
-import com.ezen.makingbaking.repository.CartRepository;
-import com.ezen.makingbaking.repository.OrderRepository;
+import com.ezen.makingbaking.repository.ReserRepository;
 import com.ezen.makingbaking.service.kakaopay.KakaoPayService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Service("kakaoOrder")
-public class KakaoPayServiceImpl implements KakaoPayService {
+@Service("kakaoReser")
+public class KakaoPayClassServiceImpl implements KakaoPayService {	
 	@Autowired
-	private CartRepository cartRepository;
-	
-	@Autowired
-	private OrderRepository orderRepository;
+	private ReserRepository reserRepository;
 	
 	@Override
-	public ReadyResponseDTO payReady(int totalAmount, String itemList) throws JsonMappingException, JsonProcessingException {
-		System.out.println(itemList);
+	public ReadyResponseDTO payReady(int totalAmount, String className) throws JsonMappingException, JsonProcessingException {
+		System.out.println(className);
 		
-		List<Map<String, Object>> itemMapList = new ObjectMapper().readValue(itemList, new TypeReference<List<Map<String, Object>>>() {});
-		
-		System.out.println(itemMapList.get(0).toString());
-		
-		String[] cartNames = new String[itemMapList.size()];
-		
-		for(int i = 0; i < itemMapList.size(); i++) {
-			cartNames[i] = itemMapList.get(i).get("itemName").toString();
-		}
-		
-		String itemName = cartNames[0] + " 그외" + (itemMapList.size()-1);
-		System.out.println("상품명:"+itemName);
-		
-		long orderNo = orderRepository.getNextOrderNo();
+		long reserNo = reserRepository.getNextReserNo();
 		
         // 카카오가 요구한 결제요청 request값을 담아줍니다. 
 		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
 		parameters.add("cid", "TC0ONETIME"); // 가맹점 코드
-		parameters.add("partner_order_id", String.valueOf(orderNo)); // 주문번호
+		parameters.add("partner_order_id", String.valueOf(reserNo)); // 주문번호
 		parameters.add("partner_user_id", "MakingBaking"); // 사이트명
-		parameters.add("item_name", itemName); // 상품명
-		parameters.add("quantity", String.valueOf(itemMapList.size())); // 상품 수량
+		parameters.add("item_name", className); // 상품명
+		parameters.add("quantity", "1"); // 상품 수량
 		parameters.add("total_amount", String.valueOf(totalAmount)); // 상품 총액
 		parameters.add("tax_free_amount", "0"); // 상품 비과세 금액
-		parameters.add("approval_url", "http://localhost:9900/order/kakaoOrderComplete?orderNo=" + orderNo); // 결제승인시 넘어갈 url
-		parameters.add("cancel_url", "http://localhost:9900/order/kakaoOrderCancel"); // 결제취소시 넘어갈 url
-		parameters.add("fail_url", "http://localhost:9900/order/kakaoOrderFail"); // 결제 실패시 넘어갈 url
+		parameters.add("approval_url", "http://localhost:9900/reser/kakaoReserComplete?reserNo=" + reserNo); // 결제승인시 넘어갈 url
+		parameters.add("cancel_url", "http://localhost:9900/reser/kakaoReserCancel"); // 결제취소시 넘어갈 url
+		parameters.add("fail_url", "http://localhost:9900/reser/kakaoReserFail"); // 결제 실패시 넘어갈 url
 		
 		System.out.println("주문번호:"+ parameters.get("partner_order_id")) ;
 		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
@@ -68,8 +50,8 @@ public class KakaoPayServiceImpl implements KakaoPayService {
 		String url = "https://kapi.kakao.com/v1/payment/ready";
         // template으로 값을 보내고 받아온 ReadyResponse값 readyResponse에 저장.
 		ReadyResponseDTO readyResponse = template.postForObject(url, requestEntity, ReadyResponseDTO.class);
+		readyResponse.setReserNo(reserNo);
 		System.out.println("결제준비 응답객체: " + readyResponse);
-		readyResponse.setOrderNo(orderNo);
 		
         // 받아온 값 return
 		return readyResponse;
@@ -77,13 +59,13 @@ public class KakaoPayServiceImpl implements KakaoPayService {
 	
     // 결제 승인요청 메서드
 	@Override
-	public ApproveResponseDTO payApprove(String tid, String pgToken, long orderNo) {
+	public ApproveResponseDTO payApprove(String tid, String pgToken, long reserNo) {
 				
 		// request값 담기.
 		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
 		parameters.add("cid", "TC0ONETIME");
 		parameters.add("tid", tid);
-		parameters.add("partner_order_id", String.valueOf(orderNo));
+		parameters.add("partner_order_id", String.valueOf(reserNo));
 		parameters.add("partner_user_id", "MakingBaking");
 		parameters.add("pg_token", pgToken);
 		

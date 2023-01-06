@@ -107,7 +107,7 @@
 				    float: right;
 				    font-size: 0.9em;
 				    margin-bottom: 8px;
-				    margin-right: 5px;
+				    margin-right: 15px;
 				}
 				#totalPrice+hr {
 				    clear: both;
@@ -256,11 +256,15 @@
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
-				$(function() {
 					let isKakaoPay = false;
 					let pushbankTransfer = false;
 					let pushKakaoPay = false;
 					const userInfo = /*[[${userInfo}]]*/;
+					const dayclass = /*[[${dayclass}]]*/;
+					let msg = '';
+						
+					
+				$(function() {
 					
 					// 결제하기 버튼 클릭했을 때 유효성 검사
 					$("#btnPayment").on('click', function() {
@@ -317,7 +321,6 @@
 						let classPrice = parseInt($(".classPrice").text().replace(/,/g,''));
 						let reserPerson = parseInt($(".class_Quantity").text());
 						
-						
 						$("#reserTotalPrice").val(classPrice * reserPerson);
 						$("#orderTel").val(orderTel);
 						$("#partiTel").val(partiTel);
@@ -344,7 +347,7 @@
 					
 					// 요청사항 글자수 세기, 글자수 제한
 					$("#request").keyup(function(e) {
-						let msg = $(this).val();
+						msg = $(this).val();
 						
 						// 글자수 세기
 						if(msg.length == 0 || msg == '') {
@@ -394,8 +397,75 @@
 							$("#reserPayment").val("카카오페이");
 							$("#reserStatus").val("결제완료");
 						}
-						// 카카오페이 API 실행
 						
+						// 카카오페이 API 실행
+						// 필수 입력값 확인
+						let orderName = $("#orderer").val();
+						let reserStatus = $("#reserStatus").val();
+						let reserPayment = $("#btnkakaoPay").val();
+						let request = $("#request").text();
+						let partiName = $("#participant").val();
+						let depositor = $("#depositor").val();
+						let classNo = $("#classNo").val();
+						let partiDate = $(".detailDate").text();
+						let partiTime = $("#partiTime").val();
+						let reserPersonCnt = $("#reserPersonCnt").val();
+						let orderTelNums = [$("#orderTel1").val(), $("#orderTel2").val(), $("#orderTel3").val()];
+						let orderTel = orderTelNums.join('-');
+						let partiTelNums = [$("#partiTel1").val(), $("#partiTel2").val(), $("#partiTel3").val()];
+						let partiTel = partiTelNums.join('-');
+						let classPrice = parseInt($(".classPrice").text().replace(/,/g,''));
+						let reserPerson = parseInt($(".class_Quantity").text());
+						let totalPrice = parseInt(reserPerson) * parseInt(classPrice);
+						
+						console.log(orderName);
+						console.log(reserStatus);
+						console.log(reserPayment);
+						console.log(partiName);
+						console.log(depositor);
+						console.log(classNo);
+						console.log(partiDate);
+						console.log(partiTime);
+						console.log(reserPersonCnt);
+						console.log(totalPrice);
+						console.log(orderTelNums);
+						console.log(orderTel);
+						console.log(partiTelNums);
+						console.log(partiTel);
+						console.log(classPrice);
+						console.log(reserPerson);
+						
+						console.log(msg);
+						
+						const formData = new FormData();
+						
+						formData.append("className", dayclass.dayclassName);
+						formData.append("total_amount", parseInt(totalPrice));
+						formData.append("orderName", orderName);
+						formData.append("reserPersonCnt", parseInt(reserPersonCnt));
+						formData.append("reserTotalPrice", parseInt(totalPrice));
+						formData.append("orderTel", orderTel);
+						formData.append("partiTel", partiTel);
+						formData.append("reserStatus", reserStatus);
+						formData.append("reserPayment", reserPayment);
+						formData.append("request", msg);
+						formData.append("partiName", partiName);
+						formData.append("classNo", parseInt(classNo));
+						formData.append("partiTime", partiTime);
+						formData.append("partiDate", partiDate);
+						formData.append("classPrice", parseInt(classPrice));
+						
+						// 카카오페이 결제전송
+						$.ajax({
+							url:'/reser/pay',
+							type: 'post',
+							data: formData,
+							processData: false,
+							contentType: false,
+							success: function(response) {
+								location.href = response.next_redirect_pc_url + "?tid=" + response.tid;
+							}
+						});
 						
 					});
 				});
@@ -420,15 +490,16 @@
 	            </div>
 	            <hr>
 	            <form id="reserForm" action="/reser/reserComplete" method="post">
-	            	<input type="hidden" name="classNo" th:value="${dayclass.dayclassNo}">
+	            	<input type="hidden" name="classNo" id="classNo" th:value="${dayclass.dayclassNo}">
 	            	<input type="hidden" name="orderTel" id="orderTel">
 	            	<input type="hidden" name="partiTel" id="partiTel">  
 	            	<input type="hidden" name="reserStatus" id="reserStatus">
 	            	<input type="hidden" name="reserPayment" id="reserPayment">
 	            	<input type="hidden" name="partiDate" id="partiDate">
-	            	<input type="hidden" name="partiTime" th:value="${partiTime}"> 
-	            	<input type="hidden" name="reserPersonCnt" th:value="${reserPersonCnt}">
+	            	<input type="hidden" name="partiTime" id="partiTime" th:value="${partiTime}"> 
+	            	<input type="hidden" name="reserPersonCnt" id="reserPersonCnt" th:value="${reserPersonCnt}">
 	            	<input type="hidden" name="reserTotalPrice" id="reserTotalPrice">
+	            	<input type="hidden" name="classPrice" id="classPrice" th:value="${dayclass.dayclassPrice}">
 		            <div id="reser_class">
 		                <div class="classView">
 		                    <div class="class_Detail">

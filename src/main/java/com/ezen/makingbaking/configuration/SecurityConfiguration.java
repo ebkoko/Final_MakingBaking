@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.ezen.makingbaking.configuration.handler.LoginFailureHandler;
+import com.ezen.makingbaking.configuration.handler.LoginSuccessHandler;
 import com.ezen.makingbaking.oauth.Oauth2UserService;
 
 
@@ -18,6 +19,9 @@ import com.ezen.makingbaking.oauth.Oauth2UserService;
 public class SecurityConfiguration {
 		@Autowired
 		private LoginFailureHandler loginFailureHandler;
+		
+		@Autowired
+		private LoginSuccessHandler loginSuccessHandler;
 		
 		@Autowired
 		private Oauth2UserService oauth2UserService;
@@ -29,6 +33,7 @@ public class SecurityConfiguration {
 		
 		@Bean
 		public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+			
 			http.authorizeRequests().antMatchers("/css/**").permitAll()
 									.antMatchers("/js/**").permitAll()
 									.antMatchers("/images/**").permitAll()
@@ -45,7 +50,7 @@ public class SecurityConfiguration {
 			.usernameParameter("userId")
 			.passwordParameter("userPw")
 			.loginProcessingUrl("/user/loginProc")
-			.defaultSuccessUrl("/main/main")
+			.successHandler(loginSuccessHandler)
 			.failureHandler(loginFailureHandler)
 			
 			//카카오 로그인

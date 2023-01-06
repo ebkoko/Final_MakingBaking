@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Dayclass;
+import com.ezen.makingbaking.entity.Reser;
 
 public interface DayclassService {
 	Dayclass getDayclass (int dayclassNo);
@@ -20,4 +21,6 @@ public interface DayclassService {
 	void deleteLike(int dayclassNo, String userId);
 	
 	CamelHashMap getClassImg(int dayclassNo);
+	
+	int getPersonCnt(Reser reser);
 }
