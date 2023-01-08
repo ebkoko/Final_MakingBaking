@@ -90,8 +90,11 @@
 							  $('html').animate({scrollTop : offset.top}, 300);
 						  }
 					});
-						
-					$("#rvwContent").val($(".rvwContent").text());
+					
+					$("#rvwContentText").on("keyup", function(e) {
+						console.log($("#rvwContentText").val());
+						$("#rvwContent").val($("#rvwContentText").val());
+					});
 					
 					// 취소 환불 문의 자세히 보기
 					$(".refundGuideBtn").on("click", function(){
@@ -283,8 +286,10 @@
 						}
 						});
 					}
+					
 					// 리뷰 등록	
 					$("#rvw_writeBtn").on("click", function(){
+						console.log($("#rvwContent").val());
 						$.ajax({
 							url: '/dayclass/insertClassRvw',
 							type:'post',
@@ -295,14 +300,17 @@
 								rvwType: 'class'
 							}, success: function(obj) {
 								console.log(obj);
-								console.log($("#rvwContent").val());
 								alert("리뷰가 등록되었습니다.");
 							}, error: function(e) {
 								console.log(e);
 								alert("리뷰 등록에 실패하였습니다.");
 							}
-						})
+						});
+						
+						
+						
 					}); 
+					
 					
 					
 					$("#rvw_array").on("change", function() {
@@ -486,10 +494,8 @@
 							<input type="radio" name="rvwScore" value="1" class="rvwScore" id="rate5"><label
 								for="rate5">★</label>							
 							</fieldset>
-							<p>
-	              				<textarea class="rvwContent" placeholder=" 로그인 후 상품 및 클래스 후기를 작성해주세요."></textarea>
-	              			</p>
-	              			<div class=""> 
+              				<textarea class="rvwContentText" id="rvwContentText" name="rvwContentText" placeholder=" 클래스 후기 100자 이내 작성해주세요."></textarea>
+	              			<div> 
 	              			<button class="rvw_writeBtn" id="rvw_writeBtn" type="button">등록</button>
 	              			</div>
 	              		</form>
