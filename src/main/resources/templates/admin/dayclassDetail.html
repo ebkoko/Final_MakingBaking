@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+	  
+	<!-- head 영역 시작 -->
+	<!-- 개별적으로 사용할 css, js 링크를 걸기 위해서 남겨둠 -->
+	<head>
+		<th:block layout:fragment="css">
+			<style>
+				/* '원데이클래스 상세' 타이틀 */
+				.itemAdmin {
+					font-size: 40px;
+				}
+				
+				/* 클래스상세Table div*/
+				#div_dayclassDtl {
+					margin-top: 80px;
+				}
+			    #T_dayclassDtl {
+					width: 1000px;
+					border-collapse: collapse;
+					margin: 0 auto;
+			    }
+			    #T_dayclassDtl td {
+					border: 1.2px solid #28693F;
+					border-right: hidden;
+				}
+			    #T_dayclassDtl th {
+					width: 30%;
+					border: 1.2px solid #28693F;
+					background-color:rgb(239, 239, 239);
+					color: #28693F;
+					border-left: hidden;
+				}
+				
+				
+				/* 운영시간 */
+				#dayclassTime {
+					height: 50px;
+					font-size: 15px;
+				}
+				
+				/* 진행상태 */
+				#dayclassUseYn {
+					height: 50px;
+					font-size: 15px;
+				}
+				
+				/* 파일 첨부 */
+				#attZone {
+					width: 660px;
+					min-height: 150px;
+					padding: 10px;
+					margin: 10px;
+					border: 1px dotted lightgreen;
+				}
+				#attZone:empty:before {
+					content: attr(data-placeholder);
+					color: #999;
+					font-size: 0.9em;
+				}
+				
+				
+				/* 클래스 이름 */
+				#dayclassName {
+					width: 650px;
+					height:50px;
+					font-size: 18px;
+					font-weight: bold;
+				}
+				/* 소제목 */
+				#dayclassMinName {
+					width: 650px;
+					height: 50px;
+					font-size: 15px;
+				}
+				/* 클래스 소요시간 */
+				#dayclassDurationTime {
+					width: 60px;
+					height: 50px;
+					text-align: right;
+					font-size: 15px;
+				}
+				/* 클래스 가격 */
+				#dayclassPrice {
+					width: 60px;
+					height: 50px;
+					text-align: right;
+					font-size: 15px;
+				}
+				/* 클래스 설명 */
+				#dayclassDetails {
+					width: 650px;
+					font-size: 15px;
+					padding-top: 10px;
+					padding-bottom: 10px;
+				}
+				
+				/* 상품유통기한 */
+				#itemExpDate {
+					width: 650px;
+					height: 50px;
+					font-size: 15px;
+				}
+				/* 상품원산지 */
+				#itemOrigin {
+					width: 650px;
+					height: 50px;
+					font-size: 15px;
+				}
+				
+				
+				
+				
+				/* 상품등록 버튼 div */
+			    #div_dayclassBtn {
+					text-align:right;
+					margin: 50px auto;
+					margin-right: 70px;
+				}
+				/* 목록으로 버튼 */
+			    #dayclassListBtn {
+					width: 150px;
+					height: 50px;
+					border: 1.2px solid #28693F;
+					border-radius: 4px;
+					background-color: white;
+					text-align: center;
+					display: inline-block;
+					color: #28693F;
+					font-size: 18px;
+					font-weight: 550;
+					letter-spacing:1px;
+					margin-right: 30px;
+			    }
+			    #dayclassListBtn:hover {
+					background-color: #28693F;
+					color: white;
+					font-weight: 550;
+					cursor: pointer;
+				}
+				
+				/* 삭제버튼 */
+				#dayclassDelBtn {
+					width: 150px;
+					height: 50px;
+					border: 1.2px solid #28693F;
+					border-radius: 4px;
+					background-color: white;
+					text-align: center;
+					display: inline-block;
+					color: #28693F;
+					font-size: 18px;
+					font-weight: 550;
+					letter-spacing:1px;
+					margin-right: 30px;
+			    }
+			    #dayclassDelBtn:hover {
+					background-color: #28693F;
+					color: white;
+					font-weight: 550;
+					cursor: pointer;
+				}
+			</style>
+		</th:block>
+		<th:block layout:fragment="script">
+			<script th:inline="javascript">
+				$(function() {
+					//클래스 삭제
+					$("#dayclassDelBtn").on('click', function(e) {
+						e.preventDefault(); //a태그가 이벤트가 동작하지 않도록.
+
+						$.ajax({
+							url: '/admin/delDayclass/',
+							type: 'delete',
+							data: {dayclassNo: $("#dayclassNo").val()},
+							success: function () {
+								alert("삭제되었습니다.");
+								window.location.href = "/admin/dayclassList";
+							}, error: function (e) {
+								console.log(e);
+							}
+						});
+					});
+				});
+				
+			</script>
+		</th:block>
+	</head>
+	<!-- head 영역 끝 -->
+	
+<body>
+	<div id="container" layout:fragment="content">
+		<div>
+			<h1 class="dayclassAdmin">원데이클래스 상세</h1>
+		</div>
+		
+	    <!-- 클래스등록내용 -->
+	    <form id="dayclassDtlForm" enctype="multipart/form-data">
+		    <input type="hidden" name="dayclassNo" id="dayclassNo" th:value="${getDayclass.dayclassNo}">
+			<input type="hidden" name="originFiles" id="originFiles">
+			<div id="div_dayclassDtl">
+				<table border="1" id="T_dayclassDtl">
+					<tr>
+			          <th id="dayclassTime_Th">운영시간</th>
+			          <td>&ensp;&ensp;<input type="text" name="dayclassTime" id="dayclassTime" th:value="${getDayclass.dayclassTime}" readonly></td>
+			        </tr>
+			        <tr>
+			          <th id="dayclassUseYn_Th">진행상태</th>
+			          <td>&ensp;&ensp;<input type="text" name="dayclassUseYn" id="dayclassUseYn" th:value="${getDayclass.dayclassUseYn}" readonly></td>
+			        </tr>
+			        <tr>
+			          <th>클래스 대표이미지</th>
+			          <td>
+			          	<div id="attZone">
+			          		<div th:each="imgFile : ${dayclassFileList}" style="display: inline-block; position: relative; 
+										width: 150px; height: 120px; margin: 5px; border: 1px solid #28693F; z-index: 1;">
+								<img th:id="'img' + ${imgFile.fileNo}" 
+										th:src="@{'/dayclass/' + ${imgFile.fileName}}"
+										style="width: 100%; height: 100%; z-index: none; cursor: pointer;"
+										class="fileImg">
+								<p th:id="'fileName' + ${imgFile.fileNo}" style="display: inline-block; font-size: 8px;
+										cursor: pointer;" th:onclick="fnFileDown([[${getDayclass.dayclassNo}]], [[${imgFile.fileNo}]])"
+									th:text="${imgFile.fileOriginName}">
+								</p>
+							</div>
+			             </div>
+			          </td>
+			        </tr>
+			        <tr>
+			          <th>이름</th>
+			          <td>&ensp;&ensp;<input type="text" name="dayclassName" id="dayclassName" th:value="${getDayclass.dayclassName}" readonly></td>
+			        </tr>
+			        <tr>
+			          <th>소제목</th>
+			          <td>&ensp;&ensp;<input type="text" name="dayclassMinName" id="dayclassMinName" th:value="${getDayclass.dayclassMinName}" readonly></td>
+			        </tr>
+			        <tr>
+			          <th>소요시간</th>
+			          <td>
+			          	<input type="text" name="dayclassDurationTime" id="dayclassDurationTime" maxlength="8" th:value="${getDayclass.dayclassDurationTime}" readonly> 시간
+			          </td>
+			        </tr>
+			        <tr>
+			          <th>가격</th>
+			          <td>&ensp;&ensp;
+			          	<input type="text" name="dayclassPrice" id="dayclassPrice" maxlength="8" th:value="${getDayclass.dayclassPrice>= 1000 ? #numbers.formatInteger(getDayclass.dayclassPrice , 3, 'COMMA') : getDayclass.dayclassPrice}" readonly> 원
+			          </td>
+			        </tr>
+			        <tr>
+			          <th>설명</th>
+			          <td>&ensp;&ensp;<textarea name="dayclassDetails" id="dayclassDetails" cols="100"  rows="10" th:text="${getDayclass.dayclassDetails}" readonly></textarea></td>
+			        </tr>
+				</table>
+			</div>
+			
+			<!-- 클래스상세 항목 외 버튼 -->
+			<div id="div_dayclassBtn">
+				<!-- 목록으로 버튼 -->
+				<a href="/admin/dayclassList"><input type="button" value="목록으로" id="dayclassListBtn"></a>
+				<!-- 삭제 버튼 -->
+				<a href="#"><input type="button" value="삭제" id="dayclassDelBtn"></a>
+			</div>
+		</form>
+  </div>
+</body>
+</html>

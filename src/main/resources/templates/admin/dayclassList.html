@@ -9,34 +9,196 @@
 	<head>
 		<th:block layout:fragment="css">
 			<style>
+				.dayclassAdmin {
+					font-size: 40px;
+				}
+				/* 검색 div */
+				#dayclass_search {
+					margin: 80px auto;
+				}
+				/* 검색창 */
+				#inputSearch {
+					width: 250px;
+					height: 30px;
+					border: 1.2px solid #28693F;
+					display: inline-block;
+				}
+				/* 검색 버튼 */
+				#btnSearch {
+					width: 80px;
+					height: 35px;
+					border: 1.2px solid #28693F;
+					background-color: white;
+					text-align: center;
+					color: #28693F;
+					font-size: 16px;
+					font-weight: 550;
+					letter-spacing:1px;
+					display: inline-block;
+					cursor: pointer;
+				}
+				
+				/* 전체선택 Select */
+				#div_dayclass_totalSelect {
+					margin: 15px auto;
+					text-align: right;
+				}
+				
+				/* 테이블 */
+				#dayclassList_T {
+					width: 1200px;
+					border: 1.2px solid #28693F;
+					border-collapse: collapse;
+					border-left: hidden;
+					border-right: hidden;
+					border-top:hidden;
+				}
+				#dayclassList_T th {
+					background: #28693F;
+					color: white;
+					height: 35px;
+				}
+				
+				.dayclassList_T_10 {
+					 width: 10%
+				}
+				.dayclassList_T_15 {
+					 width: 15%
+				}
+				.dayclassList_T_20 {
+					 width: 20%
+				}
+				
+				#dayclassList_T td {
+					border-bottom: 1.2px solid #28693F;
+					text-align: center;
+					height: 80px;
+				}
+				
+				/* 상품이름 a태그 */
+				#a_dayclassName {
+					text-decoration: none;
+					color: inherit;
+				}
+ 
+				/* 수정버튼 */
 			    #dayclassMod {
-			      width:80px;
-			      height: 25px;
-			      margin-left: 22px;
-			    }
-			    #dayclassDelete {
-			      width: 100px;
-			      height: 40px;
-			    }
-			    #dayclassRegistration {
-			      width: 100px;
-			      height: 40px;
+					width: 80px;
+					display: inline-block;
+					height: 25px;
+					border: 1.2px solid #28693F;
+					color: #28693F;
+					cursor: pointer; 
 			    }
 			    
-			    /* 페이징처리 */
+			    /* 상품삭제&등록 버튼 div */
+			    #dayclassTotalBtn {
+					 text-align:right;
+					 margin: 50px auto;
+				}
+				/* 상품등록버튼 */
+			    #dayclassRegistration {
+			     	width: 150px;
+			      	height: 50px;
+			     	border: 1.2px solid #28693F;
+					border-radius: 4px;
+					background-color: white;
+					text-align: center;
+					display: inline-block;
+					color: #28693F;
+					font-size: 18px;
+					font-weight: 550;
+					letter-spacing:1px;
+					margin-right: 30px;
+			    }
+			    #dayclassRegistration:hover {
+					background-color: #28693F;
+					color: white;
+					font-weight: 550;
+					cursor: pointer;
+				}
+			    /* 상품삭제버튼 */
+			    #dayclassDelete {
+					width: 150px;
+			      	height: 50px;
+			     	border: 1.2px solid #28693F;
+					border-radius: 4px;
+					background-color: white;
+					text-align: center;
+					display: inline-block;
+					color: #28693F;
+					font-size: 18px;
+					font-weight: 550;
+					letter-spacing:1px;
+			    }
+			    #dayclassDelete:hover {
+					background-color: #28693F;
+					color: white;
+					font-weight: 550;
+					cursor: pointer;
+				}
+				
+				/* 페이징처리 */
 			    .pagination {
-			      list-style: none;
-			      width: 100%;
-			      display: inline-block;
+			      	list-style: none;
+			      	width: 100%;
+			      	display: inline-block;
 			    }
 			    .pagination_button {
-			      float: left;
-			      margin-left: 5px;
+					float: left;
+					margin-left: 5px;
 			    }
 			</style>
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
+				let changeRows = [];
+				
+				$(function() {
+					//검색창(상품카테, 판매상태)
+					$("#searchCondition").on("change", function() {
+						if($(this).val() == 'DAYCLASSTIME') {
+							$("#inputSearch").hide();
+							$("#selectSearch2").hide();
+							$("#selectSearch1").show();
+							$("#inputSearch").attr("disabled", true);
+							$("#selectSearch2").attr("disabled", true);
+							$("#selectSearch1").attr("disabled", false);
+						} else if($(this).val() == 'DAYCLASSUSEYN') {
+							$("#inputSearch").hide();
+							$("#selectSearch1").hide();
+							$("#selectSearch2").show();
+							$("#inputSearch").attr("disabled", true);
+							$("#selectSearch2").attr("disabled", false);
+							$("#selectSearch1").attr("disabled", true);
+						} else if($(this).val() != 'DAYCLASSTIME' && $(this).val() != 'DAYCLASSUSEYN') {
+							$("#inputSearch").show();
+							$("#selectSearch1").hide();
+							$("#selectSearch2").hide();
+							$("#inputSearch").attr("disabled", false);
+							$("#selectSearch2").attr("disabled", true);
+							$("#selectSearch1").attr("disabled", true);
+						}
+					});
+					
+					//검색창 검색버튼 클릭 시
+					$("#btnSearch").on('click',function() {
+						$("input[name='page']").val(0);
+						$("#searchForm").submit();
+					});
+					
+					// 전체선택 버튼 클릭했을 때
+					$("#dayclassSelectAll").click(function() {
+						var chk = $("#dayclassSelectAll").prop("checked");
+						if(chk) {
+							$("input[name='chk']").prop("checked", true);
+						} else {
+							$("input[name='chk']").prop("checked", false);
+						}
+					});
+				});
+				
+				
 				
 			</script>
 		</th:block>
@@ -44,91 +206,84 @@
 	<!-- head 영역 끝 -->
 	
 <body>
-  <div id="container" layout:fragment="content">
-    <h1>원데이클래스 관리</h1>
-    <form>
-      <table>
-        <tr>
-          <td align="center">
-            <select name="searchCondition">
-              <option value="ALL" th:selected="${searchCondition == 'ALL'}">전체</option>
-              <option value="DAYCLASSNAME" th:selected="${searchCondition == 'DAYCLASSNAME'}">이름</option>
-              <option value="DAYCLASSPRICE" th:selected="${searchCondition == 'DAYCLASSPRICE'}">가격</option>
-              <option value="DAYCLASSREGDATE" th:selected="${searchCondition == 'DAYCLASSREGDATE'}">등록일</option>
-              <option value="DAYCLASSSTATUS" th:selected="${searchCondition == 'DAYCLASSSTATUS'}">진행여부</option>
-            </select>
-            <input type="text" name="searchKeyword" value="">
-            <button type="button" id="btnSearch">검색</button>
-          </td>
-        </tr>
-      </table>
-    </form>
-    <br>
-
-    <table border="1" style="width: 1200px; border-collapse: collapse; border-left: hidden; border-right: hidden; border-top:hidden">
-      <tr>
-        <td colspan="7" align="right"><input type="checkbox"> 전체 선택</td>
-      </tr>
-      <tr>
-        <th style="background: lightsteelblue; width: 5%;"></th>
-        <th style="background: lightsteelblue; width: 5%;">No.</th>
-        <th style="background: lightsteelblue; width: 30%;">클래스 이름</th>
-        <th style="background: lightsteelblue; width: 20%;">클래스 가격</th>
-        <th style="background: lightsteelblue; width: 15%;">클래스 등록일</th>
-        <th style="background: lightsteelblue; width: 15%;">클래스 진행여부</th>
-        <th style="background: lightsteelblue; width: 10%;">클래스 관리</th>
-      </tr>
-      <tr th:each="dayclass: ${getDayclassList}">
-        <td><input type="checkbox"></td>
-        <td th:text="${dayclass.dayclassNo"></td>
-        <td th:text="${dayclass.dayclassName}"></td>
-        <td th:text="${dayclass.dayclassPrice}"></td>
-        <td th:text="${dayclass.dayclassRegdate eq null ? '' : #string.substring(dayclass.dayclassRegdate, 0, 10)}}"></td>
-        <td th:text="${dayclass.dayclassUseYn}"></td>
-        <td><a href="#"><input type="button" value="수정" id="dayclassMod"></a></td>
-      </tr>
-    </table>
-
-    <br>
-    <!-- 삭제/등록버튼 -->
-    <div style="text-align:right;">
-      <a href="#"><input type="button" value="상품삭제" id="dayclassDelete"></a>
-      <a href="#"><input type="button" value="상품등록" id="dayclassRegistration"></a>
-    </div>
-    <br>
-    <!-- 페이징 -->
-    <!-- <div style="text-align:center;">
-      <ul class="pagination" th:if="${getDayclassList.totalElements > 0}"
-                  th:with="pageNumber = ${getDayclassList.pageable.pageNumber},
-                              pageSize = ${getDayclassList.pageable.pageSize},
-                              totalPages = ${getDayclassList.totalPages},
-                              startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
-                              tempEndPage = ${startPage + pageSize -1 },
-                              endPage =  ${tempEndPage > totalPages ? totalPages : tempEndPage}">
-          <li class="pagination_button" th:if="${pageNumber > 0}">
-            <a th:href="@{/dayclass/dayclassList(
-                    page=${pageNumber - 1},
-                    searchCondition=${searchCondition},
-                    searchKeyword=${searchKeyword})}">이전</a>
-          </li>
+	<div id="container" layout:fragment="content">
+		<div>
+			<h1 class="dayclassAdmin">원데이클래스 관리</h1>
+		</div>
+		<form id="searchForm" action="/admin/dayclassList" method="get">
+			<div id="dayclass_search">
+				<select name="searchCondition" id="searchCondition">
+					<option value="ALL" th:selected="${searchCondition == 'ALL' || searchCondition == '' || searchCondition == null}">전체</option>
+					<option value="DAYCLASSNAME" th:selected="${searchCondition} == 'DAYCLASSNAME'">이름</option>
+					<option value="DAYCLASSTIME" th:selected="${searchCondition} == 'DAYCLASSTIME'">운영시간</option>
+					<option value="DAYCLASSUSEYN" th:selected="${searchCondition} == 'DAYCLASSUSEYN'">진행상태</option>
+	            </select>
+	            <input type="text" name="searchKeyword" th:value="${searchKeyword}" id="inputSearch" 
+	            	th:style="${ searchCondition != 'DAYCLASSTIME' && searchCondition != 'DAYCLASSUSEYN'  ? 'display: inline-block;' : 'display: none;'}"
+	            	th:disabled="${ searchCondition != 'DAYCLASSTIME' && searchCondition != 'DAYCLASSUSEYN'} ? false : true">
+	            <select name="searchKeyword" id="selectSearch1" th:style="${searchCondition == 'DAYCLASSTIME' ? 'display: inline-block;' : 'display: none;'}"
+	            		th:disabled="${searchCondition == 'DAYCLASSTIME'} ? false : true">
+	            	<option>선택하세요.</option>
+	            	<option value="AM" th:selected="${searchKeyword} == 'AM'">AM</option>
+	              	<option value="PM" th:selected="${searchKeyword} == 'PM'">PM</option>
+	              	<option value="BOTH" th:selected="${searchKeyword} == 'BOTH'">BOTH</option>
+	            </select>
+	            <select name="searchKeyword" id="selectSearch2" th:style="${searchCondition == 'DAYCLASSUSEYN' ? 'display: inline-block;' : 'display: none;'}"
+	            		th:disabled="${searchCondition == 'DAYCLASSUSEYN'} ? false : true">
+	            <option>선택하세요.</option>
+	            	<option value="Y" th:selected="${searchKeyword} == 'Y'">진행중(Y)</option>
+	              	<option value="S" th:selected="${searchKeyword} == 'S'">진행예정(S)</option>
+	              	<option value="N" th:selected="${searchKeyword} == 'N'">진행완료(N)</option>
+	            </select>
+	            
+	            <button type="button" id="btnSearch">검색</input>
+	        </div>
+        </form>
         
+		<!-- 전체선택 Select -->
+		<div id="div_dayclass_totalSelect">
+			<label for="selectAll"><input type="checkbox" name="select" id="dayclassSelectAll"> <span>전체선택</span></label>
+		</div>
         
-          <li class="pagination_button" th:each="page : ${#numbers.sequence(startPage, endPage)}"> -->
-          <!-- startPage와 endPage에 있는 숫자들을 page에 담아옴. -->
-            <!--<a th:href="@{/dayclass/dayclassList(page=${page - 1},
-                    searchCondition=${searchCondition},
-                    searchKeyword=${searchKeyword})}"
-                    th:text="${page}"></a>
-          </li>
-        
-          <li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
-            <a th:href="@{/dayClass/dayClassList(page=${pageNumber + 1},
-                    searchCondition=${searchCondition},
-                    searchKeyword=${searchKeyword})}">다음</a>
-          </li>
-      </ul>-->
-    </div>
+        <!-- 상품 리스트 Table -->
+        <div id="div_dayclassList_T">
+	        <table border="1" id="dayclassList_T">
+	        	<tr>
+	        		<th class="dayclassList_T_10"></th>
+			        <th class="dayclassList_T_10">No.</th>
+			        <th class="dayclassList_T_20">클래스 이름</th>
+			        <th class="dayclassList_T_20">클래스 가격</th>
+			        <th class="dayclassList_T_15">운영시간</th>
+			        <th class="dayclassList_T_15">진행 상태</th>
+			        <th class="dayclassList_T_10">클래스 관리</th>
+	      		</tr>
+	      		<tr th:each="dayclass: ${getDayclassList.content}">
+	      			<td><input type="checkbox" name="chk"></td>
+		        	<td th:text="${dayclass.dayclassNo}"></td>
+		        	
+		        	<td>
+						<a id="a_dayclassName" th:text="${dayclass.dayclassName}"
+							th:href="@{/admin/dayclass/{dayclassNo} (dayclassNo=${dayclass.dayclassNo})}">
+						</a>
+					</td>
+		        	<td th:text="${dayclass.dayclassPrice >= 1000 ? #numbers.formatInteger(dayclass.dayclassPrice , 3, 'COMMA') : dayclass.dayclassPrice}"></td>
+		        	<td th:text="${dayclass.dayclassTime}"></td>
+		        	<td th:text="${dayclass.dayclassUseYn}"></td>
+		        	<td>
+		        		<a id="dayclassMod" th:text="수정"
+		        			th:href="@{/admin/dayclassUpdate/{dayclassNo} (dayclassNo=${dayclass.dayclassNo})}">
+						</a>
+		        	</td>
+		     	 </tr>
+		    </table>
+		</div>
+		
+		<!-- 삭제/등록버튼 -->
+	    <div id="dayclassTotalBtn">
+	    	<a href="/admin/insertDayclassView"><input type="button" value="클래스 등록" id="dayclassRegistration"></a>
+	    	<a href="#"><input type="button" value="클래스 삭제" id="dayclassDelete"></a>
+	    </div>
+	</div>
 
-  </div>
 </body>
 </html>

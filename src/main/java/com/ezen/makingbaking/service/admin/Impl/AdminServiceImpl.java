@@ -9,8 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
+import com.ezen.makingbaking.repository.DayclassRepository;
 import com.ezen.makingbaking.repository.ImgFileRepository;
 import com.ezen.makingbaking.repository.ItemRepository;
 import com.ezen.makingbaking.service.admin.AdminService;
@@ -20,6 +22,9 @@ import com.ezen.makingbaking.service.admin.AdminService;
 public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private ItemRepository itemRepository;
+	
+	@Autowired
+	private DayclassRepository dayclassRepository;
 	
 	@Autowired
 	private ImgFileRepository imgFileRepository;
@@ -64,7 +69,7 @@ public class AdminServiceImpl implements AdminService {
 		for(ImgFile imgFile : uploadFileList) {
 			imgFile.setFileReferNo(item.getItemNo());
 			
-			int imgFileNo = imgFileRepository.getMaxFileNo(item.getItemNo());
+			int imgFileNo = imgFileRepository.getItemMaxFileNo(item.getItemNo());
 			imgFile.setFileNo(imgFileNo);
 			imgFile.setFileType("item");
 			imgFileRepository.save(imgFile);
@@ -98,7 +103,7 @@ public class AdminServiceImpl implements AdminService {
 	    		  } else if (uFileList.get(i).getFileStatus().equals("I")) {
 	    			  //추가한 파일들은 boardNo은 가지고 있지만 boardFileNo가 없는 상태라
 	    			  //boardFileNo를 추가
-	    			  int itemFileNo = imgFileRepository.getMaxFileNo(item.getItemNo());
+	    			  int itemFileNo = imgFileRepository.getItemMaxFileNo(item.getItemNo());
 	    			  
 	    			  uFileList.get(i).setFileNo(itemFileNo);
 	    			  
@@ -134,10 +139,96 @@ public class AdminServiceImpl implements AdminService {
 	}
 		
 
-	
+	//dayclass
+	@Override
+	public List<Dayclass> getDayclassList(Dayclass dayclass) {
+		return dayclassRepository.findAll();
+	}
 
+	@Override
+	public Page<Dayclass> getPageDayclassList(Dayclass dayclass, Pageable pageable) {
+		if(dayclass.getSearchKeyword() != null && !dayclass.getSearchKeyword().equals("")) {
+			if(dayclass.getSearchCondition().equals("ALL")) {
+				return dayclassRepository.findByDayclassNameContainingOrDayclassTimeContainingOrDayclassUseYn
+			               (dayclass.getSearchKeyword(), 
+			            	dayclass.getSearchKeyword().charAt(0),
+			            	dayclass.getSearchKeyword().charAt(0),
+			            	pageable);
+			      } else if (dayclass.getSearchCondition().equals("DAYCLASSNAME")) {
+			         return dayclassRepository.findByDayclassNameContaining(dayclass.getSearchKeyword(), pageable);
+			      } else if (dayclass.getSearchCondition().equals("DAYCLASSTIEM")) {
+			    	  return dayclassRepository.findByDayclassTimeContaining(dayclass.getSearchKeyword().charAt(0), pageable);
+			      }  else if (dayclass.getSearchCondition().equals("DAYCLASSUSEYN")) {
+				         return dayclassRepository.findByDayclassUseYn(dayclass.getSearchKeyword().charAt(0), pageable);
+				  } else {
+			    	  return dayclassRepository.findAll(pageable);
+			      }
+		  } else {
+			  return dayclassRepository.findAll(pageable);
+		  }
+	      
+	   }
 	
+	@Override
+	public void insertDayclass(Dayclass dayclass, List<ImgFile> uploadFileList) {
+		dayclassRepository.save(dayclass);
+		dayclassRepository.flush();
+		
+		for(ImgFile imgFile : uploadFileList) {
+			imgFile.setFileReferNo(dayclass.getDayclassNo());
+			
+			int imgFileNo = imgFileRepository.getDayclassMaxFileNo(dayclass.getDayclassNo());
+			imgFile.setFileNo(imgFileNo);
+			imgFile.setFileType("dayclass");
+			imgFileRepository.save(imgFile);
+		}
+		
+	}
+	
+	@Override
+	public Dayclass getDayclass(int dayclassNo) {
+		return dayclassRepository.findById(dayclassNo).get();
+	}
 
+	@Override
+	public List<ImgFile> getDayclassFileList(int dayclassNo) {
+		return imgFileRepository.findByFileReferNoAndFileType(dayclassNo, "dayclass");
+	}
+	
+	@Override
+	public Dayclass updateDayclass(Dayclass dayclass, List<ImgFile> uFileList) {
+		dayclassRepository.save(dayclass);
+		
+		dayclassRepository.flush();
+	      
+	      if(uFileList.size() > 0) {
+	    	  for(int i = 0; i < uFileList.size() ; i++) {
+	    		  if(uFileList.get(i).getFileStatus().equals("U")) {
+	    			  imgFileRepository.save(uFileList.get(i));
+	    		  } else if(uFileList.get(i).getFileStatus().equals("D")) {
+	    			  imgFileRepository.delete(uFileList.get(i));
+	    		  } else if (uFileList.get(i).getFileStatus().equals("I")) {
+	    			  //추가한 파일들은 boardNo은 가지고 있지만 boardFileNo가 없는 상태라
+	    			  //boardFileNo를 추가
+	    			  int dayclassFileNo = imgFileRepository.getDayclassMaxFileNo(dayclass.getDayclassNo());
+	    			  
+	    			  uFileList.get(i).setFileNo(dayclassFileNo);
+	    			  
+	    			  imgFileRepository.save(uFileList.get(i));
+	    		  }
+	    	  }
+	      }
+	      
+	      
+	      System.out.println(dayclass.toString());
+	      return dayclass;
+	   }
+
+	@Override
+	public void deleteDayclass(int dayclassNo) {
+		dayclassRepository.deleteById(dayclassNo);
+		
+	}
 	
 
 	

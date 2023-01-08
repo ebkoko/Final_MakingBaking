@@ -29,9 +29,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.makingbaking.common.FileUtils;
+import com.ezen.makingbaking.dto.DayclassDTO;
 import com.ezen.makingbaking.dto.ImgFileDTO;
 import com.ezen.makingbaking.dto.ItemDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
+import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.service.admin.AdminService;
@@ -47,6 +49,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AdminController {
 	@Autowired
 	private AdminService adminService;
+	
+	
+	//관리자 메인페이지
+	@GetMapping("/main")
+	public ModelAndView adminMain() {
+		
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("admin/main.html");
+			
+		return mv;
+	}
 	
 	
 	//item
@@ -502,80 +516,355 @@ public class AdminController {
 	
 	
 	//dayclass
-	//상품등록
-//	@GetMapping("/insertDatclassView")
-//	public ModelAndView insertDayclassView() {
-//		
-//		ModelAndView mv = new ModelAndView();
-//		
-//		mv.setViewName("admin/dayclassReg.html");
-//			
-//		return mv;
-//	}
-//	
-//	@PostMapping("/insertDayclass")
-//	public void insertDayclass(ItemDTO itemDTO, MultipartFile[] uploadFiles, 
-//			HttpServletResponse response, HttpServletRequest request) throws IOException {
-//		System.out.println(itemDTO.getItemStatus());
-//		
-//		Item item = Item.builder()
-//						.itemStatus(itemDTO.getItemStatus())
-//						.itemStock(itemDTO.getItemStock())
-//						.itemCate(itemDTO.getItemCate())
-//						.itemName(itemDTO.getItemName())
-//						.itemMinName(itemDTO.getItemMinName())
-//						.itemDetails(itemDTO.getItemDetails())
-//						.itemPrice(itemDTO.getItemPrice())
-//						.itemExpDate(itemDTO.getItemExpDate())
-//						.itemOrigin(itemDTO.getItemOrigin())
-//						.itemAllergyInfo(itemDTO.getItemAllergyInfo())
-//						.build();
-//	
-//		//DB에 입력될 파일 정보 리스트
-//		List<ImgFile> uploadFileList = new ArrayList<ImgFile>();
-//		
-//		if(uploadFiles.length > 0) {
-//			String attachPath = request.getSession().getServletContext().getRealPath("/")
-//					+ "/item/";
-//			
-//			File directory = new File(attachPath);
-//			
-//			if(!directory.exists()) {
-//				directory.mkdir();
-//			}
-//			
-//			//multipartFile 형식의 데이터를 DB 테이블에 맞는 구조로 변경
-//			for(int i = 0; i < uploadFiles.length; i++) {
-//				MultipartFile file = uploadFiles[i];
-//				
-//				if(!file.getOriginalFilename().equals("") &&
-//					file.getOriginalFilename() != null) {
-//					ImgFile itemFile = new ImgFile();
-//					
-//					itemFile = FileUtils.parseFileInfo(file, attachPath);
-//					
-//					uploadFileList.add(itemFile);
-//				}
-//			}
-//		}
-//		
-//		adminService.insertItem(item, uploadFileList);
-//		
-//		response.sendRedirect("/admin/itemList");
-//	}
+	//데이클래스 리스트
+	@GetMapping("/dayclassList")
+	public ModelAndView getDayclassList(DayclassDTO dayclassDTO,
+			@PageableDefault(page = 0, size = 50) Pageable pageable) {
+		Dayclass dayclass = Dayclass.builder()
+									.dayclassName(dayclassDTO.getDayclassName())
+									.dayclassPrice(dayclassDTO.getDayclassPrice())
+									.dayclassTime(dayclassDTO.getDayclassTime())
+									.dayclassUseYn(dayclassDTO.getDayclassUseYn())
+									.searchCondition(dayclassDTO.getSearchCondition())
+									.searchKeyword(dayclassDTO.getSearchKeyword())
+									.build();
+		List<Dayclass> dayclassList = adminService.getDayclassList(dayclass);
 		
+		Page<Dayclass> pageDayclassList = adminService.getPageDayclassList(dayclass, pageable);
+		
+		Page<DayclassDTO> pageDayclassDTOList = pageDayclassList.map(pageDayclass -> 
+	                                             						DayclassDTO.builder()
+				                                             						.dayclassNo(pageDayclass.getDayclassNo())
+				                                             						.dayclassName(pageDayclass.getDayclassName())
+				                                             						.dayclassPrice(pageDayclass.getDayclassPrice())
+				                                             						.dayclassTime(pageDayclass.getDayclassTime())
+				                                             						.dayclassUseYn(pageDayclass.getDayclassUseYn())
+				                                             						.build()
+	                                             					);
+							
+		List<DayclassDTO> getDayclassList = new ArrayList<DayclassDTO>();
+		for(int i = 0; i < dayclassList.size(); i++) {
+			DayclassDTO returnDayclass = DayclassDTO.builder()
+													.dayclassNo(dayclassList.get(i).getDayclassNo())
+													.dayclassName(dayclassList.get(i).getDayclassName())
+													.dayclassPrice(dayclassList.get(i).getDayclassPrice())
+													.dayclassTime(dayclassList.get(i).getDayclassTime())
+													.dayclassUseYn(dayclassList.get(i).getDayclassUseYn())
+													.build();
+
+			getDayclassList.add(returnDayclass);
+		}
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("admin/dayclassList.html");
+		mv.addObject("getDayclassList", pageDayclassDTOList);
+		
+		if(dayclassDTO.getSearchCondition() != null && !dayclassDTO.getSearchCondition().equals("")) {
+			mv.addObject("searchCondition", dayclassDTO.getSearchCondition());
+		}
+		
+		if(dayclassDTO.getSearchKeyword() != null && !dayclassDTO.getSearchKeyword().equals("")) {
+			mv.addObject("searchKeyword", dayclassDTO.getSearchKeyword());
+		}
+		
+		return mv;
+	}
 	
+	//데이클래스 등록
+	@GetMapping("/insertDayclassView")
+	public ModelAndView insertDayclassView() {
+		
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("admin/dayclassReg.html");
+			
+		return mv;
+	}
 	
+	@PostMapping("/insertDayclass")
+	public void insertDayclass(DayclassDTO dayclassDTO, MultipartFile[] uploadFiles, 
+			HttpServletResponse response, HttpServletRequest request) throws IOException {
+		
+		Dayclass dayclass = Dayclass.builder()
+									.dayclassTime(dayclassDTO.getDayclassTime())
+									.dayclassUseYn(dayclassDTO.getDayclassUseYn())
+									.dayclassName(dayclassDTO.getDayclassName())
+									.dayclassMinName(dayclassDTO.getDayclassMinName())
+									.dayclassDurationTime(dayclassDTO.getDayclassDurationTime())
+									.dayclassPrice(dayclassDTO.getDayclassPrice())
+									.dayclassDetails(dayclassDTO.getDayclassDetails())
+									.build();
 	
+		//DB에 입력될 파일 정보 리스트
+		List<ImgFile> uploadFileList = new ArrayList<ImgFile>();
+		
+		if(uploadFiles.length > 0) {
+			String attachPath = request.getSession().getServletContext().getRealPath("/")
+					+ "/dayclass/";
+			
+			File directory = new File(attachPath);
+			
+			if(!directory.exists()) {
+				directory.mkdir();
+			}
+			
+			//multipartFile 형식의 데이터를 DB 테이블에 맞는 구조로 변경
+			for(int i = 0; i < uploadFiles.length; i++) {
+				MultipartFile file = uploadFiles[i];
+				
+				if(!file.getOriginalFilename().equals("") &&
+					file.getOriginalFilename() != null) {
+					ImgFile dayclassFile = new ImgFile();
+					
+					dayclassFile = FileUtils.parseFileInfo(file, attachPath);
+					
+					uploadFileList.add(dayclassFile);
+				}
+			}
+		}
+		
+		adminService.insertDayclass(dayclass, uploadFileList);
+		
+		response.sendRedirect("/admin/dayclassList");
+	}
+
+	//데이클래스 상세보기
+	@GetMapping("/dayclass/{dayclassNo}")
+	public ModelAndView getDayclass(@PathVariable int dayclassNo) {
+		Dayclass dayclass = adminService.getDayclass(dayclassNo);
+		
+		DayclassDTO dayclassDTO = DayclassDTO.builder()
+											.dayclassTime(dayclass.getDayclassTime())
+											.dayclassUseYn(dayclass.getDayclassUseYn())
+											.dayclassName(dayclass.getDayclassName())
+											.dayclassMinName(dayclass.getDayclassMinName())
+											.dayclassDurationTime(dayclass.getDayclassDurationTime())
+											.dayclassPrice(dayclass.getDayclassPrice())
+											.dayclassDetails(dayclass.getDayclassDetails())
+											.build();
+		
+		List<ImgFile> dayclassFileList = adminService.getDayclassFileList(dayclassNo);
+		
+		//imgFileDTO를 담는 List
+		List<ImgFileDTO> imgFileDTOList = new ArrayList<ImgFileDTO>();
+		
+		for(ImgFile imgFile : dayclassFileList) {
+			ImgFileDTO imgFileDTO = ImgFileDTO.builder()
+													.fileReferNo(dayclassNo)
+													.fileNo(dayclassNo)
+													.fileNo(imgFile.getFileNo())
+													.fileName(imgFile.getFileName())
+													.fileOriginName(imgFile.getFileOriginName())
+													.filePath(imgFile.getFilePath())
+													.fileType(imgFile.getFileType())
+													.build();
+			
+			imgFileDTOList.add(imgFileDTO);
+		}
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("admin/dayclassDetail.html");
+		mv.addObject("getDayclass", dayclassDTO);
+		mv.addObject("dayclassFileList", imgFileDTOList);
+		
+		return mv;
+	}
 	
+	//데이클래스 수정
+	@Transactional
+	@PutMapping("/updateDayclass")
+	public ResponseEntity<?> updateDayclass(DayclassDTO dayclassDTO,
+			HttpServletResponse response, MultipartFile[] uploadFiles,
+			MultipartFile[] changedFiles, HttpServletRequest request,
+			@RequestParam("originFiles") String originFiles) throws IOException { 
+		
+		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
+		
+		List<ImgFileDTO> originFileList = new ObjectMapper().readValue(originFiles, 
+												new TypeReference<List<ImgFileDTO>>() {});
+		
+		for(int i = 0; i < originFileList.size(); i++) {
+			System.out.println(originFileList.get(i).toString());
+		}
+		
+		String attachPath = request.getSession().getServletContext().getRealPath("/") +
+					"/dayclass/";
+		
+		File directory = new File(attachPath);
+		
+		if(!directory.exists()) {
+			directory.mkdir();
+		}
+		
+		//DB에서 수정, 삭제, 추가 될 파일 정보
+		List<ImgFile> uFileList = new ArrayList<ImgFile>();
+		
+		try {
+			Dayclass dayclass = Dayclass.builder()
+										.dayclassNo(dayclassDTO.getDayclassNo())
+										.dayclassTime(dayclassDTO.getDayclassTime())
+										.dayclassUseYn(dayclassDTO.getDayclassUseYn())
+										.dayclassName(dayclassDTO.getDayclassName())
+										.dayclassMinName(dayclassDTO.getDayclassMinName())
+										.dayclassDurationTime(dayclassDTO.getDayclassDurationTime())
+										.dayclassPrice(dayclassDTO.getDayclassPrice())
+										.dayclassDetails(dayclassDTO.getDayclassDetails())
+										.build();
+					
+			//파일 처리
+			for(int i = 0; i < originFileList.size(); i++) {
+				//수정되는 파일 처리
+				if(originFileList.get(i).getFileStatus().equals("U")) {
+					for(int j = 0; j < changedFiles.length; j++) {
+						if(originFileList.get(i).getNewFileName().equals(
+								changedFiles[j].getOriginalFilename())) {
+							ImgFile imgFile = new ImgFile();
+							
+							MultipartFile file = changedFiles[j];
+							
+							imgFile = FileUtils.parseFileInfo(file, attachPath);
+							
+							imgFile.setFileReferNo(dayclassDTO.getDayclassNo());
+							imgFile.setFileNo(originFileList.get(i).getFileNo());
+							imgFile.setFileStatus("U");
+							imgFile.setFileType("dayclass");
+							
+							uFileList.add(imgFile);
+						}
+					}
+				//삭제되는 파일 처리
+				} else if (originFileList.get(i).getFileStatus().equals("D")) {
+					ImgFile imgFile = new ImgFile();
+					
+					//boardFile.setBoard(board);
+					imgFile.setFileReferNo(dayclassDTO.getDayclassNo());
+					imgFile.setFileNo(originFileList.get(i).getFileNo());
+					imgFile.setFileStatus("D");
+					imgFile.setFileType("dayclass");
+					
+					//실제 파일 삭제
+					File dFile = new File(attachPath + originFileList.get(i).getFileName());
+					dFile.delete();
+					
+					uFileList.add(imgFile);
+				}
+			}
+			
+			//추가된 파일 처리
+			if(uploadFiles.length > 0) {
+				for(int i = 0; i < uploadFiles.length; i++) {
+					MultipartFile file = uploadFiles[i];
+					
+					if(file.getOriginalFilename() != null && 
+							!file.getOriginalFilename().equals("")) {
+						ImgFile imgFile = new ImgFile();
+						
+						imgFile = FileUtils.parseFileInfo(file, attachPath);
+						
+						imgFile.setFileReferNo(dayclassDTO.getDayclassNo());
+						imgFile.setFileStatus("I");
+						imgFile.setFileType("dayclass");
+						
+						uFileList.add(imgFile);
+					}
+				}
+			}
+
+			adminService.updateDayclass(dayclass, uFileList);
+			
+			DayclassDTO returnDayclass = DayclassDTO.builder()
+													.dayclassNo(dayclass.getDayclassNo())
+													.dayclassTime(dayclass.getDayclassTime())
+													.dayclassUseYn(dayclass.getDayclassUseYn())
+													.dayclassName(dayclass.getDayclassName())
+													.dayclassMinName(dayclass.getDayclassMinName())
+													.dayclassDurationTime(dayclass.getDayclassDurationTime())
+													.dayclassPrice(dayclass.getDayclassPrice())
+													.dayclassDetails(dayclass.getDayclassDetails())
+													.build();
+			
+			List<ImgFile> imgFileList = adminService.getDayclassFileList(dayclass.getDayclassNo());
+			
+			List<ImgFileDTO> imgFileDTOList = new ArrayList<ImgFileDTO>();
+			
+			for(ImgFile imgFile : imgFileList) {
+				ImgFileDTO imgFileDTO = ImgFileDTO.builder()
+													.fileReferNo(dayclass.getDayclassNo())
+													.fileNo(imgFile.getFileNo())
+													.fileName(imgFile.getFileName())
+													.fileOriginName(imgFile.getFileOriginName())
+													.filePath(imgFile.getFilePath())
+													.fileType(imgFile.getFileType())
+													.build();
+				
+				imgFileDTOList.add(imgFileDTO);
+			}
+			
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			
+			returnMap.put("getDayclass", returnDayclass);
+			returnMap.put("imgFileList", imgFileDTOList);
+			
+			responseDTO.setItem(returnMap);
+			
+			return ResponseEntity.ok().body(responseDTO);
+		} catch(Exception e) {
+			responseDTO.setErrorMessage(e.getMessage());
+			
+			return ResponseEntity.badRequest().body(responseDTO);
+		}
+		
+	}
 	
+	//상품수정 상세보기
+	@GetMapping("/dayclassUpdate/{dayclassNo}")
+	public ModelAndView getUpdateDayclass(@PathVariable int dayclassNo) {
+		Dayclass dayclass = adminService.getDayclass(dayclassNo);
+		
+		DayclassDTO dayclassDTO = DayclassDTO.builder()
+												.dayclassNo(dayclass.getDayclassNo())
+												.dayclassTime(dayclass.getDayclassTime())
+												.dayclassUseYn(dayclass.getDayclassUseYn())
+												.dayclassName(dayclass.getDayclassName())
+												.dayclassMinName(dayclass.getDayclassMinName())
+												.dayclassDurationTime(dayclass.getDayclassDurationTime())
+												.dayclassPrice(dayclass.getDayclassPrice())
+												.dayclassDetails(dayclass.getDayclassDetails())
+												.build();
+		
+		List<ImgFile> dayclassFileList = adminService.getDayclassFileList(dayclassNo);
+		
+		//imgFileDTO를 담는 List
+		List<ImgFileDTO> imgFileDTOList = new ArrayList<ImgFileDTO>();
+		
+		for(ImgFile imgFile : dayclassFileList) {
+			ImgFileDTO imgFileDTO = ImgFileDTO.builder()
+													.fileReferNo(dayclassNo)
+													.fileNo(dayclassNo)
+													.fileNo(imgFile.getFileNo())
+													.fileName(imgFile.getFileName())
+													.fileOriginName(imgFile.getFileOriginName())
+													.filePath(imgFile.getFilePath())
+													.fileType(imgFile.getFileType())
+													.build();
+			
+			imgFileDTOList.add(imgFileDTO);
+		}
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("admin/dayclassUpdate.html");
+		mv.addObject("getDayclass", dayclassDTO);
+		mv.addObject("dayclassFileList", imgFileDTOList);
+		
+		return mv;
+	}
 	
-	
-	
-	
-	
-	
-	
+	//클래스 삭제
+	@DeleteMapping("/delDayclass")
+	public void deleteDayclass(@RequestParam("dayclassNo") int dayclassNo) {
+		adminService.deleteDayclass(dayclassNo);
+	}
+
 	
 	
 	
@@ -588,12 +877,12 @@ public class AdminController {
 	
 	
 	//임시보기
-	@GetMapping("/main")
+	@GetMapping("/pre")
 	public ModelAndView preView() {
 		
 		ModelAndView mv = new ModelAndView();
 		
-		mv.setViewName("admin/main.html");
+		mv.setViewName("admin/dayclassList.html");
 			
 		return mv;
 	}
