@@ -100,8 +100,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void quitUser(String userPw) {
-		// TODO Auto-generated method stub
-		userRepository.quitUser(userPw);
+	public void quitUser(String userId) {
+		userRepository.quitUser(userId);
 	}
+
+//	@Override
+//	public void pwUser(String userId) {
+//		userRepository.pwUser(userId);
+//	}
 }

@@ -10,17 +10,23 @@ import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Dayclass;
 
 public interface DayclassRepository extends JpaRepository<Dayclass, Integer> {
-	@Query(value="SELECT B.* \r\n"
-			+ "	, A.FILE_NO\r\n"
-			+ "	, A.FILE_NAME\r\n"
-			+ "    , A.FILE_ORIGIN_NAME\r\n"
-			+ "    , A.FILE_PATH\r\n"
-			+ "    FROM T_MB_FILE A\r\n"
-			+ "		, T_MB_DAYCLASS B\r\n"
-			+ "	WHERE B.DAYCLASS_NO = A.FILE_REFER_NO\r\n"
-			+ "		AND B.DAYCLASS_NO = :dayclassNo\r\n"
-			+ "		AND A.FILE_NO = 1\r\n"
-			+ "     AND A.FILE_TYPE = 'class'", nativeQuery=true)
+	@Query(value="SELECT A.* \r\n"
+			+ "	, B.FILE_NO\r\n"
+			+ "	, B.FILE_NAME\r\n"
+			+ "    , B.FILE_ORIGIN_NAME\r\n"
+			+ "    , B.FILE_PATH\r\n"
+			+ "    FROM T_MB_DAYCLASS A\r\n"
+			+ "	 	LEFT OUTER JOIN T_MB_FILE B\r\n"
+			+ "		 ON A.DAYCLASS_NO = B.FILE_REFER_NO\r\n"
+			+ "			AND B.FILE_NO = ("
+			+ "								SELECT MIN(FILE_NO)"
+			+ "								FROM T_MB_FILE C"
+			+ "								WHERE A.DAYCLASS_NO = C.FILE_REFER_NO"
+			+ "								AND C.FILE_TYPE = 'class'"
+			+ "							)"
+			+ "		   AND B.FILE_TYPE = 'dayclass'"
+			+ "	   WHERE A.DAYCLASS_NO = :dayclassNo\r\n"
+			+ "		 ", nativeQuery=true)
 	CamelHashMap findByFileNoAndDayclassNo(@Param("dayclassNo") int dayclassNo);
 	
 	//관리자 클래스 검색_선민

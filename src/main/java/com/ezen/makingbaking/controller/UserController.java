@@ -54,7 +54,7 @@ public class UserController {
 		
 		if(customUser != null)
 			user = customUser.getUser();
-		
+		//선생님한테 가기
 		if(user == null || user.getJoinYn().equals("N")) {
 			SecurityContext securityContext = SecurityContextHolder.getContext();
 			Authentication authentication = null;
@@ -206,8 +206,9 @@ public class UserController {
     }
     
     //회원탈퇴
-    @RequestMapping("/quitUser") //ajax = ResponseEntity, submit = ModelAndView
-	public ModelAndView quitUser(@RequestParam("userPw") String userPw, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    @PostMapping("/quitUser") //ajax = ResponseEntity, submit = ModelAndView
+	public void quitUser(HttpServletResponse response, @RequestParam("userPw") String userPw, 
+			@AuthenticationPrincipal CustomUserDetails customUserDetails) throws IOException {
 		User user = User.builder()
 						.userId(customUserDetails.getUsername())
 						.build();
@@ -215,19 +216,48 @@ public class UserController {
     	
     	User dbUser = userService.idcheck(user);
     	
-    	if(passwordEncoder.matches(userPw, dbUser.getUserPw())) {
-    		
+    	if(!passwordEncoder.matches(userPw, dbUser.getUserPw())) {
+    		response.sendRedirect("/mypage/quit?quitMsg=N");
     	} else {
+    		userService.quitUser(user.getUserId());
     		
-    		ModelAndView mv = new ModelAndView();
-    		mv.setViewName("/mypage/quit");
-    		return mv;
+    		SecurityContextHolder.clearContext();
+    		//1. ModelAndView로 리턴할때에는 이동할 html에 표출할 데이터를 모델에 담아서 리턴한단
+    		//2. 만약에 void형태일때 redirect로 그 페이지를 불러오는 요청을 호출한다.
+    		//mv.addObject("", mainService.getMainList);
+    		
+    		response.sendRedirect("/main/main?quitMsg=Y");
     	}
     	
-    	userService.quitUser(userPw);
-		
-    	ModelAndView mv = new ModelAndView();
-		mv.setViewName("/home/main");
+	}
+    
+    //정보수정
+    @GetMapping("/changeInfoPw")
+	public ModelAndView changeInfoPwView() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("mypage/changeInfoPw.html");
 		return mv;
 	}
+    
+//    @PostMapping("/changeInfoPw")
+//	public void changeInfoPw(HttpServletResponse response, @RequestParam("userPw") String userPw, 
+//			@AuthenticationPrincipal CustomUserDetails customUserDetails) throws IOException {
+//		User user = User.builder()
+//						.userId(customUserDetails.getUsername())
+//						.build();
+//    	
+//    	
+//    	User dbUser = userService.idcheck(user);
+//    	
+//    	if(!passwordEncoder.matches(userPw, dbUser.getUserPw())) {
+//    		response.sendRedirect("/user/changeInfoPw");
+//    	} else {
+//    		userService.pwUser(user.getUserId());
+//    		
+//    		SecurityContextHolder.clearContext();
+//    		
+//    		response.sendRedirect("/mypage/changeInfo");
+//    	}
+//    	
+//	}
 }
