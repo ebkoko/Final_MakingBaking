@@ -12,6 +12,9 @@
 			
 			<script th:inline="javascript">
 				$(function() {
+					if($("#quitMsg").val() == "Y") {
+						alert("탈퇴가 되었습니다.");
+					}
 					/* console.log($("#btn-login"));
 					console.log($("#msg").val()); */
 					if($("#msg").val() == "joinSuccess") {
@@ -37,6 +40,7 @@
 	<body>
 		<div layout:fragment="content">
 		<input type="hidden" id="msg" th:value="${msg}">
+		<input type="hidden" id="quitMsg" name="quitMsg" th:value="${quitMsg}">
 			<div class="swiper mySwiper">
 	    <div class="swiper-wrapper">
 	      <div class="swiper-slide"><img th:src="@{/images/bg.jpg}" alt=""></div>

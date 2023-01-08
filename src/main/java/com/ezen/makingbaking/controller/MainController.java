@@ -32,16 +32,13 @@ public class MainController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/main.html");
 		
-		String msg = "";
 		
-		if(!CollectionUtils.isEmpty(request.getParameterMap())) {
-			msg = request.getParameter("msg");
+		if(request.getParameter("msg") != null && !request.getParameter("msg").equals("")) {
+				mv.addObject("msg", "joinSuccess");
 		}
 		
-		if(msg != null && !msg.equals("")) {
-			if(msg.equals("joinSuccess")) {
-				mv.addObject("msg", "joinSuccess");
-			}
+		if(request.getParameter("quitMsg") != null && !request.getParameter("quitMsg").equals("")) {
+			mv.addObject("quitMsg", request.getParameter("quitMsg").toString());
 		}
 		return mv;
 	}

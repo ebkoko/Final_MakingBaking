@@ -7,14 +7,9 @@
 	<th:block layout:fragment="script">
 		<script th:inline="javascript">
 			$(function() {
-				if($("#quitMsg").val() == "N") {
-					alert("비밀번호가 틀렸습니다.");
-				}
-				
-				$("#quitBtn").on("click", function(){
-				    if(confirm("회원탈퇴 하시겠습니까?") == true){
-				        $("#joinForm").submit(); //버튼이라서 따로 서브밋 작성
-				        
+				$("#pwBtn").on("click", function(){
+				    if(passwordEncoder.matches(userPw, dbUser.getUserPw() == true)){
+				        $("#joinForm").submit();
 				    }
 				    else{
 				        return false;
@@ -25,14 +20,13 @@
 	</th:block>
 	
 	<th:block layout:fragment="css">
-		<link rel="stylesheet" th:href="@{/css/myPage/quit.css}"/>
+		<link rel="stylesheet" th:href="@{/css/myPage/changeInfoPw.css}"/>
 	</th:block>
 </head>
 
 <body>
 <div layout:fragment="content" style="height: 70%;">
   <main class="centre">
-  <input type="hidden" name="quitMsg" id="quitMsg" th:value="${quitMsg}">
   		<!-- 사이드 바 -->
 	    <div class="left-nav-bar">
 	      <div class="mypage2">
@@ -70,15 +64,15 @@
 	    
 	    <div>
 		    <div class="c1" style="margin:24px 50px;">
-		      <form action="/user/quitUser" id="joinForm" class="form" method="post">
-		        <h3 class="changeInfo">회원탈퇴</h3>
+		      <form action="/user/changeInfoPw" id="joinForm" class="form" method="post">
+		        <h3 class="changeInfo">비밀번호 확인</h3>
 		
 		        <div class="pw-check">
 		            <input type="password" id="userPw" name="userPw" required class="input2" placeholder="현재 비밀번호 확인"><label for="userPw" class="input-label"></label>
 		        </div>
 		        
 		        <div class="buttons">
-		          <input type="button" id="quitBtn" name="quitUser" value="탈퇴" class="btn2">
+		          <input type="button" id="pwBtn" name="pwUser" value="확인" class="btn2">
 		          <input type="button" id="cancel" value="취소" class="btn2" onclick="history.back()";>
 		        </div>
 		      </form>

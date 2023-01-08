@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import com.ezen.makingbaking.entity.User;
 
 @Transactional
+//딜리트나 업데이트 시에는 데이터가 바뀌는 작업이여서 entity랑 table을 동기화 해주는 @Modifying, @Transactional이 선언되어야 한다
 public interface UserRepository extends JpaRepository<User, String> {
 	User findByUserIdAndUserPw(
 			@Param("userId") String userId, 
@@ -31,6 +32,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 			nativeQuery=true) //jpa에서 개발자 마음대로 함수명을 정하고 쿼리도 추가하려면 nativeQuery=true를 필수적으로 추가해야한다.
 	User searchPw(@Param("userId") String userId, @Param("userName") String userName);
 	
+	@Modifying
 	@Query (value="DELETE FROM T_MB_USER"
 			+ "    WHERE USER_ID = :userId",
 			nativeQuery=true)
