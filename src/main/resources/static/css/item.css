@@ -37,12 +37,10 @@
 				display: flex;
 				justify-content: space-around;
 			}
-		    .itbanner_mian_img {
+		    .itbanner_main_img {
 		      	margin-left: 50px;
 		    }
-		    .itbanner_explain_sTitle {
-				margin-top: 10px;
-			}
+		
 		    .itbanner_explain {
 		     	margin-top: 25px;
 		     	margin-right: 20px;
@@ -53,6 +51,9 @@
 		    .itbanner_explain_KRW{
 				margin-top: 10px;
 			}
+			
+			
+			
 		    .itbanner_explain_btn {
 		      	margin-top: 30px;
 		    }

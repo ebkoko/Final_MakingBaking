@@ -17,6 +17,7 @@
 				let cartClick = false;
 				const getItem = /*[[${item}]]*/;
 				const principal = /*[[${#authentication.principal}]]*/;
+				
 				$(function() {
 					// 취소환불 문의 자세히 보기
 					$(".refundGuideBtn").on("click", function(){
@@ -40,10 +41,10 @@
 						}
 						
 					});
-					// 리뷰 작성
+					// 리뷰 작성 버튼 
 					$("#it_rvw_writeBtn").on("click", function(){
 						
-					var offset = $("#dayclass_hr2").offset();
+					var offset = $("#item_hr2").offset();
                   	const isAuthenticated = $(".header > input[name='authenticate']").val();
                   	
 		                  if(isAuthenticated == "false") { // false면 로그인 창 띄우기

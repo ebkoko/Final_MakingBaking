@@ -22,7 +22,7 @@ public interface DayclassRepository extends JpaRepository<Dayclass, Integer> {
 			+ "								SELECT MIN(FILE_NO)"
 			+ "								FROM T_MB_FILE C"
 			+ "								WHERE A.DAYCLASS_NO = C.FILE_REFER_NO"
-			+ "								AND C.FILE_TYPE = 'class'"
+			+ "								AND C.FILE_TYPE = 'dayclass'"
 			+ "							)"
 			+ "		   AND B.FILE_TYPE = 'dayclass'"
 			+ "	   WHERE A.DAYCLASS_NO = :dayclassNo\r\n"
