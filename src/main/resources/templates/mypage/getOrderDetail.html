@@ -183,7 +183,7 @@
 				#btns {
 				    margin: 15px 0 20px 40px;
 				}
-				#btnbankTransfer, #btnkakaoPay {
+				#btnOrderCancel, #btnPayCancel {
 				    width: 150px;
 				    height: 35px;
 				}
@@ -224,12 +224,49 @@
 					color: white;
 					background: #28693F;
 				}
+				#moveList {
+					/*display: block;*/
+					width: 100px;
+					height: 25px;
+					text-align: center;			
+				}
+				#btnMoveList {
+					width: 150px;
+				    height: 35px;
+				    text-align: center;
+					cursor: pointer;
+					font-size: 17px;
+					border: 1.5px solid #28693F;
+ 					border-radius: 4px;
+ 					background-color: white;
+ 					color: #28693F;
+ 					letter-spacing:1px
+				}
+				#btnMoveList:hover {
+					color: white;
+					background: #28693F;
+				}
 			</style>
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
-				
-				
+				$(function() {
+					$("#btnOrderCancel").on('click', function() {
+						$.ajax({
+							url: '/order/orderCancel',
+							type: 'delete',
+							data: { orderNo: $(".realOrderNo").text()},
+							success: function(obj) {
+								console.log(obj);
+								$(".orderStatus").text("주문취소");
+								$("#moveList").css("display", "block");
+								$("#CancelOption").css("display", "none");
+							}, error: function(e) {
+								console.log(e);
+							}
+						});
+					});
+				});				
 			</script>
 		</th:block>
 	</head>
@@ -330,8 +367,11 @@
 	            </div>
 	            <hr>
 	            <div id="CancelOption">
-                    <input type="button" name="CancelOption" id="btnbankTransfer" value="주문취소">&emsp;
-                    <input type="button" name="CancelOption" id="btnkakaoPay" value="결제취소">
+                    <input type="button" name="CancelOption" id="btnOrderCancel" value="주문취소">&emsp;
+                    <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소">
+	            </div>
+	            <div id="moveList">
+	            	<button type="button" id="btnMoveList" onclick="location.href='mypage/getOrderDetail'">목록으로</button>
 	            </div>
 	        </div>
 		</div>

@@ -115,20 +115,10 @@ public class ReserController {
 		
 		String className = session.getAttribute("className").toString();
 		System.out.println("dayclass=========================================================================" + className);
-		//Map<String, Object> dayclassMap = new ObjectMapper().readValue(dayclass, new TypeReference<Map<String, Object>>() {});
 		
 		long reserNo = reser.getReserNo();
 		
 		Reser reserClass = new Reser();
-				
-//		Reser reserDayclass = Reser.builder()
-//									   .reserNo(reserNo)
-//									   .classNo(Integer.parseInt(dayclassMap.get("classNo").toString()))
-//									   .reserPersonCnt(Integer.parseInt(dayclassMap.get("reserPersonCnt").toString()))
-//									   .reserTotalPrice(Integer.parseInt(dayclassMap.get("reserPersonCnt").toString()) * Integer.parseInt(dayclassMap.get("classPrice").toString()))
-//									   .build();
-//		
-//		reser.set(reserDayclass);
 		
 		reser.setReserNo(reserNo);
 		reser.setUserId(customUser.getUsername());
@@ -138,48 +128,12 @@ public class ReserController {
 		
 		ModelAndView mv = new ModelAndView();
 		
-//		Order returnOrder = Order.builder()
-//							.userId(customUser.getUsername())
-//							.orderNo(orderNo)
-//							.orderDate(LocalDateTime.now())
-//							.orderStatus(order.getOrderStatus())
-//							.orderName(order.getOrderName())
-//							.orderTel(order.getOrderTel())
-//							.shippingAddr1(order.getShippingAddr1())
-//							.shippingAddr2(order.getShippingAddr2())
-//							.shippingAddr3(order.getShippingAddr3())
-//							.orderDeliFee(order.getOrderDeliFee())
-//							.orderTotalPrice(order.getOrderTotalPrice())
-//							.orderPayment(order.getOrderPayment())
-//							.reciName(order.getReciName())
-//							.reciTel(order.getReciTel())
-//							.orderMail(order.getOrderMail())
-//							.orderMessage(order.getOrderMessage())
-//							.depositor(order.getDepositor())
-//							.orderTotalPayPrice(order.getOrderTotalPayPrice())
-//							.build();
-//		
 		reserService.insertReser(reser);
-//		orderService.insertOrderItem(orderItemList);
 		
 		mv.addObject("totalPayPrice", reser.getReserTotalPrice());
 		mv.addObject("reserNo", reserNo);
 		mv.addObject("reserPayment", reser.getReserPayment());
 		mv.addObject("className", className);
-		
-//		List<Cart> cartItemList = new ArrayList<Cart>();
-//		
-//		for(int i=0; i < itemMapList.size(); i++) {
-//			Cart cart = Cart.builder()
-//							.cartNo(Integer.parseInt(itemMapList.get(i).get("cartNo").toString()))
-//							.itemNo(Integer.parseInt(itemMapList.get(i).get("itemNo").toString()))
-//							.cartItemCnt(Integer.parseInt(itemMapList.get(i).get("orderItemCnt").toString()))
-//							.build();
-//			
-//			cartItemList.add(cart);
-//		}
-//		
-//		cartService.deleteCartItem(cartItemList);
 		
 		mv.setViewName("reser/reserComplete.html");
 		

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+	<th:block layout:fragment="script">
+		<script th:inline="javascript">
+		
+		</script>
+	</th:block>
+	<th:block layout:fragment="css">
+		<link rel="stylesheet" th:href="@{/css/myPage/myPage.css}"/>
+	</th:block>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<main class="centre">
+	    <!-- 사이드 바 -->
+	    <div class="left-nav-bar">
+	      <div class="mypage2">
+	        <h2><a href="/mypage/myPage">마이페이지<a></h2>
+	      </div>
+	      <div class="menu">
+	        <div class="sub-menu">
+	          <h3>My 쇼핑</h3>
+	          <ul class="menu-group">
+	            <li class="menu-name"><a href="#">구매내역</a></li>
+	            <li class="menu-name"><a href="#">예약확인</a></li>
+	            <li class="menu-name"><a href="#">찜목록</a></li>
+	          </ul>
+	        </div>
+	        <div class="sub-menu">
+	          <ul class="menu-group">
+	            <h3>My 활동</h3>
+	            <li class="menu-name"><a href="#">나의 리뷰</a></li>
+	          </ul>
+	        </div>
+	        <div class="sub-menu">
+	          <ul class="menu-group">
+	            <h3>My 정보</h3>
+	            <li class="menu-name"><a th:href="@{/mypage/changeInfo}">개인정보확인</a></li>
+	            <li class="menu-name"><a th:href="@{/mypage/quit}">회원탈퇴</a></li>
+	          </ul>
+	        </div>
+	        <div class="sub-menu">
+	          <ul class="menu-group">
+	            <li style="list-style: none;"><a href="#"><h3>나의 QnA</h3></a></li>
+	          </ul>
+	        </div>
+	      </div>
+	    </div>
+	    <!-- 메인 내용 -->
+	    <div class="main-content">
+	      <h3 style="margin-bottom: 10px;">예약 확인</h3>
+	      <!-- 아이템 -->
+	      <div class="boxx" th:each="reser : ${getReserList}">
+	        <img th:src="@{'/dayclass/' + ${reser.fileName}}" width="130px" margin="10px">
+	        <div class="box_product">
+	          <div class="box_product_detail" th:text="${reser.dayclassName}">클래스명: 케이크 만들기</div>
+	          <div class="box_product_detail" th:text="${reser.reserTotalPrice}">가격: 35000원</div>
+	          <div class="box_product_detail" th:text="${reser.reserPersonCnt}">인원 수: 1</div>
+	        </div>
+	        <div class="box_right">
+	          <span class="box_right_detail"><a th:href="@{/mypage/getReserDetail/{reserNo} (reserNo=${reser.reserNo})}">예약 상세보기</a></span>
+	          <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
+	        </div>
+	      </div>
+	    </div>
+	  </main>
+	  <div class="paging">
+	    <a href="#"><이전</a>
+	    <a href="#">1</a>
+	    <a href="#">2</a>
+	    <a href="#">3</a>
+	    <a href="#">다음></a>
+	  </div>
+	</div>
+</body>
+</html>
