@@ -1,11 +1,14 @@
 package com.ezen.makingbaking.controller;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -256,6 +259,24 @@ public class ItemController {
 			response.setErrorMessage(e.getMessage());
 			return ResponseEntity.badRequest().body(response);
 		}
+	}
+	
+	@PostMapping("/insertItemRvw")
+	public void insertItemRvw(ReviewDTO reviewDTO, HttpServletResponse response, HttpServletRequest request,
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
+		
+		Review review = Review.builder()
+							  .rvwScore(reviewDTO.getRvwScore())
+							  .rvwWriter(customUser.getUsername())
+							  .rvwRegdate(LocalDateTime.now())							 
+							  .rvwContent(reviewDTO.getRvwContent())
+							  .rvwReferNo(reviewDTO.getRvwReferNo())
+							  .rvwType("item")
+							  .build();
+		
+		reviewService.insertItemRvw(review);
+		
+	
 	}
 	
 }
