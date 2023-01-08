@@ -174,36 +174,9 @@
 				    margin-bottom: 10px;
 				    text-align: center;
 				}
-				#btns {
-				    margin: 15px 0 20px 40px;
-				}
-				#btnbankTransfer, #btnkakaoPay {
+				#btnReserCancel, #btnPayCancel {
 				    width: 150px;
 				    height: 35px;
-				}
-				#bankPayment {
-					display: none;
-				    margin-left: 40px;
-				}
-				#bank {
-					width: 100px;
-					height: 25px;
-				    vertical-align: middle;
-				}
-				#accountNo1 {
-				    margin-left: 15px;
-				    width: 200px;
-				    height: 25px;
-				    vertical-align: middle;
-				}
-				#depositorTitle {
-				    margin-top: 15px;
-				}
-				#depositor {
-				    width: 150px;
-				    height: 25px;
-				    vertical-align: middle;
-				    margin-left: 5px;
 				}
 				input[type="button"] {
 					cursor: pointer;
@@ -218,11 +191,53 @@
 					color: white;
 					background: #28693F;
 				}
+				#moveList {
+				    margin-top: 100px;
+				    margin-bottom: 10px;
+					width: 100px;
+					height: 25px;		
+				}
+				#btnMoveList {
+					width: 150px;
+				    height: 35px;
+				    text-align: center;
+					cursor: pointer;
+					font-size: 17px;
+					border: 1.5px solid #28693F;
+ 					border-radius: 4px;
+ 					background-color: white;
+ 					color: #28693F;
+ 					letter-spacing:1px
+				}
+				#btnMoveList:hover {
+					color: white;
+					background: #28693F;
+				}
 			</style>
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
-			
+				$(function() {
+					$("#btnReserCancel").on('click', function() {
+						$.ajax({
+							url: '/reser/ReserCancel',
+							type: 'delete',
+							data: { reserNo: $(".realReserNo").text()},
+							success: function(obj) {
+								console.log(obj);
+								$(".reserStatus").text("주문취소");
+								$("#moveList").css("display", "block");
+								$("#CancelOption").css("display", "none");
+							}, error: function(e) {
+								console.log(e);
+							}
+						});
+					});
+				});
+				
+				function fnBtnMoveList() {
+					window.location.href = '/mypage/myReserList'
+				}
 			</script>
 		</th:block>
 	</head>
@@ -233,39 +248,30 @@
 			<div id="container">
 	            <h1 id="reser_title">내 예약 내역</h1>
 	            <div id="top">
-	                <span class="reserNoMent">예약번호: </span><span class="realReserNo" >20230106000001</span><span class="reserStatus" >입금대기</span>
+	                <span class="reserNoMent">예약번호: </span><span class="realReserNo" th:text="${reser.reserNo}"></span><span class="reserStatus" th:text="${reser.reserStatus}"></span>
 	            </div>
 	            <hr>
 	            <div id="list_title">
 	                <span class="title_classInfo">클래스 정보</span><span class="title_classPrice">클래스 금액</span><span class="title_classQuantity">인원 수</span><span class="title_totalPrice">합계금액</span>
 	            </div>
 	            <hr>
-            	<input type="hidden" name="classNo" >
-            	<input type="hidden" name="orderTel" id="orderTel">
-            	<input type="hidden" name="partiTel" id="partiTel">  
-            	<input type="hidden" name="reserStatus" id="reserStatus">
-            	<input type="hidden" name="reserPayment" id="reserPayment">
-            	<input type="hidden" name="partiDate" id="partiDate">
-            	<input type="hidden" name="partiTime" > 
-            	<input type="hidden" name="reserPersonCnt" >
-            	<input type="hidden" name="reserTotalPrice" id="reserTotalPrice">
 	            <div id="reser_class">
 	                <div class="classView">
 	                    <div class="class_Detail">
-	                        <img class="class_Img" src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg">
-	                        <div class="detailName"><a ></a><br>
-		                        <div class="detailDate" ></div>
-                              	<div class="detailTime" >오전 9:30~12:30</div>
-                              	<div class="detailTime" >오후 14:00~17:00</div>
+	                        <img class="class_Img" th:src="@{'/dayclass/' + ${reser.fileName}}">
+	                        <div class="detailName" th:text="${reser.dayclassName}"><br>
+		                        <div class="detailDate" th:text="${reser.partiDate}"></div>
+                              	<div class="detailTime" th:if="${reser.partiTime == 'A'}">오전 9:30~12:30</div>
+                              	<div class="detailTime" th:unless="${reser.partiTime == 'A'}">오후 14:00~17:00</div>
 	                        </div>
 	                    </div>           
-	                    <div class="class_Price"><span class="classPrice" ></span></div><span>원</span>  
-	                    <div class="class_Quantity" ></div>                    
-	                    <div class="class_totalPrice"><span class="totalPayPrice" ></span></div><span>원</span>
+	                    <div class="class_Price"><span class="classPrice" th:text="${#numbers.formatInteger(reser.classPrice, 3, 'COMMA')}"></span></div><span>원</span>  
+	                    <div class="class_Quantity" th:text="${reser.reserPersonCnt}"></div>                    
+	                    <div class="class_totalPrice"><span class="totalPayPrice" th:text="${#numbers.formatInteger(reser.reserTotalPrice, 3, 'COMMA')}"></span></div><span>원</span>
 	                </div>
 	                <hr>
 	                <div id="totalPrice">
-	                    <span>총 결제금액: </span> <span class="totalPrice" ></span><span >원</span>
+	                    <span>총 결제금액: </span> <span class="totalPrice"  th:text="${#numbers.formatInteger(reser.reserTotalPrice, 3, 'COMMA')}"></span><span >원</span>
 	                </div>
 	                <hr> 
 		        </div>  
@@ -279,14 +285,14 @@
 	                    <table id="T1">
 	                        <tr>
 	                            <th>주문자</th>
-	                            <td><input type="text" name="orderName" id="orderer" readonly></td>
+	                            <td><input type="text" name="orderName" id="orderer" th:value="${reser.orderName}" readonly></td>
 	                        </tr>
 	                        <tr>
 	                            <th>휴대폰</th>
 	                            <td>
-	                                <input type="text" name="orderTel1" id="orderTel1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" readonly> -
-	                                <input type="text" name="orderTel2" id="orderTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" readonly> - 
-	                                <input type="text" name="orderTel3" id="orderTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" readonly>
+	                                <input type="text" name="orderTel1" id="orderTel1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(reser.orderTel).substring(0,3)}" readonly> -
+	                                <input type="text" name="orderTel2" id="orderTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(reser.orderTel).substring(4,8)}" readonly> - 
+	                                <input type="text" name="orderTel3" id="orderTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(reser.orderTel).substring((reser.orderTel).length-4)}" readonly>
 	                            </td>
 	                        </tr>
 	                    </table>
@@ -294,21 +300,21 @@
 	                        <tr>
 	                            <th>예약자</th>
 	                            <td>
-	                                <input type="text" name="partiName" id="participant" readonly>
+	                                <input type="text" name="partiName" id="participant" th:value="${reser.partiName}" readonly>
 	                            </td>
 	                        </tr>
 	                        <tr>
 	                            <th>휴대폰</th>
 	                            <td>
-	                                <input type="text" name="orderTel1" id="orderTel1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" readonly> -
-	                                <input type="text" name="partiTel2" id="partiTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" readonly> - 
-	                                <input type="text" name="partiTel3" id="partiTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" readonly>
+	                                <input type="text" name="orderTel1" id="orderTel1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(reser.partiTel).substring(0,3)}" readonly> -
+	                                <input type="text" name="partiTel2" id="partiTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(reser.partiTel).substring(4,8)}" readonly> - 
+	                                <input type="text" name="partiTel3" id="partiTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(reser.partiTel).substring((reser.partiTel).length-4)}" readonly>
 	                            </td>
 	                        </tr>
 	                        <tr>
 	                            <th style="vertical-align: top;">요청사항</th>
 	                            <td>
-	                                <textarea name="request" id="request" cols="50" rows="8" maxlength="200" placeholder="요청사항을 입력해주세요." readonly></textarea>
+	                                <textarea name="request" id="request" cols="50" rows="8" maxlength="200" th:text="${reser.request}" readonly></textarea>
 	                            </td>
 	                        </tr>
 	                    </table>   
@@ -316,8 +322,11 @@
 	            </div>
 	            <hr>		            
 	            <div id="CancelOption">
-                    <input type="button" name="CancelOption" id="btnbankTransfer" value="주문취소">&emsp;
-                    <input type="button" name="CancelOption" id="btnkakaoPay" value="결제취소">
+                    <input type="button" name="CancelOption" id="btnReserCancel" value="주문취소" th:if="${reser.reserPayment == '입금대기'}">&emsp;
+                    <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${reser.reserPayment == '결제완료'}">
+	            </div>
+	            <div id="moveList">
+	            	<button type="button" id="btnMoveList" onclick="fnBtnMoveList()">목록으로</button>
 	            </div>
 	        </div>
 		</div>

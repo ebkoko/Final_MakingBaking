@@ -1,9 +1,12 @@
 package com.ezen.makingbaking.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Reser;
 
 public interface ReserRepository extends JpaRepository<Reser, Integer> {
@@ -18,4 +21,40 @@ public interface ReserRepository extends JpaRepository<Reser, Integer> {
 			+ " AND PARTI_DATE = :#{#reser.partiDate}"
 			+ " AND PARTI_TIME = :#{#reser.partiTime}", nativeQuery=true)
 	int getPersonCnt(@Param("reser") Reser reser);
+	
+	@Query(value = "SELECT C.*\r\n"
+			+ "	, D.FILE_NO\r\n"
+			+ "    , D.FILE_NAME\r\n"
+			+ "    , D.FILE_ORIGIN_NAME\r\n"
+			+ "    , D.FILE_PATH\r\n"
+			+ "    FROM(\r\n"
+			+ "		SELECT A.*, B.*\r\n"
+			+ "			FROM T_MB_RESER A\r\n"
+			+ "				, T_MB_DAYCLASS B\r\n"
+			+ "			WHERE A.CLASS_NO = B.DAYCLASS_NO\r\n"
+			+ "				AND A.USER_ID = :userId\r\n"
+			+ "		) C\r\n"
+			+ "	LEFT OUTER JOIN T_MB_FILE D\r\n"
+			+ "		ON C.DAYCLASS_NO = D.FILE_REFER_NO\r\n"
+			+ "        AND D.FILE_NO = 1\r\n"
+			+ "        AND D.FILE_TYPE = 'dayclass'", nativeQuery=true)
+	List<CamelHashMap> findAllReser(@Param("userId") String userId);
+	
+	@Query(value = "SELECT C.*\r\n"
+			+ "	, D.FILE_NO\r\n"
+			+ "    , D.FILE_NAME\r\n"
+			+ "    , D.FILE_ORIGIN_NAME\r\n"
+			+ "    , D.FILE_PATH\r\n"
+			+ "    FROM(\r\n"
+			+ "		SELECT A.*, B.*\r\n"
+			+ "			FROM T_MB_RESER A\r\n"
+			+ "				, T_MB_DAYCLASS B\r\n"
+			+ "			WHERE A.CLASS_NO = B.DAYCLASS_NO\r\n"
+			+ "				AND A.RESER_NO = :reserNo\r\n"
+			+ "		) C\r\n"
+			+ "	LEFT OUTER JOIN T_MB_FILE D\r\n"
+			+ "		ON C.DAYCLASS_NO = D.FILE_REFER_NO\r\n"
+			+ "        AND D.FILE_NO = 1\r\n"
+			+ "        AND D.FILE_TYPE = 'dayclass';", nativeQuery=true)
+	CamelHashMap findByReserDetailAndReserNo(@Param("reserNo") long reserNo);
 }
