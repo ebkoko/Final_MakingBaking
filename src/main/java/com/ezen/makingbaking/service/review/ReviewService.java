@@ -13,5 +13,7 @@ public interface ReviewService {
 
 	void insertClassRvw(Review review);
 
+	void insertItemRvw(Review review);
+
 	
 }
