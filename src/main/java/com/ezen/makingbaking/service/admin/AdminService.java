@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
 
@@ -23,7 +24,20 @@ public interface AdminService {
 	
 	Item updateItem(Item item, List<ImgFile> uFileList);
 	
-	void deleteItem(int ItemNo);
+	void deleteItem(int itemNo);
 	
 	void saveItemList(List<Map<String, Object>> changeRowsList);
+	
+	//dayclass
+	List<Dayclass> getDayclassList(Dayclass dayclass);
+	Page<Dayclass> getPageDayclassList(Dayclass dayclass, Pageable pageable);
+	
+	void insertDayclass(Dayclass dayclass, List<ImgFile> uploadFileList);
+	
+	Dayclass getDayclass(int dayclassNo);
+	List<ImgFile> getDayclassFileList(int dayclassNo);
+	
+	Dayclass updateDayclass(Dayclass dayclass, List<ImgFile> uFileList);
+	
+	void deleteDayclass(int dayclassNo);
 }

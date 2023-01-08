@@ -281,14 +281,8 @@
 			            let img = document.createElement("img");
 			            img.setAttribute("style", "width: 100%; height: 100%; z-index: none;");
 			            
-			            // 이미지 파일인지 아닌지 체크
-			            if(file.name.toLowerCase().match(/(.*?)\.(jpg|jpeg|png|gif|svg|bmp)$/)) {
-			               // 이미지 파일 미리보기 처리
-			               img.src = e.target.result;            
-			            } else {
-			               // 일반 파일 미리보기 처리
-			               img.src = "/images/defaultFileImg.png";
-			            }
+		               // 이미지 파일 미리보기 처리
+		               img.src = e.target.result;            
 			            
 			            // 미리보기 영역에 추가
 			            // 미리보기 이미지 태그와 삭제 버튼, 파일명을 표출하는 p태그를 묶어주는 div를 만들어 미리보기 영역에 추가
@@ -459,7 +453,7 @@
 	          <th>가격</th>
 	          <td>&ensp;&ensp;
 	          	<input type="text" name="itemPrice" id="itemPrice"
-	          			onkeyup="inputNumberFormat(this)" maxlength="8">원
+	          			onkeyup="inputNumberFormat(this)" maxlength="8"> 원
 	          </td>
 	        </tr>
 	        <tr>
@@ -475,12 +469,12 @@
 	          <td>&ensp;&ensp;<textarea name="itemAllergyInfo" id="itemAllergyInfo"></textarea></td>
 	        </tr>
 	        <tr>
-	          <th>영양정보</th>
+	          <th>상품 대표이미지 및 영양정보</th>
 	          <td>
 	            <div>
 	              &ensp;&ensp;<input type="file" id="btnAtt" name="uploadFiles" multiple="multiple">
 	              <div id="attZone"
-	              	data-placeholder="파일선택 버튼을 눌러 영양정보 이미지를 추가하세요."></div>
+	              	data-placeholder="파일선택 버튼을 눌러 상품 대표 이미지와 영양정보 이미지를 추가하세요."></div>
 	            </div>
 	          </td>
 	        </tr>

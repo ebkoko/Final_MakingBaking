@@ -9,97 +9,406 @@
 	<head>
 		<th:block layout:fragment="css">
 			<style>
-			    #dayclassReg_T {
-			      margin: 0 auto;
-			      border-left: hidden; border-right: hidden;
+				/* '원데이클래스 등록' 타이틀 */
+				.dayclassAdmin {
+					font-size: 40px;
+				}
+				
+				/* 클래스등록Table div*/
+				#div_dayclassReg {
+					margin-top: 80px;
+				}
+			    #T_dayclassReg {
+					width: 1000px;
+					border-collapse: collapse;
+					margin: 0 auto;
 			    }
-			    #dayclassReg {
-			      width: 150px;
-			      height: 40px;
+			    #T_dayclassReg td {
+					border: 1.2px solid #28693F;
+					border-right: hidden;
+				}
+			    #T_dayclassReg th {
+					width: 30%;
+					border: 1.2px solid #28693F;
+					background-color:rgb(239, 239, 239);
+					color: #28693F;
+					border-left: hidden;
+				}
+				
+				/* 운영시간 */
+				#dayclassTime_Th {
+					height: 50px;
+				}
+				#dayclassTime {
+					border: 1px solid black;
+				}
+				
+				/* 진행상태 */
+				#dayclassUseYn_Th {
+					height:50px;
+				}
+				#dayclassUseYn {
+					border: 1px solid black;
+				}
+				
+				/* 파일 첨부 */
+				#attZone {
+					width: 660px;
+					min-height: 150px;
+					padding: 10px;
+					margin: 10px;
+					border: 1px dotted lightgreen;
+				}
+				#attZone:empty:before {
+					content: attr(data-placeholder);
+					color: #999;
+					font-size: 0.9em;
+				}
+				
+				/* 등록일 */
+				#dayclassRegdate {
+					height:50px;
+					font-size: 15px;
+					padding-left: 20px;
+				}
+				/* 클래스이름 */
+				#dayclassName {
+					width: 650px;
+					height:50px;
+					font-size: 18px;
+					font-weight: bold;
+				}
+				/* 소제목 */
+				#dayclassMinName {
+					width: 650px;
+					height: 50px;
+					font-size: 15px;
+				}
+				/* 소요시간 */
+				#dayclassDurationTime {
+					width: 50px;
+					height: 50px;
+					text-align: right;
+					font-size: 15px;
+				}
+				/* 가격 */
+				#dayclassPrice {
+					width: 50px;
+					height: 50px;
+					text-align: right;
+					font-size: 15px;
+				}
+				/* 설명 */
+				#dayclassDetails {
+					width: 650px;
+					font-size: 15px;
+					padding-top: 10px;
+					padding-bottom: 10px;
+				}
+				
+				
+				/* 클래스등록 버튼 div */
+			    #div_dayclassRegBtn {
+					display: flex;
+					justify-content:center;
+				}
+				/* 클래스등록 버튼 */
+			    #dayclassRegBtn {
+					width: 150px;
+					height: 50px;
+					border: 1.2px solid #28693F;
+					border-radius: 4px;
+					background-color: white;
+					text-align: center;
+					display: inline-block;
+					color: #28693F;
+					font-size: 18px;
+					font-weight: 550;
+					letter-spacing:1px;
+					margin: 0 auto;
+					margin-top: 50px;
 			    }
-  			</style>
+			    #dayclassRegBtn:hover {
+					background-color: #28693F;
+					color: white;
+					font-weight: 550;
+				}
+			</style>
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
-				/*  https://jamesdreaming.tistory.com/211  */
-			    $(function() {
-			      $("#inputPrice").on("focus", function() {
-			        var val = $("#inputPrice").val();
-			        if(!isEmpty(val)) {
-			          val = val.replace(/,/g,'');
-			          $("#inputPrice").val(val);
-			        }
+				let dayclassPrice = 0;
+				// 추가된 파일들을 담아줄 배열. File 객체로 하나씩 담음
+			      let uploadFiles = [];
+			   
+			      $(function() {
+			         // input type="file"이 변경되면 미리보기 동작
+			         $("#btnAtt").on("change", function(e) {
+			            // input type="file"에 추가된 파일들을 변수로 받아옴
+			            const files = e.target.files;
+			            // 변수로 받아온 파일들을 배열 형태로 변환
+			            const fileArr = Array.prototype.slice.call(files);
+			            
+			            // 배열에 있는 파일들을 하나씩 꺼내서 처리
+			            for(f of fileArr) {
+			               imageLoader(f);
+			            }
+			         });
+			         
+			         $("#dayclassRegForm").on("submit", function(e) {
+			        	 //마지막으로 btnAtt에 uploadFiles에 있는 파일들을 담아준다.
+			        	 dt = new DataTransfer();
+			             
+			             for(f in uploadFiles) {
+			             	const file = uploadFiles[f];
+			             	dt.items.add(file);
+			             }
+			             
+			             $("#btnAtt")[0].files = dt.files;
+			             
+			             // 클래스등록 버튼 클릭 시 유효성 검사
+			             if(!$("#dayclassName").val()) {
+								alert("클래스 이름을 입력해주세요.");
+								e.preventDefault();
+								$("#dayclassName").focus();
+								return;
+							}
+							if(!$("#dayclassMinName").val()) {
+								alert("클래스 소제목을 입력해주세요.");
+								e.preventDefault();
+								$("#dayclassMinName").focus();
+								return;
+							}
+							if(!$("#dayclassDurationTime").val()) {
+								alert("클래스 소요시간을 입력해주세요.");
+								e.preventDefault();
+								$("#dayclassDurationTime").focus();
+								return;
+							}
+							if(!$("#dayclassPrice").val()) {
+								alert("클래스 가격을 입력해주세요.");
+								e.preventDefault();
+								$("#dayclassPrice").focus();
+								return;
+							} else {
+								$("#dayclassPrice").val(dayclassPrice);
+							}
+							if(!$("#dayclassDetails").val()) {
+								alert("클래스 설명을 입력해주세요.");
+								e.preventDefault();
+								$("#dayclassDetails").focus();
+								return;
+							}
+							if(confirm("등록하시겠습니까?")) {
+								alert("클래스가 등록되었습니다.");
+								return;
+							} else {
+								e.preventDefault();
+								alert("클래스등록이 취소되었습니다.");
+								return;
+							}
+			         })
 			      });
-			      $("#inputPrice").on("blur", function() {
-			        var val = $("#inputPrice").val();
-			        if(!isEmpty(val) && inNumeric(val)) {
-			          val = currencyFormatter(val);
-			          $("#inputPrice").val(val);
-			        }
-			      });
-			    });
+			      
+			      // 미리보기 영역에 들어갈 img태그 생성 및 선택된 파일을 Base64 인코딩된 문자열 형태로 미리보기 가능하게 해줌
+			      function imageLoader(file) {
+			         uploadFiles.push(file);
+			         
+			         const reader = new FileReader();
+			         
+			         reader.onload = function(e) {
+			            // 이미지를 표출해 줄 img태크 선언
+			            let img = document.createElement("img");
+			            img.setAttribute("style", "width: 100%; height: 100%; z-index: none;");
+			            
+		               // 이미지 파일 미리보기 처리
+		               img.src = e.target.result;            
+			            
+			            // 미리보기 영역에 추가
+			            // 미리보기 이미지 태그와 삭제 버튼, 파일명을 표출하는 p태그를 묶어주는 div를 만들어 미리보기 영역에 추가
+			            $("#attZone").append(makeDiv(img, file));
+			         };
+			         
+			         // 파일을 Base64 인코딩된 문자열로 변경
+			         reader.readAsDataURL(file);
+			      };
+			      
+			      // 미리보기 영역에 들어갈 div(img + button + p)를 생성하고 리턴
+			      function makeDiv(img, file) {
+			         // div 생성
+			         let div = document.createElement("div");
+			         div.setAttribute("style", "display: inline-block; position: relative;"
+			          + " width: 150px; height: 120px; margin: 5px; border: 1px solid #00f; z-index: 1;");
+			         
+			         // button 생성
+			         let btn = document.createElement("input");
+			         btn.setAttribute("type", "button");
+			         btn.setAttribute("value", "x");
+			         btn.setAttribute("delFile", file.name);
+			         btn.setAttribute("style", "width: 30px; height: 30px; position: absolute;"
+			         + " right: 0px; bottom: 0px; z-index: 999; background-color: rgba(255, 255, 255, 0.1);"
+			         + " color: #f00;");
+			         
+			         // 버튼 클릭 이벤트
+			         // 버튼 클릭 시 해당 파일이 삭제되도록 설정
+			         btn.onclick = function(e) {
+			            // 클릭된 버튼
+			            const ele = e.srcElement;
+			            // delFile(파일이름) 속성 꺼내오기: 삭제될 파일명
+			            const delFile = ele.getAttribute("delFile");
+			            
+			            for(let i = 0; i < uploadFiles.length; i++) {
+			               // 배열에 담아놓은 파일들 중에 해당 파일 삭제
+			               if(delFile == uploadFiles[i].name) {
+			                  // 배열에서 i번째 한 개만 제거
+			                  uploadFiles.splice(i, 1);
+			               }
+			            }
+			            
+			            //버튼 클릭 시 btnAtt에 첨부된 파일도 삭제
+			            dt = new DataTransfer();
+			            
+			            for(f in uploadFiles) {
+			            	const file = uploadFiles[f];
+			            	dt.items.add(file);
+			            }
+			            
+			            console.log($("#btnAtt"));
+			            $("#btnAtt")[0].files = dt.files;
+			            
+			            // 해당 img를 담고있는 부모태그인 div 삭제
+			            const parentDiv = ele.parentNode;
+			            $(parentDiv).remove();
+			         }
+			         
+			         // 파일명 표출할 p태그 생성
+			         const fName = document.createElement("p");
+			         fName.setAttribute("style", "display: inline-block; font-size: 8px;");
+			         fName.textContent = file.name;
+			         
+			         // div에 하나씩 추가
+			         div.appendChild(img);
+			         div.appendChild(btn);
+			         div.appendChild(fName);
+			         
+			         // 완성된 div 리턴
+			         return div;
+			      }
+			      
+			      
+			      //가격 천단위 콤마
+			      function inputNumberFormat(obj) {
+					  dayclassPrice = obj.value.replace(",", "");
+					  obj.value = comma(uncomma(obj.value));
+				  }
+				  function comma(str) {
+					  str = String(str);
+					  return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+				  }
+				  function uncomma(str) {
+					  str = String(str);
+					  return str.replace(/[^\d]+/g, '');
+				  }
+				  
+				  //소요시간 숫자만입력가능
+				  $(function() {
+					  $("#dayclassDurationTime").on("keyup", function(event) {
+				        if (event.which && ((event.which  > 47 && event.which  < 58) || (event.which > 95 && event.which < 106) || event.which == 8)) {
+				            
+				        }else{
+				            alert('숫자만 입력해주세요.');
+				            $(this).val($(this).val().replace(/[^0-9]/g,""));
+				        }
+				    });
+				  });
+				  
+				  //가격 숫자만입력가능
+				  $(function() {
+					  $("#dayclassPrice").on("keyup", function(event) {
+				        if (event.which && ((event.which  > 47 && event.which  < 58) || (event.which > 95 && event.which < 106) || event.which == 8)) {
+				            
+				        }else{
+				            alert('숫자만 입력해주세요.');
+				            $(this).val($(this).val().replace(/[^0-9]/g,""));
+				        }
+				    });
+				  });
 			</script>
 		</th:block>
 	</head>
 	<!-- head 영역 끝 -->
 	
 <body>
-  <div id="container" layout:fragment="content">
-    <h1>원데이클래스 등록</h1>
-    
-    <!-- 원데이클래스 등록내용 -->
-    <div>
-      <table border="1" style="width: 800px; height:300px; border-collapse: collapse;" id="dayclassReg_T">
-        <tr>
-          <th style="background: lightsteelblue;">클래스 진행여부</th>
-          <td>
-            <!-- 원데이클래스상태 선택 -->
-            <div>&ensp;&ensp;
-              <select name="searchCondition">
-                <option value="dayclassIng" th:selected="${searchCondition == 'dayclassIng'}">진행중</option>
-                <option value="dayclassEnd" th:selected="${searchCondition == 'dayclassSchedule'}">진행종료</option>
-              </select>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th style="background: lightsteelblue;">등록일</th>
-          <td th:text="${dayclass.dayclassRegdate eq null ? '' : #strings.substring(dayclass.dayclassRegdate, 0, 10)}">&ensp;&ensp;</td>
-        </tr>
-        <tr>
-          <th style="background: lightsteelblue;">이름</th>
-          <td>&ensp;&ensp;<input type="text"></td>
-        </tr>
-        <tr>
-          <th style="background: lightsteelblue;">설명</th>
-          <td>&ensp;&ensp;<textarea></textarea></td>
-        </tr>
-        <tr>
-          <th style="background: lightsteelblue;">가격</th>
-          <td>&ensp;&ensp;<input type="text" id="inputPrice">원</td>
-        </tr>
-        <tr>
-          <th style="background: lightsteelblue;">첨부파일</th>
-          <td>
-            <div>&ensp;&ensp;
-              <input type="file">
-              <div data-placeholder="파일선택 버튼을 눌러 원데이클래스 첨부파일을 작성하세요."></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th style="background: lightsteelblue;">재고</th>
-          <td>&ensp;&ensp;<input type="number" min="0"></td>
-        </tr>
-        <tr>
-          <th colspan="2" style="border-bottom: hidden;">
-            <div style="text-align:right;">
-              <a href="#"><input type="button" value="원데이클래스 등록" id="dayclassReg"></a>
-            </div>
-          </th>
-        </tr>
-      </table>
-    </div>
+	<div id="container" layout:fragment="content">
+		<div>
+			<h1 class="dayclassAdmin">원데이클래스 등록</h1>
+		</div>
+		
+	    <!-- 클래스등록내용 -->
+	    <form id="dayclassRegForm" method="post" action="/admin/insertDayclass" enctype="multipart/form-data">
+	    <div id="div_dayclassReg">
+	      <table border="1" id="T_dayclassReg">
+	        <tr>
+	          <th id="dayclassTime_Th">운영시간</th>
+	          <td>&ensp;&ensp;
+	            <select name="dayclassTime" id="dayclassTime">
+	              <option value="A" th:selected="${searchCondition == 'A'}">오전</option>
+	              <option value="P" th:selected="${searchCondition == 'P'}">오후</option>
+	              <option value="B" th:selected="${searchCondition == 'B'}">오전/오후</option>
+	            </select>
+	          </td>
+	        </tr>
+	        <tr>
+	          <th id="dayclassUseYn_Th">진행상태</th>
+	          <td>&ensp;&ensp;
+	            <select name="dayclassUseYn" id="dayclassUseYn">
+	              <option value="Y" th:selected="${searchCondition == 'Y'}">진행중</option>
+	              <option value="S" th:selected="${searchCondition == 'S'}">진행예정</option>
+	              <option value="N" th:selected="${searchCondition == 'N'}">진행완료</option>
+	            </select>
+	          </td>
+	        </tr>
+	        <tr>
+	          <th>클래스 대표이미지</th>
+	          <td>
+	            <div>
+	              &ensp;&ensp;<input type="file" id="btnAtt" name="uploadFiles" multiple="multiple">
+	              <div id="attZone"
+	              	data-placeholder="파일선택 버튼을 눌러 클래스 대표이미지를 추가하세요."></div>
+	            </div>
+	          </td>
+	        </tr>
+	        <tr>
+	          <th>이름</th>
+	          <td>&ensp;&ensp;<input type="text" name="dayclassName" id="dayclassName">&ensp;&ensp;</td>
+	        </tr>
+	        <tr>
+	          <th>소제목</th>
+	          <td>&ensp;&ensp;<input type="text" name="dayclassMinName" id="dayclassMinName">&ensp;&ensp;</td>
+	        </tr>
+	        <tr>
+	          <th>소요시간</th>
+	          <td>&ensp;&ensp;<input type="text" name="dayclassDurationTime" id="dayclassDurationTime"> 시간</td>
+	        </tr>
+	        <tr>
+	          <th>가격</th>
+	          <td>&ensp;&ensp;
+	          	<input type="text" name="dayclassPrice" id="dayclassPrice"
+	          			onkeyup="inputNumberFormat(this)" maxlength="8"> 원
+	          </td>
+	        </tr>
+	        <tr>
+	          <th>설명</th>
+	          <td>&ensp;&ensp;<textarea cols="100" name="dayclassDetails" rows="10" id="dayclassDetails"></textarea></td>
+	        </tr>
+	      </table>
+      </div>
+      
+      <!-- 클래스등록 버튼 -->
+      <div id="div_dayclassRegBtn">
+      	<input type="submit" value="클래스 등록" id="dayclassRegBtn">
+      </div>
+      </form>
   </div>
 </body>
 </html>
