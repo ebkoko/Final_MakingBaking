@@ -37,7 +37,8 @@ public interface ReserRepository extends JpaRepository<Reser, Integer> {
 			+ "	LEFT OUTER JOIN T_MB_FILE D\r\n"
 			+ "		ON C.DAYCLASS_NO = D.FILE_REFER_NO\r\n"
 			+ "        AND D.FILE_NO = 1\r\n"
-			+ "        AND D.FILE_TYPE = 'dayclass'", nativeQuery=true)
+			+ "        AND D.FILE_TYPE = 'dayclass'\r\n"
+			+ "        ORDER BY A.RESER_DATE DESC", nativeQuery=true)
 	List<CamelHashMap> findAllReser(@Param("userId") String userId);
 	
 	@Query(value = "SELECT C.*\r\n"
@@ -46,7 +47,13 @@ public interface ReserRepository extends JpaRepository<Reser, Integer> {
 			+ "    , D.FILE_ORIGIN_NAME\r\n"
 			+ "    , D.FILE_PATH\r\n"
 			+ "    FROM(\r\n"
-			+ "		SELECT A.*, B.*\r\n"
+			+ "		SELECT A.*, B.*,\r\n"
+			+ "               CASE \r\n"
+			+ "					WHEN DATE_FORMAT(CONCAT(A.PARTI_DATE, ' ', A.PARTI_TIME), '%Y-%m-%d %H-%i-%s') <= NOW()\r\n"
+			+ "                    THEN 'I'\r\n"
+			+ "                    WHEN DATE_FORMAT(CONCAT(A.PARTI_DATE, ' ', A.PARTI_TIME), '%Y-%m-%d %H-%i-%s') > NOW()\r\n"
+			+ "                    THEN 'P'\r\n"
+			+ "				END AS CANCEL_ENABLE\r\n"
 			+ "			FROM T_MB_RESER A\r\n"
 			+ "				, T_MB_DAYCLASS B\r\n"
 			+ "			WHERE A.CLASS_NO = B.DAYCLASS_NO\r\n"

@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.makingbaking.common.CamelHashMap;
-import com.ezen.makingbaking.dto.DayclassDTO;
 import com.ezen.makingbaking.entity.CustomUserDetails;
-import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.service.dayclass.DayclassService;
+import com.ezen.makingbaking.service.order.OrderService;
 import com.ezen.makingbaking.service.reser.ReserService;
 
 @RestController
@@ -28,9 +27,19 @@ public class MypageController {
 	@Autowired
 	private ReserService reserService;
 	
+	@Autowired
+	private OrderService orderService;
+	
 	@GetMapping("/myPage")
-	public ModelAndView joinView() {
+	public ModelAndView myOrderList(@AuthenticationPrincipal CustomUserDetails customUser) {
 		ModelAndView mv = new ModelAndView();
+		
+		List<CamelHashMap> orderList = orderService.getOrderList(customUser.getUsername());
+		
+		List<CamelHashMap> orderContent = orderService.getOrderContent(customUser.getUsername());
+		
+		mv.addObject("getOrderList", orderList);
+		mv.addObject("item", orderContent);
 		mv.setViewName("mypage/myPage.html");
 		return mv;
 	}
@@ -66,9 +75,16 @@ public class MypageController {
 		return mv;
 	}
 	
-	@GetMapping("/getOrderDetail")
-	public ModelAndView orderDetailView() {
+	@GetMapping("/getOrderDetail/{orderNo}")
+	public ModelAndView orderDetailView(@PathVariable long orderNo, @AuthenticationPrincipal CustomUserDetails customUser) {
+		CamelHashMap order = orderService.getOrderDetail(orderNo);
+		
+		List<CamelHashMap> orderContent = orderService.getOrderItem(orderNo);
+		
 		ModelAndView mv = new ModelAndView();
+		
+		mv.addObject("order", order);
+		mv.addObject("item", orderContent);
 		mv.setViewName("mypage/getOrderDetail.html");
 		return mv;
 	}
@@ -87,7 +103,6 @@ public class MypageController {
 	@GetMapping("/getReserDetail/{reserNo}")
 	public ModelAndView reserDetailView(@PathVariable long reserNo, @AuthenticationPrincipal CustomUserDetails customUser) {
 		CamelHashMap reser = reserService.getReserDetail(reserNo);
-		
 		
 		ModelAndView mv = new ModelAndView();
 		

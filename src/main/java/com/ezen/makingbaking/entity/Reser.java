@@ -27,7 +27,7 @@ public class Reser {
 	private String userId;									// 회원 아이디
 	private LocalDateTime reserDate = LocalDateTime.now();	// 예약일
 	@Builder.Default
-	private String reserStatus = "입금대기";					// 예약상태(입금대기, 결제완료 등..)
+	private String reserStatus = "MV";						// 예약상태(입금대기: MV, 결제완료: PE, 예약취소: RC, 결제취소: PC)
 	private String partiName;								// 예약자명
 	private String partiTel;								// 예약자 전화번호
 	private String partiTime;								// 예약시간
@@ -42,5 +42,5 @@ public class Reser {
 	@Nullable
 	private String depositor;								// 무통장입금 입금자명
 	private int reserTotalPrice;							// 총 결제금액
-	private int classPrice;
+	private int classPrice;					// 예약취소 가능여부(가능: P, 불가능: I)	
 }

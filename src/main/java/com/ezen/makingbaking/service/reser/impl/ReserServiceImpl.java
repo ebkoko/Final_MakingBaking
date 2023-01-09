@@ -34,4 +34,10 @@ public class ReserServiceImpl implements ReserService {
 	public CamelHashMap getReserDetail(long reserNo) {
 		return reserRepository.findByReserDetailAndReserNo(reserNo);
 	}
+	
+//	@Override
+//	public Reser updateReser(Reser reser) {
+//		reserRepository.save(reser);
+//		reserRepository.flush();
+//	}
 }

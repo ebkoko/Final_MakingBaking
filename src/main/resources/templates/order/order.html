@@ -498,7 +498,7 @@
 							$("#btnkakaoPay").css("color", "#28693F").css("background", "white");
 							pushbankTransfer = true;
 							$("#orderPayment").val("무통장입금");
-							$("#orderStatus").val("입금대기");
+							$("#orderStatus").val("MV");
 						} else {
 							$("#bankPayment").css("display", "none");
 							$("#btnbankTransfer").css("color", "#28693F").css("background", "white");
@@ -525,7 +525,7 @@
 							$("#btnkakaoPay").css("color", "white").css("background", "#28693F");
 							pushKakaoPay = true;
 							$("#orderPayment").val("카카오페이");
-							$("#orderStatus").val("결제완료");
+							$("#orderStatus").val("PE");
 						}
 						
 						console.log($("#orderStatus").val());

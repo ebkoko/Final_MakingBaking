@@ -13,4 +13,6 @@ public interface ReserService {
 	List<CamelHashMap> getReserList(String userId);
 	
 	CamelHashMap getReserDetail(long reserNo);
+	
+//	Reser updateReser(Reser reser);
 }
