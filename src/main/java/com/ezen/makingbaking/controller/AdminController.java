@@ -32,11 +32,13 @@ import com.ezen.makingbaking.common.FileUtils;
 import com.ezen.makingbaking.dto.DayclassDTO;
 import com.ezen.makingbaking.dto.ImgFileDTO;
 import com.ezen.makingbaking.dto.ItemDTO;
+import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.dto.UserDTO;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
+import com.ezen.makingbaking.entity.Reser;
 import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.service.admin.AdminService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -923,6 +925,64 @@ public class AdminController {
 		
 		return mv;
 	}
+	
+	//reser
+	//dayclass 리스트
+//	@GetMapping("/reserDayclassList")
+//	public ModelAndView getReserDayclassList(ReserDTO reserDTO,
+//			@PageableDefault(page = 0, size = 50) Pageable pageable) {
+//		Reser reser = Reser.builder()
+//							.reserNo(reserDTO.getReserNo())
+//							.partiName(reserDTO.getPartiName())
+//							.userId(reserDTO.getUserId())
+//							.classNo(reserDTO.getClassNo())
+//							.partiDate(reserDTO.getPartiDate())
+//							.partiTime(reserDTO.getPartiTime())
+//							.reserStatus(reserDTO.getReserStatus())
+//							.partiStatus(reserDTO.getPartiStatus())
+//							.build();
+//							
+//		List<Reser> reserList = adminService.getReserList(reser);
+//		
+//		Page<Reser> pageReserList = adminService.getPageReserList(reser, pageable);
+//		
+//		Page<ReserDTO> pageReserDTOList = pageReserList.map(pageReser -> 
+//	                                             						ReserDTO.builder()
+//				                                             						.dayclassNo(pageDayclass.getDayclassNo())
+//				                                             						.dayclassName(pageDayclass.getDayclassName())
+//				                                             						.dayclassPrice(pageDayclass.getDayclassPrice())
+//				                                             						.dayclassTime(pageDayclass.getDayclassTime())
+//				                                             						.dayclassUseYn(pageDayclass.getDayclassUseYn())
+//				                                             						.build()
+//	                                             					);
+//							
+//		List<DayclassDTO> getDayclassList = new ArrayList<DayclassDTO>();
+//		for(int i = 0; i < dayclassList.size(); i++) {
+//			DayclassDTO returnDayclass = DayclassDTO.builder()
+//													.dayclassNo(dayclassList.get(i).getDayclassNo())
+//													.dayclassName(dayclassList.get(i).getDayclassName())
+//													.dayclassPrice(dayclassList.get(i).getDayclassPrice())
+//													.dayclassTime(dayclassList.get(i).getDayclassTime())
+//													.dayclassUseYn(dayclassList.get(i).getDayclassUseYn())
+//													.build();
+//
+//			getDayclassList.add(returnDayclass);
+//		}
+//		
+//		ModelAndView mv = new ModelAndView();
+//		mv.setViewName("admin/dayclassList.html");
+//		mv.addObject("getDayclassList", pageDayclassDTOList);
+//		
+//		if(dayclassDTO.getSearchCondition() != null && !dayclassDTO.getSearchCondition().equals("")) {
+//			mv.addObject("searchCondition", dayclassDTO.getSearchCondition());
+//		}
+//		
+//		if(dayclassDTO.getSearchKeyword() != null && !dayclassDTO.getSearchKeyword().equals("")) {
+//			mv.addObject("searchKeyword", dayclassDTO.getSearchKeyword());
+//		}
+//		
+//		return mv;
+//	}
 	
 	
 	

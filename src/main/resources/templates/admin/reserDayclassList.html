@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+	  
+	<!-- head 영역 시작 -->
+	<!-- 개별적으로 사용할 css, js 링크를 걸기 위해서 남겨둠 -->
+	<head>
+		<th:block layout:fragment="css">
+			<style>
+			    #orderAndReserAdmin {
+					font-size: 40px;
+				}
+				/* 검색 div */
+				#reser_search {
+					margin: 80px auto;
+				}
+				/* 검색창 */
+				#inputSearch {
+					width: 250px;
+					height: 30px;
+					border: 1.2px solid #28693F;
+					display: inline-block;
+				}
+				/* 검색 버튼 */
+				#btnSearch {
+					width: 80px;
+					height: 35px;
+					border: 1.2px solid #28693F;
+					background-color: white;
+					text-align: center;
+					color: #28693F;
+					font-size: 16px;
+					font-weight: 550;
+					letter-spacing:1px;
+					display: inline-block;
+					cursor: pointer;
+				}
+				
+				/* 테이블 */
+				#reserList_T {
+					width: 1200px;
+					border: 1.2px solid #28693F;
+					border-collapse: collapse;
+					border-left: hidden;
+					border-right: hidden;
+					border-top:hidden;
+				}
+				#reserList_T th {
+					background: #28693F;
+					color: white;
+					height: 35px;
+				}
+				
+				.reserList_T_10 {
+					 width: 10%
+				}
+				.reserList_T_20 {
+					 width: 20%
+				}
+				
+				#reserList_T td {
+					border-bottom: 1.2px solid #28693F;
+					text-align: center;
+					height: 80px;
+				}
+				
+				/* 회원 이름 a태그 */
+				/*
+				#a_userName {
+					text-decoration: none;
+					color: inherit;
+				}
+				*/
+				
+				/* 개인 예약취소 버튼 */
+			    #reserCancel {
+					width: 70px;
+					display: inline-block;
+					height: 30px;
+					border: 1.2px solid #28693F;
+					color: #28693F;
+					cursor: pointer;
+					margin-right: 10px;
+			    }
+			    /* 개인 결제취소 버튼 */
+			    #payCancel {
+					width: 70px;
+					display: inline-block;
+					height: 30px;
+					border: 1.2px solid #28693F;
+					color: #28693F;
+					cursor: pointer; 
+			    }
+			</style>
+		</th:block>
+		<th:block layout:fragment="script">
+			<script th:inline="javascript">
+				
+			</script>
+		</th:block>
+	</head>
+	<!-- head 영역 끝 -->
+	
+<body>
+	<div id="container" layout:fragment="content">
+		<div>
+  			<h1 id="orderAndReserAdmin">주문 및 예약 관리</h1>
+		</div>
+		<div>
+			<a href="#">상품 주문 내역</a>&ensp;&ensp;
+			<a href="#">원데이클래스 예약 내역</a>
+		</div>
+		
+		<form id="searchForm" action="/admin/reserList" method="get">
+	    	<div id="reser_search">
+				<select name="searchCondition" id="searchCondition">
+					<option value="ALL" th:selected="${searchCondition == 'ALL' || searchCondition == '' || searchCondition == null}">전체</option>
+					<option value="RESERNO" th:selected="${searchCondition} == 'RESERNO'">예약번호</option>
+					<option value="PARTINAME" th:selected="${searchCondition} == 'PARTINAME'">예약자명</option>
+					<option value="USERID" th:selected="${searchCondition} == 'USERID'">회원 아이디</option>
+					<option value="CLASSNO" th:selected="${searchCondition} == 'CLASSNO'">예약한 클래스번호</option>
+					<option value="PARTIDATE" th:selected="${searchCondition} == 'PARTIDATE'">예약날짜</option>
+					<option value="PARTITIME" th:selected="${searchCondition} == 'PARTITIME'">예약시간</option>
+					<option value="RESERSTATUS" th:selected="${searchCondition} == 'RESERSTATUS'">예약상태</option>
+					<option value="PARTISTATUS" th:selected="${searchCondition} == 'PARTISTATUS'">참여현황</option>
+	            </select>
+	            <input type="text" name="searchKeyword" id="inputSearch" th:value="${searchKeyword}">
+	            
+	            <input type="text" name="searchKeyword" th:value="${searchKeyword}" id="inputSearch" 
+	            	th:style="${ searchCondition != 'PARTITIME' && searchCondition != 'RESERSTATUS' && searchCondition != 'PARTISTATUS' ? 'display: inline-block;' : 'display: none;'}"
+	            	th:disabled="${ searchCondition != 'PARTITIME' && searchCondition != 'RESERSTATUS' && searchCondition != 'PARTISTATUS'} ? false : true">
+	            <select name="searchKeyword" id="selectSearch1" th:style="${searchCondition == 'PARTITIME' ? 'display: inline-block;' : 'display: none;'}"
+	            		th:disabled="${searchCondition == 'PARTITIME'} ? false : true">
+	            	<option>선택하세요.</option>
+	            	<option value="AM" th:selected="${searchKeyword} == 'AM'">AM</option>
+	              	<option value="PM" th:selected="${searchKeyword} == 'PM'">PM</option>
+	              	<option value="BOTH" th:selected="${searchKeyword} == 'BOTH'">BOTH</option>
+	            </select>
+	            <select name="searchKeyword" id="selectSearch2" th:style="${searchCondition == 'RESERSTATUS' ? 'display: inline-block;' : 'display: none;'}"
+	            		th:disabled="${searchCondition == 'RESERSTATUS'} ? false : true">
+	            <option>선택하세요.</option>
+	            	<option value="MV" th:selected="${searchKeyword} == MV'">입금대기(MV)</option>
+	              	<option value="PE" th:selected="${searchKeyword} == 'PE'">결제완료(PE)</option>
+	              	<option value="RC" th:selected="${searchKeyword} == 'RC'">예약취소(RC)</option>
+	              	<option value="PC" th:selected="${searchKeyword} == 'PC'">결제취소(PC)</option>
+	            </select>
+	            <select name="searchKeyword" id="selectSearch3" th:style="${searchCondition == 'PARTISTATUS' ? 'display: inline-block;' : 'display: none;'}"
+	            		th:disabled="${searchCondition == 'PARTISTATUS'} ? false : true">
+	            <option>선택하세요.</option>
+	            	<option value="PS" th:selected="${searchKeyword} == 'PS'">진행예정(PS)</option>
+	              	<option value="PC" th:selected="${searchKeyword} == 'PC'">진행완료(PC)</option>
+	              	<option value="NS" th:selected="${searchKeyword} == 'NS'">노쇼(NS)</option>
+	            </select>
+	            
+				<button type="button" id="btnSearch">검색</button>
+	        </div>
+	    </form>
+	    
+		<!-- 전체선택 Select -->
+		<div id="div_reser_totalSelect">
+			<label for="selectAll"><input type="checkbox" name="select" id="reserSelectAll"> <span>전체선택</span></label>
+		</div>
+		
+		<!-- 원데이클래스 예약 리스트 Table -->
+	    <div id="div_reserList_T">
+	        <table border="1" id="reserList_T">
+	        	<tr>
+			        <th class="reserList_T_05">예약번호</th>
+			        <th class="reserList_T_10">예약자명</th>
+			        <th class="reserList_T_10">회원 아이디</th>
+			        <th class="reserList_T_20">예약한 클래스번호</th>
+			        <th class="reserList_T_10">예약날짜</th>
+			        <th class="reserList_T_10">예약시간</th>
+			        <th class="reserList_T_20">예약상태</th>
+			        <th class="reserList_T_10">참여현황</th>
+	      		</tr>
+	      		<tr th:each="reser: ${getReserList.content}">
+		        	<td th:text="${reser.reserNo}"></td>
+		        	<!--<td>       예약번호 누르면 예약정보 모달?페이지? 띄우기
+						<a id="a_itemName" th:text="${item.itemName}"
+							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">
+						</a>
+					</td>-->
+					<td th:text="${reser.partiName}"></td>
+					<td th:text="${reser.userId}"></td>
+					<td th:text="${reser.classNo}"></td>
+					<td th:text="${reser.partiDate}"></td>
+					<td th:text="${reser.partiTime}"></td>
+					<td th:text="${reser.reserStatus}"></td>
+					<td th:text="${reser.partiStatus}"></td>
+		        	<td>
+		        		<a id="reserCancel" th:text="예약취소">
+							<!--th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">-->
+						</a>
+						<a id="payCancel" th:text="결제취소">
+							<!--th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">-->
+						</a>
+		        	</td>
+		     	 </tr>
+		    </table>
+		</div>
+	</div>
+</body>
+</html>

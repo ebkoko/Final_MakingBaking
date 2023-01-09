@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.lang.Nullable;
@@ -45,4 +46,8 @@ public class Order {	// 주문정보 테이블
 	@Nullable
 	private String depositor;		// 무통장입금 입금자명
 	private int orderTotalPayPrice; // 배송비 포함 총 결제가격
+	@Transient
+	private String searchCondition;
+	@Transient
+	private String searchKeyword;
 }

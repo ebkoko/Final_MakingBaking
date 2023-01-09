@@ -28,4 +28,6 @@ public class OrderDTO {
 	private String orderMail;
 	private String orderMessage;
 	private String depositor;
+	private String searchCondition;
+	private String searchKeyword;
 }

@@ -28,4 +28,6 @@ public class ReserDTO {
 	private int reserTotalPrice;
 	private int classPrice;
 	private String partiStatus;
+	private String searchCondition;
+	private String searchKeyword;
 }
