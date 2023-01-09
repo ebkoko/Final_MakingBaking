@@ -30,4 +30,5 @@ public class ReserDTO {
 	private String partiStatus;
 	private String searchCondition;
 	private String searchKeyword;
+	private String reserCancelDate;
 }

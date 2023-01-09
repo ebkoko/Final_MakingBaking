@@ -270,9 +270,11 @@
 						$(".orderStatus").text("배송완료");
 					}
 					
+					let orderNo = order.orderNo;
+					
 					$("#btnOrderCancel").on('click', function() {
 						$.ajax({
-							url: '/order/orderCancel',
+							url: '/order/orderCancel/' + orderNo,
 							type: 'put',
 							data: { 
 								orderNo: $(".realOrderNo").text(),
@@ -291,7 +293,7 @@
 					
 					$("#btnPayCancel").on('click', function() {
 						$.ajax({
-							url: '/order/payCancel',
+							url: '/order/payCancel/' + orderNo,
 							type: 'put',
 							data: { 
 								orderNo: $(".realOrderNo").text(),

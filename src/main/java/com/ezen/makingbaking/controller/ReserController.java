@@ -184,13 +184,29 @@ public class ReserController {
 	
 	@Transactional
 	@PutMapping("/reserCancel/{reserNo}")
-	public ResponseEntity<?> reserCancel(@PathVariable("reserNo") long reserNo, ReserDTO reserDTO, HttpServletResponse response) {
+	public ResponseEntity<?> reserCancel(@PathVariable("reserNo") long reserNo, ReserDTO reserDTO, 
+			HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails customUser) {
 		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
 		
 		try {
 			Reser returnReser = Reser.builder()
 									.reserNo(reserNo)
+									.userId(customUser.getUsername())
 									.reserStatus(reserDTO.getReserStatus())
+									.partiName(reserDTO.getPartiName())
+									.partiTel(reserDTO.getPartiTel())
+									.partiDate(reserDTO.getPartiDate())
+									.classNo(reserDTO.getClassNo())
+									.reserPersonCnt(reserDTO.getReserPersonCnt())
+									.orderName(reserDTO.getOrderName())
+									.orderTel(reserDTO.getOrderTel())
+									.request(reserDTO.getRequest())
+									.reserPayment(reserDTO.getReserPayment())
+									.depositor(reserDTO.getDepositor())
+									.reserTotalPrice(reserDTO.getReserTotalPrice())
+									.classPrice(reserDTO.getClassPrice())
+									.partiStatus(reserDTO.getPartiStatus())
+									.reserCancelDate(LocalDateTime.now())
 									.build();
 			reserService.updateReser(returnReser);
 			
