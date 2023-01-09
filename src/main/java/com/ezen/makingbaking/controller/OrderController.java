@@ -3,18 +3,23 @@ package com.ezen.makingbaking.controller;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ezen.makingbaking.dto.ApproveResponseDTO;
 import com.ezen.makingbaking.dto.OrderDTO;
 import com.ezen.makingbaking.dto.ReadyResponseDTO;
+import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.entity.Cart;
 import com.ezen.makingbaking.entity.CustomUserDetails;
 import com.ezen.makingbaking.entity.Order;
@@ -162,27 +168,6 @@ public class OrderController {
 		
 		ModelAndView mv = new ModelAndView();
 		
-//		Order returnOrder = Order.builder()
-//							.userId(customUser.getUsername())
-//							.orderNo(orderNo)
-//							.orderDate(LocalDateTime.now())
-//							.orderStatus(order.getOrderStatus())
-//							.orderName(order.getOrderName())
-//							.orderTel(order.getOrderTel())
-//							.shippingAddr1(order.getShippingAddr1())
-//							.shippingAddr2(order.getShippingAddr2())
-//							.shippingAddr3(order.getShippingAddr3())
-//							.orderDeliFee(order.getOrderDeliFee())
-//							.orderTotalPrice(order.getOrderTotalPrice())
-//							.orderPayment(order.getOrderPayment())
-//							.reciName(order.getReciName())
-//							.reciTel(order.getReciTel())
-//							.orderMail(order.getOrderMail())
-//							.orderMessage(order.getOrderMessage())
-//							.depositor(order.getDepositor())
-//							.orderTotalPayPrice(order.getOrderTotalPayPrice())
-//							.build();
-//		
 		orderService.insertOrder(order);
 		orderService.insertOrderItem(orderItemList);
 		
@@ -252,5 +237,57 @@ public class OrderController {
 	public void payCancel(HttpServletResponse response) throws IOException {
 		
 		response.sendRedirect("/cart/orderCartList?msg=cancel");
+	}
+	
+	@Transactional
+	@PutMapping("/orderCancel/{orderNo}")
+	public ResponseEntity<?> orderCancel(@PathVariable("orderNo") long orderNo, OrderDTO orderDTO, HttpServletResponse response) {
+		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
+		
+		try {
+			Order returnOrder = Order.builder()
+									.orderNo(orderNo)
+									.orderStatus(orderDTO.getOrderStatus())
+									.build();
+			orderService.updateOrder(returnOrder);
+			
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			
+			returnMap.put("getOrder", returnOrder);
+			
+			responseDTO.setItem(returnMap);
+			
+			return ResponseEntity.ok().body(responseDTO);
+		} catch(Exception e) {
+			responseDTO.setErrorMessage(e.getMessage());
+			
+			return ResponseEntity.badRequest().body(responseDTO);
+		}
+	}
+	
+	@Transactional
+	@PutMapping("/payCancel/{orderNo}")
+	public ResponseEntity<?> payCancel(@PathVariable("orderNo") long orderNo, OrderDTO orderDTO, HttpServletResponse response) {
+		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
+		
+		try {
+			Order returnOrder = Order.builder()
+									.orderNo(orderNo)
+									.orderStatus(orderDTO.getOrderStatus())
+									.build();
+			orderService.updateOrder(returnOrder);
+			
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			
+			returnMap.put("getOrder", returnOrder);
+			
+			responseDTO.setItem(returnMap);
+			
+			return ResponseEntity.ok().body(responseDTO);
+		} catch(Exception e) {
+			responseDTO.setErrorMessage(e.getMessage());
+			
+			return ResponseEntity.badRequest().body(responseDTO);
+		}
 	}
 }

@@ -288,6 +288,25 @@
 							}
 						});
 					});
+					
+					$("#btnPayCancel").on('click', function() {
+						$.ajax({
+							url: '/order/payCancel',
+							type: 'put',
+							data: { 
+								orderNo: $(".realOrderNo").text(),
+								orderStatus: 'PC'
+								},
+							success: function(obj) {
+								console.log(obj);
+								$(".orderStatus").text("결제취소");
+								$("#moveList").css("display", "flex");
+								$("#CancelOption").css("display", "none");
+							}, error: function(e) {
+								console.log(e);
+							}
+						});
+					});
 				});	
 				
 				function fnBtnMoveList() {

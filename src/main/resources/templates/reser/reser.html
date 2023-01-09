@@ -325,6 +325,7 @@
 						$("#orderTel").val(orderTel);
 						$("#partiTel").val(partiTel);
 						$("#partiDate").val($(".detailDate").text());
+						$("#partiStatus").val("PS");
 					});
 					
 					// 주문자와 동일 체크했을 때
@@ -500,10 +501,11 @@
 	            	<input type="hidden" name="reserPersonCnt" id="reserPersonCnt" th:value="${reserPersonCnt}">
 	            	<input type="hidden" name="reserTotalPrice" id="reserTotalPrice">
 	            	<input type="hidden" name="classPrice" id="classPrice" th:value="${dayclass.dayclassPrice}">
+	            	<input type="hidden" name="partiStatus" id="partiStatus">
 		            <div id="reser_class">
 		                <div class="classView">
 		                    <div class="class_Detail">
-		                        <img class="class_Img" th:src="@{'/class/' + ${dayclass.fileName}}">
+		                        <img class="class_Img" th:src="@{'/dayclass/' + ${dayclass.fileName}}">
 		                        <div class="detailName"><a th:text="${dayclass.dayclassName}"></a><br>
 			                        <div class="detailDate" th:text="${reserDate}"></div>
 	                              	<div class="detailTime" th:if="${partiTime == 'A'}">오전 9:30~12:30</div>

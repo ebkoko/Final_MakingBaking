@@ -20,4 +20,6 @@ public interface OrderService {
 	CamelHashMap getOrderDetail(long orderNo);
 	
 	List<CamelHashMap> getOrderItem(long orderNo);
+	
+	Order updateOrder(Order order);
 }

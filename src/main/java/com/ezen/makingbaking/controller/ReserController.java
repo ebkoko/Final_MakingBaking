@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -91,6 +92,7 @@ public class ReserController {
 							.reserTotalPrice(reserDTO.getReserTotalPrice())
 							.partiDate(reserDTO.getPartiDate())
 							.classPrice(reserDTO.getClassPrice())
+							.partiStatus(reserDTO.getPartiStatus())
 							.build();
 		
 		reserService.insertReser(reser);
@@ -180,29 +182,55 @@ public class ReserController {
 		response.sendRedirect("/dayclass/reserDayclass?msg=cancel");
 	}
 	
-//	@Transactional
-//	@PutMapping("/reserCancel")
-//	public ResponseEntity<?> reserCancel(ReserDTO reserDTO, HttpServletResponse response) {
-//		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
-//		
-//		try {
-//			Reser returnReser = Reser.builder()
-//											.reserNo(reserDTO.getReserNo())
-//											.reserStatus(reserDTO.getReserStatus())
-//											.build();
-//			reserService.updateReser(returnReser);
-//			
-//			Map<String, Object> returnMap = new HashMap<String, Object>();
-//			
-//			returnMap.put("getReser", returnReser);
-//			
-//			responseDTO.setItem(returnMap);
-//			
-//			return ResponseEntity.ok().body(responseDTO);
-//		} catch(Exception e) {
-//			responseDTO.setErrorMessage(e.getMessage());
-//			
-//			return ResponseEntity.badRequest().body(responseDTO);
-//		}
-//	}
+	@Transactional
+	@PutMapping("/reserCancel/{reserNo}")
+	public ResponseEntity<?> reserCancel(@PathVariable("reserNo") long reserNo, ReserDTO reserDTO, HttpServletResponse response) {
+		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
+		
+		try {
+			Reser returnReser = Reser.builder()
+									.reserNo(reserNo)
+									.reserStatus(reserDTO.getReserStatus())
+									.build();
+			reserService.updateReser(returnReser);
+			
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			
+			returnMap.put("getReser", returnReser);
+			
+			responseDTO.setItem(returnMap);
+			
+			return ResponseEntity.ok().body(responseDTO);
+		} catch(Exception e) {
+			responseDTO.setErrorMessage(e.getMessage());
+			
+			return ResponseEntity.badRequest().body(responseDTO);
+		}
+	}
+	
+	@Transactional
+	@PutMapping("/payCancel/{reserNo}")
+	public ResponseEntity<?> payCancel(@PathVariable("reserNo") long reserNo, ReserDTO reserDTO, HttpServletResponse response) {
+		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
+		
+		try {
+			Reser returnReser = Reser.builder()
+											.reserNo(reserNo)
+											.reserStatus(reserDTO.getReserStatus())
+											.build();
+			reserService.updateReser(returnReser);
+			
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			
+			returnMap.put("getReser", returnReser);
+			
+			responseDTO.setItem(returnMap);
+			
+			return ResponseEntity.ok().body(responseDTO);
+		} catch(Exception e) {
+			responseDTO.setErrorMessage(e.getMessage());
+			
+			return ResponseEntity.badRequest().body(responseDTO);
+		}
+	}
 }

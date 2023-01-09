@@ -42,7 +42,7 @@ public class Reser {
 	@Nullable
 	private String depositor;								// 무통장입금 입금자명
 	private int reserTotalPrice;							// 총 결제금액
-	private int classPrice;					// 예약취소 가능여부(가능: P, 불가능: I)	
+	private int classPrice;									// 클래스가격	
 	@Builder.Default
-	private String partiStatus = "PS";		// 참여현황(진행예정: PS, 진행완료: PC, 노쇼: NS)
+	private String partiStatus = "PS";						// 참여현황(진행예정: PS, 진행완료: PC, 노쇼: NS)
 }

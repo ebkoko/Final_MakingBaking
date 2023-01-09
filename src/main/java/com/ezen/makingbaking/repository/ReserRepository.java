@@ -62,6 +62,6 @@ public interface ReserRepository extends JpaRepository<Reser, Integer> {
 			+ "	LEFT OUTER JOIN T_MB_FILE D\r\n"
 			+ "		ON C.DAYCLASS_NO = D.FILE_REFER_NO\r\n"
 			+ "        AND D.FILE_NO = 1\r\n"
-			+ "        AND D.FILE_TYPE = 'dayclass';", nativeQuery=true)
+			+ "        AND D.FILE_TYPE = 'dayclass'", nativeQuery=true)
 	CamelHashMap findByReserDetailAndReserNo(@Param("reserNo") long reserNo);
 }
