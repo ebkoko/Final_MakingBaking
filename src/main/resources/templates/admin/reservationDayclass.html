@@ -38,19 +38,65 @@
 	<!-- head 영역 끝 -->
 	
 <body>
-  <div id="container" layout:fragment="content">
-    <h1>주문 및 예약관리</h1>
-    <div>&ensp;&ensp;
-      <a href="#">상품 주문 내역</a>&ensp;&ensp;
-      <a href="#">원데이클래스 예약 내역</a>
-    </div>
-    <br>
+	<div id="container" layout:fragment="content">
+		<div>
+  			<h1 id="orderAndReserAdmin">주문 및 예약 관리</h1>
+		</div>
+		<div>
+			<a href="#">상품 주문 내역</a>&ensp;&ensp;
+			<a href="#">원데이클래스 예약 내역</a>
+		</div>
+		
+		<!-- 전체선택 Select -->
+		<div id="div_Reser_totalSelect">
+			<label for="selectAll"><input type="checkbox" name="select" id="reserSelectAll"> <span>전체선택</span></label>
+		</div>
+		
+		<!-- 원데이클래스 예약 리스트 Table -->
+	    <div id="div_reserList_T">
+	        <table border="1" id="reserList_T">
+	        	<tr>
+	        		<th class="reserList_T_05"></th>
+			        <th class="reserList_T_05">예약번호</th>
+			        <th class="reserList_T_10">예약자명</th>
+			        <th class="reserList_T_10">회원 아이디</th>
+			        <th class="reserList_T_20">예약한 클래스번호</th>
+			        <th class="reserList_T_10">예약날짜</th>
+			        <th class="reserList_T_10">예약시간</th>
+			        <th class="reserList_T_20">예약상태</th>
+			        <th class="reserList_T_10">참여현황</th>
+	      		</tr>
+	      		<tr th:each="reser: ${getReserList.content}">
+	      			<td><input type="checkbox" name="chk"></td>
+		        	<td th:text="${reser.reserNo}"></td>
+		        	<!--<td>       회원이름 누르면 회원정보 모달?페이지? 띄우기
+						<a id="a_itemName" th:text="${item.itemName}"
+							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">
+						</a>
+					</td>-->
+					<td th:text="${user.userNm}"></td>
+					<td th:text="${user.userId}"></td>
+		        	<td th:text="${user.userRegdate eq null ? '' : #strings.substring(user.userRegdate, 0, 10)}"></td>
+		        	<td>
+		        		<a id="userReview" th:text="Review">
+							<!--th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">-->
+						</a>
+						<a id="userQnA" th:text="QnA">
+							<!--th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">-->
+						</a>
+		        	</td>
+		     	 </tr>
+		    </table>
+		</div>
+		
+		<!-- 예약취소/결제취소 버튼 -->
+	    <div id="dayclassReserTotalBtn">
+	    	<a href="#"><input type="button" value="예약 취소" id="orderCancel"></a>
+	    	<a href="#"><input type="button" value="결제 취소" id="payCancel"></a>
+		</div>
+		
+		
 
-    <table border="1" style="width: 1200px; border-collapse: collapse; border-left: hidden; border-right: hidden; border-top:hidden">
-      <tr>
-        <td colspan="8" align="right"><input type="checkbox"> 전체 선택</td>
-      </tr>
-      <tr>
         <th style="background: lightsteelblue; width: 5%;"></th>
         <th style="background: lightsteelblue; width: 5%;">No.</th>
         <th style="background: lightsteelblue; width: 10%;">회원 아이디</th>
@@ -73,45 +119,7 @@
     </table>
     <br>
 
-    <!-- 주문취소/결제취소버튼 -->
-    <div style="text-align:right;">
-      <a href="#"><input type="button" value="주문취소" id="orderCancel"></a>
-      <a href="#"><input type="button" value="결제취소" id="payCancel"></a>
-    </div>
-    <br>
-    <!-- 페이징 -->
-    <div style="text-align:center;">
-      <ul class="pagination" th:if="${getReviewList.totalElements > 0}"
-                  th:with="pageNumber = ${getReviewList.pageable.pageNumber},
-                              pageSize = ${getReviewList.pageable.pageSize},
-                              totalPages = ${getReviewList.totalPages},
-                              startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
-                              tempEndPage = ${startPage + pageSize -1 },
-                              endPage =  ${tempEndPage > totalPages ? totalPages : tempEndPage}">
-          <li class="pagination_button" th:if="${pageNumber > 0}">
-            <a th:href="@{/review/reviewList(
-                    page=${pageNumber - 1},
-                    searchCondition=${searchCondition},
-                    searchKeyword=${searchKeyword})}">이전</a>
-          </li>
-        
-        
-          <li class="pagination_button" th:each="page : ${#numbers.sequence(startPage, endPage)}">
-          <!-- startPage와 endPage에 있는 숫자들을 page에 담아옴. -->
-            <a th:href="@{/review/reviewList(page=${page - 1},
-                    searchCondition=${searchCondition},
-                    searchKeyword=${searchKeyword})}"
-                    th:text="${page}"></a>
-          </li>
-        
-          <li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
-            <a th:href="@{/review/reviewList(page=${pageNumber + 1},
-                    searchCondition=${searchCondition},
-                    searchKeyword=${searchKeyword})}">다음</a>
-          </li>
-      </ul>
-    </div>
 
-  </div>
+	</div>
 </body>
 </html>

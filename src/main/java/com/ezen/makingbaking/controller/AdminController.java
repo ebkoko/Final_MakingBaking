@@ -940,7 +940,7 @@ public class AdminController {
 		
 		ModelAndView mv = new ModelAndView();
 		
-		mv.setViewName("admin/userList.html");
+		mv.setViewName("admin/reservationDayclass.html");
 			
 		return mv;
 	}
