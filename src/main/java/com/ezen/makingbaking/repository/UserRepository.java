@@ -2,6 +2,8 @@ package com.ezen.makingbaking.repository;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -43,4 +45,10 @@ public interface UserRepository extends JpaRepository<User, String> {
 			+ " WHERE USER_ID = :userId",
 			nativeQuery=true)
 	void pwUser(@Param("userId") String userId);
+	
+	//관리자 회원 검색_선민
+	Page<User> findByUserNameContaining(String searchKeyword, Pageable pageable); //이름
+	Page<User> findByUserIdContaining(String searchKeyword, Pageable pageable); //아이디
+	Page<User> findByUserNameContainingOrUserId(String searchKeyword1, String searchKeyword2, Pageable pageable);
+
 }

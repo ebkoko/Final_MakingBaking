@@ -33,9 +33,11 @@ import com.ezen.makingbaking.dto.DayclassDTO;
 import com.ezen.makingbaking.dto.ImgFileDTO;
 import com.ezen.makingbaking.dto.ItemDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
+import com.ezen.makingbaking.dto.UserDTO;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
+import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.service.admin.AdminService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -85,8 +87,7 @@ public class AdminController {
 	                                                      .itemNo(pageItem.getItemNo())
 	                                                      .itemName(pageItem.getItemName())
 	                                                      .itemPrice(pageItem.getItemPrice())
-	                                                      .itemRegdate(
-	                                                                     pageItem.getItemRegdate() == null?
+	                                                      .itemRegdate(pageItem.getItemRegdate() == null?
 	                                                               null :
 	                                                               pageItem.getItemRegdate().toString())
 	                                                      .itemStatus(pageItem.getItemStatus())
@@ -634,7 +635,7 @@ public class AdminController {
 		Dayclass dayclass = adminService.getDayclass(dayclassNo);
 		
 		DayclassDTO dayclassDTO = DayclassDTO.builder()
-											.dayclassTime(dayclass.getDayclassTime())
+											.dayclassNo(dayclass.getDayclassNo())											.dayclassTime(dayclass.getDayclassTime())
 											.dayclassUseYn(dayclass.getDayclassUseYn())
 											.dayclassName(dayclass.getDayclassName())
 											.dayclassMinName(dayclass.getDayclassMinName())
@@ -866,6 +867,63 @@ public class AdminController {
 	}
 
 	
+	//user
+	//회원 리스트
+	@GetMapping("/userList")
+	public ModelAndView getUserList(UserDTO userDTO,
+			@PageableDefault(page = 0, size = 50) Pageable pageable) {
+		User user = User.builder()
+						.userName(userDTO.getUserNm())
+						.userId(userDTO.getUserId())
+						.userRegdate(LocalDateTime.now())
+						.searchCondition(userDTO.getSearchCondition())
+						.searchKeyword(userDTO.getSearchKeyword())
+						.build();
+		
+		List<User> userList = adminService.getUserList(user);
+		
+		Page<User> pageUserList = adminService.getPageUserList(user, pageable);
+		
+		Page<UserDTO> pageUserDTOList = pageUserList.map(pageUser -> 
+	                             						UserDTO.builder()
+	                             								.userNo(pageUser.getUserNo())
+	                             								.userNm(pageUser.getUserName())
+	                             								.userId(pageUser.getUserId())
+	                             								.userRegdate(pageUser.getUserRegdate() == null?
+	 	                                                               null :
+	 		                                                               pageUser.getUserRegdate().toString())
+	                                         					.build()
+                                         					);
+							
+		List<UserDTO> getUserList = new ArrayList<UserDTO>();
+		for(int i = 0; i < userList.size(); i++) {
+			UserDTO returnUser = UserDTO.builder()
+											.userNo(userList.get(i).getUserNo())
+											.userNm(userList.get(i).getUserName())
+											.userId(userList.get(i).getUserId())
+											.userRegdate(userList.get(i).getUserRegdate() == null ?
+													null :
+													userList.get(i).getUserRegdate().toString())
+													.build();
+
+			getUserList.add(returnUser);
+		}
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("admin/userList.html");
+		mv.addObject("getUserList", pageUserDTOList);
+		
+		if(userDTO.getSearchCondition() != null && !userDTO.getSearchCondition().equals("")) {
+			mv.addObject("searchCondition", userDTO.getSearchCondition());
+		}
+		
+		if(userDTO.getSearchKeyword() != null && !userDTO.getSearchKeyword().equals("")) {
+			mv.addObject("searchKeyword", userDTO.getSearchKeyword());
+		}
+		
+		return mv;
+	}
+	
 	
 	
 	
@@ -882,7 +940,7 @@ public class AdminController {
 		
 		ModelAndView mv = new ModelAndView();
 		
-		mv.setViewName("admin/dayclassList.html");
+		mv.setViewName("admin/userList.html");
 			
 		return mv;
 	}

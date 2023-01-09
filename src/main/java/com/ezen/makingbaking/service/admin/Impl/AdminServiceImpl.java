@@ -12,9 +12,11 @@ import org.springframework.stereotype.Service;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
+import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.repository.DayclassRepository;
 import com.ezen.makingbaking.repository.ImgFileRepository;
 import com.ezen.makingbaking.repository.ItemRepository;
+import com.ezen.makingbaking.repository.UserRepository;
 import com.ezen.makingbaking.service.admin.AdminService;
 
 
@@ -28,6 +30,9 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Autowired
 	private ImgFileRepository imgFileRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 
 	//item
@@ -230,7 +235,30 @@ public class AdminServiceImpl implements AdminService {
 		
 	}
 	
+	//user
+	@Override
+	public List<User> getUserList(User user) {
+		return userRepository.findAll();
+	}
 
+	@Override
+	public Page<User> getPageUserList(User user, Pageable pageable) {
+		if(user.getSearchKeyword() != null && !user.getSearchKeyword().equals("")) {
+			if(user.getSearchCondition().equals("ALL")) {
+				return userRepository.findByUserNameContainingOrUserId
+						(user.getSearchKeyword(), user.getSearchKeyword(), pageable);
+			      } else if (user.getSearchCondition().equals("USERNAME")) {
+			         return userRepository.findByUserNameContaining(user.getSearchKeyword(), pageable);
+			      } else if (user.getSearchCondition().equals("USERID")) {
+			    	  return userRepository.findByUserIdContaining(user.getSearchKeyword(), pageable);
+			      } else {
+			    	  return userRepository.findAll(pageable);
+			      }
+		  } else {
+			  return userRepository.findAll(pageable);
+		  }
+	      
+	   }
 	
 	
 
