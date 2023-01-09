@@ -2,6 +2,7 @@ package com.ezen.makingbaking.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,6 +88,7 @@ public class UserController {
 							.userAddr1(userDTO.getUserAddr1())
 							.userAddr2(userDTO.getUserAddr2())
 							.userAddr3(userDTO.getUserAddr3())
+							.userRegdate(LocalDateTime.now())
 							.build();
 			
 			userService.join(user);
@@ -239,25 +241,23 @@ public class UserController {
 		return mv;
 	}
     
-//    @PostMapping("/changeInfoPw")
-//	public void changeInfoPw(HttpServletResponse response, @RequestParam("userPw") String userPw, 
-//			@AuthenticationPrincipal CustomUserDetails customUserDetails) throws IOException {
-//		User user = User.builder()
-//						.userId(customUserDetails.getUsername())
-//						.build();
-//    	
-//    	
-//    	User dbUser = userService.idcheck(user);
-//    	
-//    	if(!passwordEncoder.matches(userPw, dbUser.getUserPw())) {
-//    		response.sendRedirect("/user/changeInfoPw");
-//    	} else {
-//    		userService.pwUser(user.getUserId());
-//    		
-//    		SecurityContextHolder.clearContext();
-//    		
-//    		response.sendRedirect("/mypage/changeInfo");
-//    	}
-//    	
-//	}
+    @PostMapping("/changeInfoPw")
+	public String changeInfoPw(@RequestParam("userPw") String userPw, 
+			@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+		User user = User.builder()
+						.userId(customUserDetails.getUsername())
+						.build();
+    	
+    	
+    	User dbUser = userService.idcheck(user);
+    	
+    	if(!passwordEncoder.matches(userPw, dbUser.getUserPw())) {
+    		return "/user/changeInfoPw";
+    	} else {
+    		userService.pwUser(user.getUserId());
+    		
+    		return "/mypage/changeInfo";
+    	}
+    	
+	}
 }

@@ -8,10 +8,9 @@
 		<script th:inline="javascript">
 			$(function() {
 				$("#pwBtn").on("click", function(){
-				    if(passwordEncoder.matches(userPw, dbUser.getUserPw() == true)){
+				    if(confirm("수정하시겠습니까?") == true){
 				        $("#joinForm").submit();
-				    }
-				    else{
+				    } else {
 				        return false;
 				    }
 				});
