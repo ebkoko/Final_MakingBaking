@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.lang.Nullable;
@@ -45,4 +46,8 @@ public class Reser {
 	private int classPrice;									// 클래스가격	
 	@Builder.Default
 	private String partiStatus = "PS";						// 참여현황(진행예정: PS, 진행완료: PC, 노쇼: NS)
+	@Transient
+	private String searchCondition;
+	@Transient
+	private String searchKeyword;
 }
