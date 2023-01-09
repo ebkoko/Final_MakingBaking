@@ -233,10 +233,11 @@
 					
 					console.log(reser.reserNo);
 					console.log(typeof reser.reserNo);
+					let reserNo = reser.reserNo;
 					
 					$("#btnReserCancel").on('click', function() {
 						$.ajax({
-							url: '/reser/reserCancel/{reser.reserNo}',
+							url: '/reser/reserCancel/' + reserNo,
 							type: 'put',
 							data: { 
 								reserStatus: 'RC'
@@ -254,7 +255,7 @@
 					
 					$("#btnPayCancel").on('click', function() {
 						$.ajax({
-							url: '/reser/payCancel',
+							url: '/reser/payCancel/' + reserNo,
 							type: 'put',
 							data: {
 								reserStatus: 'PC'
