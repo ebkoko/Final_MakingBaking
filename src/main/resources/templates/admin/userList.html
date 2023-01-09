@@ -82,18 +82,19 @@
 				
 				/* 회원 개인리뷰 버튼 */
 			    #userReview {
-					width: 40px;
+					width: 70px;
 					display: inline-block;
-					height: 25px;
+					height: 30px;
 					border: 1.2px solid #28693F;
 					color: #28693F;
-					cursor: pointer; 
+					cursor: pointer;
+					margin-right: 10px;
 			    }
 			    /* 회원 개인QnA 버튼 */
 			    #userQnA {
-					width: 40px;
+					width: 70px;
 					display: inline-block;
-					height: 25px;
+					height: 30px;
 					border: 1.2px solid #28693F;
 					color: #28693F;
 					cursor: pointer; 
@@ -101,7 +102,7 @@
 			    
 			    
 			    /* 회원탈퇴/메일전송/MMS전송 버튼 div */
-			    #usesrTotalBtn {
+			    #userTotalBtn {
 					 text-align:right;
 					 margin: 50px auto;
 				}
@@ -139,6 +140,7 @@
 					font-size: 18px;
 					font-weight: 550;
 					letter-spacing:1px;
+					margin-right: 30px;
 			    }
 			    #sendMail:hover {
 					background-color: #28693F;
@@ -177,37 +179,37 @@
 	<!-- head 영역 끝 -->
 	
 <body>
-  <div id="container" layout:fragment="content">
-  	<div>
-  		<h1 id="userAdmin">회원 관리</h1>
-	</div>
-    <form id="searchForm" action="/admin/userList" method="get">
-    	<div id="user_search">
-			<select name="searchCondition" id="searchCondition">
-				<option value="ALL" th:selected="${searchCondition == 'ALL' || searchCondition == '' || searchCondition == null}">전체</option>
-				<option value="USERNAME" th:selected="${searchCondition} == 'USERNAME'">이름</option>
-				<option value="USERID" th:selected="${searchCondition} == 'USERID'">아이디</option>
-            </select>
-            <input type="text" name="searchKeyword" th:value="${searchKeyword}">
-			<button type="button" id="btnSearch">검색</button>
-        </div>
-    </form>
-    
-    <!-- 전체선택 Select -->
-	<div id="div_user_totalSelect">
-		<label for="selectAll"><input type="checkbox" name="select" id="userSelectAll"> <span>전체선택</span></label>
-	</div>
-
-	<!-- 회원 리스트 Table -->
-        <div id="div_userList_T">
+	<div id="container" layout:fragment="content">
+	  	<div>
+	  		<h1 id="userAdmin">회원 관리</h1>
+		</div>
+	    <form id="searchForm" action="/admin/userList" method="get">
+	    	<div id="user_search">
+				<select name="searchCondition" id="searchCondition">
+					<option value="ALL" th:selected="${searchCondition == 'ALL' || searchCondition == '' || searchCondition == null}">전체</option>
+					<option value="USERNAME" th:selected="${searchCondition} == 'USERNAME'">이름</option>
+					<option value="USERID" th:selected="${searchCondition} == 'USERID'">아이디</option>
+	            </select>
+	            <input type="text" name="searchKeyword" id="inputSearch" th:value="${searchKeyword}">
+				<button type="button" id="btnSearch">검색</button>
+	        </div>
+	    </form>
+	    
+	    <!-- 전체선택 Select -->
+		<div id="div_user_totalSelect">
+			<label for="selectAll"><input type="checkbox" name="select" id="userSelectAll"> <span>전체선택</span></label>
+		</div>
+	
+		<!-- 회원 리스트 Table -->
+	    <div id="div_userList_T">
 	        <table border="1" id="userList_T">
 	        	<tr>
-	        		<th class="itemList_T_10"></th>
-			        <th class="itemList_T_10">No.</th>
-			        <th class="itemList_T_20">회원 이름</th>
-			        <th class="itemList_T_20">회원 아이디</th>
-			        <th class="itemList_T_20">가입일</th>
-			        <th class="itemList_T_20">개인 게시판</th>
+	        		<th class="userList_T_10"></th>
+			        <th class="userList_T_10">No.</th>
+			        <th class="userList_T_20">회원 이름</th>
+			        <th class="userList_T_20">회원 아이디</th>
+			        <th class="userList_T_20">가입일</th>
+			        <th class="userList_T_20">개인 게시판</th>
 	      		</tr>
 	      		<tr th:each="user: ${getUserList.content}">
 	      			<td><input type="checkbox" name="chk"></td>
@@ -237,7 +239,7 @@
 	    	<a href="#"><input type="button" value="회원 탈퇴" id="userDel"></a>
 	    	<a href="#"><input type="button" value="메일 전송" id="sendMail"></a>
 	    	<a href="#"><input type="button" value="MMS 전송" id="sendMMS"></a>
-	    </div>
-  </div>
+		</div>
+	</div>
 </body>
 </html>

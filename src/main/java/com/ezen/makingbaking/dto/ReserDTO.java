@@ -27,4 +27,5 @@ public class ReserDTO {
 	private String depositor;
 	private int reserTotalPrice;
 	private int classPrice;
+	private String partiStatus;
 }
