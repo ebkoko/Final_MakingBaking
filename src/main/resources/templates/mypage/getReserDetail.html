@@ -192,10 +192,12 @@
 					background: #28693F;
 				}
 				#moveList {
+					display: none; 
+					justify-content: center;	
 				    margin-top: 100px;
 				    margin-bottom: 10px;
-					width: 100px;
-					height: 25px;		
+					width: 100%;
+					height: 25px;	
 				}
 				#btnMoveList {
 					width: 150px;
@@ -217,16 +219,30 @@
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
+				const reser = /*[[${reser}]]*/;
 				$(function() {
+					if(reser.reserStatus == 'MV') {
+						$(".reserStatus").text("입금대기");
+					} else if(reser.reserStatus == 'PE') {
+						$(".reserStatus").text("결제완료");
+					} else if(reser.reserStatus == 'RC') {
+						$(".reserStatus").text("예약취소");
+					} else if(reser.reserStatus == 'PC') {
+						$(".reserStatus").text("결제취소");
+					}
+					
 					$("#btnReserCancel").on('click', function() {
 						$.ajax({
-							url: '/reser/ReserCancel',
-							type: 'delete',
-							data: { reserNo: $(".realReserNo").text()},
+							url: '/reser/reserCancel',
+							type: 'put',
+							data: { 
+								reserNo: $(".realReserNo").text(),
+								reserStatus: 'RC'
+								},
 							success: function(obj) {
 								console.log(obj);
 								$(".reserStatus").text("주문취소");
-								$("#moveList").css("display", "block");
+								$("#moveList").css("display", "flex");
 								$("#CancelOption").css("display", "none");
 							}, error: function(e) {
 								console.log(e);
@@ -248,7 +264,7 @@
 			<div id="container">
 	            <h1 id="reser_title">내 예약 내역</h1>
 	            <div id="top">
-	                <span class="reserNoMent">예약번호: </span><span class="realReserNo" th:text="${reser.reserNo}"></span><span class="reserStatus" th:text="${reser.reserStatus}"></span>
+	                <span class="reserNoMent">예약번호: </span><span class="realReserNo" th:text="${reser.reserNo}"></span><span class="reserStatus"></span>
 	            </div>
 	            <hr>
 	            <div id="list_title">
@@ -258,12 +274,19 @@
 	            <div id="reser_class">
 	                <div class="classView">
 	                    <div class="class_Detail">
-	                        <img class="class_Img" th:src="@{'/dayclass/' + ${reser.fileName}}">
-	                        <div class="detailName" th:text="${reser.dayclassName}"><br>
-		                        <div class="detailDate" th:text="${reser.partiDate}"></div>
-                              	<div class="detailTime" th:if="${reser.partiTime == 'A'}">오전 9:30~12:30</div>
-                              	<div class="detailTime" th:unless="${reser.partiTime == 'A'}">오후 14:00~17:00</div>
-	                        </div>
+	                    	<div style="display: flex;">
+		                    	<div>
+		                        	<img class="class_Img" th:src="@{'/dayclass/' + ${reser.fileName}}">
+		                        </div>
+		                        <div style="display:flex; flex-direction: column; justify-content: center;">
+			                        <div class="detailName" th:text="${reser.dayclassName}"></div>
+			                        <div style="margin-left: 10px;">
+				                        <div class="detailDate" th:text="${reser.partiDate}"></div>
+		                              	<div class="detailTime" th:if="${reser.partiTime == 'A'}">오전 9:30~12:30</div>
+		                              	<div class="detailTime" th:unless="${reser.partiTime == 'A'}">오후 14:00~17:00</div>
+			                        </div>
+		                        </div>
+	                    	</div>
 	                    </div>           
 	                    <div class="class_Price"><span class="classPrice" th:text="${#numbers.formatInteger(reser.classPrice, 3, 'COMMA')}"></span></div><span>원</span>  
 	                    <div class="class_Quantity" th:text="${reser.reserPersonCnt}"></div>                    
@@ -321,9 +344,9 @@
 	                </div>             
 	            </div>
 	            <hr>		            
-	            <div id="CancelOption">
-                    <input type="button" name="CancelOption" id="btnReserCancel" value="주문취소" th:if="${reser.reserPayment == '입금대기'}">&emsp;
-                    <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${reser.reserPayment == '결제완료'}">
+	            <div id="CancelOption" th:if="${reser.cancelEnable == 'P'}">
+                    <input type="button" name="CancelOption" id="btnReserCancel" value="주문취소" th:if="${reser.reserStatus == 'MV'}">&emsp;
+                    <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${reser.reserStatus == 'PE'}">
 	            </div>
 	            <div id="moveList">
 	            	<button type="button" id="btnMoveList" onclick="fnBtnMoveList()">목록으로</button>

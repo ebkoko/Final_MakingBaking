@@ -2,42 +2,37 @@ package com.ezen.makingbaking.controller;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.makingbaking.dto.ApproveResponseDTO;
-import com.ezen.makingbaking.dto.DayclassDTO;
 import com.ezen.makingbaking.dto.ReadyResponseDTO;
 import com.ezen.makingbaking.dto.ReserDTO;
-import com.ezen.makingbaking.entity.Cart;
+import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.entity.CustomUserDetails;
-import com.ezen.makingbaking.entity.Dayclass;
-import com.ezen.makingbaking.entity.Order;
-import com.ezen.makingbaking.entity.OrderItem;
 import com.ezen.makingbaking.entity.Reser;
-import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.service.kakaopay.KakaoPayService;
 import com.ezen.makingbaking.service.reser.ReserService;
 import com.ezen.makingbaking.service.user.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/reser")
@@ -184,4 +179,30 @@ public class ReserController {
 		
 		response.sendRedirect("/dayclass/reserDayclass?msg=cancel");
 	}
+	
+//	@Transactional
+//	@PutMapping("/reserCancel")
+//	public ResponseEntity<?> reserCancel(ReserDTO reserDTO, HttpServletResponse response) {
+//		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
+//		
+//		try {
+//			Reser returnReser = Reser.builder()
+//											.reserNo(reserDTO.getReserNo())
+//											.reserStatus(reserDTO.getReserStatus())
+//											.build();
+//			reserService.updateReser(returnReser);
+//			
+//			Map<String, Object> returnMap = new HashMap<String, Object>();
+//			
+//			returnMap.put("getReser", returnReser);
+//			
+//			responseDTO.setItem(returnMap);
+//			
+//			return ResponseEntity.ok().body(responseDTO);
+//		} catch(Exception e) {
+//			responseDTO.setErrorMessage(e.getMessage());
+//			
+//			return ResponseEntity.badRequest().body(responseDTO);
+//		}
+//	}
 }

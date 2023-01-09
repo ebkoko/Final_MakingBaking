@@ -225,10 +225,12 @@
 					background: #28693F;
 				}
 				#moveList {
-					/*display: block;*/
-					width: 100px;
-					height: 25px;
-					text-align: center;			
+					display: none;
+					justify-content: center;	
+				    margin-top: 100px;
+				    margin-bottom: 10px;
+					width: 100%;
+					height: 25px;	
 				}
 				#btnMoveList {
 					width: 150px;
@@ -250,23 +252,47 @@
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
+				const order = /*[[${order}]]*/;
 				$(function() {
+					if(order.orderStatus == 'MV') {
+						$(".orderStatus").text("입금대기");
+					} else if(order.orderStatus == 'PE') {
+						$(".orderStatus").text("결제완료");
+					} else if(order.orderStatus == 'OC') {
+						$(".orderStatus").text("주문취소");
+					} else if(order.orderStatus == 'PC') {
+						$(".orderStatus").text("결제취소");
+					} else if(order.orderStatus == 'DW') {
+						$(".orderStatus").text("배송준비중");
+					} else if(order.orderStatus == 'D') {
+						$(".orderStatus").text("배송중");
+					} else if(order.orderStatus == 'DC') {
+						$(".orderStatus").text("배송완료");
+					}
+					
 					$("#btnOrderCancel").on('click', function() {
 						$.ajax({
 							url: '/order/orderCancel',
-							type: 'delete',
-							data: { orderNo: $(".realOrderNo").text()},
+							type: 'put',
+							data: { 
+								orderNo: $(".realOrderNo").text(),
+								orderStatus: 'OC'
+								},
 							success: function(obj) {
 								console.log(obj);
 								$(".orderStatus").text("주문취소");
-								$("#moveList").css("display", "block");
+								$("#moveList").css("display", "flex");
 								$("#CancelOption").css("display", "none");
 							}, error: function(e) {
 								console.log(e);
 							}
 						});
 					});
-				});				
+				});	
+				
+				function fnBtnMoveList() {
+					window.location.href = '/mypage/myPage'
+				}			
 			</script>
 		</th:block>
 	</head>
@@ -277,35 +303,28 @@
 			<div id="container">
 	            <h1 id="order_title">내 주문 확인</h1>
 	            <div id="top">
-	                <span class="orderNoMent">주문번호: </span><span class="realOrderNo" >20230106000001</span><span class="orderStatus" >입금대기</span>
+	                <span class="orderNoMent">주문번호: </span><span class="realOrderNo" th:text="${order.orderNo}"></span><span class="orderStatus"></span>
 	            </div>
 	            <hr>
 	            <div id="list_title">
 	                <span class="title_itemInfo">상품정보</span><span class="title_itemPrice">상품금액</span><span class="title_itemQuantity">수량</span><span class="title_totalPrice">합계금액</span>
 	            </div>
 	            <hr> 
-            	<input type="hidden" name="orderTotalPayPrice" id="totalPayPrice">
-            	<input type="hidden" name="orderTel" id="orderTel">
-            	<input type="hidden" name="reciTel" id="reciTel">
-            	<input type="hidden" name="itemList" >
-				<input type="hidden" name="orderTotalPrice" id="orderTotalPrice" >
-				<input type="hidden" name="orderDeliFee" id="orderDeliFee" >
-				<input type="hidden" name="orderStatus" id="orderStatus">
-				<input type="hidden" name="orderPayment" id="orderPayment">
 	            <div id="order_item">
-	                <div class="itemView" >
+	                <div class="itemView" th:each="item : ${item}">
 	                    <div class="item_Detail">
-	                        <img class="item_Img" >
-	                        <div class="detailName"><a ></a></div>    
+	                        <img class="item_Img" th:src="@{'/item/' + ${item.fileName}}">
+	                        <div class="detailName" th:text="${item.itemName}"></div>    
 	                    </div>
-	                    <div class="item_Price"><span class="itemPrice" ></span></div><span>원</span>  
-	                    <div class="item_Quantity" ></div>                    
-	                    <div class="item_totalPrice"><span ></span></div><span>원</span>
+	                    <div class="item_Price"><span class="itemPrice" th:text="${#numbers.formatInteger(item.itemPrice, 3, 'COMMA')}"></span></div><span>원</span>  
+	                    <div class="item_Quantity" th:text="${item.orderItemCnt}"></div>                    
+	                    <div class="item_totalPrice"><span th:text="${#numbers.formatInteger((T(java.lang.Integer).parseInt(item.itemPrice) * T(java.lang.Integer).parseInt(item.orderItemCnt)), 3, 'COMMA')}"></span></div><span>원</span>
 	                </div>            
 	                <hr>
 	                <div id="totalPrice">
-	                    <span>상품 총 금액: </span> <span class="item_PriceSum" ></span><span >원</span> <span>&#43;</span> <span>배송비: </span> <span class="deliFee" ></span><span >원</span> <span>&#61;</span> 
-	                    <span>총 결제금액: </span> <span class="totalPrice" ></span><span >원</span>
+	                    <span>상품 총 금액: </span> <span class="item_PriceSum" th:text="${#numbers.formatInteger(order.orderTotalPrice, 3, 'COMMA')}"></span><span >원</span> <span>&#43;</span> 
+	                    <span>배송비: </span> <span class="deliFee" th:text="${#numbers.formatInteger(order.orderDeliFee, 3, 'COMMA')}"></span><span >원</span> <span>&#61;</span> 
+	                    <span>총 결제금액: </span> <span class="totalPrice" th:text="${#numbers.formatInteger(order.orderTotalPayPrice, 3, 'COMMA')}"></span><span >원</span>
 	                </div>
 	                <hr>
 	            </div>          
@@ -316,28 +335,28 @@
 	                    <table id="T1">
 	                        <tr>
 	                            <th>수령인</th>
-	                            <td><input type="text" name="reciName" id="recipient"  readonly></td>
+	                            <td><input type="text" name="reciName" id="recipient" th:value="${order.reciName}" readonly></td>
 	                        </tr>
 	                        <tr>
 	                            <th>배송주소</th>
 	                            <td>
-	                                <input type="text" name="shippingAddr1" id="addr1" placeholder="우편번호"  readonly>
-	                                <input type="text" name="shippingAddr2" id="addr2" placeholder="주소"  readonly><br>
-	                                <input type="text" name="shippingAddr3" id="addr3" placeholder="상세주소"  readonly>
+	                                <input type="text" name="shippingAddr1" id="addr1" placeholder="우편번호" th:value="${order.shippingAddr1}" readonly>
+	                                <input type="text" name="shippingAddr2" id="addr2" placeholder="주소" th:value="${order.shippingAddr2}" readonly><br>
+	                                <input type="text" name="shippingAddr3" id="addr3" placeholder="상세주소" th:value="${order.shippingAddr3}" readonly>
 	                            </td>
 	                        </tr>
 	                        <tr>
 	                            <th>휴대폰</th>
 	                            <td>
-	                                <input type="text" name="reciTel1" id="reciTel1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4"  readonly> -
-	                                <input type="text" name="reciTel2" id="reciTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4"  readonly> - 
-	                                <input type="text" name="reciTel3" id="reciTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4"  readonly>
+	                                <input type="text" name="reciTel1" id="reciTel1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(order.reciTel).substring(0,3)}" readonly> -
+	                                <input type="text" name="reciTel2" id="reciTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(order.reciTel).substring(4,8)}" readonly> - 
+	                                <input type="text" name="reciTel3" id="reciTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(order.reciTel).substring((order.reciTel).length-4)}" readonly>
 	                            </td>
 	                        </tr>
 	                        <tr>
 	                            <th style="vertical-align: top;">배송메세지</th>
 	                            <td>
-	                                <textarea name="orderMessage" id="message" cols="50" rows="8" maxlength="200"  readonly></textarea>
+	                                <textarea name="orderMessage" id="message" cols="50" rows="8" maxlength="200" th:text="${order.orderMessage}" readonly></textarea>
 	                            </td>
 	                        </tr>
 	                    </table>
@@ -345,19 +364,19 @@
 	                        <caption>주문자 정보</caption>
 	                        <tr>
 	                            <th>주문자</th>
-	                            <td><input type="text" name="orderName" id="orderer"  readonly></td>
+	                            <td><input type="text" name="orderName" id="orderer" th:value="${order.orderName}" readonly></td>
 	                        </tr>
 	                        <tr>
 	                            <th>휴대폰</th>
 	                            <td>
-	                                <input type="text" name="orderTel1" id="orderTel1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4"  readonly> -
-	                                <input type="text" name="orderTel2" id="orderTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4"  readonly> - 
-	                                <input type="text" name="orderTel3" id="orderTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4"  readonly>
+	                                <input type="text" name="orderTel1" id="orderTel1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(order.orderTel).substring(0,3)}" readonly> -
+	                                <input type="text" name="orderTel2" id="orderTel2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(order.orderTel).substring(4,8)}" readonly> - 
+	                                <input type="text" name="orderTel3" id="orderTel3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="4" th:value="${(order.orderTel).substring((order.orderTel).length-4)}" readonly>
 	                            </td>
 	                        </tr>
 	                        <tr>
 	                            <th>이메일</th>
-	                            <td><input type="text" name="orderMail" id="orderMail"  readonly></td>
+	                            <td><input type="text" name="orderMail" id="orderMail" th:value="${order.orderMail}" readonly></td>
 	                        </tr>
 	                        <tr></tr>
 	                        <tr></tr>
@@ -367,11 +386,11 @@
 	            </div>
 	            <hr>
 	            <div id="CancelOption">
-                    <input type="button" name="CancelOption" id="btnOrderCancel" value="주문취소">&emsp;
-                    <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소">
+                    <input type="button" name="CancelOption" id="btnOrderCancel" value="주문취소" th:if="${order.orderStatus == 'MV'}">&emsp;
+                    <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${order.orderStatus == 'PE'}">
 	            </div>
 	            <div id="moveList">
-	            	<button type="button" id="btnMoveList" onclick="location.href='mypage/getOrderDetail'">목록으로</button>
+	            	<button type="button" id="btnMoveList" onclick="fnBtnMoveList()">목록으로</button>
 	            </div>
 	        </div>
 		</div>

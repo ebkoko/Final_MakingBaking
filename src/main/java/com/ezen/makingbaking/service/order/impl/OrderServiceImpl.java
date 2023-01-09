@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Order;
 import com.ezen.makingbaking.entity.OrderItem;
 import com.ezen.makingbaking.repository.OrderItemRepository;
@@ -35,5 +36,23 @@ public class OrderServiceImpl implements OrderService {
 		
 	}
 	
+	@Override
+	public List<CamelHashMap> getOrderList(String userId) {
+		return orderRepository.findAllOrder(userId);
+	}
 	
+	@Override
+	public List<CamelHashMap> getOrderContent(String userId) {
+		return orderRepository.findByOrderContentAndOrderNo(userId);
+	}
+	
+	@Override
+	public CamelHashMap getOrderDetail(long orderNo) {
+		return orderRepository.findByOrderDetailAndOrderNo(orderNo);
+	}
+	
+	@Override
+	public List<CamelHashMap> getOrderItem(long orderNo) {
+		return orderRepository.findByItemDetailAndOrderNo(orderNo);
+	}
 }

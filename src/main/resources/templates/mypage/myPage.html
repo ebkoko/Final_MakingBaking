@@ -26,8 +26,8 @@
 	        <div class="sub-menu">
 	          <h3>My 쇼핑</h3>
 	          <ul class="menu-group">
-	            <li class="menu-name"><a href="#">구매내역</a></li>
-	            <li class="menu-name"><a href="#">예약확인</a></li>
+	            <li class="menu-name"><a th:href="@{/mypage/myPage}">주문확인</a></li>
+	            <li class="menu-name"><a th:href="@{/mypage/myReserList}">예약확인</a></li>
 	            <li class="menu-name"><a href="#">찜목록</a></li>
 	          </ul>
 	        </div>
@@ -53,69 +53,18 @@
 	    </div>
 	    <!-- 메인 내용 -->
 	    <div class="main-content">
-	      <h3 style="margin-bottom: 10px;">주문 내역</h3>
+	      <h3 style="margin-bottom: 10px;">주문 확인</h3>
 	      <span class="search">
-	        <input type="text" class="search-bar" placeholder="검색어 입력">
-	        <a><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" id="search-icon"></a>
+	        
 	      </span>
 	      <!-- 아이템 -->
-	      <div class="boxx">
-	        <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg" width="130px" margin="10px">
+	      <div class="boxx" th:each="order : ${getOrderList}">
 	        <div class="box_product">
-	          <div class="box_product_detail">상품명: 케이크</div>
-	          <div class="box_product_detail">가격: 35000원</div>
-	          <div class="box_product_detail">수량: 1</div>
+	          <div class="box_product_detail" th:text="${'주문일시: ' + #strings.substring(order.orderDate, 0, 19)}"></div>
+	          <div class="box_product_detail" th:text="${'주문번호: ' + order.orderNo}"></div>
 	        </div>
 	        <div class="box_right">
-	          <span class="box_right_detail"><a href="#">주문 상세보기</a></span>
-	          <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
-	        </div>
-	      </div>
-	      <div class="boxx">
-	        <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg" width="130px" margin="10px">
-	        <div class="box_product">
-	          <div class="box_product_detail">상품명: 케이크</div>
-	          <div class="box_product_detail">가격: 35000원</div>
-	          <div class="box_product_detail">수량: 1</div>
-	        </div>
-	        <div class="box_right">
-	          <span class="box_right_detail"><a href="#">주문 상세보기</a></span>
-	          <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
-	        </div>
-	      </div>
-	      <div class="boxx">
-	        <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg" width="130px" margin="10px">
-	        <div class="box_product">
-	          <div class="box_product_detail">상품명: 케이크</div>
-	          <div class="box_product_detail">가격: 35000원</div>
-	          <div class="box_product_detail">수량: 1</div>
-	        </div>
-	        <div class="box_right">
-	          <span class="box_right_detail"><a href="#">주문 상세보기</a></span>
-	          <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
-	        </div>
-	      </div>
-	      <div class="boxx">
-	        <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg" width="130px" margin="10px">
-	        <div class="box_product">
-	          <div class="box_product_detail">상품명: 케이크</div>
-	          <div class="box_product_detail">가격: 35000원</div>
-	          <div class="box_product_detail">수량: 1</div>
-	        </div>
-	        <div class="box_right">
-	          <span class="box_right_detail"><a href="#">주문 상세보기</a></span>
-	          <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
-	        </div>
-	      </div>
-	      <div class="boxx">
-	        <img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg" width="130px" margin="10px">
-	        <div class="box_product">
-	          <div class="box_product_detail">상품명: 케이크</div>
-	          <div class="box_product_detail">가격: 35000원</div>
-	          <div class="box_product_detail">수량: 1</div>
-	        </div>
-	        <div class="box_right">
-	          <span class="box_right_detail"><a href="#">주문 상세보기</a></span>
+	          <span class="box_right_detail"><a th:href="@{/mypage/getOrderDetail/{orderNo} (orderNo=${order.orderNo})}">주문 상세보기</a></span>
 	          <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
 	        </div>
 	      </div>
