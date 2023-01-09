@@ -9,24 +9,25 @@
 	<head>
 		<th:block layout:fragment="css">
 			<style>
-				/* '상품수정' 타이틀 */
-				.itemAdmin {
+				/* '원데이클래스 등록' 타이틀 */
+				.dayclassAdmin {
 					font-size: 40px;
 				}
-				/* 상품수정Table div*/
-				#div_itemUpdate {
+				
+				/* 클래스등록Table div*/
+				#div_dayclassUpdate {
 					margin-top: 80px;
 				}
-			    #T_itemUpdate {
+			    #T_dayclassUpdate {
 					width: 1000px;
 					border-collapse: collapse;
 					margin: 0 auto;
 			    }
-			    #T_itemUpdate td {
+			    #T_dayclassUpdate td {
 					border: 1.2px solid #28693F;
 					border-right: hidden;
 				}
-			    #T_itemUpdate th {
+			    #T_dayclassUpdate th {
 					width: 30%;
 					border: 1.2px solid #28693F;
 					background-color:rgb(239, 239, 239);
@@ -34,77 +35,20 @@
 					border-left: hidden;
 				}
 				
-				/* 판매상태 */
-				#itemStatus_Th {
+				/* 운영시간 */
+				#dayclassTime_Th {
 					height: 50px;
 				}
-				#itemStatus {
+				#dayclassTime {
 					border: 1px solid black;
 				}
 				
-				/* 카테고리 */
-				#itemCate_Th {
+				/* 진행상태 */
+				#dayclassUseYn_Th {
 					height:50px;
 				}
-				/* 카테고리 라디오버튼 */
-				#div_itemRadio 
-					input[type='radio']{
-				      accent-color:rgb(64, 128, 128);
-				      border: 2px solid #808080;
-					}
-				
-				/* 등록일 */
-				#itemRegdate {
-					height:50px;
-					font-size: 15px;
-					padding-left: 20px;
-				}
-				/* 상품이름 */
-				#itemName {
-					width: 650px;
-					height:50px;
-					font-size: 18px;
-					font-weight: bold;
-				}
-				/* 소제목 */
-				#itemMinName {
-					width: 650px;
-					height: 50px;
-					font-size: 15px;
-				}
-				/* 상품설명 */
-				#itemDetails {
-					width: 650px;
-					font-size: 15px;
-					padding-top: 10px;
-					padding-bottom: 10px;
-				}
-				/* 상품가격 */
-				#itemPrice {
-					width: 50px;
-					height: 50px;
-					text-align: right;
-					font-size: 15px;
-				}
-				/* 상품유통기한 */
-				#itemExpDate {
-					width: 650px;
-					height: 50px;
-					font-size: 15px;
-				}
-				/* 상품원산지 */
-				#itemOrigin {
-					width: 650px;
-					height: 50px;
-					font-size: 15px;
-				}
-				/* 알레르기 정보 */
-				#itemAllergyInfo {
-					width: 650px;
-					height: 80px;
-					font-size: 15px;
-					padding-top: 10px;
-					padding-bottom: 10px;
+				#dayclassUseYn {
+					border: 1px solid black;
 				}
 				
 				/* 파일 첨부 */
@@ -121,48 +65,56 @@
 					font-size: 0.9em;
 				}
 				
-				/* 상품 재고 */
-				#itemStockNm {
-		            float: left;
-		            position: relative;
-		            min-width: 114px;
-		            height: 34px;
-		            border: solid 1px #dde0e3;
-		            margin-left: 20px;
-		         }
-		         #itemStockNm_minus, #itemStockNm_plus{
-		            position: relative;
-		            width: 34px;
-		            height: 100%;
-		            background-color: #f1f2f4;
-		            border: none;
-		         }
-		         #itemStockNm_cnt{
-		            width: 40px;
-		            height: 100%;
-		            border-width: 0 1px;
-		            vertical-align: top;
-		            color: #333333;
-		            font-size: 14px;
-		            font-weight: bold;
-		            line-height: 34px;
-		            text-align: center;  
-		         }
-		         input[type="number"]::-webkit-outer-spin-button,
-		         input[type="number"]::-webkit-inner-spin-button {
-		             -webkit-appearance: none;
-		             margin: 0;
-		         }
+				/* 등록일 */
+				#dayclassRegdate {
+					height:50px;
+					font-size: 15px;
+					padding-left: 20px;
+				}
+				/* 클래스이름 */
+				#dayclassName {
+					width: 650px;
+					height:50px;
+					font-size: 18px;
+					font-weight: bold;
+				}
+				/* 소제목 */
+				#dayclassMinName {
+					width: 650px;
+					height: 50px;
+					font-size: 15px;
+				}
+				/* 소요시간 */
+				#dayclassDurationTime {
+					width: 50px;
+					height: 50px;
+					text-align: right;
+					font-size: 15px;
+				}
+				/* 가격 */
+				#dayclassPrice {
+					width: 50px;
+					height: 50px;
+					text-align: right;
+					font-size: 15px;
+				}
+				/* 설명 */
+				#dayclassDetails {
+					width: 650px;
+					font-size: 15px;
+					padding-top: 10px;
+					padding-bottom: 10px;
+				}
 				
-				/* 상품등록 버튼 div */
-			    #div_itemBtn {
+				/* 클래스수정 버튼 div */
+			    #div_dayclassBtn {
 					text-align:right;
 					margin: 50px auto;
 					margin-right: 100px;
 				}
 
-				/* 상품수정 버튼 */
-			    #itemUpdateBtn {
+				/* 클래스수정 버튼 */
+			    #dayclassUpdateBtn {
 					width: 150px;
 					height: 50px;
 					border: 1.2px solid #28693F;
@@ -175,14 +127,14 @@
 					font-weight: 550;
 					letter-spacing:1px;
 			    }
-			    #itemUpdateBtn:hover {
+			    #dayclassUpdateBtn:hover {
 					background-color: #28693F;
 					color: white;
 					font-weight: 550;
 					cursor: pointer;
 				}
 				/* 목록으로 버튼 */
-			    #itemListBtn {
+			    #dayclassListBtn {
 					width: 150px;
 					height: 50px;
 					border: 1.2px solid #28693F;
@@ -196,7 +148,7 @@
 					letter-spacing:1px;
 					margin-right: 30px;
 			    }
-			    #itemListBtn:hover {
+			    #dayclassListBtn:hover {
 					background-color: #28693F;
 					color: white;
 					font-weight: 550;
@@ -217,8 +169,6 @@
 				
 				
 				$(function () {
-					$("#itemRegdate").attr("readonly", true);
-		               
 					//input type=file이 변경되면 미리보기 동작
 		            $("#btnAtt").on("change", function(e) {
 		               //input type=file에 추가된 파일들을 변수로 받아옴
@@ -232,14 +182,14 @@
 		               }
 		            });
 		            
-		            for(let i = 0; i < $("#itemFileCnt").val(); i++) {
+		            for(let i = 0; i < $("#dayclassFileCnt").val(); i++) {
 		               const originFileObj = {
-		                  fileReferNo: $("#itemNo").val(),
+		                  fileReferNo: $("#dayclassNo").val(),
 		                  fileNo: $("#fileNo" + i).val(),
 		                  fileName: $("#fileName" + i).val(),
 		                  //업로드 파일 경로가 각각 다를때는 boardFilePath 속성도 추가
 		                  //파일 상태값(수정되거나 삭제된 파일은 변경)
-		                  fileType: 'item',
+		                  fileType: 'dayclass',
 		                  fileStatus: "N"
 		               };
 		               
@@ -393,9 +343,9 @@
 		            $(div).remove();
 		         }
 		         
-		         function fnFileDown(itemNo, fileNo) {
-		            window.location="/admin/fileDown.do?itemNo=" //BoardController.java에 fileDonw.do 만들어주기
-		                  + itemNo + "&fileNo=" + fileNo;
+		         function fnFileDown(dayclassNo, fileNo) {
+		            window.location="/admin/fileDown.do?dayclassNo=" //BoardController.java에 fileDonw.do 만들어주기
+		                  + dayclassNo + "&fileNo=" + fileNo;
 		         }
 		         
 		         
@@ -428,30 +378,27 @@
 		           //multipart/form-data형식을 전송하기 위해서는
 		           //new FormData()를 사용하여 직접 폼데이터 객체를 만들어 준다.
 		           //form.serialize()는 multipart/form-data 전송불가
-		           let formData = new FormData($("#itemUpdateForm")[0]);
+		           let formData = new FormData($("#dayclassUpdateForm")[0]);
 		           
 		           //ajax에 enctype: multipart/form-data, processData: false, contentType: false로 설정
 		           
 		           $.ajax({
 					  enctype: 'multipart/form-data',
-		              url: '/admin/updateItem',
+		              url: '/admin/updateDayclass',
 		              type: 'put',
 		              data: formData,
 		              processData: false,
 		              contentType: false,
 		              success: function (obj) {
 		                 console.log(obj);
-		                 $("#itemNo").val(obj.item.getItem.itemNo);
-		                 $("#itemStatus").val(obj.item.getItem.itemStatus);
-		                 $("#itemCate").val(obj.item.getItem.itemCate);
-		                 $("#itemName").val(obj.item.getItem.itemName);
-		                 $("#itemMinName").val(obj.item.getItem.itemMinName);
-		                 $("#itemDetails").val(obj.item.getItem.itemDetails);
-		                 $("#itemPrice").val(obj.item.getItem.itemPrice);
-		                 $("#itemExpDate").val(obj.item.getItem.itemExpDate);
-		                 $("#itemOrigin").val(obj.item.getItem.itemOrigin);
-		                 $("#itemAllergyInfo").text(obj.item.getItem.itemAlllergyInfo);
-		                 $("#itemStockNm_cnt").val(obj.item.getItem.itemStock);
+		                 $("#dayclassNo").val(obj.item.getDayclass.dayclassNo);
+		                 $("#dayclassTime").val(obj.item.getDayclass.dayclassTime);
+		                 $("#dayclassUseYn").val(obj.item.getDayclass.dayclassUseYn);
+		                 $("#dayclassName").val(obj.item.getDayclass.dayclassName);
+		                 $("#dayclassMinName").val(obj.item.getDayclass.dayclassMinName);
+		                 $("#dayclassDurationTime").val(obj.item.getDayclass.dayclassDurationTime);
+		                 $("#dayclassPrice").val(obj.item.getDayclass.dayclassrice);
+		                 $("#dayclassDetails").text(obj.item.getDayclass.dayclassDetails);
 		              },
 		              error: function (e) {
 		                 console.log(e);
@@ -467,79 +414,47 @@
 				 
 				 
 				 $(function() {
-					 $("#itemUpdateForm").on("submit", function(e) {
+					 $("#dayclassUpdateForm").on("submit", function(e) {
 						 // 상품수정 버튼 클릭 시 유효성 검사
-			             if(!$("#itemName").val()) {
-								alert("상품 이름을 입력해주세요.");
+			             if(!$("#dayclassName").val()) {
+								alert("클래스 이름을 입력해주세요.");
 								e.preventDefault();
-								$("#itemName").focus();
+								$("#dayclassName").focus();
 								return;
 							}
-							if(!$("#itemMinName").val()) {
-								alert("상품 소제목을 입력해주세요.");
+							if(!$("#dayclassMinName").val()) {
+								alert("클래스 소제목을 입력해주세요.");
 								e.preventDefault();
-								$("#itemMinName").focus();
+								$("#dayclassMinName").focus();
 								return;
 							}
-							if(!$("#itemDetails").val()) {
-								alert("상품 설명을 입력해주세요.");
+							if(!$("#dayclassDurationTime").val()) {
+								alert("클래스 소요시간을 입력해주세요.");
 								e.preventDefault();
-								$("#itemDetails").focus();
+								$("#dayclassDurationTime").focus();
 								return;
 							}
-							/*
-							if(!$("#itemPriceInput").val()) {
-								alert("상품 가격을 입력해주세요.");
+							if(!$("#dayclassPrice").val()) {
+								alert("클래스 가격을 입력해주세요.");
 								e.preventDefault();
-								$("#itemPriceInput").focus();
-								return;
-							} else {
-								//$("#itemPrice").val($("#itemPriceInput").val().replace(/,/g, ''));
-								console.log($("#itemPrice").val());
-							}
-							*/
-							if(!$("#itemPrice").val()) {
-								alert("상품 가격을 입력해주세요.");
-								e.preventDefault();
-								$("#itemPrice").focus();
+								$("#dayclassPrice").focus();
 								return;
 							} else {
-								$("#itemPrice").val(itemPrice);
+								$("#dayclassPrice").val(dayclassPrice);
 							}
-							if(!$("#itemExpDate").val()) {
-								alert("상품 유통기한을 입력해주세요.");
+							if(!$("#dayclassDetails").val()) {
+								alert("클래스 설명을 입력해주세요.");
 								e.preventDefault();
-								$("#itemExpDate").focus();
-								return;
-							}
-							if(!$("#itemOrigin").val()) {
-								alert("상품 원산지를 입력해주세요.");
-								e.preventDefault();
-								$("#itemOrigin").focus();
-								return;
-							}
-							if(!$("#itemAllergyInfo").val()) {
-								alert("상품 알레르기 정보를 입력해주세요.");
-								e.preventDefault();
-								$("#itemAllergyInfo").focus();
+								$("#dayclassDetails").focus();
 								return;
 							}
 							e.preventDefault();
-							//if말고 변수선언하고 = confirm해서 해보기
-							/*
-							if(!confirm("수정하시겠습니까?")) {
-								alert("상품수정이 취소되었습니다.");
-								return;
-							} else {
-								$("#itemUpdateForm").submit();
-								alert("상품이 수정되었습니다.");
-							}*/
 							if(confirm("수정하시겠습니까?")) {
-								alert("상품이 수정되었습니다.");
+								alert("클래스가 수정되었습니다.");
 								return;
 							} else {
 								e.preventDefault();
-								alert("상품수정이 취소되었습니다.");
+								alert("클래스 수정이 취소되었습니다.");
 								return;
 							}
 			         });
@@ -575,10 +490,10 @@
 					  return str.replace(/[^\d]+/g, '');
 				  }*/
 				  
-				  
-				//가격 숫자만입력가능
+				
+				//소요시간 숫자만 입력가능
 				$(function() {
-					$("#itemPriceInput").on("keyup", function(event) {
+					$("#dayclassDurationTime").on("keyup", function(event) {
 						if (event.which && ((event.which  > 47 && event.which  < 58) || (event.which > 95 && event.which < 106) || event.which == 8)) {
 				            
 				        }else{
@@ -588,24 +503,17 @@
 				    });
 				});
 				  
-				//재고
+				//가격 숫자만 입력가능
 				$(function() {
-					$("#itemStockNm_plus").on("click", function(){
-						$("#itemStockNm_cnt").val(parseInt($("#itemStockNm_cnt").val()) + 1);
-                    });
-                    	
-					$("#itemStockNm_minus").on("click", function(){
-						$("#itemStockNm_cnt").val(parseInt($("#itemStockNm_cnt").val()) - 1);
-						
-						if($("#itemStockNm_cnt").val() < 0) {
-							$("#itemStockNm_cnt").val(0);
-                     		alert("최소 재고수량은 0입니다.");
-                    	 	return;
-                    	 }
-                    });
+					$("#dayclassPrice").on("keyup", function(event) {
+						if (event.which && ((event.which  > 47 && event.which  < 58) || (event.which > 95 && event.which < 106) || event.which == 8)) {
+				            
+				        }else{
+							alert('숫자만 입력해주세요.');
+				            $(this).val($(this).val().replace(/[^0-9]/g,""));
+				        }
+				    });
 				});
-				 
-				 
 			</script>
 		</th:block>
 	</head>
@@ -614,94 +522,45 @@
 <body>
 	<div id="container" layout:fragment="content">
 		<div>
-			<h1 class="itemAdmin">상품 수정</h1>
+			<h1 class="dayclassAdmin">원데이클래스 수정</h1>
 		</div>
 		
-	    <!-- 상품등록내용 -->
-	    <form id="itemUpdateForm" enctype="multipart/form-data">
-		    <input type="hidden" name="itemNo" id="itemNo" th:value="${getItem.itemNo}">
-			<input type="hidden" name="itemRegdate" id="itemRegdate" th:value="${getItem.itemRegdate}">
+	    <!-- 클래스 수정 내용 -->
+	    <form id="dayclassUpdateForm" enctype="multipart/form-data">
+		    <input type="hidden" name="dayclassNo" id="dayclassNo" th:value="${getDayclass.dayclassNo}">
 			<input type="hidden" name="originFiles" id="originFiles">
-      		<!--<input type="hidden" name="itemPrice" id="itemPrice">-->
-			<div id="div_itemUpdate">
-				<table border="1" id="T_itemUpdate">
-			        <tr>
-			          <th id="itemStatus_Th">판매 상태</th>
-			          <td>&ensp;&ensp;
-			            <select name="itemStatus" id="itemStatus">
-			              <option value="Y" th:selected="${getItem.itemStatus} == 'Y'">판매중</option>
-			              <option value="S" th:selected="${getItem.itemStatus} == 'S'">재고없음</option>
-			              <option value="N" th:selected="${getItem.itemStatus} == 'N'">판매종료</option>
-			            </select>
-			          </td>
-			        </tr>
-			        <tr>
-			          <th id="itemCate_Th">카테고리</th>
-			          <td>
-			          <div id="div_itemRadio">&ensp;&ensp;
-			          	<input type="radio" name="itemCate" value="케이크" th:checked="${getItem.itemCate} == '케이크'"><label for="케이크">케이크&ensp;&ensp;</label>
-			          	<input type="radio" name="itemCate" value="빵"  th:checked="${getItem.itemCate} == '빵'"><label for="빵">빵&ensp;&ensp;</label>
-			          	<input type="radio" name="itemCate" value="쿠키" th:checked="${getItem.itemCate} == '쿠키'"><label for="쿠키">쿠키&ensp;&ensp;</label>
-			          	<input type="radio" name="itemCate" value="디저트" th:checked="${getItem.itemCate} == '디저트'"><label for="디저트">디저트&ensp;&ensp;</label>
-			          	<input type="radio" name="itemCate" value="비건" th:checked="${getItem.itemCate} == '비건'"><label for="비건">비건</label>
-			          </div>
-			          </td>
-			        </tr>
-			        <tr>
-			        	<th>등록일</th>
-						<td name="itemRegdate" id="itemRegdate" class="inputH"
-							th:text="${getItem.itemRegdate eq null ? '' : #strings.substring(getItem.itemRegdate, 0, 10)}">
+			<div id="div_dayclassUpdate">
+				<table border="1" id="T_dayclassUpdate">
+					<tr>
+						<th id="dayclassTime_Th">운영시간</th>
+						<td>&ensp;&ensp;
+				            <select name="dayclassTime" id="dayclassTime">
+								<option value="A" th:selected="${searchCondition == 'A'}">오전</option>
+								<option value="P" th:selected="${searchCondition == 'P'}">오후</option>
+								<option value="B" th:selected="${searchCondition == 'B'}">오전/오후</option>
+				            </select>
 						</td>
-					</tr>
-			        <tr>
-			          <th>이름</th>
-			          <td>&ensp;&ensp;<input type="text" name="itemName" class="inputH" id="itemName" th:value="${getItem.itemName}">&ensp;&ensp;</td>
 			        </tr>
 			        <tr>
-			          <th>소제목</th>
-			          <td>&ensp;&ensp;<input type="text" name="itemMinName" class="inputH" id="itemMinName" th:value="${getItem.itemMinName}">&ensp;&ensp;</td>
+						<th id="dayclassUseYn_Th">진행상태</th>
+						<td>&ensp;&ensp;
+				            <select name="dayclassUseYn" id="dayclassUseYn">
+								<option value="Y" th:selected="${searchCondition == 'Y'}">진행중</option>
+								<option value="S" th:selected="${searchCondition == 'S'}">진행예정</option>
+								<option value="N" th:selected="${searchCondition == 'N'}">진행완료</option>
+				            </select>
+			          	</td>
 			        </tr>
 			        <tr>
-			          <th>설명</th>
-			          <td>&ensp;&ensp;<textarea cols="100" name="itemDetails" rows="10" id="itemDetails" th:text="${getItem.itemDetails}"></textarea></td>
-			        </tr>
-			        <!--
-			        <tr>
-			          <th>가격</th>
-			          <td>&ensp;&ensp;
-			          <input type="text" class="inputH" id="itemPriceInput"
-			          	onkeyup="inputNumberFormat(this)" maxlength="8" th:value="${getItem.itemPrice}">원
-			          </td>
-			        </tr> -->
-			        <tr>
-			          <th>가격</th>
-			          <td>&ensp;&ensp;
-			          	<input type="text" name="itemPrice" id="itemPrice" th:value="${getItem.itemPrice}"
-			          			maxlength="8">원
-			          </td>
-			        </tr>
-			        <tr>
-			          <th>유통기한</th>
-			          <td>&ensp;&ensp;<input type="text" name="itemExpDate" class="inputH"  id="itemExpDate" th:value="${getItem.itemExpDate}"></td>
-			        </tr>
-			        <tr>
-			          <th>원산지</th>
-			          <td>&ensp;&ensp;<input type="text" name="itemOrigin" class="inputH" id="itemOrigin" th:value="${getItem.itemOrigin}"></td>
-			        </tr>
-			        <tr>
-			          <th>알레르기 정보</th>
-			          <td>&ensp;&ensp;<textarea name="itemAllergyInfo" id="itemAllergyInfo" class="inputH" th:text="${getItem.itemAllergyInfo}"></textarea></td>
-			        </tr>
-			        <tr>
-			          <th>영양정보</th>
+			          <th>클래스 대표이미지</th>
 			          <td>
 			            <div>
 			              &ensp;&ensp;<input type="file" id="btnAtt" name="uploadFiles" multiple="multiple">
 			              <input type="file" id="changedFiles" name="changedFiles" style="display: none;" 
 			              	multiple="multiple">
-			              <p style="color: red; font-size: 0.9rem;">상품 영양정보를 변경하려면 이미지를 클릭하고, 영양정보를 다운로드하려면 이미지 파일명을 클릭하세요.</p>
+			              <p style="color: red; font-size: 0.9rem;">클래스 대표이미지를 변경하려면 이미지를 클릭하고, 다운로드하려면 이미지의 파일명을 클릭하세요.</p>
 			              <div id="attZone">
-			              	<div th:each="imgFile : ${itemFileList}" style="display: inline-block; position: relative; 
+			              	<div th:each="imgFile : ${dayclassFileList}" style="display: inline-block; position: relative; 
 								width: 150px; height: 120px; margin: 5px; border: 1px solid #00f; z-index: 1;">
 								<input type="hidden" th:id="'fileNo' + ${imgFileStat.index}" 
 									th:name="'fileNo' + ${imgFileStat.index}" 
@@ -713,11 +572,11 @@
 									th:name="'changedFile' + ${imgFile.fileNo}" 
 									style="display: none;"
 									th:onchange="fnGetChangedFileInfo([[${imgFile.fileNo}]], event)">
-								<input th:if="${imgFileStat.last}" type="hidden" id="itemFileCnt"
-									name="itemFileCnt" th:value="${imgFileStat.count}">
+								<input th:if="${imgFileStat.last}" type="hidden" id="dayclassFileCnt"
+									name="dayclassFileCnt" th:value="${imgFileStat.count}">
 			
 								<img th:id="'img' + ${imgFile.fileNo}" 
-									th:src="@{'/item/' + ${imgFile.fileName}}"
+									th:src="@{'/dayclass/' + ${imgFile.fileName}}"
 									style="width: 100%; height: 100%; z-index: none; cursor: pointer;"
 									class="fileImg" 
 									th:onclick="fnImgChange([[${imgFile.fileNo}]])">
@@ -728,7 +587,7 @@
 									z-index: 999; background-color: rgba(255, 255, 255, 0.1); color: #f00;"
 									onclick="fnImgDel(event)">
 								<p th:id="'fileName' + ${imgFile.fileNo}" style="display: inline-block; font-size: 8px;
-									cursor: pointer;" th:onclick="fnFileDown([[${getItem.itemNo}]], [[${imgFile.fileNo}]])"
+									cursor: pointer;" th:onclick="fnFileDown([[${getDayclass.dayclassNo}]], [[${imgFile.fileNo}]])"
 									th:text="${imgFile.fileOriginName}">
 								</p>
 							</div>
@@ -737,24 +596,37 @@
 			          </td>
 			        </tr>
 			        <tr>
-			          <th>재고</th>
+			          <th>이름</th>
+			          <td>&ensp;&ensp;<input type="text" name="dayclassName" id="dayclassName" th:value="${getDayclass.dayclassName}">&ensp;&ensp;</td>
+			        </tr>
+			        <tr>
+			          <th>소제목</th>
+			          <td>&ensp;&ensp;<input type="text" name="dayclassMinName" id="dayclassMinName" th:value="${getDayclass.dayclassMinName}">&ensp;&ensp;</td>
+			        </tr>
+			        <tr>
+			          <th>소요시간</th>
+			          <td>&ensp;&ensp;<input type="text" name="dayclassDurationTime" id="dayclassDurationTime" th:value="${getDayclass.dayclassDurationTime}"> 시간</td>
+			        </tr>
+			        <tr>
+			          <th>가격</th>
 			          <td>&ensp;&ensp;
-			          	<div id="itemStockNm">
-							<button type="button" name="재고내리기" id="itemStockNm_minus">－</button>
-							<input type="number" name="itemStock" id="itemStockNm_cnt" class="inputH" th:value="${getItem.itemStock}">
-							<button type="button" name="재고올리기" id="itemStockNm_plus">＋</button>
-						</div>
+			          	<input type="text" name="dayclassPrice" id="dayclassPrice" th:value="${getDayclass.dayclassPrice}"
+			          			 maxlength="8"> 원
 			          </td>
+			        </tr>
+			        <tr>
+			          <th>설명</th>
+			          <td>&ensp;&ensp;<textarea cols="100" name="dayclassDetails" rows="10" id="dayclassDetails"  th:value="${getDayclass.dayclassDetails}"></textarea></td>
 			        </tr>
 				</table>
 			</div>
 	      
 	      	
-			<div id="div_itemBtn">
+			<div id="div_dayclassBtn">
 				<!-- 목록으로 버튼 -->
-				<a href="/admin/itemList"><input type="button" value="목록으로" id="itemListBtn"></a>
-				<!-- 상품수정 버튼 -->
-				<button type="submit" id="itemUpdateBtn" onclick="fnUpdateItem();">수정</button>
+				<a href="/admin/dayclassList"><input type="button" value="목록으로" id="dayclassListBtn"></a>
+				<!-- 클래스 수정 버튼 -->
+				<button type="submit" id="dayclassUpdateBtn" onclick="fnUpdateItem();">수정</button>
 			</div>
 		</form>
   </div>

@@ -22,4 +22,7 @@ public class UserDTO {
 	private String userAddr1;
 	private String userAddr2;
 	private String userAddr3;
+	private String userRegdate;
+	private String searchCondition;
+	private String searchKeyword;
 }

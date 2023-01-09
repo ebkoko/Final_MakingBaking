@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
+import com.ezen.makingbaking.entity.User;
 
 public interface AdminService {
 	//Page<CamelHashMap> getItemFileList(Pageable pageable);
@@ -40,4 +41,8 @@ public interface AdminService {
 	Dayclass updateDayclass(Dayclass dayclass, List<ImgFile> uFileList);
 	
 	void deleteDayclass(int dayclassNo);
+	
+	//user
+	List<User> getUserList(User user);
+	Page<User> getPageUserList(User user, Pageable pageable);
 }

@@ -1,5 +1,7 @@
 package com.ezen.makingbaking.entity;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -47,13 +49,15 @@ public class User {		// 회원 테이블
 	private String userAddr1;	// 우편번호
 	private String userAddr2;	// 기본주소
 	private String userAddr3;	// 상세주소
+	@Builder.Default
+	private LocalDateTime userRegdate = LocalDateTime.now(); // 가입일
 	@Column
 	@ColumnDefault("ROLE_USER")
 	private String userRole;	
-	
 	@Transient
 	private String joinYn;
-	
-	
-	
+	@Transient
+	private String searchCondition;
+	@Transient
+	private String searchKeyword;
 }

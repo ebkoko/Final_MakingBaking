@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+	  
+	<!-- head 영역 시작 -->
+	<!-- 개별적으로 사용할 css, js 링크를 걸기 위해서 남겨둠 -->
+	<head>
+		<th:block layout:fragment="css">
+			<style>
+				#userAdmin {
+					font-size: 40px;
+				}
+				/* 검색 div */
+				#user_search {
+					margin: 80px auto;
+				}
+				/* 검색창 */
+				#inputSearch {
+					width: 250px;
+					height: 30px;
+					border: 1.2px solid #28693F;
+					display: inline-block;
+				}
+				/* 검색 버튼 */
+				#btnSearch {
+					width: 80px;
+					height: 35px;
+					border: 1.2px solid #28693F;
+					background-color: white;
+					text-align: center;
+					color: #28693F;
+					font-size: 16px;
+					font-weight: 550;
+					letter-spacing:1px;
+					display: inline-block;
+					cursor: pointer;
+				}
+				
+				/* 전체선택 Select */
+				#div_user_totalSelect {
+					margin: 15px auto;
+					text-align: right;
+				}
+				
+				/* 테이블 */
+				#userList_T {
+					width: 1200px;
+					border: 1.2px solid #28693F;
+					border-collapse: collapse;
+					border-left: hidden;
+					border-right: hidden;
+					border-top:hidden;
+				}
+				#userList_T th {
+					background: #28693F;
+					color: white;
+					height: 35px;
+				}
+				
+				.userList_T_10 {
+					 width: 10%
+				}
+				.userList_T_20 {
+					 width: 20%
+				}
+				
+				#userList_T td {
+					border-bottom: 1.2px solid #28693F;
+					text-align: center;
+					height: 80px;
+				}
+				
+				/* 회원 이름 a태그 */
+				/*
+				#a_userName {
+					text-decoration: none;
+					color: inherit;
+				}
+				*/
+				
+				/* 회원 개인리뷰 버튼 */
+			    #userReview {
+					width: 40px;
+					display: inline-block;
+					height: 25px;
+					border: 1.2px solid #28693F;
+					color: #28693F;
+					cursor: pointer; 
+			    }
+			    /* 회원 개인QnA 버튼 */
+			    #userQnA {
+					width: 40px;
+					display: inline-block;
+					height: 25px;
+					border: 1.2px solid #28693F;
+					color: #28693F;
+					cursor: pointer; 
+			    }
+			    
+			    
+			    /* 회원탈퇴/메일전송/MMS전송 버튼 div */
+			    #usesrTotalBtn {
+					 text-align:right;
+					 margin: 50px auto;
+				}
+				/* 회원탈퇴 버튼 */
+			    #userDel {
+			     	width: 150px;
+			      	height: 50px;
+			     	border: 1.2px solid #28693F;
+					border-radius: 4px;
+					background-color: white;
+					text-align: center;
+					display: inline-block;
+					color: #28693F;
+					font-size: 18px;
+					font-weight: 550;
+					letter-spacing:1px;
+					margin-right: 30px;
+			    }
+			    #userDel:hover {
+					background-color: #28693F;
+					color: white;
+					font-weight: 550;
+					cursor: pointer;
+				}
+			    /* 메일전송 버튼 */
+			    #sendMail {
+					width: 150px;
+			      	height: 50px;
+			     	border: 1.2px solid #28693F;
+					border-radius: 4px;
+					background-color: white;
+					text-align: center;
+					display: inline-block;
+					color: #28693F;
+					font-size: 18px;
+					font-weight: 550;
+					letter-spacing:1px;
+			    }
+			    #sendMail:hover {
+					background-color: #28693F;
+					color: white;
+					font-weight: 550;
+					cursor: pointer;
+				}
+				/* MMS전송 버튼 */
+			    #sendMMS {
+					width: 150px;
+			      	height: 50px;
+			     	border: 1.2px solid #28693F;
+					border-radius: 4px;
+					background-color: white;
+					text-align: center;
+					display: inline-block;
+					color: #28693F;
+					font-size: 18px;
+					font-weight: 550;
+					letter-spacing:1px;
+			    }
+			    #sendMMS:hover {
+					background-color: #28693F;
+					color: white;
+					font-weight: 550;
+					cursor: pointer;
+				}
+ 			</style>
+		</th:block>
+		<th:block layout:fragment="script">
+			<script th:inline="javascript">
+				
+			</script>
+		</th:block>
+	</head>
+	<!-- head 영역 끝 -->
+	
+<body>
+  <div id="container" layout:fragment="content">
+  	<div>
+  		<h1 id="userAdmin">회원 관리</h1>
+	</div>
+    <form id="searchForm" action="/admin/userList" method="get">
+    	<div id="user_search">
+			<select name="searchCondition" id="searchCondition">
+				<option value="ALL" th:selected="${searchCondition == 'ALL' || searchCondition == '' || searchCondition == null}">전체</option>
+				<option value="USERNAME" th:selected="${searchCondition} == 'USERNAME'">이름</option>
+				<option value="USERID" th:selected="${searchCondition} == 'USERID'">아이디</option>
+            </select>
+            <input type="text" name="searchKeyword" th:value="${searchKeyword}">
+			<button type="button" id="btnSearch">검색</button>
+        </div>
+    </form>
+    
+    <!-- 전체선택 Select -->
+	<div id="div_user_totalSelect">
+		<label for="selectAll"><input type="checkbox" name="select" id="userSelectAll"> <span>전체선택</span></label>
+	</div>
+
+	<!-- 회원 리스트 Table -->
+        <div id="div_userList_T">
+	        <table border="1" id="userList_T">
+	        	<tr>
+	        		<th class="itemList_T_10"></th>
+			        <th class="itemList_T_10">No.</th>
+			        <th class="itemList_T_20">회원 이름</th>
+			        <th class="itemList_T_20">회원 아이디</th>
+			        <th class="itemList_T_20">가입일</th>
+			        <th class="itemList_T_20">개인 게시판</th>
+	      		</tr>
+	      		<tr th:each="user: ${getUserList.content}">
+	      			<td><input type="checkbox" name="chk"></td>
+		        	<td th:text="${user.userNo}"></td>
+		        	<!--<td>       회원이름 누르면 회원정보 모달?페이지? 띄우기
+						<a id="a_itemName" th:text="${item.itemName}"
+							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">
+						</a>
+					</td>-->
+					<td th:text="${user.userNm}"></td>
+					<td th:text="${user.userId}"></td>
+		        	<td th:text="${user.userRegdate eq null ? '' : #strings.substring(user.userRegdate, 0, 10)}"></td>
+		        	<td>
+		        		<a id="userReview" th:text="Review">
+							<!--th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">-->
+						</a>
+						<a id="userQnA" th:text="QnA">
+							<!--th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">-->
+						</a>
+		        	</td>
+		     	 </tr>
+		    </table>
+		</div>
+		
+		<!-- 탈퇴/메일전송/MMS전송 버튼 -->
+	    <div id="userTotalBtn">
+	    	<a href="#"><input type="button" value="회원 탈퇴" id="userDel"></a>
+	    	<a href="#"><input type="button" value="메일 전송" id="sendMail"></a>
+	    	<a href="#"><input type="button" value="MMS 전송" id="sendMMS"></a>
+	    </div>
+  </div>
+</body>
+</html>
