@@ -104,8 +104,8 @@ public class UserServiceImpl implements UserService {
 		userRepository.quitUser(userId);
 	}
 
-//	@Override
-//	public void pwUser(String userId) {
-//		userRepository.pwUser(userId);
-//	}
+	@Override
+	public void pwUser(String userId) {
+		userRepository.pwUser(userId);
+	}
 }

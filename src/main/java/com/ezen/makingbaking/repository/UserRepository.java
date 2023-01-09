@@ -37,4 +37,10 @@ public interface UserRepository extends JpaRepository<User, String> {
 			+ "    WHERE USER_ID = :userId",
 			nativeQuery=true)
 	void quitUser(@Param("userId") String userId);
+
+	@Modifying
+	@Query(value="UPDATE FROM T_MB_USER"
+			+ " WHERE USER_ID = :userId",
+			nativeQuery=true)
+	void pwUser(@Param("userId") String userId);
 }

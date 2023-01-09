@@ -194,7 +194,7 @@ public class ItemController {
 				searchCondition = request.getParameter("searchCondition");
 			}
 			
-			Page<Review> pageReviewList = reviewService.getReviewList(itemNo, pageable, searchCondition);
+			Page<Review> pageReviewList = reviewService.itemReviewList(itemNo, pageable, searchCondition);
 			
 			Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview 
 													-> ReviewDTO.builder()

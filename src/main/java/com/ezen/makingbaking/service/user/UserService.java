@@ -18,5 +18,5 @@ public interface UserService {
 
 	void quitUser(String userId);
 
-//	void pwUser(String userId);
+	void pwUser(String userId);
 }
