@@ -38,6 +38,12 @@
 					cursor: pointer;
 				}
 				
+				/* 전체선택 Select */
+				#div_reser_totalSelect {
+					margin: 15px auto;
+					text-align: right;
+				}
+				
 				/* 테이블 */
 				#reserList_T {
 					width: 1200px;
@@ -97,7 +103,49 @@
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
-				
+				$(function() {
+					//검색창(상품카테, 판매상태)
+					$("#searchCondition").on("change", function() {
+						if($(this).val() == 'DAYCLASSTIME') {
+							$("#inputSearch").hide();
+							$("#selectSearch2").hide();
+							$("#selectSearch1").show();
+							$("#inputSearch").attr("disabled", true);
+							$("#selectSearch2").attr("disabled", true);
+							$("#selectSearch1").attr("disabled", false);
+						} else if($(this).val() == 'DAYCLASSUSEYN') {
+							$("#inputSearch").hide();
+							$("#selectSearch1").hide();
+							$("#selectSearch2").show();
+							$("#inputSearch").attr("disabled", true);
+							$("#selectSearch2").attr("disabled", false);
+							$("#selectSearch1").attr("disabled", true);
+						} else if($(this).val() != 'DAYCLASSTIME' && $(this).val() != 'DAYCLASSUSEYN') {
+							$("#inputSearch").show();
+							$("#selectSearch1").hide();
+							$("#selectSearch2").hide();
+							$("#inputSearch").attr("disabled", false);
+							$("#selectSearch2").attr("disabled", true);
+							$("#selectSearch1").attr("disabled", true);
+						}
+					});
+					
+					//검색창 검색버튼 클릭 시
+					$("#btnSearch").on('click',function() {
+						$("input[name='page']").val(0);
+						$("#searchForm").submit();
+					});
+					
+					// 전체선택 버튼 클릭했을 때
+					$("#dayclassSelectAll").click(function() {
+						var chk = $("#dayclassSelectAll").prop("checked");
+						if(chk) {
+							$("input[name='chk']").prop("checked", true);
+						} else {
+							$("input[name='chk']").prop("checked", false);
+						}
+					});
+				});
 			</script>
 		</th:block>
 	</head>
@@ -136,12 +184,11 @@
 	            	<option>선택하세요.</option>
 	            	<option value="AM" th:selected="${searchKeyword} == 'AM'">AM</option>
 	              	<option value="PM" th:selected="${searchKeyword} == 'PM'">PM</option>
-	              	<option value="BOTH" th:selected="${searchKeyword} == 'BOTH'">BOTH</option>
 	            </select>
 	            <select name="searchKeyword" id="selectSearch2" th:style="${searchCondition == 'RESERSTATUS' ? 'display: inline-block;' : 'display: none;'}"
 	            		th:disabled="${searchCondition == 'RESERSTATUS'} ? false : true">
 	            <option>선택하세요.</option>
-	            	<option value="MV" th:selected="${searchKeyword} == MV'">입금대기(MV)</option>
+	            	<option value="MV" th:selected="${searchKeyword} == 'MV'">입금대기(MV)</option>
 	              	<option value="PE" th:selected="${searchKeyword} == 'PE'">결제완료(PE)</option>
 	              	<option value="RC" th:selected="${searchKeyword} == 'RC'">예약취소(RC)</option>
 	              	<option value="PC" th:selected="${searchKeyword} == 'PC'">결제취소(PC)</option>
@@ -167,13 +214,13 @@
 	    <div id="div_reserList_T">
 	        <table border="1" id="reserList_T">
 	        	<tr>
-			        <th class="reserList_T_05">예약번호</th>
+			        <th class="reserList_T_20">예약번호</th>
 			        <th class="reserList_T_10">예약자명</th>
 			        <th class="reserList_T_10">회원 아이디</th>
-			        <th class="reserList_T_20">예약한 클래스번호</th>
+			        <th class="reserList_T_10">예약한 클래스번호</th>
 			        <th class="reserList_T_10">예약날짜</th>
 			        <th class="reserList_T_10">예약시간</th>
-			        <th class="reserList_T_20">예약상태</th>
+			        <th class="reserList_T_10">예약상태</th>
 			        <th class="reserList_T_10">참여현황</th>
 	      		</tr>
 	      		<tr th:each="reser: ${getReserList.content}">
