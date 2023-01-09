@@ -14,5 +14,5 @@ public interface ReserService {
 	
 	CamelHashMap getReserDetail(long reserNo);
 	
-//	Reser updateReser(Reser reser);
+	Reser updateReser(Reser reser);
 }

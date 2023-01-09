@@ -231,17 +231,37 @@
 						$(".reserStatus").text("결제취소");
 					}
 					
+					console.log(reser.reserNo);
+					console.log(typeof reser.reserNo);
+					
 					$("#btnReserCancel").on('click', function() {
 						$.ajax({
-							url: '/reser/reserCancel',
+							url: '/reser/reserCancel/{reser.reserNo}',
 							type: 'put',
 							data: { 
-								reserNo: $(".realReserNo").text(),
 								reserStatus: 'RC'
 								},
 							success: function(obj) {
 								console.log(obj);
-								$(".reserStatus").text("주문취소");
+								$(".reserStatus").text("예약취소");
+								$("#moveList").css("display", "flex");
+								$("#CancelOption").css("display", "none");
+							}, error: function(e) {
+								console.log(e);
+							}
+						});
+					});
+					
+					$("#btnPayCancel").on('click', function() {
+						$.ajax({
+							url: '/reser/payCancel',
+							type: 'put',
+							data: {
+								reserStatus: 'PC'
+							},
+							success: function(obj) {
+								console.log(obj);
+								$(".reserStatus").text("결제취소");
 								$("#moveList").css("display", "flex");
 								$("#CancelOption").css("display", "none");
 							}, error: function(e) {
@@ -345,7 +365,7 @@
 	            </div>
 	            <hr>		            
 	            <div id="CancelOption" th:if="${reser.cancelEnable == 'P'}">
-                    <input type="button" name="CancelOption" id="btnReserCancel" value="주문취소" th:if="${reser.reserStatus == 'MV'}">&emsp;
+                    <input type="button" name="CancelOption" id="btnReserCancel" value="예약취소" th:if="${reser.reserStatus == 'MV'}">&emsp;
                     <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${reser.reserStatus == 'PE'}">
 	            </div>
 	            <div id="moveList">

@@ -35,9 +35,9 @@ public class ReserServiceImpl implements ReserService {
 		return reserRepository.findByReserDetailAndReserNo(reserNo);
 	}
 	
-//	@Override
-//	public Reser updateReser(Reser reser) {
-//		reserRepository.save(reser);
+	@Override
+	public Reser updateReser(Reser reser) {
+		return reserRepository.save(reser);
 //		reserRepository.flush();
-//	}
+	}
 }

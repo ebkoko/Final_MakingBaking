@@ -55,4 +55,9 @@ public class OrderServiceImpl implements OrderService {
 	public List<CamelHashMap> getOrderItem(long orderNo) {
 		return orderRepository.findByItemDetailAndOrderNo(orderNo);
 	}
+	
+	@Override
+	public Order updateOrder(Order order) {
+		return orderRepository.save(order);
+	}
 }
