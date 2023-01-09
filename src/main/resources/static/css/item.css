@@ -16,18 +16,7 @@
 		      background-color: rgb(235, 235, 235);		      
 		    }
 		
-		    /* 내용 h2, p 글씨색상 공통 */
-		    .it_cintro_title, .it_cDetatils_title, .it_rvw_title, .c_cancel_title {
-		      color: rgb(74, 74, 74);
-		      font-weight: 600;
-		    }
-		    .it_cintro_text, .it_cDetatils_text {
-		      font-size: 15px;
-		      color: rgb(102, 102, 102);
-		      line-height: 28px;
-		    }
-				
-				
+
 		    /* 배너 dc_banner */
 		    .it_banner_container {
 		      width: 100%;
@@ -51,9 +40,7 @@
 		    .itbanner_explain_KRW{
 				margin-top: 10px;
 			}
-			
-			
-			
+
 		    .itbanner_explain_btn {
 		      	margin-top: 30px;
 		    }
@@ -96,10 +83,41 @@
 		      font-weight: 520;
 		    }
 		    #itemLikeBtn:hover {
+			  margin: 30px 0 30px 0;
 		      background-color: #28693F;
 		      color: white;
 		      font-weight: 520;
 		    }
+		    
+		    /* 내용 h2, p 글씨색상 공통 */
+		    .it_cDetatils_title, .it_rvw_title, .c_cancel_title {
+		      color: rgb(74, 74, 74);	      
+		      font-weight: 600;
+		    }
+
+				
+		    /* 상품 설명*/
+		    .it_cintro_title {
+			  color: rgb(102, 102, 102);	 
+			  font-size: 20px;				
+			  text-align: center;
+			  font-style:italic;
+			}			
+			.it_cintro textarea{
+			  width: 100%;
+    		  height: 8em;   		  
+    		  
+    		  font-size: 18px;
+    		  border: none;
+    		  resize: none;	
+    		  margin: 50px 0 50px 0;
+    		  text-align: center;
+    		  line-height:35px; 
+    		  overflow-y: hidden;
+    		  
+			}
+			
+		    /* 영양 정보*/
 		    
 			/* 상품 갯수*/
 			.itemNm {
@@ -167,13 +185,13 @@
 
 		    /* 후기 작성  */
 		    .it_rvw_write_member{
-			  margin-top:30px;
+			  margin:50px 0 100px 0;
 			}
 		    .it_rvw_write_form fieldset{
 			  display: inline-block;
     		  direction: rtl;
     		  border:0;
-    		  margin-bottom: 15px;
+    		  margin: 40px 0 15px 0;
 			}
 			.it_rvw_write_form input[type=radio]{
 		 	  display: none;
@@ -197,15 +215,23 @@
     		  height: 6.3em;
     		  border: 1px solid rgb(102, 102, 102);
     		  resize: none;		 
-			}			
-			textarea::placeholder {
-  			  font-size: 1.2em;
+			}				
+			.textLength {
+			  display:flex;
+			  float: right;
+			  margin-top:70px;
+			  font-size: 14px;
+			  color: rgb(102, 102, 102);
 			}
+			textarea::placeholder {
+  			  font-size: 1.1em;  			 
+			}	
+
 			.it_rvw_writeBtn {
 			  margin-top:10px;
 			  float: right;
-			  width: 100px;
- 			  height: 28px;
+			  width: 95px;
+ 			  height: 30px;
   			  border-radius: 4px;
 			  text-decoration: none;
 		      background-color: #28693F;
@@ -216,7 +242,7 @@
 		      font-size: 14px;
 		      line-height: 1;
 		      letter-spacing:3px;		      
-			}
+			}		
 			.it_rvw_writeBtn:hover {
 		      background: white;
 		      border: 1px solid #28693F;
@@ -226,7 +252,7 @@
 			
 			/* 후기 목록 */
 		    .it_rvw_wirte_detail {
-		   	  margin-top:100px;
+		   	  margin:50px 0 50px 0;
 		    }
 		    .it_rvw_option {
 		      margin-bottom:15px;
@@ -234,7 +260,7 @@
 		    }
 		    #it_rvw_array {
 			 border: 1px solid rgb(102, 102, 102);
-			 width: 110px;
+			 width: 100px;
 			 height: 28px;			 
 			}
 		    .it_rvw_list {
@@ -261,7 +287,7 @@
 		      color: rgb(102, 102, 102);
 		    }		 
 		    .it_rvw_paging{
-		      margin:60px 0 60px 0;
+		      margin:50px 0 50px 0;
 		    }
 		    .paging_btn{
 				list-style: none;
