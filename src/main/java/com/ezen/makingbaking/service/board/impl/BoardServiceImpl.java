@@ -37,14 +37,18 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void updateBoard(Board board) {
+	public void updateAnswer(Board board) {
 		boardRepository.updateAnswer(board.getBoardNo(), board.getBoardReply());
-		
 	}
 
 	@Override
 	public List<Board> getFaqList(Board board) {
 		return boardRepository.selectFaqList(board);
+	}
+
+	@Override
+	public void deleteBoard(int boardNo) {
+		boardRepository.deleteById(boardNo);		
 	}
 
 

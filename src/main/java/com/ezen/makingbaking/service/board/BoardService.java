@@ -17,9 +17,11 @@ public interface BoardService {
 
 	void insertBoard(Board board);
 
-	void updateBoard(Board board);
+	void updateAnswer(Board board);
 
 	List<Board> getFaqList(Board board);
+
+	void deleteBoard(int boardNo);
 
 	
 }

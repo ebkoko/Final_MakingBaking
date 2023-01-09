@@ -14,10 +14,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -277,8 +279,13 @@ public class BoardController {
 	
 	// qna 글 상세보기
 	@GetMapping("/qna/{boardNo}")
-	public ModelAndView getQna(@PathVariable int boardNo){
+	public ModelAndView getQna(@PathVariable int boardNo, @AuthenticationPrincipal CustomUserDetails customUser){
 		Board board = boardService.getBoard(boardNo);
+		
+		String loginUserId = "";
+		
+		if(customUser != null)
+			loginUserId = customUser.getUser().getUserId();
 		
 		BoardDTO boardDTO = BoardDTO.builder()
 									.boardNo(board.getBoardNo())
@@ -297,7 +304,7 @@ public class BoardController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("board/getQna.html");
 		mv.addObject("getBoard", boardDTO);
-
+		mv.addObject("userId", loginUserId);
 		return mv;
 	}
 	
@@ -316,6 +323,7 @@ public class BoardController {
 												null :
 												board.getBoardRegdate().toString()) // .toString 수정 
 									.boardCnt(board.getBoardCnt())
+									.cateCode(board.getCateCode())
 									.build();	
 				
 		ModelAndView mv = new ModelAndView();
@@ -340,6 +348,7 @@ public class BoardController {
 												null :
 												board.getBoardRegdate().toString()) // .toString 수정 
 									.boardCnt(board.getBoardCnt())
+									.cateCode(board.getCateCode())
 									.build();	
 				
 		ModelAndView mv = new ModelAndView();
@@ -434,7 +443,7 @@ public class BoardController {
 						   .cateCode(cateCode)
 						   .build();
 		
-		boardService.updateBoard(board);
+		boardService.updateAnswer(board);
 		
 		response.sendRedirect("/board/qna/" + boardNo);
 	}
@@ -473,10 +482,19 @@ public class BoardController {
 		response.sendRedirect("/board/eventList/" + cateCode);
 	}
 	
+	// [user] qna 글 삭제(admin 답변이 없는 경우만 삭제 가능)
+	@DeleteMapping("/qna")
+	public void deleteQna(@RequestParam("boardNo") int boardNo) {
+		boardService.deleteBoard(boardNo);
+	}
 	
+	// [admin] 공지사항, 이벤트 글 삭제
+	@DeleteMapping("/board")
+	public void deleteBoard(@RequestParam("boardNo") int boardNo) {
+		boardService.deleteBoard(boardNo);
+	}
 	
-	
-	
+
 	
 	
 	

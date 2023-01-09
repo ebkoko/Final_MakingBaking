@@ -132,6 +132,30 @@ hr {
   margin-bottom: 20px;
 }
 
+#deletebtn {
+  width: 100px; height: 40px;
+  font-size: 15px; font-weight: bold; 
+  color: white; 
+  text-align: center;
+  line-height: 40px;
+  background-color: #DC143C;
+  border-radius: 5px;
+  float: right;
+  margin-bottom: 20px;
+}
+
+#updatebtn {
+  width: 100px; height: 40px;
+  font-size: 15px; font-weight: bold; 
+  color: white; 
+  text-align: center;
+  line-height: 40px;
+  background-color: #696969;
+  border-radius: 5px;
+  float: right;
+  margin: 0 10px 20px 0;
+}
+
 #btn-container:after{
   content: '';
   display: block;

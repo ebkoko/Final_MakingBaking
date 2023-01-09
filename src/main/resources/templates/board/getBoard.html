@@ -9,7 +9,35 @@
 	</th:block>
 	<th:block layout:fragment="script">
 		<script th:inline="javascript">
+			$(function() {
+				$("#deletebtn").on('click', function(e){
+					e.preventDefault(); // a태그 이벤트 중지
+					
+					$.ajax({
+						url:'/board/board',
+						type: 'delete',
+						data: {
+							boardNo: $("#boardNo").val()
+						},
+						success: function(){
+							alert("삭제되었습니다.");
+							//window.location.href="/board/noticeList/3";
+							console.log($("#cateCode").val());
+							if($("#cateCode").val() == 3) {
+								window.location.href="/board/noticeList/3";
+							} else if ($("#cateCode").val() == 4) {
+								window.location.href="/board/eventList/4";
+							}
+							
+						},
+						error: function(e){
+							console.log(e);
+						}
+					});
+				});
+				
 			
+			});
 		</script>
 	</th:block>
 </head>
@@ -25,7 +53,21 @@
 		        <p th:text="${getBoard.boardContent}"></p>
 		      </div>
 		      <div id="btn-container">
-		        <input type="button" id="listbtn" value="목록" onclick="history.back()">
+		      	<div id="left-btn">
+		       		<input type="button" id="listbtn" value="목록" onclick="history.back()">
+		      	</div>
+		        <th:block sec:authorize="hasRole('ROLE_ADMIN')" th:remove="tag">
+		        	<form id="deleteForm" enctype="multipart/form-data">
+		        		<input type="hidden" name="boardNo" id="boardNo" th:value="${getBoard.boardNo}">
+			        	<input type="hidden" name="cateCode" id="cateCode" th:value="${getBoard.cateCode}">
+			        	<div id="right-btn">
+						  <a href="#" id="deletebtn">삭제</a>   
+						</div>
+						<div id="right-btn">
+						  <a th:href='@{/board/qna/insertAnswer/{cateCode}/{boardNo} (cateCode=${getBoard.cateCode}, boardNo=${getBoard.boardNo})}' id="updatebtn">수정</a>   
+						</div>
+		        	</form>
+				</th:block>
 		      </div>      
 		    </div>
 		  </div>

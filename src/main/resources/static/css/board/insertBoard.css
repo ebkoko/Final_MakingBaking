@@ -95,6 +95,11 @@ hr {
   resize: none;
 }
 
+#caution_text {
+	margin: -10px 0 20px 0;
+	color: red;
+}
+
 #btn-container {
   text-align: right;
 }
