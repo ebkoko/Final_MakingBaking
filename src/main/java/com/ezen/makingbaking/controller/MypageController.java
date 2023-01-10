@@ -1,5 +1,6 @@
 package com.ezen.makingbaking.controller;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,17 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.dto.ReserDTO;
+import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.entity.CustomUserDetails;
-import com.ezen.makingbaking.entity.Reser;
 import com.ezen.makingbaking.service.dayclass.DayclassService;
 import com.ezen.makingbaking.service.order.OrderService;
 import com.ezen.makingbaking.service.reser.ReserService;
@@ -99,12 +102,8 @@ public class MypageController {
 			, @AuthenticationPrincipal CustomUserDetails customUser) {
 		ModelAndView mv = new ModelAndView();
 		
-		List<CamelHashMap> reserList = reserService.getReserList(customUser.getUsername());
+		Page<CamelHashMap> reserList = reserService.getReserList(customUser.getUsername(), pageable, reserDTO.getReserCondition());
 		
-		Page<CamelHashMap> pageReserList = reserService.getPageReserList(customUser.getUsername(), pageable);
-		
-		Page<CamelHashMap> pageReserDTOList = pageReserList.map(pageReser ->
-																	ReserDTO.builder())
 		
 		mv.addObject("getReserList", reserList);		
 		mv.setViewName("mypage/myReserList.html");
@@ -117,8 +116,28 @@ public class MypageController {
 		
 		ModelAndView mv = new ModelAndView();
 		
+		reser.put("reser_Date_Str", ((Timestamp)reser.get("reserDate")).toLocalDateTime().toString());
+		
 		mv.addObject("reser", reser);
 		mv.setViewName("mypage/getReserDetail.html");
 		return mv;
+	}
+	
+	@PostMapping("/myReserListAjax")
+	public ResponseEntity<?> myReserListAjax(ReserDTO reserDTO, @PageableDefault(page = 0, size = 5) Pageable pageable
+			, @AuthenticationPrincipal CustomUserDetails customUser) {
+		ResponseDTO<CamelHashMap> response = new ResponseDTO<>();
+		
+		try {
+			Page<CamelHashMap> reserList = reserService.getReserList(customUser.getUsername(), pageable, reserDTO.getReserCondition());
+			response.setPageItems(reserList);
+			
+			return ResponseEntity.ok().body(response);
+			
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			
+			return ResponseEntity.badRequest().body(response);
+		}
 	}
 }
