@@ -275,15 +275,15 @@ public class AdminServiceImpl implements AdminService {
 	public Page<Reser> getPageReserList(Reser reser, Pageable pageable) {
 		if(reser.getSearchKeyword() != null && !reser.getSearchKeyword().equals("")) {
 			if(reser.getSearchCondition().equals("ALL")) {
-				return reserRepository.findByReserNoContainingOrPartiNameContainingOrClassNoContainingOrPartiDateContainingOrPartiTimeContainingOrReserStatusContainingOrPartiStatus
-						(reser.getSearchKeyword(), reser.getSearchKeyword(), reser.getSearchKeyword(), 
+				return reserRepository.findByReserNoOrPartiNameContainingOrClassNoOrPartiDateContainingOrPartiTimeContainingOrReserStatusContainingOrPartiStatus
+						(Long.parseLong(reser.getSearchKeyword()), reser.getSearchKeyword(), Integer.parseInt(reser.getSearchKeyword()), 
 								reser.getSearchKeyword(), reser.getSearchKeyword(), reser.getSearchKeyword(), reser.getSearchKeyword(), pageable);
 			      } else if (reser.getSearchCondition().equals("RESERNO")) {
-			         return reserRepository.findByReserNoContaining(reser.getSearchKeyword(), pageable);
+			         return reserRepository.findByReserNo(Long.parseLong(reser.getSearchKeyword()), pageable);
 			      } else if (reser.getSearchCondition().equals("PARTINAME")) {
 			    	  return reserRepository.findByPartiNameContaining(reser.getSearchKeyword(), pageable);
 			      } else if (reser.getSearchCondition().equals("CLASSNO")) {
-			    	  return reserRepository.findByClassNoContaining(reser.getSearchKeyword(), pageable);
+			    	  return reserRepository.findByClassNo(Integer.parseInt(reser.getSearchKeyword()), pageable);
 			      } else if (reser.getSearchCondition().equals("PARTIDATE")) {
 				         return reserRepository.findByPartiDateContaining(reser.getSearchKeyword(), pageable);
 			      } else if (reser.getSearchCondition().equals("PARTITIME")) {

@@ -637,7 +637,8 @@ public class AdminController {
 		Dayclass dayclass = adminService.getDayclass(dayclassNo);
 		
 		DayclassDTO dayclassDTO = DayclassDTO.builder()
-											.dayclassNo(dayclass.getDayclassNo())											.dayclassTime(dayclass.getDayclassTime())
+											.dayclassNo(dayclass.getDayclassNo())											
+											.dayclassTime(dayclass.getDayclassTime())
 											.dayclassUseYn(dayclass.getDayclassUseYn())
 											.dayclassName(dayclass.getDayclassName())
 											.dayclassMinName(dayclass.getDayclassMinName())
