@@ -2,14 +2,30 @@ package com.ezen.makingbaking.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ezen.makingbaking.common.CamelHashMap;
+import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.entity.Reser;
 
 public interface ReserRepository extends JpaRepository<Reser, Integer> {
+	
+	//관리자 예약 검색_선민
+	Page<Reser> findByReserNoContaining(String searchKeyword, Pageable pageable); //예약번호
+	Page<Reser> findByPartiNameContaining(String searchKeyword, Pageable pageable); //예약자명
+	Page<Reser> findByUserIdContaining(String searchKeyword, Pageable pageable); //회원아이디
+	//Page<Reser> findByClassNoContaining(int searchKeyword, Pageable pageable); //예약한 클래스번호
+	Page<Reser> findByPartiDateContaining(String searchKeyword, Pageable pageable); //예약날짜
+	Page<Reser> findByPartiTimeContaining(String searchKeyword, Pageable pageable); //예약시간
+	Page<Reser> findByReserStatusContaining(String searchKeyword, Pageable pageable); //예약상태
+	Page<Reser> findByPartiStatusContaining(String searchKeyword, Pageable pageable); //참여현황
+	Page<Reser> findByReserNoContainingOrPartiNameContainingOrUserIdContainingOrPartiDateContainingOrPartiTimeContainingOrReserStatusContainingOrPartiStatus(String searchKeyword1, String searchKeyword2, String searchKeyword3, String searchKeyword4, String searchKeyword5, String searchKeyword6, String searchKeyword7, Pageable pageable);
+	
+	
 	@Query(value="SELECT IFNULL(MAX(RESER_NO), CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(0, '6', '0'))) + 1 AS RESER_NO\r\n"
 			+ " FROM T_MB_RESER\r\n"
 			+ " WHERE RESER_NO LIKE CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), '%')", nativeQuery=true)

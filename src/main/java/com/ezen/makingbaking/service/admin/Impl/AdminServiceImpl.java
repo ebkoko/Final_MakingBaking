@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
+import com.ezen.makingbaking.entity.Reser;
 import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.repository.DayclassRepository;
 import com.ezen.makingbaking.repository.ImgFileRepository;
 import com.ezen.makingbaking.repository.ItemRepository;
+import com.ezen.makingbaking.repository.ReserRepository;
 import com.ezen.makingbaking.repository.UserRepository;
 import com.ezen.makingbaking.service.admin.AdminService;
 
@@ -33,6 +35,9 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private ReserRepository reserRepository;
 	
 
 	//item
@@ -260,16 +265,46 @@ public class AdminServiceImpl implements AdminService {
 	      
 	   }
 	
+	//reser_dayclass
+	@Override
+	public List<Reser> getReserList(Reser reser) {
+		return reserRepository.findAll();
+	}
+
+	@Override
+	public Page<Reser> getPageReserList(Reser reser, Pageable pageable) {
+		if(reser.getSearchKeyword() != null && !reser.getSearchKeyword().equals("")) {
+			if(reser.getSearchCondition().equals("ALL")) {
+				return reserRepository.findByReserNoContainingOrPartiNameContainingOrUserIdContainingOrPartiDateContainingOrPartiTimeContainingOrReserStatusContainingOrPartiStatus
+						(reser.getSearchKeyword(), reser.getSearchKeyword(), reser.getSearchKeyword(), reser.getSearchKeyword(),
+								reser.getSearchKeyword(), reser.getSearchKeyword(), reser.getSearchKeyword(), pageable);
+			      } else if (reser.getSearchCondition().equals("RESERNO")) {
+			         return reserRepository.findByReserNoContaining(reser.getSearchKeyword(), pageable);
+			      } else if (reser.getSearchCondition().equals("PARTINAME")) {
+			    	  return reserRepository.findByPartiNameContaining(reser.getSearchKeyword(), pageable);
+			      } else if (reser.getSearchCondition().equals("USERID")) {
+			    	  return reserRepository.findByUserIdContaining(reser.getSearchKeyword(), pageable);
+//			      } else if (reser.getSearchCondition().equals("CLASSNO")) {
+//			    	  return reserRepository.findByClassNoContaining(reser.getSearchKeyword(), pageable);
+			      } else if (reser.getSearchCondition().equals("PARTIDATE")) {
+				         return reserRepository.findByPartiDateContaining(reser.getSearchKeyword(), pageable);
+			      } else if (reser.getSearchCondition().equals("PARTITIME")) {
+			    	  return reserRepository.findByPartiTimeContaining(reser.getSearchKeyword(), pageable);
+			      } else if (reser.getSearchCondition().equals("RESERSTATUS")) {
+			    	  return reserRepository.findByReserStatusContaining(reser.getSearchKeyword(), pageable);
+			      } else if (reser.getSearchCondition().equals("PARTISTATUS")) {
+			    	  return reserRepository.findByPartiStatusContaining(reser.getSearchKeyword(), pageable);
+			      } else {
+			    	  return reserRepository.findAll(pageable);
+			      }
+		  } else {
+			  return reserRepository.findAll(pageable);
+		  }
+	      
+	   }
+	
 	
 
-//	@Override
-//	public Page<CamelHashMap> getItemFileList(@PageableDefault(page = 0, size = 10) Pageable pageable) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//	Page<CamelHashMap> getItemFileList(Page pageable) {
-//		return itemRepository.getItemFileList(pageable);
-//	}
 	
 	
 }

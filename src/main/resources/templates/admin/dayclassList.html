@@ -235,7 +235,6 @@
 	            	<option>선택하세요.</option>
 	            	<option value="AM" th:selected="${searchKeyword} == 'AM'">AM</option>
 	              	<option value="PM" th:selected="${searchKeyword} == 'PM'">PM</option>
-	              	<option value="BOTH" th:selected="${searchKeyword} == 'BOTH'">BOTH</option>
 	            </select>
 	            <select name="searchKeyword" id="selectSearch2" th:style="${searchCondition == 'DAYCLASSUSEYN' ? 'display: inline-block;' : 'display: none;'}"
 	            		th:disabled="${searchCondition == 'DAYCLASSUSEYN'} ? false : true">
