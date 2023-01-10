@@ -275,17 +275,15 @@ public class AdminServiceImpl implements AdminService {
 	public Page<Reser> getPageReserList(Reser reser, Pageable pageable) {
 		if(reser.getSearchKeyword() != null && !reser.getSearchKeyword().equals("")) {
 			if(reser.getSearchCondition().equals("ALL")) {
-				return reserRepository.findByReserNoContainingOrPartiNameContainingOrUserIdContainingOrPartiDateContainingOrPartiTimeContainingOrReserStatusContainingOrPartiStatus
-						(reser.getSearchKeyword(), reser.getSearchKeyword(), reser.getSearchKeyword(), reser.getSearchKeyword(),
-								reser.getSearchKeyword(), reser.getSearchKeyword(), reser.getSearchKeyword(), pageable);
+				return reserRepository.findByReserNoContainingOrPartiNameContainingOrClassNoContainingOrPartiDateContainingOrPartiTimeContainingOrReserStatusContainingOrPartiStatus
+						(reser.getSearchKeyword(), reser.getSearchKeyword(), reser.getSearchKeyword(), 
+								reser.getSearchKeyword(), reser.getSearchKeyword(), reser.getSearchKeyword(), reser.getSearchKeyword(), pageable);
 			      } else if (reser.getSearchCondition().equals("RESERNO")) {
 			         return reserRepository.findByReserNoContaining(reser.getSearchKeyword(), pageable);
 			      } else if (reser.getSearchCondition().equals("PARTINAME")) {
 			    	  return reserRepository.findByPartiNameContaining(reser.getSearchKeyword(), pageable);
-			      } else if (reser.getSearchCondition().equals("USERID")) {
-			    	  return reserRepository.findByUserIdContaining(reser.getSearchKeyword(), pageable);
-//			      } else if (reser.getSearchCondition().equals("CLASSNO")) {
-//			    	  return reserRepository.findByClassNoContaining(reser.getSearchKeyword(), pageable);
+			      } else if (reser.getSearchCondition().equals("CLASSNO")) {
+			    	  return reserRepository.findByClassNoContaining(reser.getSearchKeyword(), pageable);
 			      } else if (reser.getSearchCondition().equals("PARTIDATE")) {
 				         return reserRepository.findByPartiDateContaining(reser.getSearchKeyword(), pageable);
 			      } else if (reser.getSearchCondition().equals("PARTITIME")) {

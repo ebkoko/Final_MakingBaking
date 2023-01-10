@@ -17,13 +17,12 @@ public interface ReserRepository extends JpaRepository<Reser, Integer> {
 	//관리자 예약 검색_선민
 	Page<Reser> findByReserNoContaining(String searchKeyword, Pageable pageable); //예약번호
 	Page<Reser> findByPartiNameContaining(String searchKeyword, Pageable pageable); //예약자명
-	Page<Reser> findByUserIdContaining(String searchKeyword, Pageable pageable); //회원아이디
-	//Page<Reser> findByClassNoContaining(int searchKeyword, Pageable pageable); //예약한 클래스번호
+	Page<Reser> findByClassNoContaining(int searchKeyword, Pageable pageable); //예약한 클래스번호
 	Page<Reser> findByPartiDateContaining(String searchKeyword, Pageable pageable); //예약날짜
 	Page<Reser> findByPartiTimeContaining(String searchKeyword, Pageable pageable); //예약시간
 	Page<Reser> findByReserStatusContaining(String searchKeyword, Pageable pageable); //예약상태
 	Page<Reser> findByPartiStatusContaining(String searchKeyword, Pageable pageable); //참여현황
-	Page<Reser> findByReserNoContainingOrPartiNameContainingOrUserIdContainingOrPartiDateContainingOrPartiTimeContainingOrReserStatusContainingOrPartiStatus(String searchKeyword1, String searchKeyword2, String searchKeyword3, String searchKeyword4, String searchKeyword5, String searchKeyword6, String searchKeyword7, Pageable pageable);
+	Page<Reser> findByReserNoContainingOrPartiNameContainingOrClassNoContainingOrPartiDateContainingOrPartiTimeContainingOrReserStatusContainingOrPartiStatus(String searchKeyword1, String searchKeyword2, int searchKeyword3, String searchKeyword4, String searchKeyword5, String searchKeyword6, String searchKeyword7, Pageable pageable);
 	
 	
 	@Query(value="SELECT IFNULL(MAX(RESER_NO), CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(0, '6', '0'))) + 1 AS RESER_NO\r\n"
