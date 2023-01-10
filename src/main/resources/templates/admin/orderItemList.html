@@ -106,42 +106,27 @@
 				$(function() {
 					//검색창(상품카테, 판매상태)
 					$("#searchCondition").on("change", function() {
-						if($(this).val() == 'PARTITIME') {
+						if($(this).val() == 'ITEMCATE') {
 							$("#inputSearch").hide();
 							$("#selectSearch2").hide();
-							$("#selectSearch3").hide();
 							$("#selectSearch1").show();
 							$("#inputSearch").attr("disabled", true);
 							$("#selectSearch2").attr("disabled", true);
-							$("#selectSearch3").attr("disabled", true);
 							$("#selectSearch1").attr("disabled", false);
-						} else if($(this).val() == 'RESERSTATUS') {
+						} else if($(this).val() == 'ITEMSTATUS') {
 							$("#inputSearch").hide();
 							$("#selectSearch1").hide();
-							$("#selectSearch3").hide();
 							$("#selectSearch2").show();
 							$("#inputSearch").attr("disabled", true);
-							$("#selectSearch1").attr("disabled", true);
-							$("#selectSearch3").attr("disabled", true);
 							$("#selectSearch2").attr("disabled", false);
-						} else if($(this).val() == 'PARTISTATUS') {
-							$("#inputSearch").hide();
-							$("#selectSearch1").hide();
-							$("#selectSearch2").hide();
-							$("#selectSearch3").show();
-							$("#inputSearch").attr("disabled", true);
 							$("#selectSearch1").attr("disabled", true);
-							$("#selectSearch2").attr("disabled", true);
-							$("#selectSearch3").attr("disabled", false);
-						} else if($(this).val() != 'PARTITIME' && $(this).val() != 'RESERSTATUS' && $(this).val() != 'PARTISTATUS') {
+						} else if($(this).val() != 'ITEMSTATUS' && $(this).val() != 'ITEMCATE') {
 							$("#inputSearch").show();
 							$("#selectSearch1").hide();
 							$("#selectSearch2").hide();
-							$("#selectSearch3").hide();
 							$("#inputSearch").attr("disabled", false);
-							$("#selectSearch1").attr("disabled", true);
 							$("#selectSearch2").attr("disabled", true);
-							$("#selectSearch3").attr("disabled", true);
+							$("#selectSearch1").attr("disabled", true);
 						}
 					});
 					
@@ -176,41 +161,35 @@
 			<a href="reserDayclassList">원데이클래스 예약 내역</a>
 		</div>
 		
-		<form id="searchForm" action="/admin/reserDayclassList" method="get">
-	    	<div id="reser_search">
+		<form id="searchForm" action="/admin/orderItemListList" method="get">
+	    	<div id="order_search">
 				<select name="searchCondition" id="searchCondition">
 					<option value="ALL" th:selected="${searchCondition == 'ALL' || searchCondition == '' || searchCondition == null}">전체</option>
-					<option value="RESERNO" th:selected="${searchCondition} == 'RESERNO'">예약번호</option>
-					<option value="PARTINAME" th:selected="${searchCondition} == 'PARTINAME'">예약자</option>
-					<option value="CLASSNO" th:selected="${searchCondition} == 'CLASSNO'">클래스번호</option>
-					<option value="PARTIDATE" th:selected="${searchCondition} == 'PARTIDATE'">예약날짜</option>
-					<option value="PARTITIME" th:selected="${searchCondition} == 'PARTITIME'">예약시간</option>
-					<option value="RESERSTATUS" th:selected="${searchCondition} == 'RESERSTATUS'">예약상태</option>
-					<option value="PARTISTATUS" th:selected="${searchCondition} == 'PARTISTATUS'">참여현황</option>
+					<option value="ORDERNO" th:selected="${searchCondition} == 'ORDERNO'">주문번호</option>
+					<option value="USERID" th:selected="${searchCondition} == 'USERID'">회원아이디</option>
+					<option value="ORDERNAME" th:selected="${searchCondition} == 'ORDERNAME'">주문자명</option>
+					<option value="ORDERPAYMENT" th:selected="${searchCondition} == 'ORDERPAYMENT'">결제방법</option>
+					<option value="ORDERSTATUS" th:selected="${searchCondition} == 'ORDERSTATUS'">주문상태</option>
 	            </select>
 	            <input type="text" name="searchKeyword" th:value="${searchKeyword}" id="inputSearch" 
-	            	th:style="${ searchCondition != 'PARTITIME' && searchCondition != 'RESERSTATUS' && searchCondition != 'PARTISTATUS' ? 'display: inline-block;' : 'display: none;'}"
-	            	th:disabled="${ searchCondition != 'PARTITIME' && searchCondition != 'RESERSTATUS' && searchCondition != 'PARTISTATUS'} ? false : true">
-	            <select name="searchKeyword" id="selectSearch1" th:style="${searchCondition == 'PARTITIME' ? 'display: inline-block;' : 'display: none;'}"
-	            		th:disabled="${searchCondition == 'PARTITIME'} ? false : true">
+	            	th:style="${ searchCondition != 'ORDERPAYMENT' && searchCondition != 'ORDERSTATUS' ? 'display: inline-block;' : 'display: none;'}"
+	            	th:disabled="${ searchCondition != 'ORDERPAYMENT' && searchCondition != 'ORDERSTATUS'} ? false : true">
+	            <select name="searchKeyword" id="selectSearch1" th:style="${searchCondition == 'ORDERPAYMENT' ? 'display: inline-block;' : 'display: none;'}"
+	            		th:disabled="${searchCondition == 'ORDERPAYMENT'} ? false : true">
 	            	<option>선택하세요.</option>
-	            	<option value="AM" th:selected="${searchKeyword} == 'AM'">AM</option>
-	              	<option value="PM" th:selected="${searchKeyword} == 'PM'">PM</option>
+	            	<option value="무통장입금" th:selected="${searchKeyword} == '무통장입금'">AM</option>
+	              	<option value="카카오페이" th:selected="${searchKeyword} == '카카오페이'">PM</option>
 	            </select>
-	            <select name="searchKeyword" id="selectSearch2" th:style="${searchCondition == 'RESERSTATUS' ? 'display: inline-block;' : 'display: none;'}"
-	            		th:disabled="${searchCondition == 'RESERSTATUS'} ? false : true">
+	            <select name="searchKeyword" id="selectSearch2" th:style="${searchCondition == 'ORDERSTATUS' ? 'display: inline-block;' : 'display: none;'}"
+	            		th:disabled="${searchCondition == 'ORDERSTATUS'} ? false : true">
 	            <option>선택하세요.</option>
 	            	<option value="MV" th:selected="${searchKeyword} == 'MV'">입금대기(MV)</option>
 	              	<option value="PE" th:selected="${searchKeyword} == 'PE'">결제완료(PE)</option>
-	              	<option value="RC" th:selected="${searchKeyword} == 'RC'">예약취소(RC)</option>
+	              	<option value="OC" th:selected="${searchKeyword} == 'RC'">주문취소(OC)</option>
 	              	<option value="PC" th:selected="${searchKeyword} == 'PC'">결제취소(PC)</option>
-	            </select>
-	            <select name="searchKeyword" id="selectSearch3" th:style="${searchCondition == 'PARTISTATUS' ? 'display: inline-block;' : 'display: none;'}"
-	            		th:disabled="${searchCondition == 'PARTISTATUS'} ? false : true">
-	            <option>선택하세요.</option>
-	            	<option value="PS" th:selected="${searchKeyword} == 'PS'">진행예정(PS)</option>
-	              	<option value="PC" th:selected="${searchKeyword} == 'PC'">진행완료(PC)</option>
-	              	<option value="NS" th:selected="${searchKeyword} == 'NS'">노쇼(NS)</option>
+	              	<option value="DR" th:selected="${searchKeyword} == 'PE'">배송준비중(DR)</option>
+	              	<option value="D" th:selected="${searchKeyword} == 'RC'">배송중(D)</option>
+	              	<option value="DC" th:selected="${searchKeyword} == 'PC'">배송완료(DC)</option>
 	            </select>
 	            
 				<button type="button" id="btnSearch">검색</button>
@@ -218,33 +197,33 @@
 	    </form>
 	    
 		<!-- 원데이클래스 예약 리스트 Table -->
-	    <div id="div_reserList_T">
-	        <table border="1" id="reserList_T">
+	    <div id="div_orderList_T">
+	        <table border="1" id="orderList_T">
 	        	<tr>
-			        <th class="reserList_T_15">예약번호</th>
-			        <th class="reserList_T_10">예약자</th>
-			        <th class="reserList_T_10">클래스번호</th>
-			        <th class="reserList_T_15">예약날짜</th>
-			        <th class="reserList_T_10">예약시간</th>
-			        <th class="reserList_T_10">예약상태</th>
-			        <th class="reserList_T_10">참여현황</th>
-			        <th class="reserList_T_20">취소관리</th>
+			        <th class="orderList_T_15">주문번호</th>
+			        <th class="orderList_T_10">회원아이디</th>
+			        <th class="orderList_T_10">주문자명</th>
+			        <th class="orderList_T_15">주문 총금액</th>
+			        <th class="orderList_T_10">결제방법</th>
+			        <th class="orderList_T_10">주문일</th>
+			        <th class="orderList_T_10">주문상태</th>
+			        <th class="orderList_T_20">취소관리</th>
 	      		</tr>
-	      		<tr th:each="reser: ${getReserList.content}">
-		        	<td th:text="${reser.reserNo}"></td>
+	      		<tr th:each="order: ${getORderList.content}">
+		        	<td th:text="${order.orderNo}"></td>
 		        	<!--<td>       예약번호 누르면 예약정보 모달?페이지? 띄우기
 						<a id="a_itemName" th:text="${item.itemName}"
 							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">
 						</a>
 					</td>-->
-					<td th:text="${reser.partiName}"></td>
-					<td th:text="${reser.classNo}"></td>
-					<td th:text="${reser.partiDate}"></td>
-					<td th:text="${reser.partiTime}"></td>
-					<td th:text="${reser.reserStatus}"></td>
-					<td th:text="${reser.partiStatus}"></td>
+					<td th:text="${order.userId}"></td>
+					<td th:text="${order.orderName}"></td>
+					<td th:text="${order.orderTotalPrice}"></td>
+					<td th:text="${order.orderPayment}"></td>
+					<td th:text="${order.orderDate}"></td>
+					<td th:text="${order.orderStatus}"></td>
 		        	<td>
-		        		<a id="reserCancel" th:text="예약취소">
+		        		<a id="OrderCancel" th:text="주문취소">
 							<!--th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">-->
 						</a>
 						<a id="payCancel" th:text="결제취소">
