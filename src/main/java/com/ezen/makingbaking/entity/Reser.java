@@ -51,4 +51,5 @@ public class Reser {
 	@Transient
 	private String searchKeyword;
 	private LocalDateTime reserCancelDate;					// 취소일
+	private String tid;
 }

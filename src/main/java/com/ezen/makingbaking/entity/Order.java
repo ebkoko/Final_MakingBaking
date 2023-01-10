@@ -51,4 +51,5 @@ public class Order {	// 주문정보 테이블
 	@Transient
 	private String searchKeyword;
 	private LocalDateTime orderCancelDate;	// 취소일
+	private String tid;
 }

@@ -137,6 +137,10 @@ public class OrderController {
 	@GetMapping("/orderComplete")
 	public ModelAndView orderCompleteView(HttpSession session, @AuthenticationPrincipal CustomUserDetails customUser) throws JsonMappingException, JsonProcessingException {
 		Order order = (Order)session.getAttribute("order");
+		//1. entity, dto에 tid 멤버변수 생성
+		//2. 테이블 컬럼에 tid 추가
+		//3. 위에서 생성한 order에 세션에 담겨 있는 tid 세팅
+		String tid = (String)session.getAttribute("tid");
 		
 		
 		String itemList = session.getAttribute("itemList").toString();
@@ -163,6 +167,7 @@ public class OrderController {
 		order.setUserId(customUser.getUsername());
 		order.setOrderDate(LocalDateTime.now());
 		order.setOrderTotalPayPrice(order.getOrderTotalPrice() + order.getOrderDeliFee());
+		order.setTid(tid);
 		
 		System.out.println("order2======================================================"+order.toString());
 		
@@ -241,13 +246,31 @@ public class OrderController {
 	
 	@Transactional
 	@PutMapping("/orderCancel/{orderNo}")
-	public ResponseEntity<?> orderCancel(@PathVariable("orderNo") long orderNo, OrderDTO orderDTO, HttpServletResponse response) {
+	public ResponseEntity<?> orderCancel(@PathVariable("orderNo") long orderNo, OrderDTO orderDTO,
+			HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails customUser) {
 		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
 		
 		try {
 			Order returnOrder = Order.builder()
 									.orderNo(orderNo)
+									.userId(customUser.getUsername())
+									.orderDate(LocalDateTime.parse(orderDTO.getOrderDate()))
 									.orderStatus(orderDTO.getOrderStatus())
+									.reciName(orderDTO.getReciName())
+									.reciTel(orderDTO.getReciTel())
+									.shippingAddr1(orderDTO.getShippingAddr1())
+									.shippingAddr2(orderDTO.getShippingAddr2())
+									.shippingAddr3(orderDTO.getShippingAddr3())
+									.orderDeliFee(orderDTO.getOrderDeliFee())
+									.orderTotalPrice(orderDTO.getOrderTotalPrice())
+									.orderPayment(orderDTO.getOrderPayment())
+									.orderName(orderDTO.getOrderName())
+									.orderTel(orderDTO.getOrderTel())
+									.orderMessage(orderDTO.getOrderMessage())
+									.orderMail(orderDTO.getOrderMail())
+									.depositor(orderDTO.getDepositor())
+									.orderTotalPayPrice(orderDTO.getOrderTotalPayPrice())
+									.orderCancelDate(LocalDateTime.now())
 									.build();
 			orderService.updateOrder(returnOrder);
 			
@@ -267,13 +290,31 @@ public class OrderController {
 	
 	@Transactional
 	@PutMapping("/payCancel/{orderNo}")
-	public ResponseEntity<?> payCancel(@PathVariable("orderNo") long orderNo, OrderDTO orderDTO, HttpServletResponse response) {
+	public ResponseEntity<?> payCancel(@PathVariable("orderNo") long orderNo, OrderDTO orderDTO,
+			HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails customUser) {
 		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
 		
 		try {
 			Order returnOrder = Order.builder()
 									.orderNo(orderNo)
+									.userId(customUser.getUsername())
+									.orderDate(LocalDateTime.parse(orderDTO.getOrderDate()))
 									.orderStatus(orderDTO.getOrderStatus())
+									.reciName(orderDTO.getReciName())
+									.reciTel(orderDTO.getReciTel())
+									.shippingAddr1(orderDTO.getShippingAddr1())
+									.shippingAddr2(orderDTO.getShippingAddr2())
+									.shippingAddr3(orderDTO.getShippingAddr3())
+									.orderDeliFee(orderDTO.getOrderDeliFee())
+									.orderTotalPrice(orderDTO.getOrderTotalPrice())
+									.orderPayment(orderDTO.getOrderPayment())
+									.orderName(orderDTO.getOrderName())
+									.orderTel(orderDTO.getOrderTel())
+									.orderMessage(orderDTO.getOrderMessage())
+									.orderMail(orderDTO.getOrderMail())
+									.depositor(orderDTO.getDepositor())
+									.orderTotalPayPrice(orderDTO.getOrderTotalPayPrice())
+									.orderCancelDate(LocalDateTime.now())
 									.build();
 			orderService.updateOrder(returnOrder);
 			

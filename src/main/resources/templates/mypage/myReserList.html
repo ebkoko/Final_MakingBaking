@@ -58,9 +58,16 @@
 	      <div class="boxx" th:each="reser : ${getReserList}">
 	        <img th:src="@{'/dayclass/' + ${reser.fileName}}" width="130px" margin="10px">
 	        <div class="box_product">
-	          <div class="box_product_detail" th:text="${reser.dayclassName}">클래스명: 케이크 만들기</div>
-	          <div class="box_product_detail" th:text="${reser.reserTotalPrice}">가격: 35000원</div>
-	          <div class="box_product_detail" th:text="${reser.reserPersonCnt}">인원 수: 1</div>
+	          <div class="box_product_detail" th:if="${reser.reserStatus == 'MV'}" style="color: red;">입금대기</div>
+	          <div class="box_product_detail" th:if="${reser.reserStatus == 'PE'}" style="color: #28693F;">결제완료</div>
+	          <div class="box_product_detail" th:if="${reser.reserStatus == 'RC'}" style="color: lightgray;">예약취소</div>
+	          <div class="box_product_detail" th:if="${reser.reserStatus == 'PC'}" style="color: lightgray;">결제취소</div>
+	          <div class="box_product_detail" th:text="${reser.dayclassName}"></div>
+	          <div class="box_product_detail">
+		          <div class="box_detail" th:text="${'예약일자: ' + reser.partiDate}" style="display: inline-block;"></div>
+		          <div class="box_detail" th:if="${reser.partiTime == 'A'}" style="display: inline-block;">오전 9:30~12:30</div>
+		          <div class="box_detail" th:if="${reser.partiTime == 'P'}" style="display: inline-block;">오후 14:00~17:00</div>
+	          </div>
 	        </div>
 	        <div class="box_right">
 	          <span class="box_right_detail"><a th:href="@{/mypage/getReserDetail/{reserNo} (reserNo=${reser.reserNo})}">예약 상세보기</a></span>
