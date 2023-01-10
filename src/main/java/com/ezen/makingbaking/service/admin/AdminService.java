@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
+import com.ezen.makingbaking.entity.Order;
 import com.ezen.makingbaking.entity.Reser;
 import com.ezen.makingbaking.entity.User;
 
@@ -50,5 +51,9 @@ public interface AdminService {
 	//reser_dayclass
 	List<Reser> getReserList(Reser reser);
 	Page<Reser> getPageReserList(Reser reser, Pageable pageable);
+	
+	//order_item
+	List<Order> getOrderList(Order order);
+	Page<Order> getPageOrderList(Order order, Pageable pageable);
 	
 }

@@ -12,11 +12,13 @@ import org.springframework.stereotype.Service;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
+import com.ezen.makingbaking.entity.Order;
 import com.ezen.makingbaking.entity.Reser;
 import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.repository.DayclassRepository;
 import com.ezen.makingbaking.repository.ImgFileRepository;
 import com.ezen.makingbaking.repository.ItemRepository;
+import com.ezen.makingbaking.repository.OrderRepository;
 import com.ezen.makingbaking.repository.ReserRepository;
 import com.ezen.makingbaking.repository.UserRepository;
 import com.ezen.makingbaking.service.admin.AdminService;
@@ -38,6 +40,9 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Autowired
 	private ReserRepository reserRepository;
+	
+	@Autowired
+	private OrderRepository orderRepository;
 	
 
 	//item
@@ -265,7 +270,7 @@ public class AdminServiceImpl implements AdminService {
 	      
 	   }
 	
-	//reser_dayclass
+	//reser_dayclassList
 	@Override
 	public List<Reser> getReserList(Reser reser) {
 		return reserRepository.findAll();
@@ -301,6 +306,37 @@ public class AdminServiceImpl implements AdminService {
 	      
 	   }
 	
+	//order_itemList
+	@Override
+	public List<Order> getOrderList(Order order) {
+		return orderRepository.findAll();
+	}
+
+	@Override
+	public Page<Order> getPageOrderList(Order order, Pageable pageable) {
+		if(order.getSearchKeyword() != null && !order.getSearchKeyword().equals("")) {
+			if(order.getSearchCondition().equals("ALL")) {
+				return orderRepository.findByOrderNoOrUserIdContainingOrOrderNameContainingOrOrderPaymentContainingOrOrderStatus
+						(Long.parseLong(order.getSearchKeyword()), order.getSearchKeyword(),
+								order.getSearchKeyword(), order.getSearchKeyword(), order.getSearchKeyword(), pageable);
+			      } else if (order.getSearchCondition().equals("ORDERNO")) {
+			         return orderRepository.findByOrderNo(Long.parseLong(order.getSearchKeyword()), pageable);
+			      } else if (order.getSearchCondition().equals("USERID")) {
+			    	  return orderRepository.findByUserIdContaining(order.getSearchKeyword(), pageable);
+			      } else if (order.getSearchCondition().equals("ORDERNAME")) {
+				         return orderRepository.findByOrderNameContaining(order.getSearchKeyword(), pageable);
+			      } else if (order.getSearchCondition().equals("ORDERPAYMENT")) {
+			    	  return orderRepository.findByOrderPaymentContaining(order.getSearchKeyword(), pageable);
+			      } else if (order.getSearchCondition().equals("ORDERSTATUS")) {
+			    	  return orderRepository.findByOrderStatusContaining(order.getSearchKeyword(), pageable);
+			      } else {
+			    	  return orderRepository.findAll(pageable);
+			      }
+		  } else {
+			  return orderRepository.findAll(pageable);
+		  }
+	      
+	   }
 	
 
 	

@@ -32,12 +32,14 @@ import com.ezen.makingbaking.common.FileUtils;
 import com.ezen.makingbaking.dto.DayclassDTO;
 import com.ezen.makingbaking.dto.ImgFileDTO;
 import com.ezen.makingbaking.dto.ItemDTO;
+import com.ezen.makingbaking.dto.OrderDTO;
 import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.dto.UserDTO;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
+import com.ezen.makingbaking.entity.Order;
 import com.ezen.makingbaking.entity.Reser;
 import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.service.admin.AdminService;
@@ -249,10 +251,9 @@ public class AdminController {
 	@Transactional
 	@PutMapping("/updateItem")
 	public ResponseEntity<?> updateItem(ItemDTO itemDTO,
-			HttpServletResponse response, MultipartFile[] uploadFiles,
-			MultipartFile[] changedFiles, HttpServletRequest request,
-			@RequestParam("originFiles") String originFiles) throws IOException { 
-		System.out.println("itemDTO.getItemPrice()==================================" + itemDTO.getItemPrice());
+			MultipartFile[] uploadFiles, MultipartFile[] changedFiles,
+			HttpServletRequest request, @RequestParam("originFiles") String originFiles) throws IOException { 
+		
 		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
 		
 		List<ImgFileDTO> originFileList = new ObjectMapper().readValue(originFiles, 
@@ -276,7 +277,7 @@ public class AdminController {
 		
 		try {
 			Item item = Item.builder()
-//					상품상태, 카테고리, 등록일, 이름, 소제목, 설명, 가격, 유통기한, 원산지, 알레르기정보, 첨부파일, 재고
+					//상품상태, 카테고리, 등록일, 이름, 소제목, 설명, 가격, 유통기한, 원산지, 알레르기정보, 첨부파일, 재고
 							.itemNo(itemDTO.getItemNo())
 							.itemStatus(itemDTO.getItemStatus())
 							.itemCate(itemDTO.getItemCate())
@@ -320,7 +321,6 @@ public class AdminController {
 				} else if (originFileList.get(i).getFileStatus().equals("D")) {
 					ImgFile imgFile = new ImgFile();
 					
-					//boardFile.setBoard(board);
 					imgFile.setFileReferNo(itemDTO.getItemNo());
 					imgFile.setFileNo(originFileList.get(i).getFileNo());
 					imgFile.setFileStatus("D");
@@ -355,8 +355,6 @@ public class AdminController {
 			}
 
 			adminService.updateItem(item, uFileList);
-			
-			//board = boardService.getBoard(boardDTO.getBoardNo());
 			
 			ItemDTO returnItem = ItemDTO.builder()
 										.itemNo(item.getItemNo())
@@ -678,9 +676,8 @@ public class AdminController {
 	@Transactional
 	@PutMapping("/updateDayclass")
 	public ResponseEntity<?> updateDayclass(DayclassDTO dayclassDTO,
-			HttpServletResponse response, MultipartFile[] uploadFiles,
-			MultipartFile[] changedFiles, HttpServletRequest request,
-			@RequestParam("originFiles") String originFiles) throws IOException { 
+			MultipartFile[] uploadFiles, MultipartFile[] changedFiles,
+			HttpServletRequest request, @RequestParam("originFiles") String originFiles) throws IOException { 
 		
 		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
 		
@@ -740,7 +737,6 @@ public class AdminController {
 				} else if (originFileList.get(i).getFileStatus().equals("D")) {
 					ImgFile imgFile = new ImgFile();
 					
-					//boardFile.setBoard(board);
 					imgFile.setFileReferNo(dayclassDTO.getDayclassNo());
 					imgFile.setFileNo(originFileList.get(i).getFileNo());
 					imgFile.setFileStatus("D");
@@ -820,7 +816,7 @@ public class AdminController {
 		
 	}
 	
-	//상품수정 상세보기
+	//클래스수정 상세보기
 	@GetMapping("/dayclassUpdate/{dayclassNo}")
 	public ModelAndView getUpdateDayclass(@PathVariable int dayclassNo) {
 		Dayclass dayclass = adminService.getDayclass(dayclassNo);
@@ -927,8 +923,63 @@ public class AdminController {
 		return mv;
 	}
 	
-	//reser
-	//dayclass 리스트
+	//회원 리스트_개인 리뷰리스트 확인
+//	@GetMapping("/userReviewList/{userId}")
+//	public ModelAndView getUserList(UserDTO userDTO, ReserDTO reserDTO,
+//			@PageableDefault(page = 0, size = 50) Pageable pageable) {
+//		User user = User.builder()
+//						.userName(userDTO.getUserNm())
+//						.userId(userDTO.getUserId())
+//						.userRegdate(LocalDateTime.now())
+//						.searchCondition(userDTO.getSearchCondition())
+//						.searchKeyword(userDTO.getSearchKeyword())
+//						.build();
+//		
+//		List<User> userList = adminService.getUserList(user);
+//		
+//		Page<User> pageUserList = adminService.getPageUserList(user, pageable);
+//		
+//		Page<UserDTO> pageUserDTOList = pageUserList.map(pageUser -> 
+//	                             						UserDTO.builder()
+//	                             								.userNo(pageUser.getUserNo())
+//	                             								.userNm(pageUser.getUserName())
+//	                             								.userId(pageUser.getUserId())
+//	                             								.userRegdate(pageUser.getUserRegdate() == null?
+//	 	                                                               null :
+//	 		                                                               pageUser.getUserRegdate().toString())
+//	                                         					.build()
+//                                         					);
+//							
+//		List<UserDTO> getUserList = new ArrayList<UserDTO>();
+//		for(int i = 0; i < userList.size(); i++) {
+//			UserDTO returnUser = UserDTO.builder()
+//											.userNo(userList.get(i).getUserNo())
+//											.userNm(userList.get(i).getUserName())
+//											.userId(userList.get(i).getUserId())
+//											.userRegdate(userList.get(i).getUserRegdate() == null ?
+//													null :
+//													userList.get(i).getUserRegdate().toString())
+//													.build();
+//
+//			getUserList.add(returnUser);
+//		}
+//		
+//		ModelAndView mv = new ModelAndView();
+//		mv.setViewName("admin/userList.html");
+//		mv.addObject("getUserList", pageUserDTOList);
+//		
+//		if(userDTO.getSearchCondition() != null && !userDTO.getSearchCondition().equals("")) {
+//			mv.addObject("searchCondition", userDTO.getSearchCondition());
+//		}
+//		
+//		if(userDTO.getSearchKeyword() != null && !userDTO.getSearchKeyword().equals("")) {
+//			mv.addObject("searchKeyword", userDTO.getSearchKeyword());
+//		}
+//		
+//		return mv;
+//	}
+	
+	//reser_dayclass 리스트
 	@GetMapping("/reserDayclassList")
 	public ModelAndView getReserDayclassList(ReserDTO reserDTO,
 			@PageableDefault(page = 0, size = 50) Pageable pageable) {
@@ -991,8 +1042,48 @@ public class AdminController {
 		return mv;
 	}
 	
-	
-	
+	//order_item 리스트
+	@GetMapping("/orderItemList")
+	public ModelAndView getOrderItemList(OrderDTO orderDTO,
+			@PageableDefault(page = 0, size = 50) Pageable pageable) {
+		Order order = Order.builder()
+							.orderNo(orderDTO.getOrderNo())
+							.build();
+							
+		List<Order> orderList = adminService.getOrderList(order);
+		
+		Page<Order> pageOrderList = adminService.getPageOrderList(order, pageable);
+		
+		Page<OrderDTO> pageOrderDTOList = pageOrderList.map(pageOrder -> 
+                                             						OrderDTO.builder()
+                                             								.orderNo(pageOrder.getOrderNo())
+                                             								
+                                             								.build()
+	                                             					);
+							
+		List<OrderDTO> getOrderList = new ArrayList<OrderDTO>();
+		for(int i = 0; i < orderList.size(); i++) {
+			OrderDTO returnOrder = OrderDTO.builder()
+											.orderNo(orderList.get(i).getOrderNo())
+											.build();
+
+			getOrderList.add(returnOrder);
+		}
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("admin/orderItemList.html");
+		mv.addObject("getOrderList", pageOrderDTOList);
+		
+		if(orderDTO.getSearchCondition() != null && !orderDTO.getSearchCondition().equals("")) {
+			mv.addObject("searchCondition", orderDTO.getSearchCondition());
+		}
+		
+		if(orderDTO.getSearchKeyword() != null && !orderDTO.getSearchKeyword().equals("")) {
+			mv.addObject("searchKeyword", orderDTO.getSearchKeyword());
+		}
+		
+		return mv;
+	}
 	
 	
 	

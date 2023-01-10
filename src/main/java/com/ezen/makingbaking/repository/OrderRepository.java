@@ -2,6 +2,8 @@ package com.ezen.makingbaking.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,6 +12,16 @@ import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Order;
 
 public interface OrderRepository extends JpaRepository<Order, Integer> {
+	
+	//관리자 주문 검색_선민
+	Page<Order> findByOrderNo(long searchKeyword, Pageable pageable); //주문번호
+	Page<Order> findByUserIdContaining(String searchKeyword, Pageable pageable); //회원아이디
+	Page<Order> findByOrderNameContaining(String searchKeyword, Pageable pageable); //주문자명
+	Page<Order> findByOrderPaymentContaining(String searchKeyword, Pageable pageable); //결제방법
+	Page<Order> findByOrderStatusContaining(String searchKeyword, Pageable pageable); //주문상태
+	Page<Order> findByOrderNoOrUserIdContainingOrOrderNameContainingOrOrderPaymentContainingOrOrderStatus(long searchKeyword1, String searchKeyword2, String searchKeyword3, String searchKeyword4, String searchKeyword5, Pageable pageable);
+	
+	
 	@Query(value="SELECT  IFNULL(MAX(ORDER_NO), CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(0, '6', '0'))) + 1 AS ORDER_NO\r\n"
 			+ " FROM T_MB_ORDER\r\n"
 			+ " WHERE ORDER_NO LIKE CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), '%')", nativeQuery=true)
