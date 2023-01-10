@@ -225,7 +225,7 @@
 					background: #28693F;
 				}
 				#moveList {
-					display: none;
+					display: flex;
 					justify-content: center;	
 				    margin-top: 100px;
 				    margin-bottom: 10px;
@@ -277,13 +277,26 @@
 							url: '/order/orderCancel/' + orderNo,
 							type: 'put',
 							data: { 
-								orderNo: $(".realOrderNo").text(),
-								orderStatus: 'OC'
+								orderDate: order.orderDate,
+								orderStatus: 'OC',
+								reciName: order.reciName,
+								reciTel: order.reciTel,
+								shippingAddr1: order.shippingAddr1,
+								shippingAddr2: order.shippingAddr2,
+								shippingAddr3: order.shippingAddr3,
+								orderDeliFee: order.orderDeliFee,
+								orderTotalPrice: order.orderTotalPrice,
+								orderPayment: order.orderPayment,
+								orderName: order.orderName,
+								orderTel: order.orderTel,
+								orderMessage: order.orderMessage,
+								orderMail: order.orderMail,
+								depositor: order.depositor,
+								orderTotalPayPrice: order.orderTotalPayPrice
 								},
 							success: function(obj) {
 								console.log(obj);
 								$(".orderStatus").text("주문취소");
-								$("#moveList").css("display", "flex");
 								$("#CancelOption").css("display", "none");
 							}, error: function(e) {
 								console.log(e);
@@ -296,13 +309,26 @@
 							url: '/order/payCancel/' + orderNo,
 							type: 'put',
 							data: { 
-								orderNo: $(".realOrderNo").text(),
-								orderStatus: 'PC'
+								orderDate: order.orderDate,
+								orderStatus: 'PC',
+								reciName: order.reciName,
+								reciTel: order.reciTel,
+								shippingAddr1: order.shippingAddr1,
+								shippingAddr2: order.shippingAddr2,
+								shippingAddr3: order.shippingAddr3,
+								orderDeliFee: order.orderDeliFee,
+								orderTotalPrice: order.orderTotalPrice,
+								orderPayment: order.orderPayment,
+								orderName: order.orderName,
+								orderTel: order.orderTel,
+								orderMessage: order.orderMessage,
+								orderMail: order.orderMail,
+								depositor: order.depositor,
+								orderTotalPayPrice: order.orderTotalPayPrice
 								},
 							success: function(obj) {
 								console.log(obj);
 								$(".orderStatus").text("결제취소");
-								$("#moveList").css("display", "flex");
 								$("#CancelOption").css("display", "none");
 							}, error: function(e) {
 								console.log(e);
@@ -406,11 +432,11 @@
 	                </div>
 	            </div>
 	            <hr>
-	            <div id="CancelOption">
+	            <div id="CancelOption" th:if="${order.cancelEnable == 'P'}">
                     <input type="button" name="CancelOption" id="btnOrderCancel" value="주문취소" th:if="${order.orderStatus == 'MV'}">&emsp;
                     <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${order.orderStatus == 'PE'}">
 	            </div>
-	            <div id="moveList">
+	            <div id="moveList" th:style="${order.orderStatus == 'PC' || order.orderStatus == 'OC' ? 'display: block;' : 'display: none;'}">
 	            	<button type="button" id="btnMoveList" onclick="fnBtnMoveList()">목록으로</button>
 	            </div>
 	        </div>

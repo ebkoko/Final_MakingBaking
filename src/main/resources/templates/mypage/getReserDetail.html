@@ -192,7 +192,7 @@
 					background: #28693F;
 				}
 				#moveList {
-					display: none; 
+					display: flex; 
 					justify-content: center;	
 				    margin-top: 100px;
 				    margin-bottom: 10px;
@@ -240,12 +240,26 @@
 							url: '/reser/reserCancel/' + reserNo,
 							type: 'put',
 							data: { 
-								reserStatus: 'RC'
+								reserDate: reser.reserDate,
+								reserStatus: 'RC',
+								partiName: reser.partiName,
+								partiTel: reser.partiTel,
+								partiTime: reser.partiTime,
+								partiDate: reser.partiDate,
+								classNo: reser.classNo,
+								reserPersonCnt: reser.reserPersonCnt,
+								orderName: reser.orderName,
+								orderTel: reser.orderTel,
+								request: reser.request,
+								reserPayment: reser.reserPayment,
+								depositor: reser.depositor,
+								reserTotalPrice: reser.reserTotalPrice,
+								classPrice: reser.classPrice,
+								partiStatus: reser.partiStatus
 								},
 							success: function(obj) {
 								console.log(obj);
 								$(".reserStatus").text("예약취소");
-								$("#moveList").css("display", "flex");
 								$("#CancelOption").css("display", "none");
 							}, error: function(e) {
 								console.log(e);
@@ -258,12 +272,26 @@
 							url: '/reser/payCancel/' + reserNo,
 							type: 'put',
 							data: {
-								reserStatus: 'PC'
+								reserDate: reser.reserDate,
+								reserStatus: 'PC',
+								partiName: reser.partiName,
+								partiTel: reser.partiTel,
+								partiTime: reser.partiTime,
+								partiDate: reser.partiDate,
+								classNo: reser.classNo,
+								reserPersonCnt: reser.reserPersonCnt,
+								orderName: reser.orderName,
+								orderTel: reser.orderTel,
+								request: reser.request,
+								reserPayment: reser.reserPayment,
+								depositor: reser.depositor,
+								reserTotalPrice: reser.reserTotalPrice,
+								classPrice: reser.classPrice,
+								partiStatus: reser.partiStatus
 							},
 							success: function(obj) {
 								console.log(obj);
 								$(".reserStatus").text("결제취소");
-								$("#moveList").css("display", "flex");
 								$("#CancelOption").css("display", "none");
 							}, error: function(e) {
 								console.log(e);
@@ -369,7 +397,7 @@
                     <input type="button" name="CancelOption" id="btnReserCancel" value="예약취소" th:if="${reser.reserStatus == 'MV'}">&emsp;
                     <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${reser.reserStatus == 'PE'}">
 	            </div>
-	            <div id="moveList">
+	            <div id="moveList" th:style="${reser.reserStatus == 'PC' || reser.reserStatus == 'OC' ? 'display: block;' : 'display: none;'}">
 	            	<button type="button" id="btnMoveList" onclick="fnBtnMoveList()">목록으로</button>
 	            </div>
 	        </div>

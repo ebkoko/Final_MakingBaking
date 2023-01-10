@@ -45,7 +45,14 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 			+ "					  )", nativeQuery=true)
 	List<CamelHashMap> findByOrderContentAndOrderNo(@Param("userId") String userId);
 	
-	@Query(value="SELECT A.*\r\n"
+	@Query(value="SELECT A.*,\r\n"
+			+ "               CASE \r\n"
+			+ "					WHEN A.ORDER_STATUS = 'DW' OR A.ORDER_STATUS = 'D' OR A.ORDER_STATUS = 'DC'\r\n"
+			+ "                    THEN 'I'\r\n"
+			+ "                    WHEN A.ORDER_STATUS = 'MV' OR A.ORDER_STATUS = 'PE'\r\n"
+			+ "                    THEN 'P'\r\n"
+			+ "                    ELSE 'I'\r\n"
+			+ "				END AS CANCEL_ENABLE"
 			+ "	FROM T_MB_ORDER A\r\n"
 			+ "    WHERE A.ORDER_NO = :orderNo", nativeQuery=true)
 	CamelHashMap findByOrderDetailAndOrderNo(@Param("orderNo") long orderNo);

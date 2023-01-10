@@ -109,6 +109,7 @@ public class ReserController {
 	public ModelAndView reserCompleteView(HttpSession session, @AuthenticationPrincipal CustomUserDetails customUser) throws JsonMappingException, JsonProcessingException {
 		Reser reser = (Reser)session.getAttribute("reser");
 		
+		String tid = (String)session.getAttribute("tid");
 		
 		String className = session.getAttribute("className").toString();
 		System.out.println("dayclass=========================================================================" + className);
@@ -120,6 +121,7 @@ public class ReserController {
 		reser.setReserNo(reserNo);
 		reser.setUserId(customUser.getUsername());
 		reser.setReserDate(LocalDateTime.now());
+		reser.setTid(tid);
 		
 		System.out.println("reser2======================================================"+reser.toString());
 		
@@ -192,10 +194,12 @@ public class ReserController {
 			Reser returnReser = Reser.builder()
 									.reserNo(reserNo)
 									.userId(customUser.getUsername())
+									.reserDate(LocalDateTime.parse(reserDTO.getReserDate()))
 									.reserStatus(reserDTO.getReserStatus())
 									.partiName(reserDTO.getPartiName())
 									.partiTel(reserDTO.getPartiTel())
 									.partiDate(reserDTO.getPartiDate())
+									.partiTime(reserDTO.getPartiTime())
 									.classNo(reserDTO.getClassNo())
 									.reserPersonCnt(reserDTO.getReserPersonCnt())
 									.orderName(reserDTO.getOrderName())
@@ -226,14 +230,32 @@ public class ReserController {
 	
 	@Transactional
 	@PutMapping("/payCancel/{reserNo}")
-	public ResponseEntity<?> payCancel(@PathVariable("reserNo") long reserNo, ReserDTO reserDTO, HttpServletResponse response) {
+	public ResponseEntity<?> payCancel(@PathVariable("reserNo") long reserNo, ReserDTO reserDTO,
+			HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails customUser) {
 		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
 		
 		try {
 			Reser returnReser = Reser.builder()
-											.reserNo(reserNo)
-											.reserStatus(reserDTO.getReserStatus())
-											.build();
+									.reserNo(reserNo)
+									.userId(customUser.getUsername())
+									.reserDate(LocalDateTime.parse(reserDTO.getReserDate()))
+									.reserStatus(reserDTO.getReserStatus())
+									.partiName(reserDTO.getPartiName())
+									.partiTel(reserDTO.getPartiTel())
+									.partiDate(reserDTO.getPartiDate())
+									.partiTime(reserDTO.getPartiTime())
+									.classNo(reserDTO.getClassNo())
+									.reserPersonCnt(reserDTO.getReserPersonCnt())
+									.orderName(reserDTO.getOrderName())
+									.orderTel(reserDTO.getOrderTel())
+									.request(reserDTO.getRequest())
+									.reserPayment(reserDTO.getReserPayment())
+									.depositor(reserDTO.getDepositor())
+									.reserTotalPrice(reserDTO.getReserTotalPrice())
+									.classPrice(reserDTO.getClassPrice())
+									.partiStatus(reserDTO.getPartiStatus())
+									.reserCancelDate(LocalDateTime.now())
+									.build();
 			reserService.updateReser(returnReser);
 			
 			Map<String, Object> returnMap = new HashMap<String, Object>();

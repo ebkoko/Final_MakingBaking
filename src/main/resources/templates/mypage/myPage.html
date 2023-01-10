@@ -60,6 +60,13 @@
 	      <!-- 아이템 -->
 	      <div class="boxx" th:each="order : ${getOrderList}">
 	        <div class="box_product">
+	          <div class="box_product_detail" th:if="${order.orderStatus == 'MV'}" style="color: red;">입금대기</div>
+	          <div class="box_product_detail" th:if="${order.orderStatus == 'PE'}" style="color: #28693F;">결제완료</div>
+	          <div class="box_product_detail" th:if="${order.orderStatus == 'DW'}" style="color: lightblue;">배송준비중</div>
+	          <div class="box_product_detail" th:if="${order.orderStatus == 'D'}" style="color: lightblue;">배송중</div>
+	          <div class="box_product_detail" th:if="${order.orderStatus == 'DC'}" style="color: dimgray;">배송완료</div>
+	          <div class="box_product_detail" th:if="${order.orderStatus == 'OC'}" style="color: lightgray;">주문취소</div>
+	          <div class="box_product_detail" th:if="${order.orderStatus == 'PC'}" style="color: lightgray;">결제취소</div>
 	          <div class="box_product_detail" th:text="${'주문일시: ' + #strings.substring(order.orderDate, 0, 19)}"></div>
 	          <div class="box_product_detail" th:text="${'주문번호: ' + order.orderNo}"></div>
 	        </div>

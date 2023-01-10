@@ -5,6 +5,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.makingbaking.common.CamelHashMap;
+import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.entity.CustomUserDetails;
+import com.ezen.makingbaking.entity.Reser;
 import com.ezen.makingbaking.service.dayclass.DayclassService;
 import com.ezen.makingbaking.service.order.OrderService;
 import com.ezen.makingbaking.service.reser.ReserService;
@@ -90,10 +95,16 @@ public class MypageController {
 	}
 	
 	@GetMapping("/myReserList")
-	public ModelAndView myReserList(@AuthenticationPrincipal CustomUserDetails customUser) {
+	public ModelAndView myReserList(ReserDTO reserDTO, @PageableDefault(page = 0, size = 5) Pageable pageable
+			, @AuthenticationPrincipal CustomUserDetails customUser) {
 		ModelAndView mv = new ModelAndView();
 		
 		List<CamelHashMap> reserList = reserService.getReserList(customUser.getUsername());
+		
+		Page<CamelHashMap> pageReserList = reserService.getPageReserList(customUser.getUsername(), pageable);
+		
+		Page<CamelHashMap> pageReserDTOList = pageReserList.map(pageReser ->
+																	ReserDTO.builder())
 		
 		mv.addObject("getReserList", reserList);		
 		mv.setViewName("mypage/myReserList.html");
