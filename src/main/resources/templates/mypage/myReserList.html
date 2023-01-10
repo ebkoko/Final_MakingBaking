@@ -6,7 +6,120 @@
 <head>
 	<th:block layout:fragment="script">
 		<script th:inline="javascript">
-		
+			$(function() {
+				$("#reserCondition").on('change', function() {
+					let page = 0;
+					fnGetReserListAjax(page);
+				});
+				
+				$(document).on("click", ".pagination a", function(e) {
+					e.preventDefault();
+					const page = $(this).attr("href");
+					fnGetReserListAjax(page);
+				});
+			});
+			
+			function fnGetReserListAjax(page) {
+				$.ajax({
+						url: '/mypage/myReserListAjax',
+						type: 'post',
+						data: {
+							page: page,
+							reserCondition: $("#reserCondition").val()
+						}, success: function(obj) {
+							console.log(obj);
+							
+							let htmlstr = "";
+							
+							for(let i = 0; i < obj.pageItems.content.length; i++) {
+								htmlstr += `
+									<div class="boxx">
+								        <img src="/dayclass/${obj.pageItems.content[i].fileName}" width="130px" margin="10px">
+								        <div class="box_product">`;
+								if(obj.pageItems.content[i].reserStatus == 'MV') {
+									htmlstr += `
+								          <div class="box_product_detail" style="color: red;">입금대기</div>									
+									`;
+								} else if(obj.pageItems.content[i].reserStatus == 'PE') {
+									htmlstr += `
+								          <div class="box_product_detail" style="color: #28693F;">결제완료</div>					
+									`;
+								} else if(obj.pageItems.content[i].reserStatus == 'RC') {
+									htmlstr += `
+								          <div class="box_product_detail" style="color: lightgray;">예약취소</div>								
+									`;
+								} else if(obj.pageItems.content[i].reserStatus == 'PC') {
+									htmlstr += `
+								          <div class="box_product_detail" style="color: lightgray;">결제취소</div>									
+									`;
+								}
+								htmlstr += `
+								          <div class="box_product_detail">${obj.pageItems.content[i].dayclassName}</div>
+								          <div class="box_product_detail">
+									          <div class="box_detail" style="display: inline-block;">예약일자: ${obj.pageItems.content[i].partiDate}</div>
+									          ${obj.pageItems.content[i].partiTime == 'A' ? '<div class="box_detail" style="display: inline-block;">오전 9:30~12:30</div>'
+									          : '<div class="box_detail" style="display: inline-block;">오후 14:00~17:00</div>'}
+								          </div>
+								        </div>
+								        <div class="box_right">
+								          <span class="box_right_detail"><a href="/mypage/getReserDetail/${obj.pageItems.content[i].reserNo}">예약 상세보기</a></span>
+								          <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
+								        </div>
+								      </div>
+								`;
+								
+							}
+							
+							$("#boxxWrapper").html(htmlstr);
+							
+							htmlstr = "";
+							
+							let pageNumber = obj.pageItems.pageable.pageNumber;
+							let pageSize = obj.pageItems.pageable.pageSize;
+							let totalPages = obj.pageItems.totalPages;
+							let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
+							let tempEndPage = startPage + pageSize -1;
+							let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
+							console.log(pageNumber);
+							console.log(pageSize);
+							console.log(totalPages);
+							console.log(startPage);
+							console.log(tempEndPage);
+							console.log(endPage);
+							
+							if(pageNumber > 0) {
+								htmlstr += `
+									<li class="pagination_button">
+										<a href="${pageNumber - 1}">이전</a>
+									</li>
+								`;
+							}
+							
+							let realStart = totalPages - startPage < pageSize ? 
+												totalPages < pageSize ? 1 : totalPages - pageSize + 1 
+											: startPage;
+							
+							for(let i = realStart; i <= endPage; i++) {
+								
+								htmlstr += `<li class="pagination_button">
+										   	   <a href="${i - 1}">${i}</a>
+									       </li>
+								`;
+							}
+							
+							if(pageNumber < totalPages - 1) {
+								htmlstr += `<li class="pagination_button">
+										       <a href="${pageNumber + 1}">다음</a>
+									        </li>
+								`;
+							}
+							
+							$(".pagination").html(htmlstr);
+						}, error: function(e) {
+							console.log(e);
+						}
+					});
+			}
 		</script>
 	</th:block>
 	<th:block layout:fragment="css">
@@ -54,35 +167,60 @@
 	    <!-- 메인 내용 -->
 	    <div class="main-content">
 	      <h3 style="margin-bottom: 10px;">예약 확인</h3>
+	      <span class="search">
+	        <select class="search-bar" name="reserCondition" id="reserCondition">
+	        	<option th:selected="${reserCondition == null || reserCondition == '' || reserCondition == 'ALL'}" value="ALL">전체</option>
+	        	<option th:selected="${reserCondition == 'MV'}" value="MV">입금대기</option>
+	        	<option th:selected="${reserCondition == 'PE'}" value="PE">결제완료</option>
+	        	<option th:selected="${reserCondition == 'RC'}" value="RC">예약취소</option>
+	        	<option th:selected="${reserCondition == 'PC'}" value="PC">결제취소</option>
+	        </select>
+	      </span>
 	      <!-- 아이템 -->
-	      <div class="boxx" th:each="reser : ${getReserList}">
-	        <img th:src="@{'/dayclass/' + ${reser.fileName}}" width="130px" margin="10px">
-	        <div class="box_product">
-	          <div class="box_product_detail" th:if="${reser.reserStatus == 'MV'}" style="color: red;">입금대기</div>
-	          <div class="box_product_detail" th:if="${reser.reserStatus == 'PE'}" style="color: #28693F;">결제완료</div>
-	          <div class="box_product_detail" th:if="${reser.reserStatus == 'RC'}" style="color: lightgray;">예약취소</div>
-	          <div class="box_product_detail" th:if="${reser.reserStatus == 'PC'}" style="color: lightgray;">결제취소</div>
-	          <div class="box_product_detail" th:text="${reser.dayclassName}"></div>
-	          <div class="box_product_detail">
-		          <div class="box_detail" th:text="${'예약일자: ' + reser.partiDate}" style="display: inline-block;"></div>
-		          <div class="box_detail" th:if="${reser.partiTime == 'A'}" style="display: inline-block;">오전 9:30~12:30</div>
-		          <div class="box_detail" th:if="${reser.partiTime == 'P'}" style="display: inline-block;">오후 14:00~17:00</div>
-	          </div>
-	        </div>
-	        <div class="box_right">
-	          <span class="box_right_detail"><a th:href="@{/mypage/getReserDetail/{reserNo} (reserNo=${reser.reserNo})}">예약 상세보기</a></span>
-	          <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
-	        </div>
+	      <div id="boxxWrapper">
+		      <div class="boxx" th:each="reser : ${getReserList}">
+		        <img th:src="@{'/dayclass/' + ${reser.fileName}}" width="130px" margin="10px">
+		        <div class="box_product">
+		          <div class="box_product_detail" th:if="${reser.reserStatus == 'MV'}" style="color: red;">입금대기</div>
+		          <div class="box_product_detail" th:if="${reser.reserStatus == 'PE'}" style="color: #28693F;">결제완료</div>
+		          <div class="box_product_detail" th:if="${reser.reserStatus == 'RC'}" style="color: lightgray;">예약취소</div>
+		          <div class="box_product_detail" th:if="${reser.reserStatus == 'PC'}" style="color: lightgray;">결제취소</div>
+		          <div class="box_product_detail" th:text="${reser.dayclassName}"></div>
+		          <div class="box_product_detail">
+			          <div class="box_detail" th:text="${'예약일자: ' + reser.partiDate}" style="display: inline-block;"></div>
+			          <div class="box_detail" th:if="${reser.partiTime == 'A'}" style="display: inline-block;">오전 9:30~12:30</div>
+			          <div class="box_detail" th:if="${reser.partiTime == 'P'}" style="display: inline-block;">오후 14:00~17:00</div>
+		          </div>
+		        </div>
+		        <div class="box_right">
+		          <span class="box_right_detail"><a th:href="@{/mypage/getReserDetail/{reserNo} (reserNo=${reser.reserNo})}">예약 상세보기</a></span>
+		          <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
+		        </div>
+		      </div>
 	      </div>
 	    </div>
+	  	<div class="paging" style="text-align:center;">
+			<ul class="pagination" th:if="${getReserList.totalElements > 0}"
+								   th:with="pageNumber = ${getReserList.pageable.pageNumber},
+											pageSize = ${getReserList.pageable.pageSize},
+											totalPages = ${getReserList.totalPages},
+											startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+											tempEndPage = ${startPage + pageSize - 1},
+											endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+				<li class="pagination_button" th:if="${pageNumber > 0}">
+					<a th:href="${pageNumber - 1}">이전</a>
+				</li>
+			
+				<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
+					<a th:href="${page - 1}" th:text="${page}"></a>
+				</li>
+			
+				<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+					<a th:href="${pageNumber + 1}">다음</a>
+				</li>
+			</ul>
+		</div>
 	  </main>
-	  <div class="paging">
-	    <a href="#"><이전</a>
-	    <a href="#">1</a>
-	    <a href="#">2</a>
-	    <a href="#">3</a>
-	    <a href="#">다음></a>
-	  </div>
 	</div>
 </body>
 </html>

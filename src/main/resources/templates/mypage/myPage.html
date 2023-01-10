@@ -55,7 +55,15 @@
 	    <div class="main-content">
 	      <h3 style="margin-bottom: 10px;">주문 확인</h3>
 	      <span class="search">
-	        
+	        <select class="search-bar">
+	        	<option value="MV">입금대기</option>
+	        	<option value="PE">결제완료</option>
+	        	<option value="DW">배송준비중</option>
+	        	<option value="D">배송중</option>
+	        	<option value="DC">배송완료</option>
+	        	<option value="OC">주문취소</option>
+	        	<option value="PC">결제취소</option>
+	        </select>
 	      </span>
 	      <!-- 아이템 -->
 	      <div class="boxx" th:each="order : ${getOrderList}">

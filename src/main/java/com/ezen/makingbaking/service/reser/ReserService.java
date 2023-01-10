@@ -13,7 +13,7 @@ public interface ReserService {
 		
 	void insertReser(Reser reser);
 	
-	List<CamelHashMap> getReserList(String userId);
+	Page<CamelHashMap> getReserList(String userId, Pageable pageable, String reserCondition);
 	
 	CamelHashMap getReserDetail(long reserNo);
 	

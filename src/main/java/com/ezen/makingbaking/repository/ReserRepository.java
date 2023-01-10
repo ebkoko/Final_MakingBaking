@@ -53,8 +53,27 @@ public interface ReserRepository extends JpaRepository<Reser, Integer> {
 			+ "		ON C.DAYCLASS_NO = D.FILE_REFER_NO\r\n"
 			+ "        AND D.FILE_NO = 1\r\n"
 			+ "        AND D.FILE_TYPE = 'dayclass'\r\n"
-			+ "        ORDER BY A.RESER_DATE DESC", nativeQuery=true)
-	List<CamelHashMap> findAllReser(@Param("userId") String userId);
+			+ "        ORDER BY A.RESER_DATE DESC",
+			countQuery=" SELECT COUNT(*) FROM ("
+					+ " SELECT C.*\r\n"
+					+ "	, D.FILE_NO\r\n"
+					+ "    , D.FILE_NAME\r\n"
+					+ "    , D.FILE_ORIGIN_NAME\r\n"
+					+ "    , D.FILE_PATH\r\n"
+					+ "    FROM(\r\n"
+					+ "		SELECT A.*, B.*\r\n"
+					+ "			FROM T_MB_RESER A\r\n"
+					+ "				, T_MB_DAYCLASS B\r\n"
+					+ "			WHERE A.CLASS_NO = B.DAYCLASS_NO\r\n"
+					+ "				AND A.USER_ID = :userId\r\n"
+					+ "		) C\r\n"
+					+ "	LEFT OUTER JOIN T_MB_FILE D\r\n"
+					+ "		ON C.DAYCLASS_NO = D.FILE_REFER_NO\r\n"
+					+ "        AND D.FILE_NO = 1\r\n"
+					+ "        AND D.FILE_TYPE = 'dayclass'\r\n"
+					+ "        ORDER BY A.RESER_DATE DESC"
+					+ ") AA", nativeQuery=true)
+	Page<CamelHashMap> findAllReser(@Param("userId") String userId, Pageable pageable);
 	
 	@Query(value = "SELECT C.*\r\n"
 			+ "	, D.FILE_NO\r\n"
@@ -81,4 +100,44 @@ public interface ReserRepository extends JpaRepository<Reser, Integer> {
 			+ "        AND D.FILE_NO = 1\r\n"
 			+ "        AND D.FILE_TYPE = 'dayclass'", nativeQuery=true)
 	CamelHashMap findByReserDetailAndReserNo(@Param("reserNo") long reserNo);
+	
+	@Query(value = "SELECT C.*\r\n"
+			+ "	, D.FILE_NO\r\n"
+			+ "    , D.FILE_NAME\r\n"
+			+ "    , D.FILE_ORIGIN_NAME\r\n"
+			+ "    , D.FILE_PATH\r\n"
+			+ "    FROM(\r\n"
+			+ "		SELECT A.*, B.*\r\n"
+			+ "			FROM T_MB_RESER A\r\n"
+			+ "				, T_MB_DAYCLASS B\r\n"
+			+ "			WHERE A.CLASS_NO = B.DAYCLASS_NO\r\n"
+			+ "				AND A.USER_ID = :userId\r\n"
+			+ "				AND A.RESER_STATUS = :reserCondition"
+			+ "		) C\r\n"
+			+ "	LEFT OUTER JOIN T_MB_FILE D\r\n"
+			+ "		ON C.DAYCLASS_NO = D.FILE_REFER_NO\r\n"
+			+ "        AND D.FILE_NO = 1\r\n"
+			+ "        AND D.FILE_TYPE = 'dayclass'\r\n"
+			+ "        ORDER BY A.RESER_DATE DESC",
+			countQuery=" SELECT COUNT(*) FROM ("
+					+ " SELECT C.*\r\n"
+					+ "	, D.FILE_NO\r\n"
+					+ "    , D.FILE_NAME\r\n"
+					+ "    , D.FILE_ORIGIN_NAME\r\n"
+					+ "    , D.FILE_PATH\r\n"
+					+ "    FROM(\r\n"
+					+ "		SELECT A.*, B.*\r\n"
+					+ "			FROM T_MB_RESER A\r\n"
+					+ "				, T_MB_DAYCLASS B\r\n"
+					+ "			WHERE A.CLASS_NO = B.DAYCLASS_NO\r\n"
+					+ "				AND A.USER_ID = :userId\r\n"
+					+ "				AND A.RESER_STATUS = :reserCondition"
+					+ "		) C\r\n"
+					+ "	LEFT OUTER JOIN T_MB_FILE D\r\n"
+					+ "		ON C.DAYCLASS_NO = D.FILE_REFER_NO\r\n"
+					+ "        AND D.FILE_NO = 1\r\n"
+					+ "        AND D.FILE_TYPE = 'dayclass'\r\n"
+					+ "        ORDER BY A.RESER_DATE DESC"
+					+ ") AA", nativeQuery=true)
+	Page<CamelHashMap> findAllReserByReserCondition(@Param("userId") String userId, @Param("reserCondition") String reserCondition, Pageable pageable);
 }

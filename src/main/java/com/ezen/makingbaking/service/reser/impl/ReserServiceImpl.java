@@ -28,8 +28,13 @@ public class ReserServiceImpl implements ReserService {
 	}
 	
 	@Override
-	public List<CamelHashMap> getReserList(String userId) {
-		return reserRepository.findAllReser(userId);
+	public Page<CamelHashMap> getReserList(String userId, Pageable pageable, String reserCondition) {
+		if(reserCondition == null || reserCondition.equals("") || reserCondition.equals("ALL")) {
+			return reserRepository.findAllReser(userId, pageable);			
+		} else {
+			return reserRepository.findAllReserByReserCondition(userId, reserCondition, pageable);
+		}
+		
 	}
 	
 	@Override

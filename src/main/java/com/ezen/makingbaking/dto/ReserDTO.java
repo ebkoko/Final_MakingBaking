@@ -32,4 +32,5 @@ public class ReserDTO {
 	private String searchKeyword;
 	private String reserCancelDate;
 	private String tid;
+	private String reserCondition;
 }
