@@ -228,7 +228,7 @@
 												value="${obj.pageItems.content[i].itemNo}">
 											</td>
 											<td>${obj.pageItems.content[i].itemNo}</td>
-											<td>${obj.pageItems.content[i].itemName}</td>
+											<td name="itemName" data-item-name="${obj.pageItems.content[i].itemName}">${obj.pageItems.content[i].itemName}</td>
 											<td>${obj.pageItems.content[i].itemPrice}</td>
 											<td>${obj.pageItems.content[i].itemRegdate == null ? '' : obj.pageItems.content[i].itemRegdate.substr(0, 10)}</td>
 											<td>${obj.pageItems.content[i].itemStatus}</td>

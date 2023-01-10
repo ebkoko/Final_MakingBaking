@@ -167,7 +167,6 @@
 					<option value="ALL" th:selected="${searchCondition == 'ALL' || searchCondition == '' || searchCondition == null}">전체</option>
 					<option value="RESERNO" th:selected="${searchCondition} == 'RESERNO'">예약번호</option>
 					<option value="PARTINAME" th:selected="${searchCondition} == 'PARTINAME'">예약자명</option>
-					<option value="USERID" th:selected="${searchCondition} == 'USERID'">회원 아이디</option>
 					<option value="CLASSNO" th:selected="${searchCondition} == 'CLASSNO'">예약한 클래스번호</option>
 					<option value="PARTIDATE" th:selected="${searchCondition} == 'PARTIDATE'">예약날짜</option>
 					<option value="PARTITIME" th:selected="${searchCondition} == 'PARTITIME'">예약시간</option>
@@ -216,7 +215,6 @@
 	        	<tr>
 			        <th class="reserList_T_20">예약번호</th>
 			        <th class="reserList_T_10">예약자명</th>
-			        <th class="reserList_T_10">회원 아이디</th>
 			        <th class="reserList_T_10">예약한 클래스번호</th>
 			        <th class="reserList_T_10">예약날짜</th>
 			        <th class="reserList_T_10">예약시간</th>
@@ -231,7 +229,6 @@
 						</a>
 					</td>-->
 					<td th:text="${reser.partiName}"></td>
-					<td th:text="${reser.userId}"></td>
 					<td th:text="${reser.classNo}"></td>
 					<td th:text="${reser.partiDate}"></td>
 					<td th:text="${reser.partiTime}"></td>
