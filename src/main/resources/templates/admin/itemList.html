@@ -232,29 +232,6 @@
 											<td>${obj.pageItems.content[i].itemPrice}</td>
 											<td>${obj.pageItems.content[i].itemRegdate == null ? '' : obj.pageItems.content[i].itemRegdate.substr(0, 10)}</td>
 											<td>${obj.pageItems.content[i].itemStatus}</td>
-											
-											
-											
-											<td>${obj.pageItems.content[i].itemNo}</td>
-											<td name="boardTitleTd" data-board-title="${obj.pageItems.content[i].boardTitle}"
-												data-board-no="${obj.pageItems.content[i].boardNo}" data-new-title="">
-												<a href="@{/board/updateBoardCnt/${obj.pageItems.content[i].boardNo}}">
-												   ${obj.pageItems.content[i].boardTitle}
-												</a>
-											</td>
-											<td>${obj.pageItems.content[i].boardWriter}</td>
-											<td>
-												${obj.pageItems.content[i].boardRegdate == null ? '' : obj.pageItems.content[i].boardRegdate.substr(0, 10)}
-											</td>
-											<td>${obj.pageItems.content[i].boardCnt}</td>
-											<td style="text-align: center;" name="statusTd" id="statusTd${obj.pageItems.content[i].boardNo}">
-											</td>
-											<input type="hidden" name="status" id="status${obj.pageItems.content[i].boardNo}"	
-												data-board-no="${obj.pageItems.content[i].boardNo}" data-board-title="${obj.pageItems.content[i].boardTitle}" 
-												value="">
-												
-												
-												
 										</tr>
 									`;
 								}
