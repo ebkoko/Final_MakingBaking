@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -24,14 +25,14 @@ import lombok.NoArgsConstructor;
 @Data
 @SequenceGenerator(
 		name="UserSequenceGenerator",
-		sequenceName="USER_SEQ",
+		sequenceName="User_SEQ",
 		initialValue=1,
 		allocationSize=1
 )
 @NoArgsConstructor 
 @AllArgsConstructor 
 @Builder
-@DynamicInsert 
+@DynamicInsert
 public class User {		// 회원 테이블
 	@Id
 	private String userId;	// 아이디

@@ -19,4 +19,8 @@ public interface UserService {
 	void quitUser(String userId);
 
 	void pwUser(String userId);
+
+	int changeInfo(UserDTO userDTO);
+
+	UserDTO changedUserInfo(String userId);
 }

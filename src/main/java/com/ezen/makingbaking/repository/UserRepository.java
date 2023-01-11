@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.ezen.makingbaking.dto.UserDTO;
 import com.ezen.makingbaking.entity.User;
 
 @Transactional
@@ -17,6 +18,9 @@ public interface UserRepository extends JpaRepository<User, String> {
 	User findByUserIdAndUserPw(
 			@Param("userId") String userId, 
 			@Param("userPw") String userPw);
+	
+	//아이디찾기
+	User findByUserNameAndUserTel(@Param("userName") String userName, @Param("userTel") String userTel);
 	
 	@Modifying
 	@Query(value="UPDATE T_MB_USER"
@@ -41,14 +45,15 @@ public interface UserRepository extends JpaRepository<User, String> {
 	void quitUser(@Param("userId") String userId);
 
 	@Modifying
-	@Query(value="UPDATE FROM T_MB_USER"
+	@Query(value="UPDATE T_MB_USER"
+			+ " SET USER_ID = :userId"
 			+ " WHERE USER_ID = :userId",
 			nativeQuery=true)
-	void pwUser(@Param("userId") String userId);
+	int changeInfo(@Param("userId") UserDTO userDTO);
 	
 	//관리자 회원 검색_선민
 	Page<User> findByUserNameContaining(String searchKeyword, Pageable pageable); //이름
 	Page<User> findByUserIdContaining(String searchKeyword, Pageable pageable); //아이디
 	Page<User> findByUserNameContainingOrUserId(String searchKeyword1, String searchKeyword2, Pageable pageable);
-
+	
 }

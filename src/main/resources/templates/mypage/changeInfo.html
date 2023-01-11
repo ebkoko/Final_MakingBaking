@@ -5,8 +5,49 @@
 	  layout:decorate="~{layouts/layout}">
 <head>
 	<th:block layout:fragment="script">
+	  	<script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
 		<script th:inline="javascript">
-		
+			$(function() {
+				$("#update").on("click", function(e){
+				    if(confirm("수정하시겠습니까?")){
+						//유효성
+						
+						
+				    } else {
+				        e.preventDefault();
+						alert("취소하셨습니다.");
+						return;
+				    }
+				});
+			});
+			
+			//작동
+		    function findAddr(){
+		      new daum.Postcode({
+		        oncomplete: function(data) {
+		          let addr1 = data.roadAddress;
+		          let addr2 = data.jibunAddress;
+		          document.getElementById('post').value = data.zonecode;
+		          if(addr1 !== ''){
+		          document.getElementById("addr").value = addr1;
+		          } else if(addr2 !== '') {
+		            document.getElementById("userAddr3").value = addr2;
+		          }
+		        }
+		      }).open();
+		    }
+		    
+		    function fnPwShow(div) {
+				let pswrd = document.querySelector('#userPw');
+		        if(pswrd.type === 'password') {
+		          pswrd.setAttribute('type', 'text');
+		          div.classList.replace('show', 'hide');
+		        }
+		        else {
+		          pswrd.setAttribute('type', 'password');
+		          div.classList.replace('hide', 'show');
+		        }
+			}
 		</script>
 	</th:block>
 	
@@ -27,8 +68,8 @@
 	        <div class="sub-menu">
 	          <h3>My 쇼핑</h3>
 	          <ul class="menu-group">
-	            <li class="menu-name"><a href="#">구매내역</a></li>
-	            <li class="menu-name"><a href="#">예약확인</a></li>
+	            <li class="menu-name"><a th:href="@{/mypage/myPage}">주문확인</a></li>
+	            <li class="menu-name"><a th:href="@{/mypage/myReserList}">예약확인</a></li>
 	            <li class="menu-name"><a href="#">찜목록</a></li>
 	          </ul>
 	        </div>
@@ -55,10 +96,10 @@
 	    
 	    <div class="c1" style="margin:24px 50px">
 	      
-	      <form action="/user/join" id="joinForm" class="form" method="post">
+	      <form action="/mypage/changeInfo" id="joinForm" class="form" method="post">
 	        <h3 class="changeInfo">회원정보수정</h3>
 	        <div style="display: flex;">
-	          <input type="text" readonly class="box" id="userId" name="userId" th:value="${socialUser != null ? socialUser.userId : ''}">
+	          <input type="text" readonly class="box" id="userId" name="userId" th:value="${userId}">
 	        </div>
 	
 	        <div class="pw-check">
@@ -77,21 +118,21 @@
 	          <p id="pwRecheck" style="font-size: 12px; font-weight: bolder; margin-left: 5px; text-align: left;"></p>
 	        </div>
 	
-	        <input type="text" id="userNm" name="userNm" placeholder="이름" class="box">
-	        <input type="text" id="userBirth" name="userBirth" placeholder="생년월일 ex)19901010" class="box">
-	        <select id="userGender" name="userGender" class="box">
+	        <input type="text" id="userNm" name="userNm" placeholder="이름" class="box" th:value="${userNm}">
+	        <input type="text" id="userBirth" name="userBirth" placeholder="생년월일 ex)19901010" class="box" th:value="${userBirth}">
+	        <select id="userGender" name="userGender" class="box" th:value="${userGender}">
 	          <option selected disabled>성별</option>
 	          <option value="m">남자</option>
 	          <option value="f">여자</option>
 	          <option value="n">선택 안함</option>
 	        </select>
-	        <input type="text" id="userTel" name="userTel" placeholder="전화번호 ex)01012345678" class="box">
-	        <input type="text" id="userMail" name="userMail" placeholder="이메일 ex)xxx@xxx.com" th:value="${socialUser != null ? socialUser.userMail : ''}" class="box">
-	        <input id="post"  name="userAddr1" type="text" value="우편번호" readonly onclick="findAddr()">
-	        <input id="addr" name="userAddr2" type="text" placeholder="주소" readonly> <br>
-	        <input id="userAddr3" name="userAddr3" type="text" placeholder="상세주소">
+	        <input type="text" id="userTel" name="userTel" placeholder="전화번호 ex)01012345678" class="box" th:value="${userTel}">
+	        <input type="text" id="userMail" name="userMail" placeholder="이메일 ex)xxx@xxx.com" th:value="${userMail}" class="box">
+	        <input id="post"  name="userAddr1" type="text" placeholder="우편번호" readonly onclick="findAddr()" th:value="${userAddr1}">
+	        <input id="addr" name="userAddr2" type="text" placeholder="주소" readonly th:value="${userAddr2}"> <br>
+	        <input id="userAddr3" name="userAddr3" type="text" placeholder="상세주소" th:value="${userAddr3}">
 	        <div class="button2">
-	          <input type="button" id="update" value="수정하기" class="btn2">
+	          <input type="submit" id="update" value="수정하기" class="btn2">
 	          <input type="reset" id="cancel" value="취소" class="btn2" onclick="history.back()">
 	        </div>
 	      </form>

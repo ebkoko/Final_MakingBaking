@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -16,11 +17,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,7 +29,6 @@ import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.dto.UserDTO;
 import com.ezen.makingbaking.entity.CustomUserDetails;
 import com.ezen.makingbaking.entity.User;
-import com.ezen.makingbaking.service.mypage.MypageService;
 import com.ezen.makingbaking.service.user.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -233,17 +233,20 @@ public class UserController {
     	
 	}
     
-    //정보수정
+    //정보수정시 비번 입력
     @GetMapping("/changeInfoPw")
-	public ModelAndView changeInfoPwView() {
+	public ModelAndView changeInfoPwView(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("mypage/changeInfoPw.html");
+		if(request.getParameter("quitMsg") != null && !request.getParameter("quitMsg").equals("")) {
+	         mv.addObject("quitMsg", request.getParameter("quitMsg").toString());
+	      }
 		return mv;
 	}
     
     @PostMapping("/changeInfoPw")
-	public String changeInfoPw(@RequestParam("userPw") String userPw, 
-			@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+	public void changeInfoPw(@RequestParam("userPw") String userPw, HttpServletResponse response,
+			@AuthenticationPrincipal CustomUserDetails customUserDetails) throws IOException {
 		User user = User.builder()
 						.userId(customUserDetails.getUsername())
 						.build();
@@ -252,12 +255,38 @@ public class UserController {
     	User dbUser = userService.idcheck(user);
     	
     	if(!passwordEncoder.matches(userPw, dbUser.getUserPw())) {
-    		return "/user/changeInfoPw";
+    		response.sendRedirect("/user/changeInfoPw?quitMsg=N");
     	} else {
     		userService.pwUser(user.getUserId());
     		
-    		return "/mypage/changeInfo";
+    		response.sendRedirect("/mypage/changeInfo");
     	}
     	
 	}
+    
+    //정보수정
+    @PostMapping("/mypage/changeInfo")
+    public ModelAndView changeInfo(UserDTO userDTO,
+    		@AuthenticationPrincipal CustomUserDetails customUserDetails, 
+    		HttpServletRequest request, Model model) {
+    	User user = User.builder()
+		    			.userId(userDTO.getUserId())
+						.userName(userDTO.getUserNm())
+						.userBirth(userDTO.getUserBirth())
+						.userGender(userDTO.getUserGender())
+						.userTel(userDTO.getUserTel())
+						.userMail(userDTO.getUserMail())
+						.userAddr1(userDTO.getUserAddr1())
+						.userAddr2(userDTO.getUserAddr2())
+						.userAddr3(userDTO.getUserAddr3())
+						.build();
+
+    	User infoUser = userService.idcheck(user);
+		model.addAttribute("user", userDTO);
+		customUserDetails.addAttribute("loginUser", infoUser.getUserId());
+		
+    	ModelAndView mv = new ModelAndView();
+		mv.setViewName("/mypage/changeInfo");
+		return mv;
+    }
 }
