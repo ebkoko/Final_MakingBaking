@@ -80,7 +80,7 @@ public class BoardController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("board/getQnaList.html");
 		mv.addObject("getFaqList", getFaqList);
-		mv.addObject("getQnaList", pageBoardDTOList); // content부터 pageable까지만 오게됨
+		mv.addObject("getQnaList", pageBoardDTOList); 
 		
 		return mv;
 	}
@@ -428,7 +428,6 @@ public class BoardController {
 						   .boardContent(boardDTO.getBoardContent())
 						   .boardWriter(customUser.getUsername())
 						   .boardRegdate(LocalDateTime.now())
-						   //.cateCode(cateCode)
 						   .cateCode(boardDTO.getCateCode())
 						   .build();
 		

@@ -19,10 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.makingbaking.common.CamelHashMap;
+import com.ezen.makingbaking.dto.BoardDTO;
 import com.ezen.makingbaking.dto.OrderDTO;
 import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
+import com.ezen.makingbaking.entity.Board;
 import com.ezen.makingbaking.entity.CustomUserDetails;
+import com.ezen.makingbaking.service.board.BoardService;
 import com.ezen.makingbaking.service.dayclass.DayclassService;
 import com.ezen.makingbaking.service.order.OrderService;
 import com.ezen.makingbaking.service.reser.ReserService;
@@ -38,6 +41,9 @@ public class MypageController {
 	
 	@Autowired
 	private OrderService orderService;
+	
+	@Autowired
+	private BoardService boardService;
 	
 	@GetMapping("/myPage")
 	public ModelAndView myOrderList(OrderDTO orderDTO, @PageableDefault(page = 0, size = 5) Pageable pageable,
@@ -166,4 +172,39 @@ public class MypageController {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
+	
+	// 내가 작성한 qna 글 목록 보여주기
+	@GetMapping("/qnaList")
+	public ModelAndView myQnaList(BoardDTO boardDTO, @PageableDefault(page=0, size=10) Pageable pageable,
+			@AuthenticationPrincipal CustomUserDetails customUser) {
+				
+		Board board = Board.builder()
+				   		   .boardWriter(boardDTO.getBoardWriter())
+						   .build();
+		
+		Page<Board> pageBoardList = boardService.getPageMyQnaList(customUser.getUsername(), pageable);
+		
+		Page<BoardDTO> pageBoardDTOList = pageBoardList.map(pageQna -> 
+						   BoardDTO.builder()
+						   		   .boardNo(pageQna.getBoardNo())
+						   		   .boardTitle(pageQna.getBoardTitle())
+						   		   .boardContent(pageQna.getBoardContent())
+						   		   .boardWriter(pageQna.getBoardWriter())
+						   		   .boardReply(pageQna.getBoardReply())
+						   		   .boardRegdate(
+						   				   		pageQna.getBoardRegdate() == null?
+												null :
+												pageQna.getBoardRegdate().toString())
+						   		   .boardCnt(pageQna.getBoardCnt())
+						   		   .build()
+						   );
+		
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("mypage/myQnaList.html");
+		mv.addObject("getQnaList", pageBoardDTOList); 
+		
+		return mv;
+	}
+	
 }
