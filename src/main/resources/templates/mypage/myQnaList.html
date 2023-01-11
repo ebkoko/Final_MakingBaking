@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+<head>
+  <th:block layout:fragment="css">
+	<link rel="stylesheet" th:href="@{/css/myPage/qnaList.css}"/>
+  </th:block>
+  <th:block layout:fragment="script">
+	<script th:inline="javascript">
+		$(function() {				
+			$(".pagination_button a").on("click", function(e) {
+				e.preventDefault();
+				$.ajax({
+					url: '/mypage/qnaList',
+					type: 'post',
+					data: {	page: $(e.target).attr("data-page-num")},
+					success: function(obj) {
+						console.log(obj);
+						
+						let htmlStr = "";
+						
+						for(let i=0; i<obj.pageItems.content.length; i++) {
+							htmlStr += `
+								<tr>
+									<td class="list-category">${obj.pageItems.content[i].cateCode == 3 ? '원데이클래스' : '제품구매'}</td>
+									<td class="list-title">
+										<a href="/board/updateQnaCnt/${obj.pageItems.content[i].boardNo}">
+										${obj.pageItems.content[i].boardTitle}
+										</a>
+									</td>
+									<td class="list-answer">${obj.pageItems.content[i].boardReply == null ? '답변대기' : '답변완료'}</td>
+									<td class="list-date">${obj.pageItems.content[i].boardRegdate == null ? '' : obj.pageItems.content[i].boardRegdate.substring(0, 10)}</td>
+									<td class="list-cnt">${obj.pageItems.content[i].boardCnt}</td>
+								</tr>
+							`;
+						}
+						$("#list-table").children(":first").children().not(":first").remove();
+						$("#list-table").children(":first").append(htmlStr);
+					},
+					error: function(e) {
+						console.log(e);
+						console.log($(e.target).attr("data-page-num"));
+					}
+				})
+				/*.done(function(result) {
+					$("#list-table").replaceWith(result);
+				});*/
+			});
+			
+		});
+	</script>
+  </th:block>
+</head>
+<body>
+  <div layout:fragment="content">
+	<div id="container">
+	  <div id="high-container">
+	    <div id="mid-container">
+	      <table id="list-table">
+	        <tr>
+	          <th width="15%" id="th-category">분류</th>
+	          <th width="48%" id="th-title">제목</th>
+	          <th width="15%" id="th-answer">답변여부</th>
+	          <th width="15%" id="th-date">작성일</th>
+	          <th width="7%" id="th-cnt">조회수</th>
+	        </tr>
+	        <tr th:each="qna: ${getQnaList}">
+	        	<td class="list-category" th:text="${qna.cateCode}"></td>
+				<td class="list-title">
+					<a th:text="${qna.boardTitle}"
+					   th:href="@{/board/updateQnaCnt/{boardNo} (boardNo=${qna.boardNo})}">
+					</a>
+				</td>
+				<td class="list-answer" th:text="${qna.boardReply eq null ? '답변대기' : '답변완료'}"></td>
+				<td class="list-date" th:text="${qna.boardRegdate eq null ? '' : #strings.substring(qna.boardRegdate, 0, 10)}"></td>
+				<td class="list-cnt" th:text="${qna.boardCnt}"></td>
+			</tr>
+	      </table>
+	      <br/>
+		  <div style="text-align:center;">
+			<ul class="pagination" style="display: flex; justify-content: center;" 
+				th:if="${getQnaList.totalElements > 0}"
+				th:with="pageNumber = ${getQnaList.pageable.pageNumber},
+									pageSize = ${getQnaList.pageable.pageSize},
+									totalPages = ${getQnaList.totalPages},
+									startPage =${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+									tempEndPage = ${startPage + pageSize -1}, 
+									endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+					<li class="pagination_button" th:if="${pageNumber > 0}">
+						<a th:data-page-num="${pageNumber - 1}"><</a>
+					</li>
+					<li class="pagination_button" th:each="page : ${#numbers.sequence(startPage, endPage)}">
+						<a th:data-page-num="${page - 1}" th:text="${page}"></a>
+					</li>
+					<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+						<a th:data-page-num="${pageNumber + 1}">></a>
+					</li>
+			  </ul>
+		  </div>
+		  <th:block sec:authorize="hasRole('ROLE_USER')" th:remove="tag">
+	      <div id="btn-container">
+		    <a th:href='@{/board/qna/insertQna/{cateCode} (cateCode=${cateCode})}' id="right-btn">등록</a>
+		  </div>    
+		  </th:block>
+	    </div>
+	  </div>
+	</div>
+  </div>
+</body>
+</html>
