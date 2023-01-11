@@ -41,6 +41,7 @@ import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.entity.Order;
 import com.ezen.makingbaking.entity.Reser;
+import com.ezen.makingbaking.entity.Review;
 import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.service.admin.AdminService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -522,14 +523,9 @@ public class AdminController {
 	public ModelAndView getDayclassList(DayclassDTO dayclassDTO,
 			@PageableDefault(page = 0, size = 50) Pageable pageable) {
 		Dayclass dayclass = Dayclass.builder()
-									.dayclassName(dayclassDTO.getDayclassName())
-									.dayclassPrice(dayclassDTO.getDayclassPrice())
-									.dayclassTime(dayclassDTO.getDayclassTime())
-									.dayclassUseYn(dayclassDTO.getDayclassUseYn())
 									.searchCondition(dayclassDTO.getSearchCondition())
 									.searchKeyword(dayclassDTO.getSearchKeyword())
 									.build();
-		List<Dayclass> dayclassList = adminService.getDayclassList(dayclass);
 		
 		Page<Dayclass> pageDayclassList = adminService.getPageDayclassList(dayclass, pageable);
 		
@@ -542,19 +538,6 @@ public class AdminController {
 				                                             						.dayclassUseYn(pageDayclass.getDayclassUseYn())
 				                                             						.build()
 	                                             					);
-							
-		List<DayclassDTO> getDayclassList = new ArrayList<DayclassDTO>();
-		for(int i = 0; i < dayclassList.size(); i++) {
-			DayclassDTO returnDayclass = DayclassDTO.builder()
-													.dayclassNo(dayclassList.get(i).getDayclassNo())
-													.dayclassName(dayclassList.get(i).getDayclassName())
-													.dayclassPrice(dayclassList.get(i).getDayclassPrice())
-													.dayclassTime(dayclassList.get(i).getDayclassTime())
-													.dayclassUseYn(dayclassList.get(i).getDayclassUseYn())
-													.build();
-
-			getDayclassList.add(returnDayclass);
-		}
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/dayclassList.html");
@@ -924,10 +907,11 @@ public class AdminController {
 	}
 	
 	//회원 리스트_개인 리뷰리스트 확인
-//	@GetMapping("/userReviewList/{userId}")
-//	public ModelAndView getUserList(UserDTO userDTO, ReserDTO reserDTO,
+//	@GetMapping("/userRvwList")
+//	public ModelAndView getUserRvwList(@RequestParam("rvwWriter") int rvwWriter,
 //			@PageableDefault(page = 0, size = 50) Pageable pageable) {
-//		User user = User.builder()
+//		Review review = Review.builder()
+//								.rvw
 //						.userName(userDTO.getUserNm())
 //						.userId(userDTO.getUserId())
 //						.userRegdate(LocalDateTime.now())
@@ -992,6 +976,8 @@ public class AdminController {
 							.partiTime(reserDTO.getPartiTime())
 							.reserStatus(reserDTO.getReserStatus())
 							.partiStatus(reserDTO.getPartiStatus())
+							.searchCondition(reserDTO.getSearchCondition())
+							.searchKeyword(reserDTO.getSearchKeyword())
 							.build();
 							
 		List<Reser> reserList = adminService.getReserList(reser);
@@ -1045,30 +1031,46 @@ public class AdminController {
 	//order_item 리스트
 	@GetMapping("/orderItemList")
 	public ModelAndView getOrderItemList(OrderDTO orderDTO,
-			@PageableDefault(page = 0, size = 50) Pageable pageable) {
+			@PageableDefault(page = 0, size = 500) Pageable pageable) {
 		Order order = Order.builder()
-							.orderNo(orderDTO.getOrderNo())
+							.searchCondition(orderDTO.getSearchCondition())
+							.searchKeyword(orderDTO.getSearchKeyword())
 							.build();
 							
-		List<Order> orderList = adminService.getOrderList(order);
+		//List<Order> orderList = adminService.getOrderList(order);
 		
 		Page<Order> pageOrderList = adminService.getPageOrderList(order, pageable);
 		
 		Page<OrderDTO> pageOrderDTOList = pageOrderList.map(pageOrder -> 
                                              						OrderDTO.builder()
                                              								.orderNo(pageOrder.getOrderNo())
-                                             								
+                                             								.userId(pageOrder.getUserId())
+                                             								.orderName(pageOrder.getOrderName())
+                                             								.orderTotalPrice(pageOrder.getOrderTotalPrice())
+                                             								.orderPayment(pageOrder.getOrderPayment())
+                                             								.orderDate(pageOrder.getOrderDate() == null ?
+                                             										null :
+                                             										pageOrder.getOrderDate().toString())
+                                             								.orderStatus(pageOrder.getOrderStatus())
                                              								.build()
 	                                             					);
 							
-		List<OrderDTO> getOrderList = new ArrayList<OrderDTO>();
-		for(int i = 0; i < orderList.size(); i++) {
-			OrderDTO returnOrder = OrderDTO.builder()
-											.orderNo(orderList.get(i).getOrderNo())
-											.build();
-
-			getOrderList.add(returnOrder);
-		}
+//		List<OrderDTO> getOrderList = new ArrayList<OrderDTO>();
+//		for(int i = 0; i < orderList.size(); i++) {
+//			OrderDTO returnOrder = OrderDTO.builder()
+//											.orderNo(orderList.get(i).getOrderNo())
+//											.userId(orderList.get(i).getUserId())
+//             								.orderName(orderList.get(i).getOrderName())
+//             								.orderTotalPrice(orderList.get(i).getOrderTotalPrice())
+//             								.orderPayment(orderList.get(i).getOrderPayment())
+//             								.orderDate(orderList.get(i).getOrderDate() == null ?
+//             										null :
+//             											orderList.get(i).getOrderDate().toString())
+//             								.orderStatus(orderList.get(i).getOrderStatus())
+//											.build();
+//
+//			getOrderList.add(returnOrder);
+//		}
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/orderItemList.html");

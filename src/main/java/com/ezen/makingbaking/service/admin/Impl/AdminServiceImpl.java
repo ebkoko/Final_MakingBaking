@@ -147,7 +147,13 @@ public class AdminServiceImpl implements AdminService {
 							.itemNo(Integer.parseInt(String.valueOf(changeRowsList.get(i).get("itemNo"))))
 								.build();
 			
+			ImgFile dImgFile = ImgFile.builder()
+									  .fileReferNo(Integer.parseInt(String.valueOf(changeRowsList.get(i).get("itemNo"))))
+									  .fileType("item")
+									  .build();
+			
 			itemRepository.delete(ditem);
+			imgFileRepository.delete(dImgFile);
 			 
 		}
 		
@@ -164,15 +170,15 @@ public class AdminServiceImpl implements AdminService {
 	public Page<Dayclass> getPageDayclassList(Dayclass dayclass, Pageable pageable) {
 		if(dayclass.getSearchKeyword() != null && !dayclass.getSearchKeyword().equals("")) {
 			if(dayclass.getSearchCondition().equals("ALL")) {
-				return dayclassRepository.findByDayclassNameContainingOrDayclassTimeContainingOrDayclassUseYn
+				return dayclassRepository.findByDayclassNameContainingOrDayclassTimeOrDayclassUseYn
 			               (dayclass.getSearchKeyword(), 
 			            	dayclass.getSearchKeyword().charAt(0),
 			            	dayclass.getSearchKeyword().charAt(0),
 			            	pageable);
 			      } else if (dayclass.getSearchCondition().equals("DAYCLASSNAME")) {
 			         return dayclassRepository.findByDayclassNameContaining(dayclass.getSearchKeyword(), pageable);
-			      } else if (dayclass.getSearchCondition().equals("DAYCLASSTIEM")) {
-			    	  return dayclassRepository.findByDayclassTimeContaining(dayclass.getSearchKeyword().charAt(0), pageable);
+			      } else if (dayclass.getSearchCondition().equals("DAYCLASSTIME")) {
+			    	  return dayclassRepository.findByDayclassTime(dayclass.getSearchKeyword().charAt(0), pageable);
 			      }  else if (dayclass.getSearchCondition().equals("DAYCLASSUSEYN")) {
 				         return dayclassRepository.findByDayclassUseYn(dayclass.getSearchKeyword().charAt(0), pageable);
 				  } else {

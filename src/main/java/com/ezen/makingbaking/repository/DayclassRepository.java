@@ -31,9 +31,9 @@ public interface DayclassRepository extends JpaRepository<Dayclass, Integer> {
 	
 	//관리자 클래스 검색_선민
 	Page<Dayclass> findByDayclassNameContaining(String searchKeyword, Pageable pageable); //이름
-	Page<Dayclass> findByDayclassTimeContaining(char searchKeyword, Pageable pageable); //운영시간
+	Page<Dayclass> findByDayclassTime(char searchKeyword, Pageable pageable); //운영시간
 	Page<Dayclass> findByDayclassUseYn(char searchKeyword, Pageable pageable); //진행상태
-	Page<Dayclass> findByDayclassNameContainingOrDayclassTimeContainingOrDayclassUseYn(String searchKeyword1, char searchKeyword2, char searchKeyword3, Pageable pageable);
+	Page<Dayclass> findByDayclassNameContainingOrDayclassTimeOrDayclassUseYn(String searchKeyword1, char searchKeyword2, char searchKeyword3, Pageable pageable);
 	
 	// 관리자 클래스리스트&이미지파일 조인_선민
 	@Query(value="SELECT COUNT(*) FROM (SELECT A.*, B.* FROM A.DAYCLASS_NO = B.FILE_NO AND FILE_NO =:fileNo) C", 

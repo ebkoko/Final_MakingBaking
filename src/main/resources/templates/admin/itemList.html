@@ -205,14 +205,18 @@
 					//삭제버튼 클릭 시 체크된 게시물들 삭제 상태로 변경
 					$("#itemDelete").on('click', function() {
 						$("input:checkbox[name='chk']").each(function() {
-							const delItem = {
-									itemNo: $(this).attr("data-item-no")
-								};
-								
-								changeRows.push(delItem);
+							if($(this).is(":checked")) {
+								const delItem = {
+										itemNo: $(this).val()
+									};
+									
+									changeRows.push(delItem);
+							}
 						});
 						
+						console.log(changeRows);
 						
+						if(confirm("aaaa")) {
 						$.ajax({
 							url: '/admin/saveItemList',
 							type: 'post',
@@ -232,6 +236,11 @@
 											<td>${obj.pageItems.content[i].itemPrice}</td>
 											<td>${obj.pageItems.content[i].itemRegdate == null ? '' : obj.pageItems.content[i].itemRegdate.substr(0, 10)}</td>
 											<td>${obj.pageItems.content[i].itemStatus}</td>
+											<td>
+								        		<a id="itemMod"
+													href="@{/admin/itemUpdate/${obj.pageItems.content[i].itemNo}">수정
+												</a>
+								        	</td>
 										</tr>
 									`;
 								}
@@ -243,6 +252,9 @@
 								console.log(e);
 							},
 						});
+						} else {
+							
+						}
 						console.log(changeRows);
 						
 					});
@@ -310,7 +322,7 @@
 			        <th class="itemList_T_10">상품 관리</th>
 	      		</tr>
 	      		<tr th:each="item: ${getItemList.content}">
-	      			<td><input type="checkbox" name="chk"></td>
+	      			<td><input type="checkbox" name="chk" th:value="${item.itemNo}"></td>
 		        	<td th:text="${item.itemNo}"></td>
 		        	
 		        	<td>
@@ -333,7 +345,7 @@
 		<!-- 삭제/등록버튼 -->
 	    <div id="itemTotalBtn">
 	    	<a href="/admin/insertItemView"><input type="button" value="상품 등록" id="itemRegistration"></a>
-	    	<a href="/admin/delItem"><input type="button" value="상품 삭제" id="itemDelete"></a>
+	    	<input type="button" value="상품 삭제" id="itemDelete">
 	    </div>
 	</div>
 

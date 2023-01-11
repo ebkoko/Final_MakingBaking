@@ -24,6 +24,8 @@ public interface ReserRepository extends JpaRepository<Reser, Integer> {
 	Page<Reser> findByPartiStatusContaining(String searchKeyword, Pageable pageable); //참여현황
 	Page<Reser> findByReserNoOrPartiNameContainingOrClassNoOrPartiDateContainingOrPartiTimeContainingOrReserStatusContainingOrPartiStatus(long searchKeyword1, String searchKeyword2, int searchKeyword3, String searchKeyword4, String searchKeyword5, String searchKeyword6, String searchKeyword7, Pageable pageable);
 	
+//	@Query(value="", nativeQuery=true)
+//	Page<Reser> findBySearchKeyoword(long searchKeyword1, String searchKeyword2, int searchKeyword3, Pageable pageable);
 	
 	@Query(value="SELECT IFNULL(MAX(RESER_NO), CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(0, '6', '0'))) + 1 AS RESER_NO\r\n"
 			+ " FROM T_MB_RESER\r\n"

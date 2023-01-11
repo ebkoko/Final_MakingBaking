@@ -16,7 +16,7 @@
 					margin: 50px 0 0 0;
 				}
 				/* 검색 div */
-				#reser_search {
+				#order_search {
 					margin: 80px auto;
 				}
 				/* 검색창 */
@@ -42,7 +42,7 @@
 				}
 				
 				/* 테이블 */
-				#reserList_T {
+				#orderList_T {
 					width: 1200px;
 					border: 1.2px solid #28693F;
 					border-collapse: collapse;
@@ -50,23 +50,24 @@
 					border-right: hidden;
 					border-top:hidden;
 				}
-				#reserList_T th {
+				#orderList_T th {
 					background: #28693F;
 					color: white;
 					height: 35px;
 				}
 				
-				.reserList_T_10 {
+				
+				.orderList_T_10 {
 					 width: 10%;
 				}
-				.reserList_T_15 {
+				.orderList_T_15 {
 					 width: 15%;
 				}
-				.reserList_T_20 {
+				.orderList_T_20 {
 					 width: 20%;
 				}
 				
-				#reserList_T td {
+				#orderList_T td {
 					border-bottom: 1.2px solid #28693F;
 					text-align: center;
 					height: 80px;
@@ -80,8 +81,8 @@
 				}
 				*/
 				
-				/* 개인 예약취소 버튼 */
-			    #reserCancel {
+				/* 개인 주문취소 버튼 */
+			    #orderCancel {
 					width: 70px;
 					display: inline-block;
 					height: 30px;
@@ -106,21 +107,21 @@
 				$(function() {
 					//검색창(상품카테, 판매상태)
 					$("#searchCondition").on("change", function() {
-						if($(this).val() == 'ITEMCATE') {
+						if($(this).val() == 'ORDERPAYMENT') {
 							$("#inputSearch").hide();
 							$("#selectSearch2").hide();
 							$("#selectSearch1").show();
 							$("#inputSearch").attr("disabled", true);
 							$("#selectSearch2").attr("disabled", true);
 							$("#selectSearch1").attr("disabled", false);
-						} else if($(this).val() == 'ITEMSTATUS') {
+						} else if($(this).val() == 'ORDERSTATUS') {
 							$("#inputSearch").hide();
 							$("#selectSearch1").hide();
 							$("#selectSearch2").show();
 							$("#inputSearch").attr("disabled", true);
 							$("#selectSearch2").attr("disabled", false);
 							$("#selectSearch1").attr("disabled", true);
-						} else if($(this).val() != 'ITEMSTATUS' && $(this).val() != 'ITEMCATE') {
+						} else if($(this).val() != 'ORDERPAYMENT' && $(this).val() != 'ORDERSTATUS') {
 							$("#inputSearch").show();
 							$("#selectSearch1").hide();
 							$("#selectSearch2").hide();
@@ -132,7 +133,7 @@
 					
 					//검색창 검색버튼 클릭 시
 					$("#btnSearch").on('click',function() {
-						$("input[name='page']").val(0);
+						//$("input[name='page']").val(0);
 						$("#searchForm").submit();
 					});
 					
@@ -161,7 +162,7 @@
 			<a href="reserDayclassList">원데이클래스 예약 내역</a>
 		</div>
 		
-		<form id="searchForm" action="/admin/orderItemListList" method="get">
+		<form id="searchForm" action="/admin/orderItemList" method="get">
 	    	<div id="order_search">
 				<select name="searchCondition" id="searchCondition">
 					<option value="ALL" th:selected="${searchCondition == 'ALL' || searchCondition == '' || searchCondition == null}">전체</option>
@@ -177,19 +178,19 @@
 	            <select name="searchKeyword" id="selectSearch1" th:style="${searchCondition == 'ORDERPAYMENT' ? 'display: inline-block;' : 'display: none;'}"
 	            		th:disabled="${searchCondition == 'ORDERPAYMENT'} ? false : true">
 	            	<option>선택하세요.</option>
-	            	<option value="무통장입금" th:selected="${searchKeyword} == '무통장입금'">AM</option>
-	              	<option value="카카오페이" th:selected="${searchKeyword} == '카카오페이'">PM</option>
+	            	<option value="무통장입금" th:selected="${searchKeyword} == '무통장입금'">무통장입금</option>
+	              	<option value="카카오페이" th:selected="${searchKeyword} == '카카오페이'">카카오페이</option>
 	            </select>
 	            <select name="searchKeyword" id="selectSearch2" th:style="${searchCondition == 'ORDERSTATUS' ? 'display: inline-block;' : 'display: none;'}"
 	            		th:disabled="${searchCondition == 'ORDERSTATUS'} ? false : true">
 	            <option>선택하세요.</option>
 	            	<option value="MV" th:selected="${searchKeyword} == 'MV'">입금대기(MV)</option>
 	              	<option value="PE" th:selected="${searchKeyword} == 'PE'">결제완료(PE)</option>
-	              	<option value="OC" th:selected="${searchKeyword} == 'RC'">주문취소(OC)</option>
+	              	<option value="OC" th:selected="${searchKeyword} == 'OC'">주문취소(OC)</option>
 	              	<option value="PC" th:selected="${searchKeyword} == 'PC'">결제취소(PC)</option>
-	              	<option value="DR" th:selected="${searchKeyword} == 'PE'">배송준비중(DR)</option>
-	              	<option value="D" th:selected="${searchKeyword} == 'RC'">배송중(D)</option>
-	              	<option value="DC" th:selected="${searchKeyword} == 'PC'">배송완료(DC)</option>
+	              	<option value="DR" th:selected="${searchKeyword} == 'DR'">배송준비중(DR)</option>
+	              	<option value="D" th:selected="${searchKeyword} == 'D'">배송중(D)</option>
+	              	<option value="DC" th:selected="${searchKeyword} == 'DC'">배송완료(DC)</option>
 	            </select>
 	            
 				<button type="button" id="btnSearch">검색</button>
@@ -203,13 +204,13 @@
 			        <th class="orderList_T_15">주문번호</th>
 			        <th class="orderList_T_10">회원아이디</th>
 			        <th class="orderList_T_10">주문자명</th>
-			        <th class="orderList_T_15">주문 총금액</th>
+			        <th class="orderList_T_10">주문 총금액</th>
 			        <th class="orderList_T_10">결제방법</th>
-			        <th class="orderList_T_10">주문일</th>
+			        <th class="orderList_T_20">주문일</th>
 			        <th class="orderList_T_10">주문상태</th>
-			        <th class="orderList_T_20">취소관리</th>
+			        <th class="orderList_T_15">취소관리</th>
 	      		</tr>
-	      		<tr th:each="order: ${getORderList.content}">
+	      		<tr th:each="order: ${getOrderList.content}">
 		        	<td th:text="${order.orderNo}"></td>
 		        	<!--<td>       예약번호 누르면 예약정보 모달?페이지? 띄우기
 						<a id="a_itemName" th:text="${item.itemName}"
@@ -218,12 +219,12 @@
 					</td>-->
 					<td th:text="${order.userId}"></td>
 					<td th:text="${order.orderName}"></td>
-					<td th:text="${order.orderTotalPrice}"></td>
+					<td th:text="${order.orderTotalPrice >= 1000 ? #numbers.formatInteger(order.orderTotalPrice , 3, 'COMMA') : order.orderTotalPrice}"></td>
 					<td th:text="${order.orderPayment}"></td>
 					<td th:text="${order.orderDate}"></td>
 					<td th:text="${order.orderStatus}"></td>
 		        	<td>
-		        		<a id="OrderCancel" th:text="주문취소">
+		        		<a id="orderCancel" th:text="주문취소">
 							<!--th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">-->
 						</a>
 						<a id="payCancel" th:text="결제취소">
