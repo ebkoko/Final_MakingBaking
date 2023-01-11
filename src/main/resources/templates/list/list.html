@@ -25,7 +25,7 @@
 						        `
 						          <div>
 						            <div class="card">
-						              <img th:src="@{'/item/' + ${obj.pageItems.content[i].fileName}}" alt="NoImg" class="card_img">
+						              <img src="@{'/item/' + ${obj.pageItems.content[i].fileName}}" alt="NoImg" class="card_img">
 						            </div>
 						            <div class="text">
 						              <h3><a href="{/item/item/${obj.pageItems.content[i].itemNo}}">${obj.pageItems.content[i].itemName}</a></h3>
