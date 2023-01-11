@@ -35,6 +35,7 @@ import com.ezen.makingbaking.dto.ItemDTO;
 import com.ezen.makingbaking.dto.OrderDTO;
 import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
+import com.ezen.makingbaking.dto.ReviewDTO;
 import com.ezen.makingbaking.dto.UserDTO;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
@@ -83,7 +84,7 @@ public class AdminController {
 							.searchCondition(itemDTO.getSearchCondition())
 							.searchKeyword(itemDTO.getSearchKeyword())
 							.build();
-		List<Item> itemList = adminService.getItemList(item);
+//		List<Item> itemList = adminService.getItemList(item);
 		
 		Page<Item> pageItemList = adminService.getPageItemList(item, pageable);
 	      
@@ -99,22 +100,22 @@ public class AdminController {
 	                                                      .build()
 	                                             );
 		
-		List<ItemDTO> getItemList = new ArrayList<ItemDTO>();
-		for(int i = 0; i < itemList.size(); i++) {
-			ItemDTO returnItem = ItemDTO.builder()
-											.itemNo(itemList.get(i).getItemNo())
-											.itemName(itemList.get(i).getItemName())
-											.itemPrice(itemList.get(i).getItemPrice())
-											.itemRegdate(
-													itemList.get(i).getItemRegdate() == null ?
-													null :
-													itemList.get(i).getItemRegdate().toString())
-
-											.itemStatus(itemList.get(i).getItemStatus())
-											.build();
-
-			getItemList.add(returnItem);
-		}
+//		List<ItemDTO> getItemList = new ArrayList<ItemDTO>();
+//		for(int i = 0; i < itemList.size(); i++) {
+//			ItemDTO returnItem = ItemDTO.builder()
+//											.itemNo(itemList.get(i).getItemNo())
+//											.itemName(itemList.get(i).getItemName())
+//											.itemPrice(itemList.get(i).getItemPrice())
+//											.itemRegdate(
+//													itemList.get(i).getItemRegdate() == null ?
+//													null :
+//													itemList.get(i).getItemRegdate().toString())
+//
+//											.itemStatus(itemList.get(i).getItemStatus())
+//											.build();
+//
+//			getItemList.add(returnItem);
+//		}
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/itemList.html");
@@ -862,7 +863,7 @@ public class AdminController {
 						.searchKeyword(userDTO.getSearchKeyword())
 						.build();
 		
-		List<User> userList = adminService.getUserList(user);
+//		List<User> userList = adminService.getUserList(user);
 		
 		Page<User> pageUserList = adminService.getPageUserList(user, pageable);
 		
@@ -877,19 +878,19 @@ public class AdminController {
 	                                         					.build()
                                          					);
 							
-		List<UserDTO> getUserList = new ArrayList<UserDTO>();
-		for(int i = 0; i < userList.size(); i++) {
-			UserDTO returnUser = UserDTO.builder()
-											.userNo(userList.get(i).getUserNo())
-											.userNm(userList.get(i).getUserName())
-											.userId(userList.get(i).getUserId())
-											.userRegdate(userList.get(i).getUserRegdate() == null ?
-													null :
-													userList.get(i).getUserRegdate().toString())
-													.build();
-
-			getUserList.add(returnUser);
-		}
+//		List<UserDTO> getUserList = new ArrayList<UserDTO>();
+//		for(int i = 0; i < userList.size(); i++) {
+//			UserDTO returnUser = UserDTO.builder()
+//											.userNo(userList.get(i).getUserNo())
+//											.userNm(userList.get(i).getUserName())
+//											.userId(userList.get(i).getUserId())
+//											.userRegdate(userList.get(i).getUserRegdate() == null ?
+//													null :
+//													userList.get(i).getUserRegdate().toString())
+//													.build();
+//
+//			getUserList.add(returnUser);
+//		}
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/userList.html");
@@ -907,61 +908,36 @@ public class AdminController {
 	}
 	
 	//회원 리스트_개인 리뷰리스트 확인
-//	@GetMapping("/userRvwList")
-//	public ModelAndView getUserRvwList(@RequestParam("rvwWriter") int rvwWriter,
-//			@PageableDefault(page = 0, size = 50) Pageable pageable) {
-//		Review review = Review.builder()
-//								.rvw
-//						.userName(userDTO.getUserNm())
-//						.userId(userDTO.getUserId())
-//						.userRegdate(LocalDateTime.now())
-//						.searchCondition(userDTO.getSearchCondition())
-//						.searchKeyword(userDTO.getSearchKeyword())
-//						.build();
-//		
-//		List<User> userList = adminService.getUserList(user);
-//		
-//		Page<User> pageUserList = adminService.getPageUserList(user, pageable);
-//		
-//		Page<UserDTO> pageUserDTOList = pageUserList.map(pageUser -> 
-//	                             						UserDTO.builder()
-//	                             								.userNo(pageUser.getUserNo())
-//	                             								.userNm(pageUser.getUserName())
-//	                             								.userId(pageUser.getUserId())
-//	                             								.userRegdate(pageUser.getUserRegdate() == null?
-//	 	                                                               null :
-//	 		                                                               pageUser.getUserRegdate().toString())
-//	                                         					.build()
-//                                         					);
-//							
-//		List<UserDTO> getUserList = new ArrayList<UserDTO>();
-//		for(int i = 0; i < userList.size(); i++) {
-//			UserDTO returnUser = UserDTO.builder()
-//											.userNo(userList.get(i).getUserNo())
-//											.userNm(userList.get(i).getUserName())
-//											.userId(userList.get(i).getUserId())
-//											.userRegdate(userList.get(i).getUserRegdate() == null ?
-//													null :
-//													userList.get(i).getUserRegdate().toString())
-//													.build();
-//
-//			getUserList.add(returnUser);
-//		}
-//		
-//		ModelAndView mv = new ModelAndView();
-//		mv.setViewName("admin/userList.html");
-//		mv.addObject("getUserList", pageUserDTOList);
-//		
-//		if(userDTO.getSearchCondition() != null && !userDTO.getSearchCondition().equals("")) {
-//			mv.addObject("searchCondition", userDTO.getSearchCondition());
-//		}
-//		
-//		if(userDTO.getSearchKeyword() != null && !userDTO.getSearchKeyword().equals("")) {
-//			mv.addObject("searchKeyword", userDTO.getSearchKeyword());
-//		}
-//		
-//		return mv;
-//	}
+	@GetMapping("/userRvwList")
+	public ModelAndView getUserRvwList(@RequestParam("rvwWriter") String rvwWriter,
+			@PageableDefault(page = 0, size = 50) Pageable pageable) {
+		Review review = adminService.getUserRvwList(rvwWriter);
+		
+		ReviewDTO reviewDTO = ReviewDTO.builder()
+										.rvwNo(review.getRvwNo())
+										.rvwReferNo(review.getRvwReferNo())
+										.rvwType(review.getRvwType())
+										.rvwContent(review.getRvwContent())
+										.rvwWriter(review.getRvwWriter())
+										.rvwRegdate(review.getRvwRegdate().toString())
+										.rvwScore(review.getRvwScore())
+										.build();
+		
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("admin/userRvwList.html");
+		mv.addObject("getUserRvwList", reviewDTO);
+		
+		if(reviewDTO.getSearchCondition() != null && !reviewDTO.getSearchCondition().equals("")) {
+			mv.addObject("searchCondition", reviewDTO.getSearchCondition());
+		}
+		
+		if(reviewDTO.getSearchKeyword() != null && !reviewDTO.getSearchKeyword().equals("")) {
+			mv.addObject("searchKeyword", reviewDTO.getSearchKeyword());
+		}
+		
+		return mv;
+	}
 	
 	//reser_dayclass 리스트
 	@GetMapping("/reserDayclassList")
@@ -980,7 +956,7 @@ public class AdminController {
 							.searchKeyword(reserDTO.getSearchKeyword())
 							.build();
 							
-		List<Reser> reserList = adminService.getReserList(reser);
+//		List<Reser> reserList = adminService.getReserList(reser);
 		
 		Page<Reser> pageReserList = adminService.getPageReserList(reser, pageable);
 		
@@ -997,21 +973,21 @@ public class AdminController {
                                              								.build()
 	                                             					);
 							
-		List<ReserDTO> getReserList = new ArrayList<ReserDTO>();
-		for(int i = 0; i < reserList.size(); i++) {
-			ReserDTO returnReser = ReserDTO.builder()
-											.reserNo(reserList.get(i).getReserNo())
-											.partiName(reserList.get(i).getPartiName())
-											.userId(reserList.get(i).getUserId())
-											.classNo(reserList.get(i).getClassNo())
-											.partiDate(reserList.get(i).getPartiDate())
-											.partiTime(reserList.get(i).getPartiTime())
-											.reserStatus(reserList.get(i).getReserStatus())
-											.partiStatus(reserList.get(i).getPartiStatus())
-											.build();
-
-			getReserList.add(returnReser);
-		}
+//		List<ReserDTO> getReserList = new ArrayList<ReserDTO>();
+//		for(int i = 0; i < reserList.size(); i++) {
+//			ReserDTO returnReser = ReserDTO.builder()
+//											.reserNo(reserList.get(i).getReserNo())
+//											.partiName(reserList.get(i).getPartiName())
+//											.userId(reserList.get(i).getUserId())
+//											.classNo(reserList.get(i).getClassNo())
+//											.partiDate(reserList.get(i).getPartiDate())
+//											.partiTime(reserList.get(i).getPartiTime())
+//											.reserStatus(reserList.get(i).getReserStatus())
+//											.partiStatus(reserList.get(i).getPartiStatus())
+//											.build();
+//
+//			getReserList.add(returnReser);
+//		}
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/reserDayclassList.html");

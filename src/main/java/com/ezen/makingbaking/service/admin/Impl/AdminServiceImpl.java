@@ -14,12 +14,14 @@ import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.entity.Order;
 import com.ezen.makingbaking.entity.Reser;
+import com.ezen.makingbaking.entity.Review;
 import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.repository.DayclassRepository;
 import com.ezen.makingbaking.repository.ImgFileRepository;
 import com.ezen.makingbaking.repository.ItemRepository;
 import com.ezen.makingbaking.repository.OrderRepository;
 import com.ezen.makingbaking.repository.ReserRepository;
+import com.ezen.makingbaking.repository.ReviewRepository;
 import com.ezen.makingbaking.repository.UserRepository;
 import com.ezen.makingbaking.service.admin.AdminService;
 
@@ -44,13 +46,11 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private OrderRepository orderRepository;
 	
+	@Autowired
+	private ReviewRepository reviewRepository;
+	
 
 	//item
-	@Override
-	public List<Item> getItemList(Item item) {
-		return itemRepository.findAll();
-	}
-
 	@Override
 	public Page<Item> getPageItemList(Item item, Pageable pageable) {
 		if(item.getSearchKeyword() != null && !item.getSearchKeyword().equals("")) {
@@ -141,7 +141,6 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public void saveItemList(List<Map<String, Object>> changeRowsList) {
-		// TODO Auto-generated method stub
 		for(int i = 0; i < changeRowsList.size(); i++) {
 			Item ditem = Item.builder()
 							.itemNo(Integer.parseInt(String.valueOf(changeRowsList.get(i).get("itemNo"))))
@@ -161,11 +160,6 @@ public class AdminServiceImpl implements AdminService {
 		
 
 	//dayclass
-	@Override
-	public List<Dayclass> getDayclassList(Dayclass dayclass) {
-		return dayclassRepository.findAll();
-	}
-
 	@Override
 	public Page<Dayclass> getPageDayclassList(Dayclass dayclass, Pageable pageable) {
 		if(dayclass.getSearchKeyword() != null && !dayclass.getSearchKeyword().equals("")) {
@@ -253,11 +247,6 @@ public class AdminServiceImpl implements AdminService {
 	
 	//user
 	@Override
-	public List<User> getUserList(User user) {
-		return userRepository.findAll();
-	}
-
-	@Override
 	public Page<User> getPageUserList(User user, Pageable pageable) {
 		if(user.getSearchKeyword() != null && !user.getSearchKeyword().equals("")) {
 			if(user.getSearchCondition().equals("ALL")) {
@@ -276,12 +265,13 @@ public class AdminServiceImpl implements AdminService {
 	      
 	   }
 	
-	//reser_dayclassList
 	@Override
-	public List<Reser> getReserList(Reser reser) {
-		return reserRepository.findAll();
+	public Review getUserRvwList(String rvwWriter) {
+		return reviewRepository.getUserRvwList(rvwWriter);
 	}
-
+	
+	
+	//reser_dayclassList
 	@Override
 	public Page<Reser> getPageReserList(Reser reser, Pageable pageable) {
 		if(reser.getSearchKeyword() != null && !reser.getSearchKeyword().equals("")) {
@@ -313,11 +303,6 @@ public class AdminServiceImpl implements AdminService {
 	   }
 	
 	//order_itemList
-	@Override
-	public List<Order> getOrderList(Order order) {
-		return orderRepository.findAll();
-	}
-
 	@Override
 	public Page<Order> getPageOrderList(Order order, Pageable pageable) {
 		if(order.getSearchKeyword() != null && !order.getSearchKeyword().equals("")) {
