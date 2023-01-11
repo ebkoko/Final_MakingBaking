@@ -39,5 +39,13 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
 			+ "      ) C\r\n"
 			+ "   WHERE C.ROWNUM < 4", nativeQuery=true)
 	List<Board> selectFaqList(Board board);
+
+	@Modifying
+	@Query(value="UPDATE T_MB_BOARD SET BOARD_TITLE = :boardTitle, BOARD_CONTENT = :boardContent, CATE_CODE = :cateCode WHERE BOARD_NO = :boardNo", nativeQuery=true)
+	void updateQna(@Param(value="boardTitle") String boardTitle, @Param(value="boardContent") String boardContent, @Param(value="cateCode") int cateCode, @Param(value="boardNo") int boardNo);
+	
+	@Modifying
+	@Query(value="UPDATE T_MB_BOARD SET BOARD_TITLE = :boardTitle, BOARD_CONTENT = :boardContent WHERE BOARD_NO = :boardNo", nativeQuery=true)
+	void updateBoard(@Param(value="boardTitle") String boardTitle, @Param(value="boardContent") String boardContent, @Param(value="boardNo") int boardNo);
 	
 }

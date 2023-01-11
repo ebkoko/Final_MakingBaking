@@ -51,6 +51,17 @@ public class BoardServiceImpl implements BoardService {
 		boardRepository.deleteById(boardNo);		
 	}
 
+	@Override
+	public void updateQna(Board board) {
+		boardRepository.updateQna(board.getBoardTitle(), board.getBoardContent(), board.getCateCode(), board.getBoardNo());
+	}
+
+	@Override
+	public void updateBoard(Board board) {
+		boardRepository.updateBoard(board.getBoardTitle(), board.getBoardContent(), board.getBoardNo());
+		
+	}
+
 
 	
 

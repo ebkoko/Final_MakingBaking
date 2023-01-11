@@ -279,7 +279,8 @@ public class BoardController {
 	
 	// qna 글 상세보기
 	@GetMapping("/qna/{boardNo}")
-	public ModelAndView getQna(@PathVariable int boardNo, @AuthenticationPrincipal CustomUserDetails customUser){
+	public ModelAndView getQna(@PathVariable int boardNo, 
+			@AuthenticationPrincipal CustomUserDetails customUser){
 		Board board = boardService.getBoard(boardNo);
 		
 		String loginUserId = "";
@@ -360,7 +361,8 @@ public class BoardController {
 	
 	// [user] qna 질문 글 작성 페이지 이동
 	@GetMapping("/qna/insertQna/{cateCode}")
-	public ModelAndView insertQnaView(@PathVariable("cateCode") int cateCode, @AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
+	public ModelAndView insertQnaView(@PathVariable("cateCode") int cateCode, 
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
 		System.out.println(customUser.getUsername());
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("cateCode", cateCode);
@@ -370,7 +372,8 @@ public class BoardController {
 
 	// [admin] getQna에서 user가 작성한 질문 데이터를 가지고 답글 작성 페이지로 이동
 	@GetMapping("/qna/insertAnswer/{cateCode}/{boardNo}")
-	public ModelAndView insertAnswerView(@PathVariable("cateCode") int cateCode, @PathVariable("boardNo") int boardNo, @AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
+	public ModelAndView insertAnswerView(@PathVariable("cateCode") int cateCode, @PathVariable("boardNo") int boardNo, 
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
 		Board board = boardService.getBoard(boardNo);
 		
 		BoardDTO boardDTO = BoardDTO.builder()
@@ -396,7 +399,8 @@ public class BoardController {
 	
 	// [admin] 공지사항 작성 페이지 이동
 	@GetMapping("/notice/insertNotice/{cateCode}")
-	public ModelAndView insertNoticeView(@PathVariable("cateCode") int cateCode, @AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
+	public ModelAndView insertNoticeView(@PathVariable("cateCode") int cateCode, 
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
 		System.out.println(customUser.getUsername());
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("cateCode", cateCode);
@@ -406,7 +410,8 @@ public class BoardController {
 	
 	// [admin] 이벤트 글 작성 페이지 이동
 	@GetMapping("/event/insertEvent/{cateCode}")
-	public ModelAndView insertEventView(@PathVariable("cateCode") int cateCode, @AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
+	public ModelAndView insertEventView(@PathVariable("cateCode") int cateCode, 
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
 		System.out.println(customUser.getUsername());
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("cateCode", cateCode);
@@ -417,7 +422,7 @@ public class BoardController {
 	// [user] qna 글 작성
 	@PostMapping("/qna/{cateCode}")
 	public void insertQna(BoardDTO boardDTO, @PathVariable("cateCode") int cateCode, HttpServletResponse response, HttpServletRequest request,
-			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException { // response 다시 게시글 목록으로 갈 수 있게
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
 		Board board = Board.builder()
 						   .boardTitle(boardDTO.getBoardTitle())
 						   .boardContent(boardDTO.getBoardContent())
@@ -434,8 +439,9 @@ public class BoardController {
 	
 	// [admin] qna 상세페이지에서 답글 작성
 	@PostMapping("/qna/answer/{cateCode}/{boardNo}")
-	public void insertAnswer(BoardDTO boardDTO, @PathVariable("cateCode") int cateCode, @PathVariable("boardNo") int boardNo, HttpServletResponse response, HttpServletRequest request,
-			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException { // response 다시 게시글 목록으로 갈 수 있게
+	public void insertAnswer(BoardDTO boardDTO, @PathVariable("cateCode") int cateCode, @PathVariable("boardNo") int boardNo, 
+			HttpServletResponse response, HttpServletRequest request,
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
 		Board board = Board.builder()
 						   .boardNo(boardDTO.getBoardNo())
 						   .boardReply(boardDTO.getBoardContent())
@@ -451,7 +457,7 @@ public class BoardController {
 	// [admin] 공지사항 글 작성
 	@PostMapping("/notice/{cateCode}")
 	public void insertNotice(BoardDTO boardDTO, @PathVariable("cateCode") int cateCode, HttpServletResponse response, HttpServletRequest request,
-			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException { // response 다시 게시글 목록으로 갈 수 있게
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
 		Board board = Board.builder()
 						   .boardTitle(boardDTO.getBoardTitle())
 						   .boardContent(boardDTO.getBoardContent())
@@ -468,7 +474,7 @@ public class BoardController {
 	// [admin] 이벤트 글 작성
 	@PostMapping("/event/{cateCode}")
 	public void insertEvent(BoardDTO boardDTO, @PathVariable("cateCode") int cateCode, HttpServletResponse response, HttpServletRequest request,
-			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException { // response 다시 게시글 목록으로 갈 수 있게
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
 		Board board = Board.builder()
 						   .boardTitle(boardDTO.getBoardTitle())
 						   .boardContent(boardDTO.getBoardContent())
@@ -494,9 +500,91 @@ public class BoardController {
 		boardService.deleteBoard(boardNo);
 	}
 	
-
+	// [user] qna 질문 글 수정 페이지 이동
+	@GetMapping("/qna/updateQna/{cateCode}/{boardNo}")
+	public ModelAndView updateQnaView(@PathVariable("cateCode") int cateCode, @PathVariable("boardNo") int boardNo, 
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
+		Board board = boardService.getBoard(boardNo);
+		
+		BoardDTO boardDTO = BoardDTO.builder()
+									.boardNo(board.getBoardNo())
+									.boardTitle(board.getBoardTitle())
+									.boardContent(board.getBoardContent())
+									.boardWriter(board.getBoardWriter())
+									.cateCode(board.getCateCode())
+									.build();
+		
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("getBoard", boardDTO);		
+		mv.addObject("cateCode", cateCode);
+		mv.setViewName("board/updateQna.html");
+		return mv;
+	}
 	
+	// [user] qna 수정페이지에서 글 수정
+	@PostMapping("/qna/{cateCode}/{boardNo}")
+	public void updateQna(BoardDTO boardDTO, @PathVariable("cateCode") int cateCode, @PathVariable("boardNo") int boardNo, 
+			HttpServletResponse response, HttpServletRequest request,
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
+		Board board = Board.builder()
+						   .boardNo(boardDTO.getBoardNo())
+						   .boardTitle(boardDTO.getBoardTitle())
+						   .boardContent(boardDTO.getBoardContent())
+						   .cateCode(boardDTO.getCateCode())
+						   .build();
+		
+		boardService.updateQna(board);
+		
+		response.sendRedirect("/board/qna/" + boardNo);
+	}
 	
+	// [admin] 공지사항, 이벤트 글 수정 페이지 이동
+	@GetMapping("/board/updateBoard/{cateCode}/{boardNo}")
+	public ModelAndView updateBoardView(@PathVariable("cateCode") int cateCode, @PathVariable("boardNo") int boardNo, 
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
+		Board board = boardService.getBoard(boardNo);
+		
+		BoardDTO boardDTO = BoardDTO.builder()
+									.boardNo(board.getBoardNo())
+									.boardTitle(board.getBoardTitle())
+									.boardContent(board.getBoardContent())
+									.boardWriter(board.getBoardWriter())
+									.cateCode(board.getCateCode())
+									.build();
+		
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("getBoard", boardDTO);		
+		mv.addObject("cateCode", cateCode);
+		mv.setViewName("board/updateBoard.html");
+		return mv;
+	}
+	
+	// [admin] 공지사항 수정페이지에서 글 수정
+	@PostMapping("/board/{cateCode}/{boardNo}")
+	public void updateBoard(BoardDTO boardDTO, @PathVariable("cateCode") int cateCode, @PathVariable("boardNo") int boardNo, 
+			HttpServletResponse response, HttpServletRequest request,
+			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {
+		Board board = Board.builder()
+						   .boardNo(boardDTO.getBoardNo())
+						   .boardTitle(boardDTO.getBoardTitle())
+						   .boardContent(boardDTO.getBoardContent())
+						   .cateCode(boardDTO.getCateCode())
+						   .build();
+		
+		boardService.updateBoard(board);
+		
+		String categoryTitle = "";
+		
+		if(boardDTO.getCateCode() == 3) {
+			categoryTitle = "notice";
+		} else {
+			categoryTitle = "event";
+		}
+		
+		System.out.println("@@@@@@@@categoryTitle: " + categoryTitle);
+		
+		response.sendRedirect("/board/" + categoryTitle + "/" + boardNo);
+	}
 	
 	
 }

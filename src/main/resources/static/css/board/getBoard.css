@@ -112,12 +112,16 @@ hr {
   float: right;
 }
 
-#listbtn {
+
+#left-btn > a {
   width: 100px; height: 40px;
   font-size: 15px; font-weight: bold; 
   color: white; 
+  text-align: center;
+  line-height: 40px;
   background-color: #696969;
   border-radius: 5px;
+  margin-bottom: 20px;
 }
 
 #insertbtn {
