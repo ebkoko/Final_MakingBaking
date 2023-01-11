@@ -12,9 +12,11 @@ import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.entity.ItemLike;
 import com.ezen.makingbaking.entity.ItemLikeId;
+import com.ezen.makingbaking.entity.Order;
 import com.ezen.makingbaking.repository.ImgFileRepository;
 import com.ezen.makingbaking.repository.ItemLikeRepository;
 import com.ezen.makingbaking.repository.ItemRepository;
+import com.ezen.makingbaking.repository.OrderRepository;
 import com.ezen.makingbaking.service.item.ItemService;
 
 @Service
@@ -25,10 +27,14 @@ public class ItemServiceImpl implements ItemService {
 	@Autowired
 	private ImgFileRepository imgFileRepository;
 	
+	@Autowired
+	private OrderRepository orderRepository;
+	
 	@Override
 	public int getItemStock(int itemNo) {
 		return itemRepository.findItemStockByItemNo(itemNo);
 	}
+	
 	
 	@Override
 	public Page<CamelHashMap> getItemList(Pageable pageable) {
@@ -95,6 +101,11 @@ public class ItemServiceImpl implements ItemService {
 	@Override
 	public List<ImgFile> getItemImg(int itemNo) {
 		return imgFileRepository.findByFileReferNoAndFileType(itemNo, "item");
+	}
+
+	@Override
+	public List<CamelHashMap> getUserOrderStatus(String loginUserId, int itemNo) {	
+		return orderRepository.getByUserIdAndItemNo(loginUserId, itemNo);
 	}
 
 }

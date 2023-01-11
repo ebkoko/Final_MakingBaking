@@ -233,7 +233,7 @@
 								htmlStr +=  `</span>
 		                          	  </td>
 			                          <td>${obj.pageItems.content[i].rvwContent}</td>
-			                          <td>${obj.pageItems.content[i].rvwRegdate}</td>
+			                          <td>${obj.pageItems.content[i].rvwRegdate.substring(0,10)}</td>
 			                          <td>${principal != 'anonymousUser' && principal.user.userRole == 'ROLE_ADMIN' 
 			                         	   ? obj.pageItems.content[i].rvwWriter 
 			                         	   : obj.pageItems.content[i].rvwWriter.substring(0, obj.pageItems.content[i].rvwWriter.length - 3) + '***'}</td>
@@ -266,7 +266,7 @@
 	          <div class="it_banner"> 
 	            <div class="itbanner_mainImg">
 	              <img class="itbanner_main_img" th:src="@{'/item/' + ${itemImgList.get(0).fileName}}"
-	              width="350px">
+	              width="400px" hegiht="300px">
 	            </div>
 	            <div class="itbanner_explain">   
 	              <div class="item_h2">     
@@ -342,6 +342,14 @@
 	              <div class="it_rvw_write">
 	              	<div class="it_rvw_write_member">	   	            
 	              		<form class="it_rvw_write_form" action="/item/insertItemRvw" method="post">	              			             			
+						 	<div th:each="reviewChk : ${reviewChkList}">
+						 		<span th:if="${reviewChk.orderStatus == 'DC' && reviewChk.reviewYn == 'N'}">
+							 		<input type="radio" name="reviewOrderNo" th:value="${reviewChk.orderNo}"
+							 			   th:id="'radio' + ${reviewChk.orderNo}">
+							 		<label th:for="'radio' + ${reviewChk.orderNo}"
+							 			   th:text="'주문번호 : ' + ${reviewChk.orderNo}"></label>
+						 		</span>
+						 	</div>	
 	             			<input type="hidden" id="rvwContent" name="rvwContent">             			
 	              			<fieldset>
 							<input type="radio" name="rvwScore" value="5" class="rvwScore" id="rate1"><label
@@ -358,7 +366,7 @@
 							<div class="textLength" >
 						      <p class="textCount">0자</p>
 						      <p class="textTotal">/200자</p>
-						 	</div>						
+						 	</div>
 	              			<textarea class="rvwContentText" id="rvwContentText" placeholder=" 로그인 후 후기를 리뷰해주세요."></textarea>	              			
 	              			<div class="writeBtn_div"> 
 	              			  <button class="it_rvw_writeBtn" id="it_rvw_writeBtn" type="button">등록</button>
@@ -401,7 +409,7 @@
 		                          <td th:text="${review.rvwContent}"></td>
 		                          <td th:text="${review.rvwRegdate eq null ? '' : #strings.substring(review.rvwRegdate, 0, 10)}"></td>
 		                          <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${review.rvwWriter}"></td>
-		                          <td sec:authorize="!hasRole('ROLE_ADMIN')" th:text="${review.rvwWriter.substring(0, review.rvwWriter.length()-3) + '***'}"></td>
+		                          <td sec:authorize="!hasRole('ROLE_ADMIN')" th:text="${review.rvwWriter.length() > 4 ? review.rvwWriter.substring(0, review.rvwWriter.length()-3) + '***' : review.rvwWriter}"></td>
 		                        </tr> 
 		                      </tbody>
 		                    </table>
