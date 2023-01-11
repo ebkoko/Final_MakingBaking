@@ -28,6 +28,8 @@ public interface ItemService {
 	void deleteLike(int itemNo, String userId);
 
 	List<ImgFile> getItemImg(int itemNo);
+
+	List<CamelHashMap> getUserOrderStatus(String loginUserId, int itemNo);
 	
 
 	

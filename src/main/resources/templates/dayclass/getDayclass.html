@@ -385,7 +385,7 @@
 								htmlStr +=  `</span>
 		                          	  </td>
 			                          <td>${obj.pageItems.content[i].rvwContent}</td>
-			                          <td>${obj.pageItems.content[i].rvwRegdate}</td>
+			                          <td>${obj.pageItems.content[i].rvwRegdate.substring(0,10)}</td>
 			                          <td>${principal != 'anonymousUser' && principal.user.userRole == 'ROLE_ADMIN' 
 			                         	   ? obj.pageItems.content[i].rvwWriter 
 			                         	   : obj.pageItems.content[i].rvwWriter.substring(0, obj.pageItems.content[i].rvwWriter.length - 3) + '***'}</td>
@@ -420,7 +420,7 @@
 	        <div class="dc_banner_container">
 	          <div class="dc_banner">
 	            <div class="banner_mainImg">
-	              <img class="banner_main_img" th:src="@{'/dayclass/' + ${dayclass.fileName}}" width="350px">
+	              <img class="banner_main_img" th:src="@{'/dayclass/' + ${dayclass.fileName}}" width="400px" height="300px">
 	            </div>
 	            <div class="banner_explain">   
 	              <div class="class_hr1">     
@@ -428,7 +428,8 @@
 	              </div>
 	              <div class="banner_explain_MinName">
 	              	<p th:text="${dayclass.dayclassMinName}"></p>
-	              </div>
+	             </div>
+	             <div class="banner_explain_div">
 	              <div class="banner_explain_details">
 	                <span><img src="/images/class_day.png" width="17px">&ensp;원데이 클래스&ensp;</span>  
 	                <span><img src="/images/class_time.png" width="16.5px" th:text="${dayclass.dayclassDurationTime}">시간</span>
@@ -443,6 +444,7 @@
 	                <span id="likeSpan"><button type="button" id="dayclassLikeBtn" 
 	                	th:value="${likeYn}" th:text="${likeYn == 'Y' ? '♥   ' : '♡   '} + ${likeCnt}"></button></span>
 	              </div>
+		         </div>  
 	            </div>  
 	          </div>
 	        </div>

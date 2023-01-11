@@ -1,6 +1,7 @@
 package com.ezen.makingbaking.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -92,4 +93,35 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 			+ "                                AND E.FILE_TYPE = 'item'\r\n"
 			+ "					  )", nativeQuery=true)
 	List<CamelHashMap> findByItemDetailAndOrderNo(@Param("orderNo") long orderNo);
+	
+	@Query(value="WITH ONTBL AS (\r\n"
+			+ "	SELECT A.*\r\n"
+			+ "		 , B.ITEM_NO\r\n"
+			+ "		FROM \r\n"
+			+ "			T_MB_ORDER A,\r\n"
+			+ "			T_MB_ORDER_ITEM B\r\n"
+			+ "		WHERE \r\n"
+			+ "			A.USER_ID = :userId\r\n"
+			+ "		AND B.ITEM_NO = :itemNo\r\n"
+			+ "		AND A.ORDER_NO = B.ORDER_NO\r\n"
+			+ ")\r\n"
+			+ "SELECT ONTBL.*\r\n"
+			+ "	 , CASE\r\n"
+			+ "		WHEN ONTBL.ORDER_NO IN (\r\n"
+			+ "								  SELECT D.ORDER_NO\r\n"
+			+ "							   )\r\n"
+			+ "		THEN 'Y'\r\n"
+			+ "		ELSE 'N'\r\n"
+			+ "		END AS REVIEW_YN\r\n"
+			+ "	FROM ONTBL\r\n"
+			+ "	LEFT OUTER JOIN	 (\r\n"
+			+ "						 SELECT E.*\r\n"
+			+ "							FROM T_MB_REVIEW E\r\n"
+			+ "							WHERE E.RVW_REFER_NO = :itemNo\r\n"
+			+ "							  AND E.RVW_TYPE = 'item'\r\n"
+			+ "					 ) D\r\n"
+			+ "	ON ONTBL.USER_ID = D.RVW_WRITER\r\n"
+			+ "	AND ONTBL.ORDER_NO = D.ORDER_NO\r\n"
+			+ "	AND ONTBL.ITEM_NO = D.RVW_REFER_NO", nativeQuery=true)
+	List<CamelHashMap> getByUserIdAndItemNo(@Param("userId") String loginUserId, @Param("itemNo") int itemNo);
 }

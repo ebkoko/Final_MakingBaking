@@ -163,6 +163,8 @@ public class ItemController {
 		
 		int likeCnt = itemService.getLikeCnt(itemNo);
 		
+		List<CamelHashMap> reviewChkList = itemService.getUserOrderStatus(loginUserId, itemNo);
+		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("item/getItem.html");		
 		
@@ -172,6 +174,7 @@ public class ItemController {
 		mv.addObject("likeYn", likeYn);
 		mv.addObject("likeCnt", likeCnt);
 		mv.addObject("searchCondition", searchCondition);
+		mv.addObject("reviewChkList", reviewChkList);
 		
 		
 	
