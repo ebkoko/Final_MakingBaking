@@ -3,6 +3,8 @@ package com.ezen.makingbaking.service.order.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ezen.makingbaking.common.CamelHashMap;
@@ -37,8 +39,12 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	@Override
-	public List<CamelHashMap> getOrderList(String userId) {
-		return orderRepository.findAllOrder(userId);
+	public Page<CamelHashMap> getOrderList(String userId, Pageable pageable, String orderCondition) {
+		if(orderCondition == null || orderCondition.equals("") || orderCondition.equals("ALL")) {
+			return orderRepository.findAllOrder(userId, pageable);			
+		} else {
+			return orderRepository.findAllOrderByOrderCondition(userId, orderCondition, pageable);
+		}		
 	}
 	
 	@Override

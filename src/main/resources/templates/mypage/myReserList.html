@@ -153,7 +153,7 @@
 	        <div class="sub-menu">
 	          <ul class="menu-group">
 	            <h3>My 정보</h3>
-	            <li class="menu-name"><a th:href="@{/mypage/changeInfo}">개인정보확인</a></li>
+	            <li class="menu-name"><a th:href="@{/user/changeInfoPw}">개인정보확인</a></li>
 	            <li class="menu-name"><a th:href="@{/mypage/quit}">회원탈퇴</a></li>
 	          </ul>
 	        </div>
@@ -166,7 +166,7 @@
 	    </div>
 	    <!-- 메인 내용 -->
 	    <div class="main-content">
-	      <h3 style="margin-bottom: 10px;">예약 확인</h3>
+	      <h3>예약 확인</h3>
 	      <span class="search">
 	        <select class="search-bar" name="reserCondition" id="reserCondition">
 	        	<option th:selected="${reserCondition == null || reserCondition == '' || reserCondition == 'ALL'}" value="ALL">전체</option>
@@ -179,7 +179,9 @@
 	      <!-- 아이템 -->
 	      <div id="boxxWrapper">
 		      <div class="boxx" th:each="reser : ${getReserList}">
-		        <img th:src="@{'/dayclass/' + ${reser.fileName}}" width="130px" margin="10px">
+		      	<div class="imgWrapper" style="width: 120px; height: 90px;">
+		        	<img th:src="@{'/dayclass/' + ${reser.fileName}}" width="100%" height="100%" object-fit="cover" margin="10px">
+		      	</div>
 		        <div class="box_product">
 		          <div class="box_product_detail" th:if="${reser.reserStatus == 'MV'}" style="color: red;">입금대기</div>
 		          <div class="box_product_detail" th:if="${reser.reserStatus == 'PE'}" style="color: #28693F;">결제완료</div>
