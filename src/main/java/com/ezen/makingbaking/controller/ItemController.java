@@ -177,7 +177,7 @@ public class ItemController {
 	
 		return mv;
 	}
-	// 페이징
+	// 리뷰 조건 검색
 	@PostMapping("/item/{itemNo}")
 	public ResponseEntity<?> getDayclassPage(@PathVariable int itemNo, 
 			@PageableDefault(page = 0, size = 4) Pageable pageable, 
@@ -261,6 +261,7 @@ public class ItemController {
 		}
 	}
 	
+	// 리뷰 등록
 	@PostMapping("/insertItemRvw")
 	public void insertItemRvw(ReviewDTO reviewDTO, HttpServletResponse response, HttpServletRequest request,
 			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {

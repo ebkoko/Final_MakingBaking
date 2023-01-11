@@ -5,8 +5,7 @@
 		    }
 		    .item {
 		      position: relative;
-		      width: 950px;
-		      margin: 0 auto;
+		      width: 950px;		      
 		      margin: 100px auto 180px;
 		      padding-top: 30px;
 		    }	
@@ -15,7 +14,7 @@
 		      height: 2px; 
 		      background-color: rgb(235, 235, 235);		      
 		    }
-		
+			
 
 		    /* 배너 dc_banner */
 		    .it_banner_container {
@@ -26,25 +25,61 @@
 				display: flex;
 				justify-content: space-around;
 			}
-		    .itbanner_main_img {
+
+			.itbanner_mainImg {
+				margin-top: 30px;
+			}
+			.itbanner_main_img {
 		      	margin-left: 50px;
 		    }
-		
-		    .itbanner_explain {
-		     	margin-top: 25px;
-		     	margin-right: 20px;
-		    }
-		    .itbanner_explain_details {
-		      	margin-top: 80px;
-		    }
-		    .itbanner_explain_KRW{
-				margin-top: 10px;
+			.itbanner_explain{
+				margin-top: 25px;
+		      margin-right: 20px;
 			}
-
+		    
+		    .item_h2{
+				color:rgb(74, 74, 74);	
+			}
+			.itbanner_explain_sTitle{
+				margin-top: 15px;			 
+			    color:rgb(102, 102, 102);	
+			}
+		    
+		    .itbanner_explain_KRW{
+				font-size: 20px;
+				font-weight: 600;
+				margin: 40px 0 30px 0;
+			}
+			/*배너 상세정보*/
+			.it_explainList_div {
+				margin: 20px auto;
+			}
+			.it_explainList_T{				
+				font-size: 14px;
+				width:400px;
+				border: 1px solid rgb(221, 221, 221);	
+				border-collapse: collapse;
+				border-left: hidden;
+				border-right: hidden;	
+			}
+			.it_explainList{
+				width:10%;
+				text-align: left;
+				color: rgb(102, 102, 102);	
+			}
+			.it_explainList_T tr {
+				height: 75px;				
+			}
+			.it_explainList_T td {
+				width:20%;				
+				color: rgb(102, 102, 102);	
+			}
+			
+			/*배너 버튼*/
 		    .itbanner_explain_btn {
 		      	margin-top: 30px;
 		    }
-		    #itemGetBtn, #itemCartBtn {
+		    #itemCartBtn {
 		      width: 120px;
 		      height: 40px;
 		      border: 1.2px solid #28693F;
@@ -59,24 +94,18 @@
 		      letter-spacing:1px	
 		    }
 		    #itemLikeBtn {
-			  width: 60px;
-		      height: 40px;
-		      border: 1.2px solid #28693F;
+			  width: 120px;
+		      height: 40px;		      
 		      border-radius: 4px;
-		      background-color: white;
+		      background-color: #28693F;
 		      text-align: center;
 		      display: inline-block;
-		      color: #28693F;
+		      color: white;
 		      font-size: 16px;
 		      font-weight: 550;
 		      margin-right: 10px;
 		      letter-spacing:1px	
 			}
-		    #itemGetBtn:hover{
-		      background-color: #28693F;
-		      color: white;
-		      font-weight: 520;		      
-		    }
 		    #itemCartBtn:hover {
 		      background-color: #28693F;
 		      color: white;
@@ -84,8 +113,9 @@
 		    }
 		    #itemLikeBtn:hover {
 			  margin: 30px 0 30px 0;
-		      background-color: #28693F;
-		      color: white;
+			  border: 1.2px solid #28693F;
+		      background-color: white;
+		      color: #28693F;
 		      font-weight: 520;
 		    }
 		    
@@ -114,54 +144,25 @@
     		  text-align: center;
     		  line-height:35px; 
     		  overflow-y: hidden;
-    		  
+ 		  
 			}
 			
 		    /* 영양 정보*/
-		    
-			/* 상품 갯수*/
-			.itemNm {
-				float: left;
-			    position: relative;
-			    min-width: 114px;
-			    height: 34px;
-			    border: solid 1px #dde0e3;
+			.it_cDetatils {
+			  margin-top: 70px 0 70px 0;
 			}
-			.itemNm_minus, .itemNm_plus{
-				position: relative;
-			    width: 34px;
-			    height: 100%;
-			    background-color: #f1f2f4;
-			    border: none;
-			}
-			.itemNm_cnt{
-				width: 40px;
-			    height: 100%;
-			    border-width: 0 1px;
-			    vertical-align: top;
-			    color: #333333;
-			    font-size: 14px;
-			    font-weight: bold;
-			    line-height: 34px;
-			    text-align: center;  
-			}
-			
-			/* 인원수량 우측 화살표 없애기*/
-			input[type="number"]::-webkit-outer-spin-button,
-			input[type="number"]::-webkit-inner-spin-button {
-    			-webkit-appearance: none;
-    			margin: 0;
-			}
-			
 		    /* 메뉴바 dc_menu */
 		    .it_menu {
 		      margin-top: 60px;
+		    }
+		    .it_menu ul {
+		      display: flex;
 		    }
 		    .itmenu ul li {
 		      text-decoration: none;
 		      list-style:none;
 		      color: rgb(51, 51, 51);
-		      float: left;
+		      
 		      width: 25%;
 		      line-height: 50px;
 		      text-align: center;		      
@@ -179,13 +180,13 @@
 		   
 		    /* it_cotents */
 		    .it_contents_container {
-		      margin-top: 200px;
+		      margin-top: 100px;
 		    }
 
 
 		    /* 후기 작성  */
 		    .it_rvw_write_member{
-			  margin:50px 0 100px 0;
+			  margin-bottom: 100px;
 			}
 		    .it_rvw_write_form fieldset{
 			  display: inline-block;

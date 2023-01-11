@@ -120,7 +120,7 @@ public class DayclassController {
 		return mv;
 	}
 	
-	// 페이징
+	// 리뷰 조건 검색
 	@PostMapping("/dayclass/{dayclassNo}")
 	public ResponseEntity<?> getDayclassPage(@PathVariable int dayclassNo, 
 			@PageableDefault(page = 0, size = 4) Pageable pageable, 
@@ -148,6 +148,8 @@ public class DayclassController {
 																  .rvwWriter(pageReview.getRvwWriter())
 																  
 																  .rvwRegdate(pageReview.getRvwRegdate().toString())
+																  
+																  
 																  .rvwScore(pageReview.getRvwScore())
 																  .build()
 									);
@@ -249,6 +251,7 @@ public class DayclassController {
 		}
 	}
 	
+	// 리뷰 등록
 	@PostMapping("/insertClassRvw")
 	public void insertClassRvw(ReviewDTO reviewDTO, HttpServletResponse response, HttpServletRequest request,
 			@AuthenticationPrincipal CustomUserDetails customUser) throws IOException {

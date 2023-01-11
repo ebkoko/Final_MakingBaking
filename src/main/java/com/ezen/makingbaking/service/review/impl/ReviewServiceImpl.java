@@ -37,7 +37,7 @@ public class ReviewServiceImpl implements ReviewService {
 		} else if(searchCondition.equals("OLD")) {
 			return reviewRepository.findByRvwReferNoAndRvwTypeOrderByRvwRegdateAsc(itemNo, "item", pageable);
 		} else {
-			return reviewRepository.findByRvwReferNoAndRvwType(itemNo, "item" ,pageable);	
+			return reviewRepository.findByRvwReferNoAndRvwTypeOrderByRvwRegdateDesc(itemNo, "item" ,pageable);	
 		}
 	
 	}
