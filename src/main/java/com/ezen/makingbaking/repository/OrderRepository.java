@@ -31,8 +31,14 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 	@Query(value = "SELECT A.*\r\n"
 			+ "	FROM T_MB_ORDER A\r\n"
 			+ "    WHERE A.USER_ID = :userId\r\n"
-			+ "		ORDER BY A.ORDER_NO DESC", nativeQuery=true)
-	List<CamelHashMap> findAllOrder(@Param("userId") String userId);
+			+ "		ORDER BY A.ORDER_NO DESC",
+			countQuery=" SELECT COUNT(*) FROM ("
+					+ "SELECT A.*\r\n"
+					+ "	FROM T_MB_ORDER A\r\n"
+					+ "    WHERE A.USER_ID = :userId\r\n"
+					+ "		ORDER BY A.ORDER_NO DESC"
+					+ ") AA", nativeQuery=true)
+	Page<CamelHashMap> findAllOrder(@Param("userId") String userId, Pageable pageable);
 	
 	@Query(value="SELECT B.ORDER_NO\r\n"
 			+ "	 , B.ITEM_NO\r\n"
@@ -60,7 +66,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 	
 	@Query(value="SELECT A.*,\r\n"
 			+ "               CASE \r\n"
-			+ "					WHEN A.ORDER_STATUS = 'DW' OR A.ORDER_STATUS = 'D' OR A.ORDER_STATUS = 'DC'\r\n"
+			+ "					WHEN A.ORDER_STATUS = 'DW' OR A.ORDER_STATUS = 'D' OR A.ORDER_STATUS = 'DC' OR A.ORDER_STATUS = 'OC' OR A.ORDER_STATUS = 'PC'\r\n"
 			+ "                    THEN 'I'\r\n"
 			+ "                    WHEN A.ORDER_STATUS = 'MV' OR A.ORDER_STATUS = 'PE'\r\n"
 			+ "                    THEN 'P'\r\n"
@@ -124,4 +130,18 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 			+ "	AND ONTBL.ORDER_NO = D.ORDER_NO\r\n"
 			+ "	AND ONTBL.ITEM_NO = D.RVW_REFER_NO", nativeQuery=true)
 	List<CamelHashMap> getByUserIdAndItemNo(@Param("userId") String loginUserId, @Param("itemNo") int itemNo);
+	
+	@Query(value = "SELECT A.*\r\n"
+			+ "	FROM T_MB_ORDER A\r\n"
+			+ "    WHERE A.USER_ID = :userId\r\n"
+			+ "			AND A.ORDER_STATUS = :orderCondition"	
+			+ "		ORDER BY A.ORDER_NO DESC",
+			countQuery=" SELECT COUNT(*) FROM ("
+					+ "SELECT A.*\r\n"
+					+ "	FROM T_MB_ORDER A\r\n"
+					+ "    WHERE A.USER_ID = :userId\r\n"
+					+ "			AND A.ORDER_STATUS = :orderCondition"
+					+ "		ORDER BY A.ORDER_NO DESC"
+					+ ") AA", nativeQuery=true)
+	Page<CamelHashMap> findAllOrderByOrderCondition(@Param("userId") String userId, @Param("orderCondition") String orderCondition, Pageable pageable);
 }

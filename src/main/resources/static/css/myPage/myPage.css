@@ -54,9 +54,13 @@
       padding: 20px;
       margin-left: 1rem;
     }
+    h3 {
+		display: inline-block;
+		margin-bottom: 10px;
+	}
     .search {
-      position: relative;
-      display: flex;
+      display: inline-block;
+      margin-left: 360px;
     }
 
     .search-bar {
@@ -68,15 +72,6 @@
       margin-bottom: 10px;
     }
 
-    #search-icon {
-      position : absolute;
-      width: 20px;
-      top: 9px;
-      margin: 0;
-      margin-left: -2rem;
-      cursor: pointer;
-    }
-
     /* 아이템 */
     .boxx {
       display: flex;
@@ -86,12 +81,6 @@
       height: 100px;
       position: relative;
       margin-bottom: 10px;
-    }
-    .box_img {
-      margin-right: 20px;
-    }
-    .centre .main-content .boxx img {
-      margin: 10px;
     }
     .box_product {
       display: flex;
@@ -120,11 +109,11 @@
       color: black;
     }
 
-    .paging {
+/*    .paging {
       display: flex;
       justify-content: center;
       margin-bottom: 10px;
-    }
+    }*/
     
     .paging a{
       color: black;

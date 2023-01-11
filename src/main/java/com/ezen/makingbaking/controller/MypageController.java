@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.makingbaking.common.CamelHashMap;
+import com.ezen.makingbaking.dto.OrderDTO;
 import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.entity.CustomUserDetails;
@@ -39,10 +40,11 @@ public class MypageController {
 	private OrderService orderService;
 	
 	@GetMapping("/myPage")
-	public ModelAndView myOrderList(@AuthenticationPrincipal CustomUserDetails customUser) {
+	public ModelAndView myOrderList(OrderDTO orderDTO, @PageableDefault(page = 0, size = 5) Pageable pageable,
+			@AuthenticationPrincipal CustomUserDetails customUser) {
 		ModelAndView mv = new ModelAndView();
 		
-		List<CamelHashMap> orderList = orderService.getOrderList(customUser.getUsername());
+		Page<CamelHashMap> orderList = orderService.getOrderList(customUser.getUsername(), pageable, orderDTO.getOrderCondition());
 		
 		List<CamelHashMap> orderContent = orderService.getOrderContent(customUser.getUsername());
 		
@@ -91,6 +93,8 @@ public class MypageController {
 		
 		ModelAndView mv = new ModelAndView();
 		
+		order.put("order_Date_Str", (Timestamp.valueOf(order.get("orderDate").toString())).toLocalDateTime().toString());
+		
 		mv.addObject("order", order);
 		mv.addObject("item", orderContent);
 		mv.setViewName("mypage/getOrderDetail.html");
@@ -134,6 +138,28 @@ public class MypageController {
 			
 			return ResponseEntity.ok().body(response);
 			
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+	
+	@PostMapping("/myPageAjax")
+	public ResponseEntity<?> myPageAjax(OrderDTO orderDTO, @PageableDefault(page = 0, size = 5) Pageable pageable
+			, @AuthenticationPrincipal CustomUserDetails customUser) {
+		ResponseDTO<CamelHashMap> response = new ResponseDTO<>();
+		
+		try {
+			Page<CamelHashMap> orderList = orderService.getOrderList(customUser.getUsername(), pageable, orderDTO.getOrderCondition());
+			response.setPageItems(orderList);
+			
+			for(CamelHashMap c : orderList.getContent()) {
+				System.out.println("orderDate =================================" + c.get("orderDate"));
+				c.put("order_Date_Str", c.get("orderDate").toString());
+			}
+			
+			return ResponseEntity.ok().body(response);
 		} catch(Exception e) {
 			response.setErrorMessage(e.getMessage());
 			

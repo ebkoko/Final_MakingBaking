@@ -274,10 +274,10 @@
 					
 					$("#btnOrderCancel").on('click', function() {
 						$.ajax({
-							url: '/order/orderCancel/' + orderNo,
+							url: '/order/orderCancel/' + order.orderNo,
 							type: 'put',
 							data: { 
-								orderDate: order.orderDate,
+								orderDate: order.orderDateStr,
 								orderStatus: 'OC',
 								reciName: order.reciName,
 								reciTel: order.reciTel,
@@ -298,6 +298,7 @@
 								console.log(obj);
 								$(".orderStatus").text("주문취소");
 								$("#CancelOption").css("display", "none");
+								$("#moveList").show();
 							}, error: function(e) {
 								console.log(e);
 							}
@@ -306,10 +307,10 @@
 					
 					$("#btnPayCancel").on('click', function() {
 						$.ajax({
-							url: '/order/payCancel/' + orderNo,
+							url: `/order/payCancel/${order.orderNo}`,
 							type: 'put',
 							data: { 
-								orderDate: order.orderDate,
+								orderDate: order.orderDateStr,
 								orderStatus: 'PC',
 								reciName: order.reciName,
 								reciTel: order.reciTel,
@@ -330,6 +331,7 @@
 								console.log(obj);
 								$(".orderStatus").text("결제취소");
 								$("#CancelOption").css("display", "none");
+								$("#moveList").show();
 							}, error: function(e) {
 								console.log(e);
 							}
@@ -351,6 +353,7 @@
 	            <h1 id="order_title">내 주문 확인</h1>
 	            <div id="top">
 	                <span class="orderNoMent">주문번호: </span><span class="realOrderNo" th:text="${order.orderNo}"></span><span class="orderStatus"></span>
+	                <span th:if="${order.orderCancelDate != null}">취소일시: </span><span th:if="${order.orderCancelDate != null}" th:text="${order.orderCancelDate}"></span>
 	            </div>
 	            <hr>
 	            <div id="list_title">
@@ -436,7 +439,12 @@
                     <input type="button" name="CancelOption" id="btnOrderCancel" value="주문취소" th:if="${order.orderStatus == 'MV'}">&emsp;
                     <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${order.orderStatus == 'PE'}">
 	            </div>
-	            <div id="moveList" th:style="${order.orderStatus == 'PC' || order.orderStatus == 'OC' ? 'display: block;' : 'display: none;'}">
+	            <div id="moveList" th:style="${order.orderStatus == 'PC' || order.orderStatus == 'OC' ? 'display: flex; 
+					justify-content: center;	
+				    margin-top: 100px;
+				    margin-bottom: 10px;
+					width: 100%;
+					height: 25px;' : 'display: none;'}">
 	            	<button type="button" id="btnMoveList" onclick="fnBtnMoveList()">목록으로</button>
 	            </div>
 	        </div>
