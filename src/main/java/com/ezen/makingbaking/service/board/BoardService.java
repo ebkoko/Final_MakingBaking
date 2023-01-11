@@ -27,5 +27,7 @@ public interface BoardService {
 
 	void updateBoard(Board board);
 
+	Page<Board> getPageMyQnaList(String userId, Pageable pageable);
+
 	
 }
