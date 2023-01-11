@@ -9,6 +9,10 @@
 	<head>
 		<th:block layout:fragment="css">
 			<style>
+				#a_Title {
+					text-decoration: none;
+					color: inherit;
+				}
 				#userAdmin {
 					font-size: 40px;
 				}
@@ -181,7 +185,7 @@
 <body>
 	<div id="container" layout:fragment="content">
 	  	<div>
-	  		<h1 id="userAdmin">회원 관리</h1>
+	  		<a href="userList" id="a_Title"><h1 id="userAdmin">회원 관리</h1></a>
 		</div>
 	    <form id="searchForm" action="/admin/userList" method="get">
 	    	<div id="user_search">
@@ -223,12 +227,8 @@
 					<td th:text="${user.userId}"></td>
 		        	<td th:text="${user.userRegdate eq null ? '' : #strings.substring(user.userRegdate, 0, 10)}"></td>
 		        	<td>
-		        		<a id="userReview" th:text="Review">
-							<!--th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">-->
-						</a>
-						<a id="userQnA" th:text="QnA">
-							<!--th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">-->
-						</a>
+		        		<a id="userReview" th:text="Review" th:herf="'/admin/userRvwList?rvwWriter=' + ${user.userId}"></a>
+						<a id="userQnA" th:text="QnA" th:herf="'/admin/userRvwList?boardWriter=' + ${user.userId}"></a>
 		        	</td>
 		     	 </tr>
 		    </table>
