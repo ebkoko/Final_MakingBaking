@@ -17,6 +17,10 @@
 					const page = $(this).attr("href");
 					fnGetOrderListAjax(page);
 				});
+				
+				$(".present").on('click', function(e) {
+					$(e.target).css("color", "white");
+				})
 			});
 			
 			function fnGetOrderListAjax(page) {
@@ -37,31 +41,31 @@
 	      							<div class="box_product">`;
 	      					if(obj.pageItems.content[i].orderStatus == 'MV') {
 								  htmlstr += `
-										<div class="box_product_detail" style="color: red;">입금대기</div>
+										<div class="box_product_detail" style="color: red; font-weight: 600;">입금대기</div>
 								  `;
 							  } else if(obj.pageItems.content[i].orderStatus == 'PE') {
 								  htmlstr += `
-					          			<div class="box_product_detail" style="color: #28693F;">결제완료</div>
+					          			<div class="box_product_detail" style="color: #28693F; font-weight: 600;">결제완료</div>
 							 	  `;
 							  } else if(obj.pageItems.content[i].orderStatus == 'DW') {
 								  htmlstr += `
-					          			<div class="box_product_detail" style="color: lightblue;">배송준비중</div>
+					          			<div class="box_product_detail" style="color: lightblue; font-weight: 600;">배송준비중</div>
 							  	  `;
 							  } else if(obj.pageItems.content[i].orderStatus == 'D') {
 								  htmlstr += `
-					          			<div class="box_product_detail" style="color: lightblue;">배송중</div>
+					          			<div class="box_product_detail" style="color: lightblue; font-weight: 600;">배송중</div>
 								  `;					          		
 							  } else if(obj.pageItems.content[i].orderStatus == 'DC') {
 								  htmlstr += `								  
-							        	<div class="box_product_detail" style="color: dimgray;">배송완료</div>
+							        	<div class="box_product_detail" style="color: dimgray; font-weight: 600;">배송완료</div>
 								  `;
 							  } else if(obj.pageItems.content[i].orderStatus == 'OC') {
 								  htmlstr += `
-					          			<div class="box_product_detail" style="color: lightgray;">주문취소</div>
+					          			<div class="box_product_detail" style="color: lightgray; font-weight: 600;">주문취소</div>
 							 	  `;
 							  } else if(obj.pageItems.content[i].orderStatus == 'PC') {
 								  htmlstr += `
-					          			<div class="box_product_detail" style="color: lightgray;">결제취소</div>
+					          			<div class="box_product_detail" style="color: lightgray; font-weight: 600;">결제취소</div>
 							  	  `;
 							  }
 							  htmlstr += `                                   
@@ -96,7 +100,7 @@
 						if(pageNumber > 0) {
 							htmlstr += `
 								<li class="pagination_button">
-									<a href="${pageNumber - 1}">이전</a>
+									<a style="border: 0px;" href="${pageNumber - 1}">&#60;</a>
 								</li>
 							`;
 						}
@@ -106,16 +110,22 @@
 										: startPage;
 						
 						for(let i = realStart; i <= endPage; i++) {
-							
-							htmlstr += `<li class="pagination_button">
-									   	   <a href="${i - 1}">${i}</a>
-								       </li>
-							`;
+							if(pageNumber == i) {
+								htmlstr += `<li id="present" class="pagination_button">
+										   	   <a href="${i - 1}">${i}</a>
+									        </li>
+								`;
+							} else {
+								htmlstr += `<li class="pagination_button">
+										   	   <a href="${i - 1}">${i}</a>
+									        </li>
+								`;
+							}
 						}
 						
 						if(pageNumber < totalPages - 1) {
 							htmlstr += `<li class="pagination_button">
-									       <a href="${pageNumber + 1}">다음</a>
+									       <a style="border: 0px;" href="${pageNumber + 1}">&#62;</a>
 								        </li>
 							`;
 						}
@@ -172,60 +182,62 @@
 	      </div>
 	    </div>
 	    <!-- 메인 내용 -->
-	    <div class="main-content">
-	      <h3>주문 확인</h3>
-	      <span class="search">
-	        <select class="search-bar" name="orderCondition" id="orderCondition">
-	        	<option th:selected="${orderCondition == null || orderCondition == '' || orderCondition == 'ALL'}" value="ALL">전체</option>
-	        	<option th:selected="${orderCondition == 'MV'}" value="MV">입금대기</option>
-	        	<option th:selected="${orderCondition == 'PE'}" value="PE">결제완료</option>
-	        	<option th:selected="${orderCondition == 'DW'}" value="DW">배송준비중</option>
-	        	<option th:selected="${orderCondition == 'D'}" value="D">배송중</option>
-	        	<option th:selected="${orderCondition == 'DC'}" value="DC">배송완료</option>
-	        	<option th:selected="${orderCondition == 'OC'}" value="OC">주문취소</option>
-	        	<option th:selected="${orderCondition == 'PC'}" value="PC">결제취소</option>
-	        </select>
-	      </span>
-	      <!-- 아이템 -->
-	      <div id="boxxWrapper">
-		      <div class="boxx" th:each="order : ${getOrderList}">
-		        <div class="box_product">
-		          <div class="box_product_detail" th:if="${order.orderStatus == 'MV'}" style="color: red;">입금대기</div>
-		          <div class="box_product_detail" th:if="${order.orderStatus == 'PE'}" style="color: #28693F;">결제완료</div>
-		          <div class="box_product_detail" th:if="${order.orderStatus == 'DW'}" style="color: lightblue;">배송준비중</div>
-		          <div class="box_product_detail" th:if="${order.orderStatus == 'D'}" style="color: lightblue;">배송중</div>
-		          <div class="box_product_detail" th:if="${order.orderStatus == 'DC'}" style="color: dimgray;">배송완료</div>
-		          <div class="box_product_detail" th:if="${order.orderStatus == 'OC'}" style="color: lightgray;">주문취소</div>
-		          <div class="box_product_detail" th:if="${order.orderStatus == 'PC'}" style="color: lightgray;">결제취소</div>
-		          <div class="box_product_detail" th:text="${'주문일시: ' + #strings.substring(order.orderDate, 0, 19)}"></div>
-		          <div class="box_product_detail" th:text="${'주문번호: ' + order.orderNo}"></div>
-		        </div>
-		        <div class="box_right">
-		          <span class="box_right_detail"><a th:href="@{/mypage/getOrderDetail/{orderNo} (orderNo=${order.orderNo})}">주문 상세보기</a></span>
-		          <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
-		        </div>
+	    <div class="mainContentWrapper">
+		    <div class="main-content">
+		      <h3>주문 확인</h3>
+		      <span class="search">
+		        <select class="search-bar" name="orderCondition" id="orderCondition">
+		        	<option th:selected="${orderCondition == null || orderCondition == '' || orderCondition == 'ALL'}" value="ALL">전체</option>
+		        	<option th:selected="${orderCondition == 'MV'}" value="MV">입금대기</option>
+		        	<option th:selected="${orderCondition == 'PE'}" value="PE">결제완료</option>
+		        	<option th:selected="${orderCondition == 'DW'}" value="DW">배송준비중</option>
+		        	<option th:selected="${orderCondition == 'D'}" value="D">배송중</option>
+		        	<option th:selected="${orderCondition == 'DC'}" value="DC">배송완료</option>
+		        	<option th:selected="${orderCondition == 'OC'}" value="OC">주문취소</option>
+		        	<option th:selected="${orderCondition == 'PC'}" value="PC">결제취소</option>
+		        </select>
+		      </span>
+		      <!-- 아이템 -->
+		      <div id="boxxWrapper">
+			      <div class="boxx" th:each="order : ${getOrderList}">
+			        <div class="box_product">
+			          <div class="box_product_detail" th:if="${order.orderStatus == 'MV'}" style="color: red; font-weight: 600;">입금대기</div>
+			          <div class="box_product_detail" th:if="${order.orderStatus == 'PE'}" style="color: #28693F; font-weight: 600;">결제완료</div>
+			          <div class="box_product_detail" th:if="${order.orderStatus == 'DW'}" style="color: lightblue; font-weight: 600;">배송준비중</div>
+			          <div class="box_product_detail" th:if="${order.orderStatus == 'D'}" style="color: lightblue; font-weight: 600;">배송중</div>
+			          <div class="box_product_detail" th:if="${order.orderStatus == 'DC'}" style="color: dimgray; font-weight: 600;">배송완료</div>
+			          <div class="box_product_detail" th:if="${order.orderStatus == 'OC'}" style="color: lightgray; font-weight: 600;">주문취소</div>
+			          <div class="box_product_detail" th:if="${order.orderStatus == 'PC'}" style="color: lightgray; font-weight: 600;">결제취소</div>
+			          <div class="box_product_detail" th:text="${'주문일시: ' + #strings.substring(order.orderDate, 0, 19)}"></div>
+			          <div class="box_product_detail" th:text="${'주문번호: ' + order.orderNo}"></div>
+			        </div>
+			        <div class="box_right">
+			          <span class="box_right_detail"><a th:href="@{/mypage/getOrderDetail/{orderNo} (orderNo=${order.orderNo})}">주문 상세보기</a></span>
+			          <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
+			        </div>
+			      </div>
 		      </div>
-	      </div>
+		    </div>
+		    <div class="paging">
+				<ul class="pagination" th:if="${getOrderList.totalElements > 0}"
+									   th:with="pageNumber = ${getOrderList.pageable.pageNumber},
+												pageSize = ${getOrderList.pageable.pageSize},
+												totalPages = ${getOrderList.totalPages},
+												startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+												tempEndPage = ${startPage + pageSize - 1},
+												endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+					<li class="pagination_button" th:if="${pageNumber > 0}">
+						<a style="border: 0px;" th:href="${pageNumber - 1}">&#60;</a>
+					</li>
+					<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
+						<a th:href="${page - 1}" th:text="${page}"></a>
+					</li>
+					<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+						<a style="border: 0px;" th:href="${pageNumber + 1}">&#62;</a>
+					</li>
+				</ul>
+			</div>
 	    </div>
-	    <div class="paging" style="text-align:center;">
-			<ul class="pagination" th:if="${getOrderList.totalElements > 0}"
-								   th:with="pageNumber = ${getOrderList.pageable.pageNumber},
-											pageSize = ${getOrderList.pageable.pageSize},
-											totalPages = ${getOrderList.totalPages},
-											startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
-											tempEndPage = ${startPage + pageSize - 1},
-											endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
-				<li class="pagination_button" th:if="${pageNumber > 0}">
-					<a th:href="${pageNumber - 1}">이전</a>
-				</li>
-				<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
-					<a th:href="${page - 1}" th:text="${page}"></a>
-				</li>
-				<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
-					<a th:href="${pageNumber + 1}">다음</a>
-				</li>
-			</ul>
-		</div>
 	  </main>
 	</div>
 </body>
