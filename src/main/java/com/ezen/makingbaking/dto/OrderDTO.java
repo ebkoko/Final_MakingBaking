@@ -32,4 +32,5 @@ public class OrderDTO {
 	private String searchKeyword;
 	private String orderCancelDate;
 	private String tid;
+	private String orderCondition;
 }

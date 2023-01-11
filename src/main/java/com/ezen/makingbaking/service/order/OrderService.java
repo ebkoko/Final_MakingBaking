@@ -2,6 +2,9 @@ package com.ezen.makingbaking.service.order;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Order;
 import com.ezen.makingbaking.entity.OrderItem;
@@ -13,7 +16,7 @@ public interface OrderService {
 	
 	void insertOrderItem(List<OrderItem> orderItemList);
 	
-	List<CamelHashMap> getOrderList(String userId);
+	Page<CamelHashMap> getOrderList(String userId, Pageable pageable, String orderCondition);
 	
 	List<CamelHashMap> getOrderContent(String userId);
 	
