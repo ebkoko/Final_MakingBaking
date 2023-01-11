@@ -9,6 +9,10 @@
 	<head>
 		<th:block layout:fragment="css">
 			<style>
+				#a_Title {
+					text-decoration: none;
+					color: inherit;
+				}
 				.dayclassAdmin {
 					font-size: 40px;
 				}
@@ -205,8 +209,89 @@
 							$("input[name='chk']").prop("checked", false);
 						}
 					});
+					
+					// 전체선택 버튼 클릭했을 때
+					$("#dayclassSelectAll").click(function() {
+						var chk = $("#dayclassSelectAll").prop("checked");
+						if(chk) {
+							$("input[name='chk']").prop("checked", true);
+						} else {
+							$("input[name='chk']").prop("checked", false);
+						}
+					});
+					
+					// 원데이클래스 리스트 중 전체선택을 누른 뒤 상품 체크박스를 풀면, 전체선택 체크박스도 풀림
+					$(".check").click(function() {
+						if($("input[name='chk']:checked").length < $("input[name='chk']").length) {
+							$("#dayclassSelectAll").prop("checked", false);
+						} else if($("input[name='chk']:checked").length == $("input[name='chk']").length) {
+							$("#dayclassSelectAll").prop("checked", true);
+						}
+					});
 				});
 				
+				
+				//선택클래스 삭제
+				$(function() {
+					//삭제버튼 클릭 시 체크된 게시물들 삭제 상태로 변경
+					$("#dayclassDelete").on('click', function() {
+						$("input:checkbox[name='chk']").each(function() {
+							if($(this).is(":checked")) {
+								const delDayclass = {
+										dayclassNo: $(this).val()
+									};
+									
+									changeRows.push(delDayclass);
+							}
+						});
+						
+						console.log(changeRows);
+						
+						if(confirm("선택한 원데이클래스를 삭제하시겠습니까?")) {
+						$.ajax({
+							url: '/admin/saveDayclassList',
+							type: 'post',
+							data: {changeRows: JSON.stringify(changeRows)},
+							success: function(obj) {
+								console.log(obj);
+								let htmlStr = "";
+								for(let i = 0; i < obj.pageItems.content.length; i++) {
+									htmlStr += `
+										<tr>
+											<td>
+												<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].dayclassNo}"
+												value="${obj.pageItems.content[i].dayclassNo}">
+											</td>
+											<td>${obj.pageItems.content[i].dayclassNo}</td>
+											<td name="dayclassName" data-dayclass-name="${obj.pageItems.content[i].dayclassName}">${obj.pageItems.content[i].dayclassName}</td>
+											<td>${obj.pageItems.content[i].dayclassPrice}</td>
+											<td>${obj.pageItems.content[i].dayclassTime}</td>
+											<td>${obj.pageItems.content[i].dayclassUseYn}</td>
+											<td>
+								        		<a id="dayclassMod"
+													href="@{/admin/dayclassUpdate/${obj.pageItems.content[i].dayclassNo}}">수정
+												</a>
+								        	</td>
+										</tr>
+									`;
+								}
+								
+								$("#dayclassList_T").children(":first").children().not(':first').remove();
+								$("#dayclassList_T").children(":first").append(htmlStr);
+							},
+							error: function(e) {
+								console.log(e);
+							},
+						});
+						alert("삭제를 완료하였습니다.");
+						} else {
+							alert("삭제를 취소하였습니다.");
+						}
+						console.log(changeRows);
+						
+					});
+
+				});
 				
 				
 			</script>
@@ -217,7 +302,7 @@
 <body>
 	<div id="container" layout:fragment="content">
 		<div>
-			<h1 class="dayclassAdmin">원데이클래스 관리</h1>
+			<a href="dayclassList" id="a_Title"><h1 class="dayclassAdmin">원데이클래스 관리</h1></a>
 		</div>
 		<form id="searchForm" action="/admin/dayclassList" method="get">
 			<div id="dayclass_search">
@@ -266,7 +351,7 @@
 			        <th class="dayclassList_T_10">클래스 관리</th>
 	      		</tr>
 	      		<tr th:each="dayclass: ${getDayclassList.content}">
-	      			<td><input type="checkbox" name="chk"></td>
+	      			<td><input type="checkbox" class="check" name="chk" th:value="${dayclass.dayclassNo}"></td>
 		        	<td th:text="${dayclass.dayclassNo}"></td>
 		        	
 		        	<td>
@@ -289,7 +374,7 @@
 		<!-- 삭제/등록버튼 -->
 	    <div id="dayclassTotalBtn">
 	    	<a href="/admin/insertDayclassView"><input type="button" value="클래스 등록" id="dayclassRegistration"></a>
-	    	<a href="#"><input type="button" value="클래스 삭제" id="dayclassDelete"></a>
+	    	<input type="button" value="클래스 삭제" id="dayclassDelete">
 	    </div>
 	</div>
 

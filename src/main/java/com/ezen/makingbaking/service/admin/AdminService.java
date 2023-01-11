@@ -43,6 +43,7 @@ public interface AdminService {
 	
 	void deleteDayclass(int dayclassNo);
 	
+	void saveDayclassList(List<Map<String, Object>> changeRowsList);
 	
 	//user
 	Page<User> getPageUserList(User user, Pageable pageable);
