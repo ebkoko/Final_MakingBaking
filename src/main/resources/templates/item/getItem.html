@@ -112,7 +112,7 @@
 								data: {itemNo: $("#itemNo").val()},
 								success: function(obj) {
 									console.log(obj);
-									$("#itemLikeBtn").text("♡ " + obj.item.likeCnt);
+									$("#itemLikeBtn").text("♡    " + obj.item.likeCnt);
 									$("#itemLikeBtn").val("N");
 								},
 								error: function(e) {
@@ -126,7 +126,7 @@
 								data: {itemNo: $("#itemNo").val()},
 								success: function(obj) {
 									console.log(obj);
-									$("#itemLikeBtn").text("♥ " + obj.item.likeCnt);
+									$("#itemLikeBtn").text("♥    " + obj.item.likeCnt);
 									$("#itemLikeBtn").val("Y");
 								},
 								error: function(e) {
@@ -137,25 +137,39 @@
 						});
 					}
 					
+					
 					// 리뷰 등록
 					$("#it_rvw_writeBtn").on("click", function(){
 						console.log($("#rvwContent").val());
-						$.ajax({
-							url: '/item/insertItemRvw',
-							type:'post',
-							data:{
-								rvwReferNo: $("#itemNo").val(),
-								rvwContent: $("#rvwContent").val(),
-								rvwScore: $("input[type='radio']:checked").val(),
-								rvwType: 'item'
-							}, success: function(obj) {
-								console.log(obj);
-								alert("리뷰가 등록되었습니다.");
-							}, error: function(e) {
-								console.log(e);
-								alert("리뷰 등록에 실패하였습니다.");
-							}
-						});		
+						
+						if( ! $("input[type='radio']:checked").val()){
+							 alert('별점을 선택해주세요.');
+							 return;
+						} 
+						if( ! $("#rvwContent").val()){
+							 alert('리뷰를 작성해주세요.');
+						} else {
+							$.ajax({
+								url: '/item/insertItemRvw',
+								type:'post',
+								data:{
+									rvwReferNo: $("#itemNo").val(),
+									rvwContent: $("#rvwContent").val(),
+									rvwScore: $("input[type='radio']:checked").val(),
+									rvwType: 'item'
+								}, success: function(obj) {
+									console.log(obj);
+									location.reload();
+									alert("리뷰가 등록되었습니다.");
+									
+								}, error: function(e) {
+									console.log(e);
+									alert("리뷰 등록에 실패하였습니다.");
+								}
+							});	
+							 
+						 }
+							
 					}); 
 					
 					// 리뷰 글자 제한
@@ -191,7 +205,7 @@
 					
 				});
 				
-				// 리뷰 검색 정렬
+				// ??????????
 				function reviewPagingAndOrder(page, condition) {
 					console.log(page);
 					console.log(condition);
@@ -245,41 +259,53 @@
 	  <div class="entire-wrap" >	  
 	  <div class="item">
 	    <main > 
-	      <section class="it_banner"> 
+	    <form id="itemForm"  method="post">	 
+	    <input type="hidden" id="itemNo" name="itemNo" th:value="${item.itemNo}">  
+	      <section> 
 	        <div class="it_banner_container">
-	          <div class="it_banner">
-				<form id="itemForm"  method="post">	
-					<input type="hidden" id="itemNo" name="itemNo" th:value="${item.itemNo}">          
-		            <div class="itbanner_mainImg">
-		              <img class="itbanner_main_img" th:src="@{'/item/' + ${itemImgList.get(0).fileName}}"
-		              width="350px">
-		            </div>
-		            <div class="itbanner_explain">        
-		              <h2 th:text="${item.itemName}"></h2>
-		              <div class="itbanner_explain_sTitle">
-		              <p>영양 정보</p>
-		              </div>
-		              <div class="itbanner_explain_KRW">
-		                <span>KRW ${}</span>
-		              </div> 
-	             </form>
-	              <div class="itbanner_explain_details">
-	                <span>&ensp;&ensp;</span>  
-	                <span>&ensp;3시간&ensp;</span>
-	                <span>서울/강남${} </span>
+	          <div class="it_banner"> 
+	            <div class="itbanner_mainImg">
+	              <img class="itbanner_main_img" th:src="@{'/item/' + ${itemImgList.get(0).fileName}}"
+	              width="350px">
+	            </div>
+	            <div class="itbanner_explain">   
+	              <div class="item_h2">     
+	                <h2 th:text="${item.itemName}"></h2>
 	              </div>
-	              <div class="itbanner_explain_btn">	             
-	          		<span><button type="button" id="itemCartBtn" value="itemCart">장바구니  
-	                </button></span>
-	                <span id="likeSpan"><button type="button" id="itemLikeBtn" 
-	                th:value="${likeYn}" th:text="${likeYn == 'Y' ? '♥' : '♡'} + ${likeCnt}">♡
-	                </button></span>
+	              <div class="itbanner_explain_sTitle">
+	                <p th:text="${item.itemMinName}" name="소제목"></p>
+	              </div>
+		          <div class="itbanner_explain_KRW">
+		            <span>KRW&nbsp;</span><span th:text="${#numbers.formatInteger(item.itemPrice, 3, 'COMMA')}" class="itemPrice"></span>
+		          </div> 
+		          <div class="it_explainList_div">
+		              <table class="it_explainList_T">
+		              	<tr>
+		              	  <th class="it_explainList">원산지</th>
+		              	  <td th:text="${item.itemOrigin}"></td>		 
+		              	</tr>
+		              	<tr>
+		              	  <th class="it_explainList">유통기한</th>
+		              	  <td th:text="${item.itemExpDate}"></td>		              	  
+		              	</tr>
+		              	<tr>
+		              	  <th class="it_explainList">알레르기 정보</th>
+		              	  <td th:text="${item.itemAllergyInfo}"></td>
+		              	</tr>
+		              </table>
+		          </div>
+		          <div class="itbanner_explain_btn">	             
+		      		<span><button type="button" id="itemCartBtn" value="itemCart">장바구니  
+		            </button></span>
+		            <span id="likeSpan"><button type="button" id="itemLikeBtn" 
+		            	th:value="${likeYn}" th:text="${likeYn == 'Y' ? '♥   ' : '♡   '} + ${likeCnt}"></button></span>
+	              </div>   
+		        </div>
+		       </div>
+	         </div>
+	       </section>       
+	     </form>
 
-	              </div>
-	            </div>  
-	          </div>
-	        </div>
-	      </section>
 	      <section class="it_menu">
 	        <div class="itmenu">
 	          <ul >
@@ -293,7 +319,7 @@
 	          </ul>
 	        </div>    
 	      </section>
-	      <section class="it_contents">
+	      <section>
 	        <div class="it_contents_container">
 	          <div class="it_contents">
 	          	<h3 class="it_cintro_title" th:text="${item.itemName}" name="상품설명"></h3>
@@ -303,18 +329,18 @@
 	              
 	            </div>
 	            <hr id="item_hr1" class="item_hr">
+	            <h3 class="it_cDetatils_title">영양정보</h3>
 	            <div class="it_cDetatils" id="itemDetails">
-	              <h3 class="it_cDetatils_title">영양정보</h3>
-	              
 				  <img th:each="itemImg : ${itemImgList}" class="it_cDetatils_main_img" th:if="${itemImg.fileName.contains('영양정보')}" th:src="@{'/item/' + ${itemImg.fileName}}"
 		              width="350px">
+    
 	            </div>
+	          
 	            <hr id="item_hr2" class="item_hr">
-	            <div class="it_rvw" id="itemReview">
-	              
+	            <div class="it_rvw" id="itemReview">	 
+	              <h3 class="it_rvw_title" >상품후기</h3>             
 	              <div class="it_rvw_write">
-	              	<div class="it_rvw_write_member">	
-	              	<h3 class="it_rvw_title" >상품후기</h3>            
+	              	<div class="it_rvw_write_member">	   	            
 	              		<form class="it_rvw_write_form" action="/item/insertItemRvw" method="post">	              			             			
 	             			<input type="hidden" id="rvwContent" name="rvwContent">             			
 	              			<fieldset>
@@ -333,14 +359,15 @@
 						      <p class="textCount">0자</p>
 						      <p class="textTotal">/200자</p>
 						 	</div>						
-	              			<textarea class="rvwContentText" id="rvwContentText" placeholder=" 로그인 후 상품 후기를 작성해주세요."></textarea>	              			
+	              			<textarea class="rvwContentText" id="rvwContentText" placeholder=" 로그인 후 후기를 리뷰해주세요."></textarea>	              			
 	              			<div class="writeBtn_div"> 
 	              			  <button class="it_rvw_writeBtn" id="it_rvw_writeBtn" type="button">등록</button>
 	              			</div>
 	              		</form>
 	              	</div>
+	              	
 	              	<hr id="item_hr2" class="item_hr">
-	              	<div class="it_rvw_wirte_detail" >
+	              		<div class="it_rvw_wirte_detail" id="classReviewList">
 		                <div id="itemReviewList">
 		                  <div class="it_rvw_option"> 
 		                    <select name="it_rvw_array" id="it_rvw_array">
@@ -361,7 +388,7 @@
 		                      <thead>
 		                        <tr>
 		                          <th scope="col">평점</th>
-		                          <th scope="col">내용</th>
+		                          <th scope="col">내 용</th>
 		                          <th scope="col">작성일자</th>
 		                          <th scope="col">작성자</th>
 		                        </tr>
@@ -378,7 +405,7 @@
 		                        </tr> 
 		                      </tbody>
 		                    </table>
-		                    </div>
+		                </div>
 	                    </div>
 	                    <div class="it_rvw_pasing">
 	                      <ul class="paging" style="display: flex; justify-content: center;" 

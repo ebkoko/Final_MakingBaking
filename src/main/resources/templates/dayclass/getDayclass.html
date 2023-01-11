@@ -78,17 +78,19 @@
 						  }
 					});
 					
-					// 리뷰 작성
+					// 리뷰 작성 버튼
 					$("#rvw_writeBtn").on("click", function(){
 						
 					var offset = $("#dayclass_hr2").offset();
                   	const isAuthenticated = $(".header > input[name='authenticate']").val();
-                  	
+                  		  
+                  		  
 		                  if(isAuthenticated == "false") { // false면 로그인 창 띄우기
 		                     $('.login-form-container').toggleClass('active');
 		                  } else { // 아니면 예약페이지 위치로 이동
 							  $('html').animate({scrollTop : offset.top}, 300);
-						  }
+						  } 
+						
 					});
 					
 					$("#rvwContentText").on("keyup", function(e) {
@@ -262,7 +264,7 @@
 								data: {dayclassNo: $("#dayclassNo").val()},
 								success: function(obj) {
 									console.log(obj);
-									$("#dayclassLikeBtn").text("♡ " + obj.item.likeCnt);
+									$("#dayclassLikeBtn").text("♡    " + obj.item.likeCnt);
 									$("#dayclassLikeBtn").val("N");
 								},
 								error: function(e) {
@@ -276,7 +278,7 @@
 								data: {dayclassNo: $("#dayclassNo").val()},
 								success: function(obj) {
 									console.log(obj);
-									$("#dayclassLikeBtn").text("♥ " + obj.item.likeCnt);
+									$("#dayclassLikeBtn").text("♥    " + obj.item.likeCnt);
 									$("#dayclassLikeBtn").val("Y");
 								},
 								error: function(e) {
@@ -290,29 +292,58 @@
 					// 리뷰 등록	
 					$("#rvw_writeBtn").on("click", function(){
 						console.log($("#rvwContent").val());
-						$.ajax({
-							url: '/dayclass/insertClassRvw',
-							type:'post',
-							data:{
-								rvwReferNo: $("#dayclassNo").val(),
-								rvwContent: $("#rvwContent").val(),
-								rvwScore: $("input[type='radio']:checked").val(),
-								rvwType: 'class'
-							}, success: function(obj) {
-								console.log(obj);
-								alert("리뷰가 등록되었습니다.");
-							}, error: function(e) {
-								console.log(e);
-								alert("리뷰 등록에 실패하였습니다.");
-							}
-						});
-						
-						
+						 
+						 
+						 if( ! $("input[type='radio']:checked").val()){
+							 alert('별점을 선택해주세요.');
+							 return;
+						 } 
+						 if( ! $("#rvwContent").val()){
+							 alert('리뷰를 작성해주세요.');
+						 } else {
+							$.ajax({
+								url: '/dayclass/insertClassRvw',
+								type:'post',
+								data:{
+									rvwReferNo: $("#dayclassNo").val(),
+									rvwContent: $("#rvwContent").val(),
+									rvwScore: $("input[type='radio']:checked").val(),								
+									rvwType: 'class'
+								}, success: function(obj) {
+									console.log(obj);
+									location.reload();								
+									alert("리뷰가 등록되었습니다.");
+								}, error: function(e) {
+									console.log(e);
+									alert("리뷰 등록에 실패하였습니다.");
+								}
+							});
+								
+							} 
 						
 					}); 
 					
+					// 리뷰 글자 제한
+					$('#rvwContentText').keyup(function (e) {
+						let content = $(this).val();
+					    
+					    // 글자수 세기
+					    if (content.length == 0 || content == '') {
+					    	$('.textCount').text('0자');
+					    } else {
+					    	$('.textCount').text(content.length + '자');
+					    }
+					    
+					    // 글자수 제한
+					    if (content.length > 200) {
+					    	// 200자 부터는 타이핑 되지 않도록
+					        $(this).val($(this).val().substring(0, 200));
+					        // 200자 넘으면 알림창 뜨도록
+					        alert('글자수는 200자까지 입력 가능합니다.');
+					    };
+					});
 					
-					
+					//
 					$("#rvw_array").on("change", function() {
 						reviewPagingAndOrder(0, $("#rvw_array").val());
 					});
@@ -326,7 +357,7 @@
 
 				}); 
 				
-				
+				// ?????
 				function reviewPagingAndOrder(page, condition) {
 					console.log(page);
 					console.log(condition);
@@ -381,36 +412,36 @@
 	<div layout:fragment="content">
 	  <div class="entire-wrap" >	  
 	  <div class="dayclass">
-	    <main > 
+	    <main> 
         <form id="rsvtForm" action="/dayclass/reserDayclass" method="post">
     	  <input type="hidden" id="dayclassNo" name="dayclassNo" th:value="${dayclass.dayclassNo}">
     	  <input type="hidden" id="totalPayPrice" name="totalPayPrice">
-	      <section class="dc_banner"> 
+	      <section> 
 	        <div class="dc_banner_container">
 	          <div class="dc_banner">
 	            <div class="banner_mainImg">
-	              <img class="banner_main_img" th:src="@{'/class/' + ${dayclass.fileName}}" width="350px">
+	              <img class="banner_main_img" th:src="@{'/dayclass/' + ${dayclass.fileName}}" width="350px">
 	            </div>
-	            <div class="banner_explain">        
-	              <h1 th:text="${dayclass.dayclassName}"></h1>        
+	            <div class="banner_explain">   
+	              <div class="class_hr1">     
+	              <h2 th:text="${dayclass.dayclassName}"></h2>        
+	              </div>
 	              <div class="banner_explain_MinName">
 	              	<p th:text="${dayclass.dayclassMinName}"></p>
 	              </div>
 	              <div class="banner_explain_details">
 	                <span><img src="/images/class_day.png" width="17px">&ensp;원데이 클래스&ensp;</span>  
-	                <span><img src="/images/class_time.png" width="16.5px">&ensp;3시간&ensp;</span>
+	                <span><img src="/images/class_time.png" width="16.5px" th:text="${dayclass.dayclassDurationTime}">시간</span>
 	                <span><img src="/images/class_location.png" width="18px" th:text="${#strings.substring(dayclass.dayclassAddress, 0, 6)}"></span>
 	              </div>
 	              <div class="banner_explain_KRW">
 	                <span>KRW&nbsp;</span><span th:text="${#numbers.formatInteger(dayclass.dayclassPrice, 3, 'COMMA')}" class="dayclassPrice"></span>
 	              </div> 
 	              <div class="banner_explain_btn">
-	             
 	                <span><button type="button" id="moveRsrvtBtn" value="dayclassRsrvt">예약하기  
 	                </button></span>
-	          
 	                <span id="likeSpan"><button type="button" id="dayclassLikeBtn" 
-	                	th:value="${likeYn}" th:text="${likeYn == 'Y' ? '♥' : '♡'} + ${likeCnt}"></button></span>
+	                	th:value="${likeYn}" th:text="${likeYn == 'Y' ? '♥   ' : '♡   '} + ${likeCnt}"></button></span>
 	              </div>
 	            </div>  
 	          </div>
@@ -422,7 +453,7 @@
 	            <li><a th:href="@{#classIntro}" 
 	              class="m_intro_a">클래스 소개</a></li>
 	            <li><a th:href="@{#dayclass_hr2}" 
-	              class="m_rvw_a">후기</a></li>
+	              class="m_rvw_a">클래스 후기</a></li>
 	            <li><a th:href="@{#dayclass_hr1}" 
 	              class="m_apply_a">신청하기</a></li>
 	            <li><a th:href="@{#dayclass_hr3}" 
@@ -433,12 +464,12 @@
 	      <section class="dc_contents">
 	        <div class="dc_contents_container">
 	          <div class="contents">
+	            <h3 class="c_intro_title" name="클래스소개" th:text="${dayclass.dayclassName}"></h3>
 	            <div class="c_intro" id="classIntro" >
-	              <h3 class="c_intro_title">클래스 소개</h3>
+	              	             
 	              <textarea class="c_intro_text"  th:text="${dayclass.dayclassDetails}"></textarea>
-	              <!--<p class="c_intro_text" th:text="${dayclass.dayclassDetails}"></p>-->
-	            </div>
-	            
+	              
+	            </div>	            
 	            <hr class="dayclass_hr">
 	            <div class="c_map" id="classMap">
 	              <h3 class="c_map_title">클래스 위치</h3>
@@ -472,8 +503,9 @@
 	              	</div>
 					</li>
 	              </ul>
+	             </div>
 				 </form>
-	            </div>
+	            
 	            
 	            <hr class="dayclass_hr" id="dayclass_hr2">
 	            <div class="c_rvw" id="classReview">
@@ -494,9 +526,13 @@
 							<input type="radio" name="rvwScore" value="1" class="rvwScore" id="rate5"><label
 								for="rate5">★</label>							
 							</fieldset>
-              				<textarea class="rvwContentText" id="rvwContentText" name="rvwContentText" placeholder=" 클래스 후기 100자 이내 작성해주세요."></textarea>
-	              			<div> 
-	              			<button class="rvw_writeBtn" id="rvw_writeBtn" type="button">등록</button>
+							<div class="textLength" >
+						      <p class="textCount">0자</p>
+						      <p class="textTotal">/200자</p>
+							</div>  
+							<textarea class="rvwContentText" id="rvwContentText" name="rvwContentText" placeholder=" 로그인 후 리뷰를 작성해주세요."></textarea>
+						 	<div class="writeBtn_div"> 
+	              			  <button class="rvw_writeBtn" id="rvw_writeBtn" type="button">등록</button>
 	              			</div>
 	              		</form>
 	              	</div>
@@ -522,7 +558,7 @@
 	                      <thead>
 	                        <tr>
 	                          <th scope="col">평점</th>
-	                          <th scope="col">내용</th>
+	                          <th scope="col">내 용</th>
 	                          <th scope="col">작성일자</th>
 	                          <th scope="col">작성자</th>
 	                        </tr>
@@ -663,7 +699,8 @@
 					  	- 클래스 진행 1일 전 취소시 환불 가능하니, 고객센터에 문의해주세요.
 		              </p>
 		            </div>
-		          </div>	
+		          </div>
+	          	
 	          </div>   
 	         </section>  
 	  		</main>       

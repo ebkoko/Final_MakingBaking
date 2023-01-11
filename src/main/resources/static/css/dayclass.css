@@ -9,16 +9,16 @@
 		       width: 950px;
 		       margin: 100px auto 180px;
 		       padding-top: 30px;
-		    }	
-	
+		    }		
 		    .dayclass_hr{
-		       margin: 70px auto;
+		       margin: 50px auto;
 		       height: 2px; 
 		       background-color: rgb(235, 235, 235);		      
 		    }
-		
+
+			
 		    /* 내용 h2, p 글씨색상 공통 */
-		    .c_intro_title, .c_map_title, .c_rvw_title, .c_cancel_title {
+		    .c_map_title, .c_rvw_title, .c_cancel_title {
 		       margin-bottom: 10px;
 		       
 		       color: rgb(74, 74, 74);
@@ -35,7 +35,26 @@
    				border: none;
    				resize: none;
 			}
-				
+			
+			/*클래스 소개*/
+			.c_intro_title{
+			  color: rgb(102, 102, 102);	 
+			  font-size: 20px;				
+			  text-align: center;
+			  font-style:italic;
+			}
+			.c_intro textarea{
+			  width: 100%;
+    		  height: 8em;   		  
+    		  
+    		  font-size: 18px;
+    		  border: none;
+    		  resize: none;	
+    		  margin: 50px 0 50px 0;
+    		  text-align: center;
+    		  line-height:35px; 
+    		  overflow-y: hidden;
+			}	
 		    /* 배너 dc_banner */
 		    .dc_banner_container {
 		      width: 100%;
@@ -45,29 +64,40 @@
 			  display: flex;
 			  justify-content: space-around;
 			}
+			.banner_mainImg {
+				margin-top: 30px;
+			}
 		    .banner_mian_img {
 		      margin-left: 50px;
+		      
 		    }
-		    .banner_explain {
+		    .banner_explain {				
 		      margin-top: 25px;
 		      margin-right: 20px;
+		      
 		    }
+		    .class_hr1{
+				color:rgb(74, 74, 74);	
+			}
 		    .banner_explain_MinName {
-			  margin-top: 15px;
+			  margin-top: 15px;			 
+			  color:rgb(102, 102, 102);	
 			}
 		    .banner_explain_details {
-		      margin: 120px 0 10px 0;
+		      margin: 80px 0 10px 0;
 		      font-size: 17px;
+		      color:rgb(74, 74, 74);	
 		    }
 		    .banner_explain_KRW{
 			  margin-top: 10px;
 			  font-size: 17px;
 			  font-weight: 600;
+			  color:rgb(102, 102, 102);	
 			}
 		    .banner_explain_btn {
 		      margin-top: 30px;
 		    }
-		    #moveRsrvtBtn, #dayclassLikeBtn {
+		    #moveRsrvtBtn {
 		      width: 120px;
 		      height: 40px;
 		      border: 1.2px solid #28693F;
@@ -81,14 +111,30 @@
 		      margin-right: 10px;
 		      letter-spacing:1px;
 		    }
+		    #dayclassLikeBtn {
+			  width: 120px;
+		      height: 40px;
+		      
+		      border-radius: 4px;
+		      background-color: #28693F;
+		      text-align: center;
+		      display: inline-block;
+		      color: white;
+		      font-size: 16px;
+		      font-weight: 550;
+		      margin-right: 10px;
+		      letter-spacing:1px;
+			}
 		    #moveRsrvtBtn:hover{
 		      background-color: #28693F;
 		      color: white;
 		      font-weight: 400;		      
 		    }
 		    #dayclassLikeBtn:hover {
-		      background-color: #28693F;
-		      color: white;
+				border: 1.2px solid #28693F;
+				background-color: white;
+		      color: #28693F;
+		     
 		      font-weight: 520;
 		    }
 		
@@ -125,15 +171,14 @@
 		    }
 		    
 			/* 위치 */
-			.c_map {
-			  margin-top:40px;
-			}
+			
 			.kakao_location {
-			  margin: 20px 0 20px 0;
+			  margin: 50px 0 20px 0;
 			}
 			#kakao_map {
 			  width:80%;
 			  height:380px;
+			  
 			}
 			
 		    /* 예약날짜, 예약시간 dc_content_apply */
@@ -226,17 +271,17 @@
 			
 		    /* 후기 작성  */
 		    .c_rvw{
-			  margin-top:100px auto;
+			  margin:50px 0 100px 0;
 			 
 			}
 		    .rvw_write_member{
-			  margin-top:30px;
+			  margin-bottom: 100px;
 			}
 		    .rvw_write_form fieldset{
 			  display: inline-block;
     		  direction: rtl;
     		  border:0;
-    		  margin-bottom: 15px;
+    		  margin: 40px 0 15px 0;
 			}
 			.rvw_write_form input[type=radio]{
 		 	  display: none;
@@ -260,15 +305,22 @@
     		  height: 6.3em;
     		  border: 1px solid rgb(102, 102, 102);
     		  resize: none;		 
+			}
+			.textLength {
+			  display:flex;
+			  float: right;
+			  margin-top:70px;
+			  font-size: 14px;
+			  color: rgb(102, 102, 102);
 			}			
 			textarea::placeholder {
-  			  font-size: 1.2em;
+  			  font-size: 1.1em;
 			}
 			.rvw_writeBtn {
 			  margin-top:10px;
 			  float: right;
-			  width: 100px;
- 			  height: 28px;
+			  width: 95px;
+ 			  height: 30px;
   			  border-radius: 4px;
 			  text-decoration: none;
 		      background-color: #28693F;
@@ -297,7 +349,7 @@
 		    }
 		    #rvw_array {
 			 border: 1px solid rgb(102, 102, 102);
-			 width: 110px;
+			 width: 100px;
 			 height: 28px;			 
 			}
 		    .rvw_list {
@@ -312,7 +364,7 @@
 		      border-left: none;
 		      border-right: none;
 		      height: 30px;
-		      font-size: 14.5px;
+		      font-size: 13.5px;
 		      color: rgb(102, 102, 102);
 		    }
 		    .rvw_list td{
