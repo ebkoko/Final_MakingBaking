@@ -68,7 +68,7 @@
 	      </th:block>
 	      <div id="btn-container">
 	        <div id="left-btn">
-	          <input type="button" id="listbtn" value="목록" onclick="history.back()">
+	          <a th:href='@{/board/qnaList/{cateCode} (cateCode=${getBoard.cateCode})}' id="listbtn">목록</a>
 	        </div>
 	        <div th:if="${getBoard.boardWriter == userId && getBoard.boardReply == null}">
 		        <th:block sec:authorize="hasRole('ROLE_USER')" th:remove="tag">
@@ -79,15 +79,15 @@
 						  <a href="#" id="deletebtn">삭제</a>   
 						</div>
 						<div id="right-btn">
-						  <a th:href='@{/board/qna/insertAnswer/{cateCode}/{boardNo} (cateCode=${getBoard.cateCode}, boardNo=${getBoard.boardNo})}' id="updatebtn">수정</a>   
+						  <a th:href='@{/board/qna/updateQna/{cateCode}/{boardNo} (cateCode=${getBoard.cateCode}, boardNo=${getBoard.boardNo})}' id="updatebtn">수정</a>   
 						</div>
 		        	</form>
 				</th:block>
 	        </div>
 	        <th:block sec:authorize="hasRole('ROLE_ADMIN')" th:remove="tag">
-	        <div id="right-btn">
-			  <a th:href='@{/board/qna/insertAnswer/{cateCode}/{boardNo} (cateCode=${getBoard.cateCode}, boardNo=${getBoard.boardNo})}' id="insertbtn">답변등록</a>   
-			</div>
+		        <div id="right-btn">
+				  <a th:href='@{/board/qna/insertAnswer/{cateCode}/{boardNo} (cateCode=${getBoard.cateCode}, boardNo=${getBoard.boardNo})}' id="insertbtn">답변등록</a>   
+				</div>
 			</th:block>
 	      </div>      
 	    </div>

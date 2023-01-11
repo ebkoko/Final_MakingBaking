@@ -53,8 +53,11 @@
 		        <p th:text="${getBoard.boardContent}"></p>
 		      </div>
 		      <div id="btn-container">
-		      	<div id="left-btn">
-		       		<input type="button" id="listbtn" value="목록" onclick="history.back()">
+		      	<div id="left-btn" th:if="${getBoard.cateCode == 3}">
+		      		<a th:href='@{/board/noticeList/{cateCode} (cateCode=${getBoard.cateCode})}' id="listbtn">목록</a>
+		      	</div>
+		      	<div id="left-btn" th:if="${getBoard.cateCode == 4}">
+		      		<a th:href='@{/board/eventList/{cateCode} (cateCode=${getBoard.cateCode})}' id="listbtn">목록</a>
 		      	</div>
 		        <th:block sec:authorize="hasRole('ROLE_ADMIN')" th:remove="tag">
 		        	<form id="deleteForm" enctype="multipart/form-data">
@@ -64,8 +67,14 @@
 						  <a href="#" id="deletebtn">삭제</a>   
 						</div>
 						<div id="right-btn">
-						  <a th:href='@{/board/qna/insertAnswer/{cateCode}/{boardNo} (cateCode=${getBoard.cateCode}, boardNo=${getBoard.boardNo})}' id="updatebtn">수정</a>   
+						  <a th:href='@{/board/board/updateBoard/{cateCode}/{boardNo} (cateCode=${getBoard.cateCode}, boardNo=${getBoard.boardNo})}' id="updatebtn">수정</a>   
 						</div>
+						<!--<div id="right-btn" th:if="${getBoard.cateCode == 3}">
+						  <a th:href='@{/board/notice/updateNotice/{cateCode}/{boardNo} (cateCode=${getBoard.cateCode}, boardNo=${getBoard.boardNo})}' id="updatebtn">수정</a>   
+						</div>
+						<div id="right-btn" th:if="${getBoard.cateCode == 4}">
+						  <a th:href='@{/board/event/updateEvent/{cateCode}/{boardNo} (cateCode=${getBoard.cateCode}, boardNo=${getBoard.boardNo})}' id="updatebtn">수정</a>   
+						</div>-->
 		        	</form>
 				</th:block>
 		      </div>      

@@ -23,5 +23,9 @@ public interface BoardService {
 
 	void deleteBoard(int boardNo);
 
+	void updateQna(Board board);
+
+	void updateBoard(Board board);
+
 	
 }
