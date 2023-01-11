@@ -12,12 +12,12 @@ import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.entity.Order;
 import com.ezen.makingbaking.entity.Reser;
+import com.ezen.makingbaking.entity.Review;
 import com.ezen.makingbaking.entity.User;
 
 public interface AdminService {
 
-	//item
-	List<Item> getItemList(Item item);
+	//item_리스트, 등록, 수정, 삭제
 	Page<Item> getPageItemList(Item item, Pageable pageable);
 	
 	void insertItem(Item item, List<ImgFile> uploadFileList);
@@ -31,8 +31,7 @@ public interface AdminService {
 	
 	void saveItemList(List<Map<String, Object>> changeRowsList);
 	
-	//dayclass
-	List<Dayclass> getDayclassList(Dayclass dayclass);
+	//dayclass_리스트, 등록, 수정, 삭제
 	Page<Dayclass> getPageDayclassList(Dayclass dayclass, Pageable pageable);
 	
 	void insertDayclass(Dayclass dayclass, List<ImgFile> uploadFileList);
@@ -44,16 +43,18 @@ public interface AdminService {
 	
 	void deleteDayclass(int dayclassNo);
 	
+	
 	//user
-	List<User> getUserList(User user);
 	Page<User> getPageUserList(User user, Pageable pageable);
 	
+	//user_review
+	Review getUserRvwList(String rvwWriter);
+	
+	
 	//reser_dayclass
-	List<Reser> getReserList(Reser reser);
 	Page<Reser> getPageReserList(Reser reser, Pageable pageable);
 	
 	//order_item
-	List<Order> getOrderList(Order order);
 	Page<Order> getPageOrderList(Order order, Pageable pageable);
 	
 }

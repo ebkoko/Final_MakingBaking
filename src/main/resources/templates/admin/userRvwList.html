@@ -1,76 +1,84 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Modal</title>  
-<style>
-        #modal {
-          display: none;
-          position:relative;
-          width:100%;
-          height:100%;
-          z-index:1;
-        }
-        
-        #modal h2 {
-          margin:0;
-        }
-        #modal button {
-          display:inline-block;
-          width:100px;
-          margin-left:calc(100% - 100px - 10px);
-        }
-        
-        #modal .modal_content {
-          width:300px;
-          margin:100px auto;
-          padding:20px 10px;
-          background:#fff;
-          border:2px solid #666;
-        }
-        
-        #modal .modal_layer {
-          position:fixed;
-          top:0;
-          left:0;
-          width:100%;
-          height:100%;
-          background:rgba(0, 0, 0, 0.5);
-          z-index:-1;
-        }   
-</style> 
-</head>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+	  
+	<!-- head 영역 시작 -->
+	<!-- 개별적으로 사용할 css, js 링크를 걸기 위해서 남겨둠 -->
+	<head>
+		<th:block layout:fragment="css">
+  			<style>
+			    @import "init.css";
+			    .joinSuccessModal_box{
+			      border : 1px solid #B5A27F;
+			      border-radius : 5px;
+			    }
+			    .joinSuccessModal_top{
+			     width: 500px;
+			     height: 40px;
+			     background-color: #B5A27F;
+			    }
+			    .joinSuccessModal_body{
+			     margin: 40px auto 20px auto;
+			     text-align: center;
+			     font-weight: bold;
+			    }
+			    .joinSuccessModal_body p {
+			      font-size: 1.1rem;
+			    }
+			    .joinSuccessModal_footer{
+			      justify-content: center;
+			      border: none;
+			    }
+			    .btnJoinCheck{
+			      width: 150px;
+			      height: 40px;
+			      margin-bottom: 30px;
+			      color: #FFF;
+			      font-weight: bold;
+			      font-size: 1.1rem;
+			      border: 1px solid #B5A27F;
+			      border-radius: 5px;
+			      background: #B5A27F;
+			      align-items: center;
+			    }
+			</style>
+		</th:block>
+		<th:block layout:fragment="script">
+			<script th:inline="javascript">
+				$(document).ready(function() {
+			        $("#joinText").text(`가입을 축하드립니다.`);
+			        $(".joinSuccessModal").modal("show");
+			        $(".modal-backdrop").removeClass("show");
+			
+			        $(".btnJoinCheck").on("click", function(){
+			                  $(".ModalBox").modal('hide');
+			               });
+			    });
+			</script>
+		</th:block>
+	</head>
+
 <body>
-
-<div id="root">
-   
-    <button type="button" id="modal_opne_btn">모달 창 열기</button>
-       
-</div>
-
-<div id="modal">
-   
-    <div class="modal_content">
-        <h2>모달 창</h2>
-       
-        <p>모달 창 입니다.</p>
-       
-        <button type="button" id="modal_close_btn">모달 창 닫기</button>
-       
-    </div>
-   
-    <div class="modal_layer"></div>
-</div>
-<script>
-    document.getElementById("modal_opne_btn").onclick = function() {
-        document.getElementById("modal").style.display="block";
-    }
-   
-    document.getElementById("modal_close_btn").onclick = function() {
-        document.getElementById("modal").style.display="none";
-    }   
-</script>
+	<div id="container" layout:fragment="content">
+		<!--회원가입성공 모달--> 
+		 <div id="myModal" class="modal fade ModalBox joinSuccessModal" tabindex="-1">
+		    <div class="modal-dialog">
+		        <div class="modal-content joinSuccessModal_box">
+		            <div class="modal-header joinSuccessModal_top">
+		                <h5 class="modal-title"></h5>
+		                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+		            </div>
+		            <div class="modal-body joinSuccessModal_body">
+		                <p id="joinText"></p>
+		            </div>
+		            <div class="modal-footer joinSuccessModal_footer>
+		                <button type="button" class="btnJoinCheck">확 인</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</div>
 </body>
 </html>
