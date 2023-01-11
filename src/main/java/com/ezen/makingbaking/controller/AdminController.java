@@ -467,9 +467,9 @@ public class AdminController {
 		adminService.deleteItem(itemNo);
 	}
 	
-	//관리자가 게시글 삭제하는 경우 ajax를 이용해 백단에 전송
+	//관리자가 상품을 삭제하는 경우 ajax를 이용해 백단에 전송
 	@PostMapping("/saveItemList")
-	public ResponseEntity<?> saveBoardList(@RequestParam("changeRows") String changeRows,
+	public ResponseEntity<?> saveItemList(@RequestParam("changeRows") String changeRows,
 			@PageableDefault(page = 0, size = 50) Pageable pageable) throws JsonMappingException, JsonProcessingException {
 		ResponseDTO<ItemDTO> response = new ResponseDTO<>();
 		List<Map<String, Object>> changeRowsList = new ObjectMapper().readValue(changeRows, 
@@ -848,7 +848,49 @@ public class AdminController {
 	public void deleteDayclass(@RequestParam("dayclassNo") int dayclassNo) {
 		adminService.deleteDayclass(dayclassNo);
 	}
+	
+	//관리자가 클래스를 삭제하는 경우 ajax를 이용해 백단에 전송
+	@PostMapping("/saveDayclassList")
+	public ResponseEntity<?> saveDayclassList(@RequestParam("changeRows") String changeRows,
+			@PageableDefault(page = 0, size = 50) Pageable pageable) throws JsonMappingException, JsonProcessingException {
+		ResponseDTO<DayclassDTO> response = new ResponseDTO<>();
+		List<Map<String, Object>> changeRowsList = new ObjectMapper().readValue(changeRows, 
+											new TypeReference<List<Map<String, Object>>>() {});
+		
+		try {
+			adminService.saveDayclassList(changeRowsList);
+			
+			Dayclass dayclass = Dayclass.builder()
+										.searchCondition("")
+										.searchKeyword("")
+										.build();
 
+			Page<Dayclass> pageDayclassList = adminService.getPageDayclassList(dayclass, pageable);
+			
+			Page<DayclassDTO> pageDayclassDTOList = pageDayclassList.map(pageDayclass ->
+														DayclassDTO.builder()
+																	.dayclassNo(pageDayclass.getDayclassNo())
+																	.dayclassNo(pageDayclass.getDayclassNo())											
+																	.dayclassTime(pageDayclass.getDayclassTime())
+																	.dayclassUseYn(pageDayclass.getDayclassUseYn())
+																	.dayclassName(pageDayclass.getDayclassName())
+																	.dayclassMinName(pageDayclass.getDayclassMinName())
+																	.dayclassDurationTime(pageDayclass.getDayclassDurationTime())
+																	.dayclassPrice(pageDayclass.getDayclassPrice())
+																	.dayclassDetails(pageDayclass.getDayclassDetails())
+																	.build()
+			);
+			
+			response.setPageItems(pageDayclassDTOList);
+			
+			
+			return ResponseEntity.ok().body(response);
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+	
 	
 	//user
 	//회원 리스트
@@ -938,6 +980,49 @@ public class AdminController {
 		
 		return mv;
 	}
+	
+	//관리자가 회원을 삭제하는 경우 ajax를 이용해 백단에 전송
+//	@PostMapping("/saveUserList")
+//	public ResponseEntity<?> saveUserList(@RequestParam("changeRows") String changeRows,
+//			@PageableDefault(page = 0, size = 50) Pageable pageable) throws JsonMappingException, JsonProcessingException {
+//		ResponseDTO<UserDTO> response = new ResponseDTO<>();
+//		List<Map<String, Object>> changeRowsList = new ObjectMapper().readValue(changeRows, 
+//											new TypeReference<List<Map<String, Object>>>() {});
+//		
+//		try {
+//			adminService.saveUserList(changeRowsList);
+//			
+//			User user  = User.builder()
+//							.searchCondition("")
+//							.searchKeyword("")
+//							.build();
+//
+//			Page<User> pageUserList = adminService.getPageUserList(user, pageable);
+//			
+//			Page<UserDTO> pageUserDTOList = pageUserList.map(pageUser ->
+//														UserDTO.builder()
+//																	.dayclassNo(pageDayclass.getDayclassNo())
+//																	.dayclassNo(pageDayclass.getDayclassNo())											
+//																	.dayclassTime(pageDayclass.getDayclassTime())
+//																	.dayclassUseYn(pageDayclass.getDayclassUseYn())
+//																	.dayclassName(pageDayclass.getDayclassName())
+//																	.dayclassMinName(pageDayclass.getDayclassMinName())
+//																	.dayclassDurationTime(pageDayclass.getDayclassDurationTime())
+//																	.dayclassPrice(pageDayclass.getDayclassPrice())
+//																	.dayclassDetails(pageDayclass.getDayclassDetails())
+//																	.build()
+//			);
+//			
+//			response.setPageItems(pageDayclassDTOList);
+//			
+//			
+//			return ResponseEntity.ok().body(response);
+//		} catch(Exception e) {
+//			response.setErrorMessage(e.getMessage());
+//			return ResponseEntity.badRequest().body(response);
+//		}
+//	}
+	
 	
 	//reser_dayclass 리스트
 	@GetMapping("/reserDayclassList")
@@ -1076,7 +1161,7 @@ public class AdminController {
 		
 		ModelAndView mv = new ModelAndView();
 		
-		mv.setViewName("admin/reservationDayclass.html");
+		mv.setViewName("admin/userRvwList.html");
 			
 		return mv;
 	}

@@ -8,77 +8,85 @@
 	<!-- 개별적으로 사용할 css, js 링크를 걸기 위해서 남겨둠 -->
 	<head>
 		<th:block layout:fragment="css">
-  			<style>
-			    @import "init.css";
-			    .joinSuccessModal_box{
-			      border : 1px solid #B5A27F;
-			      border-radius : 5px;
-			    }
-			    .joinSuccessModal_top{
-			     width: 500px;
-			     height: 40px;
-			     background-color: #B5A27F;
-			    }
-			    .joinSuccessModal_body{
-			     margin: 40px auto 20px auto;
-			     text-align: center;
-			     font-weight: bold;
-			    }
-			    .joinSuccessModal_body p {
-			      font-size: 1.1rem;
-			    }
-			    .joinSuccessModal_footer{
-			      justify-content: center;
-			      border: none;
-			    }
-			    .btnJoinCheck{
-			      width: 150px;
-			      height: 40px;
-			      margin-bottom: 30px;
-			      color: #FFF;
-			      font-weight: bold;
-			      font-size: 1.1rem;
-			      border: 1px solid #B5A27F;
-			      border-radius: 5px;
-			      background: #B5A27F;
-			      align-items: center;
-			    }
-			</style>
+			<style>
+				#a_Title {
+					text-decoration: none;
+					color: inherit;
+				}
+				#AuserAdmin {
+					font-size: 40px;
+				}
+				
+				
+				/* 테이블 */
+				#AuserList_T {
+					width: 1200px;
+					border: 1.2px solid #28693F;
+					border-collapse: collapse;
+					border-left: hidden;
+					border-right: hidden;
+					border-top:hidden;
+				}
+				#AuserList_T th {
+					background: #28693F;
+					color: white;
+					height: 35px;
+				}
+				
+				.AuserList_T_10 {
+					 width: 10%
+				}
+				.AuserList_T_20 {
+					 width: 20%
+				}
+				
+				#AuserList_T td {
+					border-bottom: 1.2px solid #28693F;
+					text-align: center;
+					height: 80px;
+				}
+ 			</style>
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
-				$(document).ready(function() {
-			        $("#joinText").text(`가입을 축하드립니다.`);
-			        $(".joinSuccessModal").modal("show");
-			        $(".modal-backdrop").removeClass("show");
-			
-			        $(".btnJoinCheck").on("click", function(){
-			                  $(".ModalBox").modal('hide');
-			               });
-			    });
+				
 			</script>
 		</th:block>
 	</head>
-
+	<!-- head 영역 끝 -->
+	
 <body>
 	<div id="container" layout:fragment="content">
-		<!--회원가입성공 모달--> 
-		 <div id="myModal" class="modal fade ModalBox joinSuccessModal" tabindex="-1">
-		    <div class="modal-dialog">
-		        <div class="modal-content joinSuccessModal_box">
-		            <div class="modal-header joinSuccessModal_top">
-		                <h5 class="modal-title"></h5>
-		                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-		            </div>
-		            <div class="modal-body joinSuccessModal_body">
-		                <p id="joinText"></p>
-		            </div>
-		            <div class="modal-footer joinSuccessModal_footer>
-		                <button type="button" class="btnJoinCheck">확 인</button>
-		            </div>
-		        </div>
-		    </div>
+	  	<div>
+	  		<a href="AuserList" id="a_Title"><h1 id="AuserAdmin">개인리뷰보기</h1></a>
 		</div>
+	    
+	
+		<!-- 회원 리스트 Table -->
+	    <div id="div_AuserList_T">
+	        <table border="1" id="AuserList_T">
+	        	<tr>
+	        		<th class="AuserList_T_10">번호</th>
+			        <th class="AuserList_T_10">타입</th>
+			        <th class="AuserList_T_20">작성자</th>
+			        <th class="AuserList_T_20">작성일</th>
+			        <th class="AuserList_T_20">별점</th>
+	      		</tr>
+	      		<tr th:each="reser: ${getOrderItemList}">
+		        	<td th:text="${reser.rvwNo}"></td>
+		        	<!--<td>       회원이름 누르면 회원정보 모달?페이지? 띄우기
+						<a id="a_itemName" th:text="${item.itemName}"
+							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">
+						</a>
+					</td>-->
+					<td th:text="${reser.rvwType}"></td>
+					<td th:text="${reser.rvwWriter}"></td>
+		        	<td th:text="${reser.rvwRegdate eq null ? '' : #strings.substring(reser.rvwRegdat, 0, 10)}"></td>
+		        	<td th:text="${reser.rwvScore}"></td>
+		     	 </tr>
+		    </table>
+		</div>
+
 	</div>
 </body>
 </html>

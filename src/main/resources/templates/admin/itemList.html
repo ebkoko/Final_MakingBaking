@@ -9,6 +9,10 @@
 	<head>
 		<th:block layout:fragment="css">
 			<style>
+				#a_Title {
+					text-decoration: none;
+					color: inherit;
+				}
 				.itemAdmin {
 					font-size: 40px;
 				}
@@ -196,6 +200,16 @@
 							$("input[name='chk']").prop("checked", false);
 						}
 					});
+					
+					// 상품리스트 중 전체선택을 누른 뒤 상품 체크박스를 풀면, 전체선택 체크박스도 풀림
+					$(".check").click(function() {
+						if($("input[name='chk']:checked").length < $("input[name='chk']").length) {
+							$("#itemSelectAll").prop("checked", false);
+						} else if($("input[name='chk']:checked").length == $("input[name='chk']").length) {
+							$("#itemSelectAll").prop("checked", true);
+						}
+					});
+					
 				});
 				
 				
@@ -216,7 +230,7 @@
 						
 						console.log(changeRows);
 						
-						if(confirm("aaaa")) {
+						if(confirm("선택한 상품을 삭제하시겠습니까?")) {
 						$.ajax({
 							url: '/admin/saveItemList',
 							type: 'post',
@@ -238,7 +252,7 @@
 											<td>${obj.pageItems.content[i].itemStatus}</td>
 											<td>
 								        		<a id="itemMod"
-													href="@{/admin/itemUpdate/${obj.pageItems.content[i].itemNo}">수정
+													href="@{/admin/itemUpdate/${obj.pageItems.content[i].itemNo}}">수정
 												</a>
 								        	</td>
 										</tr>
@@ -252,15 +266,14 @@
 								console.log(e);
 							},
 						});
+						alert("삭제를 완료하였습니다.");
 						} else {
-							
+							alert("삭제를 취소하였습니다.");
 						}
 						console.log(changeRows);
 						
 					});
-					
-						
-				
+
 				});
 			</script>
 		</th:block>
@@ -270,7 +283,7 @@
 <body>
 	<div id="container" layout:fragment="content">
 		<div>
-			<h1 class="itemAdmin">상품 관리</h1>
+			<a href="itemList" id="a_Title"><h1 class="itemAdmin">상품 관리</h1></a>
 		</div>
 		<form id="searchForm" action="/admin/itemList" method="get">
 			<div id="item_search">
@@ -322,7 +335,7 @@
 			        <th class="itemList_T_10">상품 관리</th>
 	      		</tr>
 	      		<tr th:each="item: ${getItemList.content}">
-	      			<td><input type="checkbox" name="chk" th:value="${item.itemNo}"></td>
+	      			<td><input type="checkbox" class="check" name="chk" th:value="${item.itemNo}"></td>
 		        	<td th:text="${item.itemNo}"></td>
 		        	
 		        	<td>

@@ -245,6 +245,26 @@ public class AdminServiceImpl implements AdminService {
 		
 	}
 	
+	@Override
+	public void saveDayclassList(List<Map<String, Object>> changeRowsList) {
+		for(int i = 0; i < changeRowsList.size(); i++) {
+			Dayclass ddayclass = Dayclass.builder()
+										.dayclassNo(Integer.parseInt(String.valueOf(changeRowsList.get(i).get("dayclassNo"))))
+										.build();
+			
+			ImgFile dImgFile = ImgFile.builder()
+									  .fileReferNo(Integer.parseInt(String.valueOf(changeRowsList.get(i).get("dayclassNo"))))
+									  .fileType("dayclass")
+									  .build();
+			
+			dayclassRepository.delete(ddayclass);
+			imgFileRepository.delete(dImgFile);
+			 
+		}
+		
+	}
+	
+	
 	//user
 	@Override
 	public Page<User> getPageUserList(User user, Pageable pageable) {
