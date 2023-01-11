@@ -179,10 +179,10 @@ public class MypageController {
 			@AuthenticationPrincipal CustomUserDetails customUser) {
 				
 		Board board = Board.builder()
-				   		   .boardWriter(boardDTO.getBoardWriter())
+				   		   .boardWriter(customUser.getUsername())
 						   .build();
 		
-		Page<Board> pageBoardList = boardService.getPageMyQnaList(customUser.getUsername(), pageable);
+		Page<Board> pageBoardList = boardService.getPageMyQnaList(board, pageable);
 		
 		Page<BoardDTO> pageBoardDTOList = pageBoardList.map(pageQna -> 
 						   BoardDTO.builder()
@@ -195,6 +195,7 @@ public class MypageController {
 						   				   		pageQna.getBoardRegdate() == null?
 												null :
 												pageQna.getBoardRegdate().toString())
+						   		   .cateCode(pageQna.getCateCode())
 						   		   .boardCnt(pageQna.getBoardCnt())
 						   		   .build()
 						   );

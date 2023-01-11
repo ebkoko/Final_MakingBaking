@@ -63,8 +63,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public Page<Board> getPageMyQnaList(String userId, Pageable pageable) {
-		return boardRepository.getMyQnaList(userId, pageable);
+	public Page<Board> getPageMyQnaList(Board board, Pageable pageable) {
+		return boardRepository.getMyQnaList(board.getBoardWriter(), pageable);
 	}
 
 

@@ -52,8 +52,8 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
 	@Query(value="SELECT *\r\n"
 			+ "	   FROM t_mb_board\r\n"
 			+ "    WHERE (cate_code = 1 or cate_code = 2)\r\n"
-			+ "    and board_writer = :userId\r\n"
-			+ "    order by board_no desc;", nativeQuery=true)
-	Page<Board> getMyQnaList(@Param("userId") String userId, Pageable pageable);
+			+ "    and board_writer = :boardWriter\r\n"
+			+ "    order by board_no desc", nativeQuery=true)
+	Page<Board> getMyQnaList(@Param("boardWriter") String boardWriter, Pageable pageable);
 	
 }
