@@ -114,9 +114,4 @@ public class UserServiceImpl implements UserService {
 	public int changeInfo(UserDTO userDTO) {
 		return userRepository.changeInfo(userDTO);
 	}
-
-	@Override
-	public UserDTO changedUserInfo(String userId) {
-		return userRepository.changedUserInfo(userId);
-	}
 }

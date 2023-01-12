@@ -266,9 +266,9 @@ public class UserController {
     
     //정보수정
     @PostMapping("/mypage/changeInfo")
-    public ModelAndView changeInfo(UserDTO userDTO,
+    public ModelAndView changeInfo(UserDTO userDTO, HttpSession session,
     		@AuthenticationPrincipal CustomUserDetails customUserDetails, 
-    		HttpServletRequest request, Model model) {
+    		HttpServletResponse response, Model model) throws IOException {
     	User user = User.builder()
 		    			.userId(userDTO.getUserId())
 						.userName(userDTO.getUserNm())
@@ -283,10 +283,26 @@ public class UserController {
 
     	User infoUser = userService.idcheck(user);
 		model.addAttribute("user", userDTO);
-		customUserDetails.addAttribute("loginUser", infoUser.getUserId());
+		ModelAndView mv = new ModelAndView();
 		
-    	ModelAndView mv = new ModelAndView();
-		mv.setViewName("/mypage/changeInfo");
+		//수정하는 로직이 없다
+		
+		//소셜로그인 참조하여 @GetMapping("/join") securityContext에 등록되어 있는 athenticationToken을 수정된 정보로 변경
+		if(customUserDetails != null)
+			infoUser = customUserDetails.getUser();
+		
+		if(user == null || user.getJoinYn().equals("N")) {
+			SecurityContext securityContext = SecurityContextHolder.getContext();
+			Authentication authentication = null;
+			securityContext.setAuthentication(authentication);
+			session.setAttribute("SPRING_SERCURITY_CONTEXT", securityContext);
+			
+			mv.setViewName("mypage/changeInfo.html");
+			mv.addObject("socialUser", user);
+		} else {
+			response.sendRedirect("/user/changeInfoPw");
+		}
+		
 		return mv;
     }
 }

@@ -49,7 +49,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 			+ " SET USER_ID = :userId"
 			+ " WHERE USER_ID = :userId",
 			nativeQuery=true)
-	int changeInfo(@Param("userId") UserDTO userDTO);
+	int changeInfo(@Param("userId") UserDTO userId);
 	
 	//관리자 회원 검색_선민
 	Page<User> findByUserNameContaining(String searchKeyword, Pageable pageable); //이름

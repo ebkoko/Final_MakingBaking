@@ -73,19 +73,12 @@ public class ItemController {
 	
 	@PostMapping("/list")
 	public ResponseEntity<?> getPageItemList(@PageableDefault(page=0, size=4) Pageable pageable){
-		ResponseDTO<ItemDTO> response = new ResponseDTO<>();
+		ResponseDTO<CamelHashMap> response = new ResponseDTO<>();
 		System.out.println(pageable.getPageNumber());
 		try {
-			Page<Item> pageItemList = itemService.getPageItemList(pageable);
+			Page<CamelHashMap> pageItemList = itemService.getPageItemList(pageable);
 			
-			Page<ItemDTO> pageItemDTOList = pageItemList.map(pageItem -> 
-															 ItemDTO.builder()
-															 		.itemNo(pageItem.getItemNo())
-															 		.itemName(pageItem.getItemName())
-															 		.itemPrice(pageItem.getItemPrice())
-															 		.build()
-															);
-			response.setPageItems(pageItemDTOList);
+			response.setPageItems(pageItemList);
 			
 			return ResponseEntity.ok().body(response);
 		} catch(Exception e) {

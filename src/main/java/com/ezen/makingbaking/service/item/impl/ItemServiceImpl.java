@@ -42,8 +42,8 @@ public class ItemServiceImpl implements ItemService {
 	}
 	
 	@Override
-	public Page<Item> getPageItemList(Pageable pageable) {
-		return itemRepository.findAll(pageable);
+	public Page<CamelHashMap> getPageItemList(Pageable pageable) {
+		return itemRepository.findItemAndFile(pageable);
 	}
 	
 	

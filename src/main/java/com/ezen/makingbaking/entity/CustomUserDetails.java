@@ -90,9 +90,4 @@ public class CustomUserDetails implements UserDetails, OAuth2User{
 	public String getName() {
 		return null;
 	}
-
-	@Override
-	public void addAttribute(String string, String userId) {
-		return;
-	}
 }
