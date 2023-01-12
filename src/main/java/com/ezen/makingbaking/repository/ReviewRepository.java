@@ -30,5 +30,5 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 	//개인 리뷰리스트_선민
 	@Query(value="SELECT * FROM T_MB_REVIEW"
 			+ " WHERE RVW_WRITER = :rvwWriter", nativeQuery=true)
-	Review getUserRvwList(@Param("rvwWriter") String rvwWriter);
+	Page<Review> getUserRvwList(@Param("rvwWriter") String rvwWriter, Pageable pageable);
 }

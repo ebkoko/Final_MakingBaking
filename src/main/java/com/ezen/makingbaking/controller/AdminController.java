@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.makingbaking.common.FileUtils;
+import com.ezen.makingbaking.dto.BoardDTO;
 import com.ezen.makingbaking.dto.DayclassDTO;
 import com.ezen.makingbaking.dto.ImgFileDTO;
 import com.ezen.makingbaking.dto.ItemDTO;
@@ -37,6 +38,7 @@ import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.dto.ReviewDTO;
 import com.ezen.makingbaking.dto.UserDTO;
+import com.ezen.makingbaking.entity.Board;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
@@ -75,7 +77,8 @@ public class AdminController {
 	//상품리스트
 	@GetMapping("/itemList")
 	public ModelAndView getItemList(ItemDTO itemDTO,
-			@PageableDefault(page = 0, size = 50) Pageable pageable) {
+			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+		
 		Item item = Item.builder()
 							.itemName(itemDTO.getItemName())
 							.itemPrice(itemDTO.getItemPrice())
@@ -84,11 +87,10 @@ public class AdminController {
 							.searchCondition(itemDTO.getSearchCondition())
 							.searchKeyword(itemDTO.getSearchKeyword())
 							.build();
-//		List<Item> itemList = adminService.getItemList(item);
 		
 		Page<Item> pageItemList = adminService.getPageItemList(item, pageable);
 	      
-	      Page<ItemDTO> pageItemDTOList = pageItemList.map(pageItem -> 
+	    Page<ItemDTO> pageItemDTOList = pageItemList.map(pageItem -> 
 	                                             ItemDTO.builder()
 	                                                      .itemNo(pageItem.getItemNo())
 	                                                      .itemName(pageItem.getItemName())
@@ -97,29 +99,14 @@ public class AdminController {
 	                                                               null :
 	                                                               pageItem.getItemRegdate().toString())
 	                                                      .itemStatus(pageItem.getItemStatus())
+	                                                      .searchCondition(pageItem.getSearchCondition())
+	                                                      .searchKeyword(pageItem.getSearchKeyword())
 	                                                      .build()
 	                                             );
 		
-//		List<ItemDTO> getItemList = new ArrayList<ItemDTO>();
-//		for(int i = 0; i < itemList.size(); i++) {
-//			ItemDTO returnItem = ItemDTO.builder()
-//											.itemNo(itemList.get(i).getItemNo())
-//											.itemName(itemList.get(i).getItemName())
-//											.itemPrice(itemList.get(i).getItemPrice())
-//											.itemRegdate(
-//													itemList.get(i).getItemRegdate() == null ?
-//													null :
-//													itemList.get(i).getItemRegdate().toString())
-//
-//											.itemStatus(itemList.get(i).getItemStatus())
-//											.build();
-//
-//			getItemList.add(returnItem);
-//		}
-		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/itemList.html");
-		mv.addObject("getItemList", pageItemDTOList);
+		mv.addObject("pageItemList", pageItemDTOList);
 		
 		if(itemDTO.getSearchCondition() != null && !itemDTO.getSearchCondition().equals("")) {
 			mv.addObject("searchCondition", itemDTO.getSearchCondition());
@@ -130,6 +117,45 @@ public class AdminController {
 		}
 		
 		return mv;
+	}
+	
+	//상품리스트 - ajax로 처리한 페이징 글 목록 보여주기
+	@PostMapping("/itemList")
+	public ResponseEntity<?> getItemPageList(ItemDTO itemDTO,
+			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+		ResponseDTO<ItemDTO> response = new ResponseDTO<>();
+		try {
+			Item item = Item.builder()
+							.itemName(itemDTO.getItemName())
+							.itemPrice(itemDTO.getItemPrice())
+							.itemRegdate(LocalDateTime.now())
+							.itemStatus(itemDTO.getItemStatus())
+							.searchCondition(itemDTO.getSearchCondition())
+							.searchKeyword(itemDTO.getSearchKeyword())
+							.build();
+			Page<Item> pageItemList = adminService.getPageItemList(item, pageable);
+			
+			Page<ItemDTO> pageItemDTOList = pageItemList.map(pageItem -> 
+											            ItemDTO.builder()
+													            .itemNo(pageItem.getItemNo())
+													            .itemName(pageItem.getItemName())
+													            .itemPrice(pageItem.getItemPrice())
+													            .itemRegdate(pageItem.getItemRegdate() == null?
+													                     null :
+													                     pageItem.getItemRegdate().toString())
+													            .itemStatus(pageItem.getItemStatus())
+													            .searchCondition(pageItem.getSearchCondition())
+													            .searchKeyword(pageItem.getSearchKeyword())
+													            .build()
+											   				);
+			response.setPageItems(pageItemDTOList);
+			
+			return ResponseEntity.ok().body(response);
+			
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
 	}
 	
 	
@@ -518,6 +544,12 @@ public class AdminController {
 	
 	
 	
+	
+	
+	
+	
+	
+	
 	//dayclass
 	//데이클래스 리스트
 	@GetMapping("/dayclassList")
@@ -892,6 +924,14 @@ public class AdminController {
 	}
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
 	//user
 	//회원 리스트
 	@GetMapping("/userList")
@@ -905,8 +945,6 @@ public class AdminController {
 						.searchKeyword(userDTO.getSearchKeyword())
 						.build();
 		
-//		List<User> userList = adminService.getUserList(user);
-		
 		Page<User> pageUserList = adminService.getPageUserList(user, pageable);
 		
 		Page<UserDTO> pageUserDTOList = pageUserList.map(pageUser -> 
@@ -919,20 +957,6 @@ public class AdminController {
 	 		                                                               pageUser.getUserRegdate().toString())
 	                                         					.build()
                                          					);
-							
-//		List<UserDTO> getUserList = new ArrayList<UserDTO>();
-//		for(int i = 0; i < userList.size(); i++) {
-//			UserDTO returnUser = UserDTO.builder()
-//											.userNo(userList.get(i).getUserNo())
-//											.userNm(userList.get(i).getUserName())
-//											.userId(userList.get(i).getUserId())
-//											.userRegdate(userList.get(i).getUserRegdate() == null ?
-//													null :
-//													userList.get(i).getUserRegdate().toString())
-//													.build();
-//
-//			getUserList.add(returnUser);
-//		}
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/userList.html");
@@ -951,11 +975,12 @@ public class AdminController {
 	
 	//회원 리스트_개인 리뷰리스트 확인
 	@GetMapping("/userRvwList")
-	public ModelAndView getUserRvwList(@RequestParam("rvwWriter") String rvwWriter,
+	public ModelAndView getUserRvwList(ReviewDTO reviewDTO,
 			@PageableDefault(page = 0, size = 50) Pageable pageable) {
-		Review review = adminService.getUserRvwList(rvwWriter);
+		Page<Review> reviewList = adminService.getUserRvwList(reviewDTO.getRvwWriter(), pageable);
 		
-		ReviewDTO reviewDTO = ReviewDTO.builder()
+		Page<ReviewDTO> reviewListDTO = reviewList.map(review -> 
+								ReviewDTO.builder()
 										.rvwNo(review.getRvwNo())
 										.rvwReferNo(review.getRvwReferNo())
 										.rvwType(review.getRvwType())
@@ -963,65 +988,61 @@ public class AdminController {
 										.rvwWriter(review.getRvwWriter())
 										.rvwRegdate(review.getRvwRegdate().toString())
 										.rvwScore(review.getRvwScore())
-										.build();
+										.build()
+										);
 		
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/userRvwList.html");
-		mv.addObject("getUserRvwList", reviewDTO);
+		mv.addObject("getUserRvwList", reviewListDTO);
 		
 		if(reviewDTO.getSearchCondition() != null && !reviewDTO.getSearchCondition().equals("")) {
 			mv.addObject("searchCondition", reviewDTO.getSearchCondition());
 		}
 		
-		if(reviewDTO.getSearchKeyword() != null && !reviewDTO.getSearchKeyword().equals("")) {
-			mv.addObject("searchKeyword", reviewDTO.getSearchKeyword());
-		}
+		
 		
 		return mv;
 	}
 	
 	//관리자가 회원을 삭제하는 경우 ajax를 이용해 백단에 전송
-//	@PostMapping("/saveUserList")
-//	public ResponseEntity<?> saveUserList(@RequestParam("changeRows") String changeRows,
-//			@PageableDefault(page = 0, size = 50) Pageable pageable) throws JsonMappingException, JsonProcessingException {
-//		ResponseDTO<UserDTO> response = new ResponseDTO<>();
-//		List<Map<String, Object>> changeRowsList = new ObjectMapper().readValue(changeRows, 
-//											new TypeReference<List<Map<String, Object>>>() {});
-//		
-//		try {
-//			adminService.saveUserList(changeRowsList);
-//			
-//			User user  = User.builder()
-//							.searchCondition("")
-//							.searchKeyword("")
-//							.build();
-//
-//			Page<User> pageUserList = adminService.getPageUserList(user, pageable);
-//			
-//			Page<UserDTO> pageUserDTOList = pageUserList.map(pageUser ->
-//														UserDTO.builder()
-//																	.dayclassNo(pageDayclass.getDayclassNo())
-//																	.dayclassNo(pageDayclass.getDayclassNo())											
-//																	.dayclassTime(pageDayclass.getDayclassTime())
-//																	.dayclassUseYn(pageDayclass.getDayclassUseYn())
-//																	.dayclassName(pageDayclass.getDayclassName())
-//																	.dayclassMinName(pageDayclass.getDayclassMinName())
-//																	.dayclassDurationTime(pageDayclass.getDayclassDurationTime())
-//																	.dayclassPrice(pageDayclass.getDayclassPrice())
-//																	.dayclassDetails(pageDayclass.getDayclassDetails())
-//																	.build()
-//			);
-//			
-//			response.setPageItems(pageDayclassDTOList);
-//			
-//			
-//			return ResponseEntity.ok().body(response);
-//		} catch(Exception e) {
-//			response.setErrorMessage(e.getMessage());
-//			return ResponseEntity.badRequest().body(response);
-//		}
-//	}
+	@PostMapping("/saveUserList")
+	public ResponseEntity<?> saveUserList(@RequestParam("changeRows") String changeRows,
+			@PageableDefault(page = 0, size = 50) Pageable pageable) throws JsonMappingException, JsonProcessingException {
+		ResponseDTO<UserDTO> response = new ResponseDTO<>();
+		List<Map<String, Object>> changeRowsList = new ObjectMapper().readValue(changeRows, 
+											new TypeReference<List<Map<String, Object>>>() {});
+		
+		try {
+			adminService.saveUserList(changeRowsList);
+			
+			User user  = User.builder()
+							.searchCondition("")
+							.searchKeyword("")
+							.build();
+
+			Page<User> pageUserList = adminService.getPageUserList(user, pageable);
+			
+			Page<UserDTO> pageUserDTOList = pageUserList.map(pageUser ->
+														UserDTO.builder()
+																.userNo(pageUser.getUserNo())
+		                         								.userNm(pageUser.getUserName())
+		                         								.userId(pageUser.getUserId())
+		                         								.userRegdate(pageUser.getUserRegdate() == null?
+			                                                               null :
+				                                                               pageUser.getUserRegdate().toString())
+		                                     					.build()
+			);
+			
+			response.setPageItems(pageUserDTOList);
+			
+			
+			return ResponseEntity.ok().body(response);
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
 	
 	
 	//reser_dayclass 리스트
@@ -1040,8 +1061,6 @@ public class AdminController {
 							.searchCondition(reserDTO.getSearchCondition())
 							.searchKeyword(reserDTO.getSearchKeyword())
 							.build();
-							
-//		List<Reser> reserList = adminService.getReserList(reser);
 		
 		Page<Reser> pageReserList = adminService.getPageReserList(reser, pageable);
 		
@@ -1057,22 +1076,6 @@ public class AdminController {
                                              								.partiStatus(pageReser.getPartiStatus())
                                              								.build()
 	                                             					);
-							
-//		List<ReserDTO> getReserList = new ArrayList<ReserDTO>();
-//		for(int i = 0; i < reserList.size(); i++) {
-//			ReserDTO returnReser = ReserDTO.builder()
-//											.reserNo(reserList.get(i).getReserNo())
-//											.partiName(reserList.get(i).getPartiName())
-//											.userId(reserList.get(i).getUserId())
-//											.classNo(reserList.get(i).getClassNo())
-//											.partiDate(reserList.get(i).getPartiDate())
-//											.partiTime(reserList.get(i).getPartiTime())
-//											.reserStatus(reserList.get(i).getReserStatus())
-//											.partiStatus(reserList.get(i).getPartiStatus())
-//											.build();
-//
-//			getReserList.add(returnReser);
-//		}
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/reserDayclassList.html");
@@ -1097,8 +1100,6 @@ public class AdminController {
 							.searchCondition(orderDTO.getSearchCondition())
 							.searchKeyword(orderDTO.getSearchKeyword())
 							.build();
-							
-		//List<Order> orderList = adminService.getOrderList(order);
 		
 		Page<Order> pageOrderList = adminService.getPageOrderList(order, pageable);
 		
@@ -1115,23 +1116,6 @@ public class AdminController {
                                              								.orderStatus(pageOrder.getOrderStatus())
                                              								.build()
 	                                             					);
-							
-//		List<OrderDTO> getOrderList = new ArrayList<OrderDTO>();
-//		for(int i = 0; i < orderList.size(); i++) {
-//			OrderDTO returnOrder = OrderDTO.builder()
-//											.orderNo(orderList.get(i).getOrderNo())
-//											.userId(orderList.get(i).getUserId())
-//             								.orderName(orderList.get(i).getOrderName())
-//             								.orderTotalPrice(orderList.get(i).getOrderTotalPrice())
-//             								.orderPayment(orderList.get(i).getOrderPayment())
-//             								.orderDate(orderList.get(i).getOrderDate() == null ?
-//             										null :
-//             											orderList.get(i).getOrderDate().toString())
-//             								.orderStatus(orderList.get(i).getOrderStatus())
-//											.build();
-//
-//			getOrderList.add(returnOrder);
-//		}
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/orderItemList.html");

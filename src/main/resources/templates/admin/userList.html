@@ -306,7 +306,7 @@
 			        <th class="userList_T_25">개인 게시판</th>
 	      		</tr>
 	      		<tr th:each="user: ${getUserList.content}">
-	      			<td><input type="checkbox" class="check" name="chk" th:value="${user.userNo}"></td>
+	      			<td><input type="checkbox" class="check" name="chk" th:value="${user.userNm}"></td>
 		        	<!--<td>       회원이름 누르면 회원정보 모달?페이지? 띄우기
 						<a id="a_itemName" th:text="${item.itemName}"
 							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">
