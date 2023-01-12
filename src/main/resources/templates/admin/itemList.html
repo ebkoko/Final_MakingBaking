@@ -143,20 +143,46 @@
 				}
 				
 				/* 페이징처리 */
+			    .paging {
+					text-align: center;
+					margin-top: 50px;
+				}
 			    .pagination {
-			      	list-style: none;
-			      	width: 100%;
-			      	display: inline-block;
+			      display: flex;
+			      justify-content: center;
+			      align-items: center;
+			      margin-bottom: 20px;
+			    }    
+			    .paging a{
+				  display: block;
+				  margin: 0 3px;
+				  border: 1px solid #ccc;
+				  width: 40px;
+				  height: 40px;
+				  line-height: 35px;
+				  text-align: center;
+			      color: #8c8c8c;
+			      font-size: 25px;
+			      font-weight: 600;
 			    }
-			    .pagination_button {
-					float: left;
-					margin-left: 5px;
+			    .paging a:hover {
+			      color: #28693F;
 			    }
+			    .paging a:focus {
+					background:#28693F;
+					color: white;
+				}
+				.paging .pagination .pagination_button a.present {
+					border-color: #28693F;
+					background: #28693F;
+					color: white;
+				}
 			</style>
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
 				let changeRows = [];
+				let pageNum;
 				
 				$(function() {
 					//검색창(상품카테, 판매상태)
@@ -234,10 +260,26 @@
 						$.ajax({
 							url: '/admin/saveItemList',
 							type: 'post',
-							data: {changeRows: JSON.stringify(changeRows)},
+							data: {
+								changeRows: JSON.stringify(changeRows),
+								page: pageNum
+							},
 							success: function(obj) {
 								console.log(obj);
 								let htmlStr = "";
+								
+								htmlStr += `
+							
+								<tr>
+					        		<th class="itemList_T_10"></th>
+							        <th class="itemList_T_10">No.</th>
+							        <th class="itemList_T_20">상품 이름</th>
+							        <th class="itemList_T_20">상품 가격</th>
+							        <th class="itemList_T_15">상품 등록일</th>
+							        <th class="itemList_T_15">판매 상태</th>
+							        <th class="itemList_T_10">상품 관리</th>
+					      		</tr>
+					      	`;
 								for(let i = 0; i < obj.pageItems.content.length; i++) {
 									htmlStr += `
 										<tr>
@@ -259,8 +301,7 @@
 									`;
 								}
 								
-								$("#itemList_T").children(":first").children().not(':first').remove();
-								$("#itemList_T").children(":first").append(htmlStr);
+								$("#itemList_T").html(htmlStr);
 							},
 							error: function(e) {
 								console.log(e);
@@ -276,8 +317,8 @@
 				//상품리스트 페이징 처리
 				$(document).on("click", ".pagination a", function(e) {
 					e.preventDefault();
-					const page = $(this).attr("href");
-					itemListPaging(page, $("#searchCondition").val());
+					pageNum = $(this).attr("href");
+					itemListPaging(pageNum, $("#searchCondition").val());
 				});
 				
 
@@ -365,7 +406,7 @@
 											: startPage;
 							
 							for(let i = realStart; i <= endPage; i++) {
-								if(pageNumber == i) {
+								if(pageNumber == i - 1) {
 									htmlstr += `<li id="present" class="pagination_button">
 											   	   <a href="${i - 1}">${i}</a>
 										        </li>

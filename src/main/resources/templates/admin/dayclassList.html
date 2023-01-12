@@ -151,16 +151,42 @@
 					cursor: pointer;
 				}
 				
-				/* 페이징처리 */
+				
+			    /* 페이징처리 */
+			    .paging {
+					text-align: center;
+					margin-top: 50px;
+				}
 			    .pagination {
-			      	list-style: none;
-			      	width: 100%;
-			      	display: inline-block;
+			      display: flex;
+			      justify-content: center;
+			      align-items: center;
+			      margin-bottom: 20px;
+			    }    
+			    .paging a{
+				  display: block;
+				  margin: 0 3px;
+				  border: 1px solid #ccc;
+				  width: 40px;
+				  height: 40px;
+				  line-height: 35px;
+				  text-align: center;
+			      color: #8c8c8c;
+			      font-size: 25px;
+			      font-weight: 600;
 			    }
-			    .pagination_button {
-					float: left;
-					margin-left: 5px;
+			    .paging a:hover {
+			      color: #28693F;
 			    }
+			    .paging a:focus {
+					background:#28693F;
+					color: white;
+				}
+				.paging .pagination .pagination_button a.present {
+					border-color: #28693F;
+					background: #28693F;
+					color: white;
+				}
 			</style>
 		</th:block>
 		<th:block layout:fragment="script">
@@ -247,14 +273,30 @@
 						
 						console.log(changeRows);
 						
-						if(confirm("선택한 원데이클래스를 삭제하시겠습니까?")) {
+						if(confirm("선택한 클래스를 삭제하시겠습니까?")) {
 						$.ajax({
 							url: '/admin/saveDayclassList',
 							type: 'post',
-							data: {changeRows: JSON.stringify(changeRows)},
+							data: {
+								changeRows: JSON.stringify(changeRows),
+								page: pageNum
+							},
 							success: function(obj) {
 								console.log(obj);
 								let htmlStr = "";
+								
+								htmlStr += `
+							
+								<tr>
+					        		<th class="dayclassList_T_05"></th>
+							        <th class="dayclassList_T_10">No.</th>
+							        <th class="dayclassList_T_25">클래스 이름</th>
+							        <th class="dayclassList_T_20">클래스 가격</th>
+							        <th class="dayclassList_T_15">운영시간</th>
+							        <th class="dayclassList_T_15">진행 상태</th>
+							        <th class="dayclassList_T_10">클래스 관리</th>
+					      		</tr>
+					      	`;
 								for(let i = 0; i < obj.pageItems.content.length; i++) {
 									htmlStr += `
 										<tr>
@@ -276,8 +318,7 @@
 									`;
 								}
 								
-								$("#dayclassList_T").children(":first").children().not(':first').remove();
-								$("#dayclassList_T").children(":first").append(htmlStr);
+								$("#dayclassList_T").html(htmlStr);
 							},
 							error: function(e) {
 								console.log(e);
@@ -288,10 +329,128 @@
 							alert("삭제를 취소하였습니다.");
 						}
 						console.log(changeRows);
-						
 					});
 
+				//상품리스트 페이징 처리
+				$(document).on("click", ".pagination a", function(e) {
+					e.preventDefault();
+					pageNum = $(this).attr("href");
+					dayclassListPaging(pageNum, $("#searchCondition").val());
 				});
+				
+
+				}); //function 닫음
+				
+				
+				function dayclassListPaging(page, condition) {
+					console.log(page);
+					console.log(condition);
+
+						$.ajax({
+						url: '/admin/dayclassList',
+						type: 'post',
+						data: {
+							page: page,
+							searchCondition: condition
+						},
+						success: function(obj) {
+							console.log(obj);
+							
+							let htmlStr = "";
+							
+							htmlStr += `
+							
+								<tr>
+					        		<th class="dayclassList_T_05"></th>
+							        <th class="dayclassList_T_10">No.</th>
+							        <th class="dayclassList_T_25">클래스 이름</th>
+							        <th class="dayclassList_T_20">클래스 가격</th>
+							        <th class="dayclassList_T_15">운영시간</th>
+							        <th class="dayclassList_T_15">진행 상태</th>
+							        <th class="dayclassList_T_10">클래스 관리</th>
+					      		</tr>
+					      	`;
+							
+							for(let i=0; i<obj.pageItems.content.length; i++) {
+								htmlStr += `
+									
+									<tr>
+										<td>
+											<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].dayclassNo}"
+											value="${obj.pageItems.content[i].dayclassNo}">
+										</td>
+										<td>${obj.pageItems.content[i].dayclassNo}</td>
+										<td name="dayclassName" data-dayclass-name="${obj.pageItems.content[i].dayclassName}">${obj.pageItems.content[i].dayclassName}</td>
+										<td>${obj.pageItems.content[i].dayclassPrice}</td>
+										<td>${obj.pageItems.content[i].dayclassTime}</td>
+										<td>${obj.pageItems.content[i].dayclassUseYn}</td>
+										<td>
+							        		<a id="dayclassMod"
+												href="@{/admin/dayclassUpdate/${obj.pageItems.content[i].dayclassNo}}">수정
+											</a>
+							        	</td>
+									</tr>
+								`;
+							}
+							
+							$("#dayclassList_T").html(htmlStr);
+							
+							htmlstr = "";
+						
+							let pageNumber = obj.pageItems.pageable.pageNumber;
+							let pageSize = obj.pageItems.pageable.pageSize;
+							let totalPages = obj.pageItems.totalPages;
+							let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
+							let tempEndPage = startPage + pageSize -1;
+							let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
+							console.log(pageNumber);
+							console.log(pageSize);
+							console.log(totalPages);
+							console.log(startPage);
+							console.log(tempEndPage);
+							console.log(endPage);
+							
+							if(pageNumber > 0) {
+								htmlstr += `
+									<li class="pagination_button">
+										<a style="border: 0px;" href="${pageNumber - 1}">&#60;</a>
+									</li>
+								`;
+							}
+							
+							let realStart = totalPages - startPage < pageSize ? 
+												totalPages < pageSize ? 1 : totalPages - pageSize + 1 
+											: startPage;
+							
+							for(let i = realStart; i <= endPage; i++) {
+								if(pageNumber == i - 1) {
+									htmlstr += `<li id="present" class="pagination_button">
+											   	   <a href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								} else {
+									htmlstr += `<li class="pagination_button">
+											   	   <a href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								}
+							}
+							
+							if(pageNumber < totalPages - 1) {
+								htmlstr += `<li class="pagination_button">
+										       <a style="border: 0px;" href="${pageNumber + 1}">&#62;</a>
+									        </li>
+								`;
+							}
+							
+							$(".pagination").html(htmlstr);
+						},
+						error: function(e) {
+							console.log(e);
+						}
+					}); 
+					
+				}; //function 닫음
 				
 				
 			</script>
@@ -350,7 +509,7 @@
 			        <th class="dayclassList_T_15">진행 상태</th>
 			        <th class="dayclassList_T_10">클래스 관리</th>
 	      		</tr>
-	      		<tr th:each="dayclass: ${getDayclassList.content}">
+	      		<tr th:each="dayclass: ${pageDayclassList}">
 	      			<td><input type="checkbox" class="check" name="chk" th:value="${dayclass.dayclassNo}"></td>
 		        	<td th:text="${dayclass.dayclassNo}"></td>
 		        	
@@ -369,6 +528,26 @@
 		        	</td>
 		     	 </tr>
 		    </table>
+		</div>
+		
+		<div class="paging">
+			<ul class="pagination" th:if="${pageDayclassList.totalElements > 0}"
+								   th:with="pageNumber = ${pageDayclassList.pageable.pageNumber},
+											pageSize = ${pageDayclassList.pageable.pageSize},
+											totalPages = ${pageDayclassList.totalPages},
+											startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+											tempEndPage = ${startPage + pageSize - 1},
+											endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+				<li class="pagination_button" th:if="${pageNumber > 0}">
+					<a style="border: 0px;" th:href="${pageNumber - 1}">&#60;</a>
+				</li>
+				<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
+					<a th:href="${page - 1}" th:text="${page}"></a>
+				</li>
+				<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+					<a style="border: 0px;" th:href="${pageNumber + 1}">&#62;</a>
+				</li>
+			</ul>
 		</div>
 		
 		<!-- 삭제/등록버튼 -->
