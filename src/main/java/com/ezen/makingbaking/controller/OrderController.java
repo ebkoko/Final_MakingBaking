@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.makingbaking.dto.ApproveResponseDTO;
+import com.ezen.makingbaking.dto.CancelResponseDTO;
 import com.ezen.makingbaking.dto.OrderDTO;
 import com.ezen.makingbaking.dto.ReadyResponseDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
@@ -288,10 +289,55 @@ public class OrderController {
 		}
 	}
 	
-	@Transactional
-	@PutMapping("/payCancel/{orderNo}")
-	public ResponseEntity<?> payCancel(@PathVariable("orderNo") long orderNo, OrderDTO orderDTO,
-			HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails customUser) {
+//	@Transactional
+//	@PutMapping("/payCancel/{orderNo}")
+//	public ResponseEntity<?> payCancel(@PathVariable("orderNo") long orderNo, OrderDTO orderDTO,
+//			HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails customUser) {
+//		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
+//		
+//		try {
+//			Order returnOrder = Order.builder()
+//									.orderNo(orderNo)
+//									.userId(customUser.getUsername())
+//									.orderDate(LocalDateTime.parse(orderDTO.getOrderDate()))
+//									.orderStatus(orderDTO.getOrderStatus())
+//									.reciName(orderDTO.getReciName())
+//									.reciTel(orderDTO.getReciTel())
+//									.shippingAddr1(orderDTO.getShippingAddr1())
+//									.shippingAddr2(orderDTO.getShippingAddr2())
+//									.shippingAddr3(orderDTO.getShippingAddr3())
+//									.orderDeliFee(orderDTO.getOrderDeliFee())
+//									.orderTotalPrice(orderDTO.getOrderTotalPrice())
+//									.orderPayment(orderDTO.getOrderPayment())
+//									.orderName(orderDTO.getOrderName())
+//									.orderTel(orderDTO.getOrderTel())
+//									.orderMessage(orderDTO.getOrderMessage())
+//									.orderMail(orderDTO.getOrderMail())
+//									.depositor(orderDTO.getDepositor())
+//									.orderTotalPayPrice(orderDTO.getOrderTotalPayPrice())
+//									.orderCancelDate(LocalDateTime.now())
+//									.build();
+//			orderService.updateOrder(returnOrder);
+//			
+//			Map<String, Object> returnMap = new HashMap<String, Object>();
+//			
+//			returnMap.put("getOrder", returnOrder);
+//			
+//			responseDTO.setItem(returnMap);
+//			
+//			return ResponseEntity.ok().body(responseDTO);
+//		} catch(Exception e) {
+//			responseDTO.setErrorMessage(e.getMessage());
+//			
+//			return ResponseEntity.badRequest().body(responseDTO);
+//		}
+//	}
+	
+	@PostMapping("/payCancel/{orderNo}")
+	public ResponseEntity<?> cancelReady( @PathVariable("orderNo") long orderNo,
+			OrderDTO orderDTO, HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails customUser,
+			@RequestParam("itemList") String itemList, HttpSession session) throws JsonMappingException, JsonProcessingException {
+		
 		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
 		
 		try {
@@ -316,6 +362,11 @@ public class OrderController {
 									.orderTotalPayPrice(orderDTO.getOrderTotalPayPrice())
 									.orderCancelDate(LocalDateTime.now())
 									.build();
+
+			// 카카오페이 결제취소 준비: 결제취소요청 service 실행
+			CancelResponseDTO cancelResponseDTO = kakaoPayService.cancelReady(orderDTO, itemList);
+			
+			
 			orderService.updateOrder(returnOrder);
 			
 			Map<String, Object> returnMap = new HashMap<String, Object>();
@@ -329,6 +380,14 @@ public class OrderController {
 			responseDTO.setErrorMessage(e.getMessage());
 			
 			return ResponseEntity.badRequest().body(responseDTO);
-		}
+		}		
+		
+		
+		// Order 정보를 모델에 저장
+		session.setAttribute("order", orderDTO);
+		
+		session.setAttribute("itemList", itemList);
+		
+		return cancelResponseDTO;
 	}
 }

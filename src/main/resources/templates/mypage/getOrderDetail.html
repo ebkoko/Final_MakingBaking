@@ -22,6 +22,10 @@
 				#order_title {
 				    font-size: 40px;
 				}
+				.orderStatus {
+					color: red;
+					font-weight: 600;
+				}
 				#top {
 				    clear: both;
 				    margin-top: 90px;
@@ -292,7 +296,8 @@
 								orderMessage: order.orderMessage,
 								orderMail: order.orderMail,
 								depositor: order.depositor,
-								orderTotalPayPrice: order.orderTotalPayPrice
+								orderTotalPayPrice: order.orderTotalPayPrice,
+								tid: order.tid
 								},
 							success: function(obj) {
 								console.log(obj);
@@ -308,7 +313,7 @@
 					$("#btnPayCancel").on('click', function() {
 						$.ajax({
 							url: `/order/payCancel/${order.orderNo}`,
-							type: 'put',
+							type: 'post',
 							data: { 
 								orderDate: order.orderDateStr,
 								orderStatus: 'PC',
@@ -352,8 +357,8 @@
 			<div id="container">
 	            <h1 id="order_title">내 주문 확인</h1>
 	            <div id="top">
-	                <span class="orderNoMent">주문번호: </span><span class="realOrderNo" th:text="${order.orderNo}"></span><span class="orderStatus"></span>
-	                <span th:if="${order.orderCancelDate != null}">취소일시: </span><span th:if="${order.orderCancelDate != null}" th:text="${order.orderCancelDate}"></span>
+	                <span class="orderNoMent">주문번호: </span><span class="realOrderNo" th:text="${order.orderNo}"></span><span class="orderStatus"></span>&ensp;
+	                <span th:if="${order.orderCancelDate != null}">취소일시: </span><span th:if="${order.orderCancelDate != null}" th:text="${#strings.substring(order.orderCancelDate, 0, 16)}"></span>
 	            </div>
 	            <hr>
 	            <div id="list_title">
@@ -439,7 +444,7 @@
                     <input type="button" name="CancelOption" id="btnOrderCancel" value="주문취소" th:if="${order.orderStatus == 'MV'}">&emsp;
                     <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${order.orderStatus == 'PE'}">
 	            </div>
-	            <div id="moveList" th:style="${order.orderStatus == 'PC' || order.orderStatus == 'OC' ? 'display: flex; 
+	            <div id="moveList" th:style="${order.orderStatus == 'PC' || order.orderStatus == 'OC' || order.orderStatus == 'DW' || order.orderStatus == 'D' || order.orderStatus == 'DC' ? 'display: flex; 
 					justify-content: center;	
 				    margin-top: 100px;
 				    margin-bottom: 10px;

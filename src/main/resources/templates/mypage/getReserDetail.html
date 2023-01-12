@@ -25,6 +25,10 @@
 				#reser_title {
 				    font-size: 40px;
 				}
+				.reserStatus {
+					color: red;
+					font-weight: 600;
+				}
 				#top {
 				    clear: both;
 				    margin-top: 90px;
@@ -315,7 +319,8 @@
 			<div id="container">
 	            <h1 id="reser_title">내 예약 내역</h1>
 	            <div id="top">
-	                <span class="reserNoMent">예약번호: </span><span class="realReserNo" th:text="${reser.reserNo}"></span><span class="reserStatus"></span>
+	                <span class="reserNoMent">예약번호: </span><span class="realReserNo" th:text="${reser.reserNo}"></span><span class="reserStatus"></span>&ensp;
+	                <span th:if="${reser.reserCancelDate != null}">취소일시: </span><span th:if="${reser.reserCancelDate != null}" th:text="${#strings.substring(reser.reserCancelDate, 0, 16)}"></span>
 	            </div>
 	            <hr>
 	            <div id="list_title">

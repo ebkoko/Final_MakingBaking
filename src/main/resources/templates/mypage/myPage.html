@@ -17,13 +17,10 @@
 					const page = $(this).attr("href");
 					fnGetOrderListAjax(page);
 				});
-				
-				$(".present").on('click', function(e) {
-					$(e.target).css("color", "white");
-				})
 			});
 			
 			function fnGetOrderListAjax(page) {
+				console.log($("#orderCondition option:selected").text());
 				$.ajax({
 					url: '/mypage/myPageAjax',
 					type: 'post',
@@ -35,52 +32,58 @@
 						
 						let htmlstr = "";
 						
-						for(let i = 0; i < obj.pageItems.content.length; i++) {
+						if(obj.pageItems.content.length == 0) {
 							htmlstr += `
-								<div class="boxx">
-	      							<div class="box_product">`;
-	      					if(obj.pageItems.content[i].orderStatus == 'MV') {
-								  htmlstr += `
-										<div class="box_product_detail" style="color: red; font-weight: 600;">입금대기</div>
+								<p class="noOrder"><span class="noOrderStatus">${$("#orderCondition option:selected").text()}</span>인 주문이 없습니다.</p>
+							`;
+							$("#boxxWrapper").html(htmlstr);
+						} else {
+							for(let i = 0; i < obj.pageItems.content.length; i++) {
+								htmlstr += `
+									<div class="boxx">
+		      							<div class="box_product">`;
+		      					if(obj.pageItems.content[i].orderStatus == 'MV') {
+									  htmlstr += `
+											<div class="box_product_detail" style="color: red; font-weight: 600;">입금대기</div>
+									  `;
+								  } else if(obj.pageItems.content[i].orderStatus == 'PE') {
+									  htmlstr += `
+						          			<div class="box_product_detail" style="color: #28693F; font-weight: 600;">결제완료</div>
+								 	  `;
+								  } else if(obj.pageItems.content[i].orderStatus == 'DW') {
+									  htmlstr += `
+						          			<div class="box_product_detail" style="color: lightblue; font-weight: 600;">배송준비중</div>
+								  	  `;
+								  } else if(obj.pageItems.content[i].orderStatus == 'D') {
+									  htmlstr += `
+						          			<div class="box_product_detail" style="color: lightblue; font-weight: 600;">배송중</div>
+									  `;					          		
+								  } else if(obj.pageItems.content[i].orderStatus == 'DC') {
+									  htmlstr += `								  
+								        	<div class="box_product_detail" style="color: dimgray; font-weight: 600;">배송완료</div>
+									  `;
+								  } else if(obj.pageItems.content[i].orderStatus == 'OC') {
+									  htmlstr += `
+						          			<div class="box_product_detail" style="color: lightgray; font-weight: 600;">주문취소</div>
+								 	  `;
+								  } else if(obj.pageItems.content[i].orderStatus == 'PC') {
+									  htmlstr += `
+						          			<div class="box_product_detail" style="color: lightgray; font-weight: 600;">결제취소</div>
+								  	  `;
+								  }
+								  htmlstr += `                                   
+									        <div class="box_product_detail">주문일시: ${obj.pageItems.content[i].orderDateStr.substring(0, 10)} ${obj.pageItems.content[i].orderDateStr.substring(11, 16)}</div>
+									        <div class="box_product_detail">주문번호: ${obj.pageItems.content[i].orderNo}</div>										  
+									    </div>
+								        <div class="box_right">
+								          <span class="box_right_detail"><a href="/mypage/getOrderDetail/${obj.pageItems.content[i].orderNo}">주문 상세보기</a></span>
+								          <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
+								        </div>
+								     </div>
 								  `;
-							  } else if(obj.pageItems.content[i].orderStatus == 'PE') {
-								  htmlstr += `
-					          			<div class="box_product_detail" style="color: #28693F; font-weight: 600;">결제완료</div>
-							 	  `;
-							  } else if(obj.pageItems.content[i].orderStatus == 'DW') {
-								  htmlstr += `
-					          			<div class="box_product_detail" style="color: lightblue; font-weight: 600;">배송준비중</div>
-							  	  `;
-							  } else if(obj.pageItems.content[i].orderStatus == 'D') {
-								  htmlstr += `
-					          			<div class="box_product_detail" style="color: lightblue; font-weight: 600;">배송중</div>
-								  `;					          		
-							  } else if(obj.pageItems.content[i].orderStatus == 'DC') {
-								  htmlstr += `								  
-							        	<div class="box_product_detail" style="color: dimgray; font-weight: 600;">배송완료</div>
-								  `;
-							  } else if(obj.pageItems.content[i].orderStatus == 'OC') {
-								  htmlstr += `
-					          			<div class="box_product_detail" style="color: lightgray; font-weight: 600;">주문취소</div>
-							 	  `;
-							  } else if(obj.pageItems.content[i].orderStatus == 'PC') {
-								  htmlstr += `
-					          			<div class="box_product_detail" style="color: lightgray; font-weight: 600;">결제취소</div>
-							  	  `;
-							  }
-							  htmlstr += `                                   
-								        <div class="box_product_detail">주문일시: ${obj.pageItems.content[i].orderDateStr.substring(0, 10)} ${obj.pageItems.content[i].orderDateStr.substring(11, 19)}</div>
-								        <div class="box_product_detail">주문번호: ${obj.pageItems.content[i].orderNo}</div>										  
-								    </div>
-							        <div class="box_right">
-							          <span class="box_right_detail"><a href="/mypage/getOrderDetail/${obj.pageItems.content[i].orderNo}">주문 상세보기</a></span>
-							          <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
-							        </div>
-							     </div>
-							  `;
+							}
+							$("#boxxWrapper").html(htmlstr);
 						}
-						
-						$("#boxxWrapper").html(htmlstr);
 						
 						htmlstr = "";
 						
@@ -110,9 +113,9 @@
 										: startPage;
 						
 						for(let i = realStart; i <= endPage; i++) {
-							if(pageNumber == i) {
-								htmlstr += `<li id="present" class="pagination_button">
-										   	   <a href="${i - 1}">${i}</a>
+							if(pageNumber == i-1) {
+								htmlstr += `<li class="pagination_button">
+										   	   <a class="present" href="${i - 1}">${i}</a>
 									        </li>
 								`;
 							} else {
@@ -145,7 +148,7 @@
 </head>
 
 <body>
-	<div layout:fragment="content">
+	<div layout:fragment="content" style="height: 75vh;">
 		<main class="centre">
 	    <!-- 사이드 바 -->
 	    <div class="left-nav-bar">
@@ -208,7 +211,7 @@
 			          <div class="box_product_detail" th:if="${order.orderStatus == 'DC'}" style="color: dimgray; font-weight: 600;">배송완료</div>
 			          <div class="box_product_detail" th:if="${order.orderStatus == 'OC'}" style="color: lightgray; font-weight: 600;">주문취소</div>
 			          <div class="box_product_detail" th:if="${order.orderStatus == 'PC'}" style="color: lightgray; font-weight: 600;">결제취소</div>
-			          <div class="box_product_detail" th:text="${'주문일시: ' + #strings.substring(order.orderDate, 0, 19)}"></div>
+			          <div class="box_product_detail" th:text="${'주문일시: ' + #strings.substring(order.orderDate, 0, 16)}"></div>
 			          <div class="box_product_detail" th:text="${'주문번호: ' + order.orderNo}"></div>
 			        </div>
 			        <div class="box_right">
@@ -217,6 +220,7 @@
 			        </div>
 			      </div>
 		      </div>
+		      <p class="noOrder" th:if="${#lists.size('getOrderList') == 0}"><span class="noOrderStatus"></span>인 주문이 없습니다.</p>
 		    </div>
 		    <div class="paging">
 				<ul class="pagination" th:if="${getOrderList.totalElements > 0}"
