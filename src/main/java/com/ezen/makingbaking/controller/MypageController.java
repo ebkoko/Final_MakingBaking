@@ -208,6 +208,43 @@ public class MypageController {
 		return mv;
 	}
 	
+	// [ajax - 페이징] 내가 작성한 qna 글 목록 보여주기
+	@PostMapping("/qnaList")
+	public ResponseEntity<?> getNoticePageList(@PageableDefault(page=0, size=10) Pageable pageable,
+			@AuthenticationPrincipal CustomUserDetails customUser) {
+		ResponseDTO<BoardDTO> response = new ResponseDTO<>();
+		try {
+			Board board = Board.builder()
+							   .boardWriter(customUser.getUsername())
+							   .build();
+			Page<Board> pageBoardList = boardService.getPageMyQnaList(board, pageable);
+			
+			Page<BoardDTO> pageBoardDTOList = pageBoardList.map(pageQna -> 
+							   BoardDTO.builder()
+									   .boardNo(pageQna.getBoardNo())
+							   		   .boardTitle(pageQna.getBoardTitle())
+							   		   .boardContent(pageQna.getBoardContent())
+							   		   .boardWriter(pageQna.getBoardWriter())
+							   		   .boardReply(pageQna.getBoardReply())
+							   		   .boardRegdate(
+							   				   		pageQna.getBoardRegdate() == null?
+													null :
+													pageQna.getBoardRegdate().toString())
+							   		   .cateCode(pageQna.getCateCode())
+							   		   .boardCnt(pageQna.getBoardCnt())
+							   		   .build()
+							   );  
+			response.setPageItems(pageBoardDTOList);
+			
+			return ResponseEntity.ok().body(response);
+			
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+	
+	
 	// 나의 리뷰
 	
 	
