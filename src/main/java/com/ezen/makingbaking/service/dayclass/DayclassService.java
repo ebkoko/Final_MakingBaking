@@ -1,5 +1,7 @@
 package com.ezen.makingbaking.service.dayclass;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -23,4 +25,6 @@ public interface DayclassService {
 	CamelHashMap getClassImg(int dayclassNo);
 	
 	int getPersonCnt(Reser reser);
+
+	List<CamelHashMap> getUserReserStatus(String loginUserId, int dayclassNo);
 }

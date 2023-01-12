@@ -1,5 +1,7 @@
 package com.ezen.makingbaking.service.dayclass.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -86,5 +88,10 @@ public class DayclassServiceImpl implements DayclassService {
 	@Override
 	public int getPersonCnt(Reser reser) {
 		return reserRepository.getPersonCnt(reser);
+	}
+
+	@Override
+	public List<CamelHashMap> getUserReserStatus(String loginUserId, int dayclassNo) {
+		return reserRepository.getByUserIdAndClassNo(loginUserId, dayclassNo);
 	}
 }

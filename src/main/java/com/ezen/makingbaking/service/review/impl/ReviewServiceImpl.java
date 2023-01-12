@@ -53,4 +53,9 @@ public class ReviewServiceImpl implements ReviewService {
 		reviewRepository.save(review);
 		
 	}
+
+	@Override
+	public Page<Review> getPageMyRvwList(String userId, Pageable pageable) {
+		return reviewRepository.myPageRvwList(userId, pageable);
+	}
 }
