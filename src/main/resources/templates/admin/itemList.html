@@ -210,7 +210,7 @@
 						}
 					});
 					
-				});
+				}); //function 닫음
 				
 				
 				
@@ -271,10 +271,9 @@
 							alert("삭제를 취소하였습니다.");
 						}
 						console.log(changeRows);
-						
 					});
 
-//페이지이이이이이이이잉ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ
+				//상품리스트 페이징 처리
 				$(document).on("click", ".pagination a", function(e) {
 					e.preventDefault();
 					const page = $(this).attr("href");
@@ -282,7 +281,7 @@
 				});
 				
 
-				});
+				}); //function 닫음
 				
 				
 				function itemListPaging(page, condition) {
@@ -393,8 +392,7 @@
 						}
 					}); 
 					
-					
-				}; 
+				}; //function 닫음
 			</script>
 		</th:block>
 	</head>
@@ -454,7 +452,6 @@
 			        <th class="itemList_T_15">판매 상태</th>
 			        <th class="itemList_T_10">상품 관리</th>
 	      		</tr>
-	      		<tbody>
 	      		<tr th:each="item: ${pageItemList}">
 	      			<td><input type="checkbox" class="check" name="chk" th:value="${item.itemNo}"></td>
 		        	<td th:text="${item.itemNo}"></td>
@@ -473,7 +470,6 @@
 						</a>
 		        	</td>
 		     	 </tr>
-	      		</tbody>
 		    </table>
 		</div>
 		
