@@ -44,8 +44,8 @@ public class Review {		// 리뷰 테이블
 	private LocalDateTime rvwRegdate = LocalDateTime.now();	// 리뷰작성일	
 	@Builder.Default
 	private int rvwScore = 5;	// 별점
-	private long orderNo;
-	private int itemNo;
+	private long rvwOrderNo;
+	private long rvwReserNo;
 	@Transient
 	private String searchCondition;
 	@Transient

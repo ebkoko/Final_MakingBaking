@@ -276,6 +276,7 @@ public class ItemController {
 							  .rvwContent(reviewDTO.getRvwContent())
 							  .rvwReferNo(reviewDTO.getRvwReferNo())
 							  .rvwType("item")
+							  .rvwOrderNo(reviewDTO.getRvwOrderNo())
 							  .build();
 		
 		reviewService.insertItemRvw(review);
