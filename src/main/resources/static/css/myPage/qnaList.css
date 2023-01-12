@@ -7,36 +7,13 @@
 }
 
 #container {
-  width: 1200px; 
-  margin: 0 auto 100px;
+  width: 750px; 
+  margin: 0 0 100px 10px;
 }
 
-#high-container {
-  width: 100%; height: fit-content;
-  background-color: #FFFAF0;
-  padding: 30px;
-}
-
-#mid-nav {
-  margin-top: 60px;
-}
-
-#mid-nav>#dayclass-button {
-  width: 130px; height: 50px;
-  display: inline-block;
-  font-size: 18px; font-weight: bold; 
-  color: white; 
-  background-color: #28693F;
-  margin-left: 20px;
-}
-
-#mid-nav>#item-button {
-  width: 130px; height: 50px;
-  display: inline-block;
-  font-size: 18px; font-weight: bold; 
-  color: #28693F; 
-  background-color: #fff;
-  border: 1px solid #28693F;
+#container > h3 {
+	margin: 40px 0 0 40px;
+	font-size: 24px;
 }
 
 #mid-container {
@@ -56,32 +33,21 @@ th {
 
 td { font-size: 15px;}
 
-#th-title { border-right: 1px solid gray;}
+#th-category { border-right: 1px solid gray;}
 
-#th-date, #th-answer, #th-cnt { border-left: 1px solid gray;}
+#th-date, #th-answer, #th-cnt, #th-title { border-left: 1px solid gray;}
 
 .list-answer, .list-date, .list-category, .list-cnt { text-align: center;}
 
 .list-title { 
-  padding: 0 5px;
+  padding: 0 20px;
   border-right: 1px solid gray;
 }
 
 .list-title>a {color: black;}
 
-.list-date, .list-answer, .list-cnt { border-left: 1px solid gray;}
+.list-date, .list-answer, .list-cnt, .list-title { border-left: 1px solid gray;}
 
-.pagination {
-  list-style: none;
-  width: 100%;
-  display: inline-block;
-  text-align: center;
-}
-
-.pagination_button {
-  float: left;
-  margin-left: 5px;
-}
 
 #right-btn {
   width: 100px; height: 40px;
