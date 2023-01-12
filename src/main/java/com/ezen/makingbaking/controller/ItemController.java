@@ -169,8 +169,6 @@ public class ItemController {
 		mv.addObject("searchCondition", searchCondition);
 		mv.addObject("reviewChkList", reviewChkList);
 		
-		
-	
 		return mv;
 	}
 	// 리뷰 조건 검색

@@ -15,5 +15,7 @@ public interface ReviewService {
 
 	void insertItemRvw(Review review);
 
+	Page<Review> getPageMyRvwList(String userId, Pageable pageable);
+
 	
 }

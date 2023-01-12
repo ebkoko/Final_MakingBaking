@@ -3,6 +3,7 @@ package com.ezen.makingbaking.controller;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -108,6 +109,8 @@ public class DayclassController {
 		
 		int likeCnt = dayclassService.getLikeCnt(dayclassNo);
 		
+		List<CamelHashMap> reviewChkList = dayclassService.getUserReserStatus(loginUserId, dayclassNo);
+		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("dayclass/getDayclass.html");
 		
@@ -116,7 +119,8 @@ public class DayclassController {
 		mv.addObject("likeYn", likeYn);
 		mv.addObject("likeCnt", likeCnt);
 		mv.addObject("searchCondition", searchCondition);
-	
+		mv.addObject("reviewChkList", reviewChkList);
+		
 		return mv;
 	}
 	
@@ -148,8 +152,7 @@ public class DayclassController {
 																  .rvwWriter(pageReview.getRvwWriter())
 																  
 																  .rvwRegdate(pageReview.getRvwRegdate().toString())
-																  
-																  
+								
 																  .rvwScore(pageReview.getRvwScore())
 																  .build()
 									);
@@ -263,6 +266,7 @@ public class DayclassController {
 							  .rvwContent(reviewDTO.getRvwContent())
 							  .rvwReferNo(reviewDTO.getRvwReferNo())
 							  .rvwType("class")
+							  .rvwReserNo(reviewDTO.getRvwReserNo())
 							  .build();
 		
 		reviewService.insertClassRvw(review);

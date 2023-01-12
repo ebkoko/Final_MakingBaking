@@ -294,7 +294,7 @@
 						console.log($("#rvwContent").val());
 						 
 						 
-						 if( ! $("input[type='radio']:checked").val()){
+						 if( ! $("input[name='rvwScore']:checked").val()){
 							 alert('별점을 선택해주세요.');
 							 return;
 						 } 
@@ -307,7 +307,8 @@
 								data:{
 									rvwReferNo: $("#dayclassNo").val(),
 									rvwContent: $("#rvwContent").val(),
-									rvwScore: $("input[type='radio']:checked").val(),								
+									rvwScore: $("input[name='rvwScore']:checked").val(),								
+									rvwReserNo: $("#rvwReserNo").val(),
 									rvwType: 'class'
 								}, success: function(obj) {
 									console.log(obj);
@@ -354,6 +355,10 @@
 						reviewPagingAndOrder($(e.target).attr("href"), $("#rvw_array").val());
 					});
 					
+					$("input[name='reviewReserNo']").on("click", function() {
+						$(".rvwWriteSection").css("display", "block");
+						$("#rvwReserNo").val($(this).val());
+					});
 
 				}); 
 				
@@ -509,34 +514,46 @@
 				 </form>
 	            
 	            
-	            <hr class="dayclass_hr" id="dayclass_hr2">
-	            <div class="c_rvw" id="classReview">
+	            <hr th:if="${!#lists.isEmpty(reviewChkList)}" sec:authorize="isAuthenticated()" class="dayclass_hr" id="dayclass_hr2">
+	            <div th:if="${!#lists.isEmpty(reviewChkList)}" sec:authorize="isAuthenticated()" class="c_rvw" id="classReview">
 	              <h3 class="c_rvw_title" >클래스 후기</h3>
 	              <div class="c_rvw_write">
 	              	<div class="rvw_write_member">
 	              		<form class="rvw_write_form" action="/dayclass/insertClassRvw" method="post" >
+	              			<div th:each="reviewChk : ${reviewChkList}">
+						 		<span th:if="${reviewChk.reserStatus == 'PE' && reviewChk.reviewYn == 'N'}">
+							 		<input type="radio" name="reviewReserNo" th:value="${reviewChk.reserNo}"
+							 			   th:id="'radio' + ${reviewChk.reserNo}">
+							 		<label th:for="'radio' + ${reviewChk.reserNo}"
+							 			   th:text="'예약번호 : ' + ${reviewChk.reserNo}"></label>
+						 		</span>
+						 	</div>	
 	              			<input type="hidden" id="rvwContent" name="rvwContent">
-	              			<fieldset>
-							<input type="radio" name="rvwScore" value="5" class="rvwScore" id="rate1"><label
-								for="rate1">★</label>
-							<input type="radio" name="rvwScore" value="4" class="rvwScore" id="rate2"><label
-								for="rate2">★</label>
-							<input type="radio" name="rvwScore" value="3" class="rvwScore" id="rate3"><label
-								for="rate3">★</label>
-							<input type="radio" name="rvwScore" value="2" class="rvwScore" id="rate4"><label
-								for="rate4">★</label>
-							<input type="radio" name="rvwScore" value="1" class="rvwScore" id="rate5"><label
-								for="rate5">★</label>							
-							</fieldset>
-							<div class="textLength" >
-						      <p class="textCount">0자</p>
-						      <p class="textTotal">/200자</p>
-							</div>  
-							<textarea class="rvwContentText" id="rvwContentText" name="rvwContentText" placeholder=" 로그인 후 리뷰를 작성해주세요."></textarea>
-						 	<div class="writeBtn_div"> 
-	              			  <button class="rvw_writeBtn" id="rvw_writeBtn" type="button">등록</button>
+	              			<input type="hidden" id="rvwReserNo" name="rvwReserNo">
+	              			<div class="rvwWriteSection" style="display: none;">
+		              			<fieldset>
+								<input type="radio" name="rvwScore" value="5" class="rvwScore" id="rate1"><label
+									for="rate1">★</label>
+								<input type="radio" name="rvwScore" value="4" class="rvwScore" id="rate2"><label
+									for="rate2">★</label>
+								<input type="radio" name="rvwScore" value="3" class="rvwScore" id="rate3"><label
+									for="rate3">★</label>
+								<input type="radio" name="rvwScore" value="2" class="rvwScore" id="rate4"><label
+									for="rate4">★</label>
+								<input type="radio" name="rvwScore" value="1" class="rvwScore" id="rate5"><label
+									for="rate5">★</label>							
+								</fieldset>
+								<div class="textLength" >
+							      <p class="textCount">0자</p>
+							      <p class="textTotal">/200자</p>
+								</div>  
+								<textarea class="rvwContentText" id="rvwContentText" name="rvwContentText" placeholder=" 로그인 후 리뷰를 작성해주세요."></textarea>
+							 	<div class="writeBtn_div"> 
+		              			  <button class="rvw_writeBtn" id="rvw_writeBtn" type="button">등록</button>
+		              			</div>
 	              			</div>
 	              		</form>
+	              	
 	              	</div>
 	              	
 	              	<hr class="dayclass_hr" >
@@ -573,7 +590,7 @@
 	                          <td th:text="${review.rvwContent}"></td>
 	                          <td th:text="${review.rvwRegdate eq null ? '' : #strings.substring(review.rvwRegdate, 0, 10)}"></td>
 	                          <td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${review.rvwWriter}"></td>
-	                          <td sec:authorize="!hasRole('ROLE_ADMIN')" th:text="${review.rvwWriter.substring(0, review.rvwWriter.length()-3) + '***'}"></td>
+	                          <td sec:authorize="!hasRole('ROLE_ADMIN')" th:text="${review.rvwWriter.length() > 4 ? review.rvwWriter.substring(0, review.rvwWriter.length()-3) + '***' : review.rvwWriter}"></td>
 	                        </tr>
 	                      </tbody>
 	                    </table>

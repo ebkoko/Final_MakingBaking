@@ -103,7 +103,30 @@ public interface ReserRepository extends JpaRepository<Reser, Integer> {
 			+ "        AND D.FILE_TYPE = 'dayclass'", nativeQuery=true)
 	CamelHashMap findByReserDetailAndReserNo(@Param("reserNo") long reserNo);
 	
-	@Query(value = "SELECT C.*\r\n"
+    @Query(value="SELECT A.*\r\n"
+    		+ "	 , CASE\r\n"
+    		+ "		WHEN A.RESER_NO IN (\r\n"
+    		+ "								SELECT C.RVW_RESER_NO\r\n"
+    		+ "							)\r\n"
+    		+ "		THEN 'Y'\r\n"
+    		+ "        ELSE 'N'\r\n"
+    		+ "        END AS REVIEW_YN\r\n"
+    		+ "	FROM T_MB_RESER A\r\n"
+    		+ "    LEFT OUTER JOIN (\r\n"
+    		+ "						SELECT B.*\r\n"
+    		+ "							FROM T_MB_REVIEW B\r\n"
+    		+ "                            WHERE B.RVW_TYPE = 'class'\r\n"
+    		+ "                              AND B.RVW_REFER_NO = :dayclassNo\r\n"
+    		+ "                              AND B.RVW_WRITER = :userId\r\n"
+    		+ "					) C\r\n"
+    		+ "	ON A.CLASS_NO = C.RVW_REFER_NO\r\n"
+    		+ "    AND A.USER_ID = C.RVW_WRITER\r\n"
+    		+ "	AND A.RESER_NO = C.RVW_RESER_NO\r\n"
+    		+ "	WHERE A.CLASS_NO = :dayclassNo\r\n"
+    		+ "      AND A.USER_ID = :userId", nativeQuery=true)
+    List<CamelHashMap> getByUserIdAndClassNo(@Param("userId") String loginUserId, @Param("dayclassNo") int dayclassNo);
+	
+    @Query(value = "SELECT C.*\r\n"
 			+ "	, D.FILE_NO\r\n"
 			+ "    , D.FILE_NAME\r\n"
 			+ "    , D.FILE_ORIGIN_NAME\r\n"
@@ -141,5 +164,6 @@ public interface ReserRepository extends JpaRepository<Reser, Integer> {
 					+ "        AND D.FILE_TYPE = 'dayclass'\r\n"
 					+ "        ORDER BY A.RESER_DATE DESC"
 					+ ") AA", nativeQuery=true)
+	
 	Page<CamelHashMap> findAllReserByReserCondition(@Param("userId") String userId, @Param("reserCondition") String reserCondition, Pageable pageable);
 }

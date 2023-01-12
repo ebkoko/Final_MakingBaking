@@ -23,12 +23,15 @@ import com.ezen.makingbaking.dto.BoardDTO;
 import com.ezen.makingbaking.dto.OrderDTO;
 import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
+import com.ezen.makingbaking.dto.ReviewDTO;
 import com.ezen.makingbaking.entity.Board;
 import com.ezen.makingbaking.entity.CustomUserDetails;
+import com.ezen.makingbaking.entity.Review;
 import com.ezen.makingbaking.service.board.BoardService;
 import com.ezen.makingbaking.service.dayclass.DayclassService;
 import com.ezen.makingbaking.service.order.OrderService;
 import com.ezen.makingbaking.service.reser.ReserService;
+import com.ezen.makingbaking.service.review.ReviewService;
 
 @RestController
 @RequestMapping("/mypage")
@@ -44,6 +47,9 @@ public class MypageController {
 	
 	@Autowired
 	private BoardService boardService;
+	
+	@Autowired
+	private ReviewService reviewService;
 	
 	@GetMapping("/myPage")
 	public ModelAndView myOrderList(OrderDTO orderDTO, @PageableDefault(page = 0, size = 5) Pageable pageable,
@@ -246,8 +252,72 @@ public class MypageController {
 	
 	
 	// 나의 리뷰
+	@GetMapping("/myRvwList")
+	public ModelAndView myRvwList(ReviewDTO reviewDTO, @PageableDefault(page=0, size=10) Pageable pageable,
+			@AuthenticationPrincipal CustomUserDetails customUser) {
+				
 	
 	
+		Page<Review> pageReviewList = reviewService.getPageMyRvwList(customUser.getUsername(), pageable);
+		
+		Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview -> 
+						  ReviewDTO.builder()
+						   		   .rvwNo(pageReview.getRvwNo())
+						   		   .rvwReferNo(pageReview.getRvwReferNo())
+						   		   .rvwType(pageReview.getRvwType())						
+						   		   .rvwContent(pageReview.getRvwContent())
+						   		   .rvwRegdate(
+						   				   			pageReview.getRvwRegdate() == null?
+												null :
+													pageReview.getRvwRegdate().toString())
+						   		   .rvwScore(pageReview.getRvwScore())
+
+						   		   .build()
+						   );
+		
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("mypage/myPageRvw.html");
+		mv.addObject("pageReviewList", pageReviewDTOList); 
+		
+		return mv;
+	}
+	
+	// 
+	@PostMapping("/myRvwList")
+	public ResponseEntity<?> myRvwPageList(@PageableDefault(page=0, size=10) Pageable pageable,
+			@AuthenticationPrincipal CustomUserDetails customUser) {
+		ResponseDTO<BoardDTO> response = new ResponseDTO<>();
+		try {
+			Board board = Board.builder()
+							   .boardWriter(customUser.getUsername())
+							   .build();
+			Page<Board> pageBoardList = boardService.getPageMyQnaList(board, pageable);
+			
+			Page<BoardDTO> pageBoardDTOList = pageBoardList.map(pageQna -> 
+							   BoardDTO.builder()
+									   .boardNo(pageQna.getBoardNo())
+							   		   .boardTitle(pageQna.getBoardTitle())
+							   		   .boardContent(pageQna.getBoardContent())
+							   		   .boardWriter(pageQna.getBoardWriter())
+							   		   .boardReply(pageQna.getBoardReply())
+							   		   .boardRegdate(
+							   				   		pageQna.getBoardRegdate() == null?
+													null :
+													pageQna.getBoardRegdate().toString())
+							   		   .cateCode(pageQna.getCateCode())
+							   		   .boardCnt(pageQna.getBoardCnt())
+							   		   .build()
+							   );  
+			response.setPageItems(pageBoardDTOList);
+			
+			return ResponseEntity.ok().body(response);
+			
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
 	
 	
 }
