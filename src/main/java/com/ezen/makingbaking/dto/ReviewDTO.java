@@ -19,5 +19,6 @@ public class ReviewDTO {
 	private int rvwScore;
 	private String searchCondition;
 	private String searchKeyword;
-
+	private long rvwOrderNo;
+	private long rvwReserNo;
 }

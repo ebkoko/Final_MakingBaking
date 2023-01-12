@@ -142,33 +142,34 @@
 					$("#it_rvw_writeBtn").on("click", function(){
 						console.log($("#rvwContent").val());
 						
-						if( ! $("input[type='radio']:checked").val()){
+						if( ! $("input[name='rvwScore']:checked").val()){
 							 alert('별점을 선택해주세요.');
 							 return;
 						} 
 						if( ! $("#rvwContent").val()){
 							 alert('리뷰를 작성해주세요.');
-						} else {
-							$.ajax({
-								url: '/item/insertItemRvw',
-								type:'post',
-								data:{
-									rvwReferNo: $("#itemNo").val(),
-									rvwContent: $("#rvwContent").val(),
-									rvwScore: $("input[type='radio']:checked").val(),
-									rvwType: 'item'
-								}, success: function(obj) {
-									console.log(obj);
-									location.reload();
-									alert("리뷰가 등록되었습니다.");
-									
-								}, error: function(e) {
-									console.log(e);
-									alert("리뷰 등록에 실패하였습니다.");
-								}
-							});	
-							 
-						 }
+							 return;
+						} 
+						
+						$.ajax({
+							url: '/item/insertItemRvw',
+							type:'post',
+							data:{
+								rvwReferNo: $("#itemNo").val(),
+								rvwContent: $("#rvwContent").val(),
+								rvwScore: $("input[name='rvwScore']:checked").val(),
+								rvwOrderNo: $("#rvwOrderNo").val(),
+								rvwType: 'item'
+							}, success: function(obj) {
+								console.log(obj);
+								location.reload();
+								alert("리뷰가 등록되었습니다.");
+								
+							}, error: function(e) {
+								console.log(e);
+								alert("리뷰 등록에 실패하였습니다.");
+							}
+						});	
 							
 					}); 
 					
@@ -201,6 +202,11 @@
 					$(".paging_btn a").on("click", function(e) {
 						e.preventDefault();
 						reviewPagingAndOrder($(e.target).attr("href"), $("#it_rvw_array").val());
+					});
+					
+					$("input[name='reviewOrderNo']").on("click", function() {
+						$(".rvwWriteSection").css("display", "block");
+						$("#rvwOrderNo").val($(this).val());
 					});
 					
 				});
@@ -276,7 +282,7 @@
 	                <p th:text="${item.itemMinName}" name="소제목"></p>
 	              </div>
 		          <div class="itbanner_explain_KRW">
-		            <span>KRW&nbsp;</span><span th:text="${#numbers.formatInteger(item.itemPrice, 3, 'COMMA')}" class="itemPrice"></span>
+		            <span th:text="${#numbers.formatInteger(item.itemPrice, 3, 'COMMA')}" class="itemPrice"></span><span>원</span>
 		          </div> 
 		          <div class="it_explainList_div">
 		              <table class="it_explainList_T">
@@ -336,8 +342,8 @@
     
 	            </div>
 	          
-	            <hr id="item_hr2" class="item_hr">
-	            <div class="it_rvw" id="itemReview">	 
+	            <hr th:if="${!#lists.isEmpty(reviewChkList)}" sec:authorize="isAuthenticated()" id="item_hr2" class="item_hr">
+	            <div th:if="${!#lists.isEmpty(reviewChkList)}" sec:authorize="isAuthenticated()" class="it_rvw" id="itemReview">	 
 	              <h3 class="it_rvw_title" >상품후기</h3>             
 	              <div class="it_rvw_write">
 	              	<div class="it_rvw_write_member">	   	            
@@ -350,27 +356,30 @@
 							 			   th:text="'주문번호 : ' + ${reviewChk.orderNo}"></label>
 						 		</span>
 						 	</div>	
-	             			<input type="hidden" id="rvwContent" name="rvwContent">             			
-	              			<fieldset>
-							<input type="radio" name="rvwScore" value="5" class="rvwScore" id="rate1"><label
-								for="rate1">★</label>
-							<input type="radio" name="rvwScore" value="4" class="rvwScore" id="rate2"><label
-								for="rate2">★</label>
-							<input type="radio" name="rvwScore" value="3" class="rvwScore" id="rate3"><label
-								for="rate3">★</label>
-							<input type="radio" name="rvwScore" value="2" class="rvwScore" id="rate4"><label
-								for="rate4">★</label>
-							<input type="radio" name="rvwScore" value="1" class="rvwScore" id="rate5"><label
-								for="rate5">★</label>
-							</fieldset>	    			
-							<div class="textLength" >
-						      <p class="textCount">0자</p>
-						      <p class="textTotal">/200자</p>
-						 	</div>
-	              			<textarea class="rvwContentText" id="rvwContentText" placeholder=" 로그인 후 후기를 리뷰해주세요."></textarea>	              			
-	              			<div class="writeBtn_div"> 
-	              			  <button class="it_rvw_writeBtn" id="it_rvw_writeBtn" type="button">등록</button>
-	              			</div>
+	             			<input type="hidden" id="rvwContent" name="rvwContent">
+	             			<input type="hidden" id="rvwOrderNo" name="rvwOrderNo">
+	             			<div class="rvwWriteSection" style="display: none;">    			
+		              			<fieldset>
+								<input type="radio" name="rvwScore" value="5" class="rvwScore" id="rate1"><label
+									for="rate1">★</label>
+								<input type="radio" name="rvwScore" value="4" class="rvwScore" id="rate2"><label
+									for="rate2">★</label>
+								<input type="radio" name="rvwScore" value="3" class="rvwScore" id="rate3"><label
+									for="rate3">★</label>
+								<input type="radio" name="rvwScore" value="2" class="rvwScore" id="rate4"><label
+									for="rate4">★</label>
+								<input type="radio" name="rvwScore" value="1" class="rvwScore" id="rate5"><label
+									for="rate5">★</label>
+								</fieldset>	    			
+								<div class="textLength" >
+							      <p class="textCount">0자</p>
+							      <p class="textTotal">/200자</p>
+							 	</div>
+		              			<textarea class="rvwContentText" id="rvwContentText" placeholder=" 로그인 후 후기를 리뷰해주세요."></textarea>	              			
+		              			<div class="writeBtn_div"> 
+		              			  <button class="it_rvw_writeBtn" id="it_rvw_writeBtn" type="button">등록</button>
+		              			</div>
+	             			</div>
 	              		</form>
 	              	</div>
 	              	

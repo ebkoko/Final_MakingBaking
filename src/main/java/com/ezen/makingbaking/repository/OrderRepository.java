@@ -114,7 +114,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 			+ "SELECT ONTBL.*\r\n"
 			+ "	 , CASE\r\n"
 			+ "		WHEN ONTBL.ORDER_NO IN (\r\n"
-			+ "								  SELECT D.ORDER_NO\r\n"
+			+ "								  SELECT D.RVW_ORDER_NO\r\n"
 			+ "							   )\r\n"
 			+ "		THEN 'Y'\r\n"
 			+ "		ELSE 'N'\r\n"
@@ -127,7 +127,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 			+ "							  AND E.RVW_TYPE = 'item'\r\n"
 			+ "					 ) D\r\n"
 			+ "	ON ONTBL.USER_ID = D.RVW_WRITER\r\n"
-			+ "	AND ONTBL.ORDER_NO = D.ORDER_NO\r\n"
+			+ "	AND ONTBL.ORDER_NO = D.RVW_ORDER_NO\r\n"
 			+ "	AND ONTBL.ITEM_NO = D.RVW_REFER_NO", nativeQuery=true)
 	List<CamelHashMap> getByUserIdAndItemNo(@Param("userId") String loginUserId, @Param("itemNo") int itemNo);
 	

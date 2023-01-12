@@ -208,4 +208,9 @@ public class MypageController {
 		return mv;
 	}
 	
+	// 나의 리뷰
+	
+	
+	
+	
 }
