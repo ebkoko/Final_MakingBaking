@@ -12,6 +12,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.ezen.makingbaking.dto.ApproveResponseDTO;
+import com.ezen.makingbaking.dto.CancelResponseDTO;
+import com.ezen.makingbaking.dto.OrderDTO;
 import com.ezen.makingbaking.dto.ReadyResponseDTO;
 import com.ezen.makingbaking.repository.CartRepository;
 import com.ezen.makingbaking.repository.OrderRepository;
@@ -107,6 +109,34 @@ public class KakaoPayServiceImpl implements KakaoPayService {
 		headers.set("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 		
 		return headers;
+	}
+
+	@Override
+	public CancelResponseDTO cancelReady(OrderDTO orderDTO, String itemList)
+			throws JsonMappingException, JsonProcessingException {
+
+		List<Map<String, Object>> itemMapList = new ObjectMapper().readValue(itemList, new TypeReference<List<Map<String, Object>>>() {});
+		
+		// 카카오가 요구한 결제취소 요청 request값을 담아줍니다. 
+		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
+		parameters.add("cid", "TC0ONETIME"); // 가맹점 코드
+		parameters.add("tid", orderDTO.getTid()); // tid
+		parameters.add("cancel_amount", String.valueOf(orderDTO.getOrderTotalPayPrice())); // 상품 총액
+		parameters.add("cancel_tax_free_amount", "0"); // 상품 비과세 금액
+		parameters.add("approval_url", "http://localhost:9900/mypage/getOrderDetail/" + orderDTO.getOrderNo()); // 결제취소 승인시 넘어갈 url
+//		parameters.add("cancel_url", "http://localhost:9900/order/kakaoOrderCancel"); // 결제취소시 넘어갈 url
+		parameters.add("fail_url", "http://localhost:9900/mypage/myPage"); // 결제취소 실패시 넘어갈 url
+		
+		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
+		// 외부url요청 통로 열기.
+		RestTemplate template = new RestTemplate();
+		String url = "https://kapi.kakao.com/v1/payment/cancel";
+        // template으로 값을 보내고 받아온 CancelResponse값 cancelResponse에 저장.
+		CancelResponseDTO cancelResponse = template.postForObject(url, requestEntity, CancelResponseDTO.class);
+		System.out.println("결제취소 응답객체: " + cancelResponse);
+		cancelResponse.setOrderNo(orderDTO.getOrderNo());
+		
+		return cancelResponse;
 	}
 
 	

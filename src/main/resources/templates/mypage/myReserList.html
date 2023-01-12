@@ -31,48 +31,56 @@
 							
 							let htmlstr = "";
 							
-							for(let i = 0; i < obj.pageItems.content.length; i++) {
+							if(obj.pageItems.content.length == 0) {
 								htmlstr += `
-									<div class="boxx">
-									  <div class="imgWrapper">
-								        <img src="/dayclass/${obj.pageItems.content[i].fileName}" width="130px" margin="10px">
-								      </div>
-								      <div class="box_product">`;
-								if(obj.pageItems.content[i].reserStatus == 'MV') {
-									htmlstr += `
-								         <div class="box_product_detail" style="color: red; font-weight: 600;">입금대기</div>									
-									`;
-								} else if(obj.pageItems.content[i].reserStatus == 'PE') {
-									htmlstr += `
-								         <div class="box_product_detail" style="color: #28693F; font-weight: 600;">결제완료</div>					
-									`;
-								} else if(obj.pageItems.content[i].reserStatus == 'RC') {
-									htmlstr += `
-								         <div class="box_product_detail" style="color: lightgray; font-weight: 600;">예약취소</div>								
-									`;
-								} else if(obj.pageItems.content[i].reserStatus == 'PC') {
-									htmlstr += `
-								         <div class="box_product_detail" style="color: lightgray; font-weight: 600;">결제취소</div>									
-									`;
-								}
-								htmlstr += `
-								         <div class="box_product_detail">${obj.pageItems.content[i].dayclassName}</div>
-								         <div class="box_product_detail">
-									         <div class="box_detail" style="display: inline-block;">예약일자: ${obj.pageItems.content[i].partiDate}</div>
-									          ${obj.pageItems.content[i].partiTime == 'A' ? '<div class="box_detail" style="display: inline-block;">오전 9:30~12:30</div>'
-									          : '<div class="box_detail" style="display: inline-block;">오후 14:00~17:00</div>'}
-								         </div>
-								       </div>
-								       <div class="box_right">
-								         <span class="box_right_detail"><a href="/mypage/getReserDetail/${obj.pageItems.content[i].reserNo}">예약 상세보기</a></span>
-								         <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
-								       </div>
-								     </div>
+									<p class="noReser"><span class="noReserStatus">${$("#reserCondition option:selected").text()}</span>인 예약이 없습니다.</p>
 								`;
-								
-							}
+								$("#boxxWrapper").html(htmlstr);
+							} else {
 							
-							$("#boxxWrapper").html(htmlstr);
+								for(let i = 0; i < obj.pageItems.content.length; i++) {
+									htmlstr += `
+										<div class="boxx">
+										  <div class="imgWrapper">
+									        <img src="/dayclass/${obj.pageItems.content[i].fileName}" width="130px" margin="10px">
+									      </div>
+									      <div class="box_product">`;
+									if(obj.pageItems.content[i].reserStatus == 'MV') {
+										htmlstr += `
+									         <div class="box_product_detail" style="color: red; font-weight: 600;">입금대기</div>									
+										`;
+									} else if(obj.pageItems.content[i].reserStatus == 'PE') {
+										htmlstr += `
+									         <div class="box_product_detail" style="color: #28693F; font-weight: 600;">결제완료</div>					
+										`;
+									} else if(obj.pageItems.content[i].reserStatus == 'RC') {
+										htmlstr += `
+									         <div class="box_product_detail" style="color: lightgray; font-weight: 600;">예약취소</div>								
+										`;
+									} else if(obj.pageItems.content[i].reserStatus == 'PC') {
+										htmlstr += `
+									         <div class="box_product_detail" style="color: lightgray; font-weight: 600;">결제취소</div>									
+										`;
+									}
+									htmlstr += `
+									         <div class="box_product_detail">${obj.pageItems.content[i].dayclassName}</div>
+									         <div class="box_product_detail">
+										         <div class="box_detail" style="display: inline-block;">예약일자: ${obj.pageItems.content[i].partiDate}</div>
+										          ${obj.pageItems.content[i].partiTime == 'A' ? '<div class="box_detail" style="display: inline-block;">오전 9:30~12:30</div>'
+										          : '<div class="box_detail" style="display: inline-block;">오후 14:00~17:00</div>'}
+									         </div>
+									       </div>
+									       <div class="box_right">
+									         <span class="box_right_detail"><a href="/mypage/getReserDetail/${obj.pageItems.content[i].reserNo}">예약 상세보기</a></span>
+									         <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
+									       </div>
+									     </div>
+									`;
+									
+								}
+								
+								$("#boxxWrapper").html(htmlstr);
+							}
 							
 							htmlstr = "";
 							
@@ -102,11 +110,17 @@
 											: startPage;
 							
 							for(let i = realStart; i <= endPage; i++) {
-								
-								htmlstr += `<li class="pagination_button">
-										   	   <a href="${i - 1}">${i}</a>
-									       </li>
-								`;
+								if(pageNumber == i-1) {
+									htmlstr += `<li class="pagination_button">
+											   	   <a class="present" href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								} else {
+									htmlstr += `<li class="pagination_button">
+											   	   <a href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								}
 							}
 							
 							if(pageNumber < totalPages - 1) {
@@ -130,7 +144,7 @@
 </head>
 
 <body>
-	<div layout:fragment="content">
+	<div layout:fragment="content" style="height: 75vh;">
 		<main class="centre">
 	    <!-- 사이드 바 -->
 	    <div class="left-nav-bar">
@@ -203,6 +217,7 @@
 			        </div>
 			      </div>
 		      </div>
+		      <p class="noReser" th:if="${#lists.size('getReserList') == 0}"><span class="noReserStatus"></span>인 예약이 없습니다.</p>
 		    </div>
 		  	<div class="paging" style="text-align:center;">
 				<ul class="pagination" th:if="${getReserList.totalElements > 0}"
