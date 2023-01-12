@@ -1,6 +1,7 @@
 package com.ezen.makingbaking.service.order.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -65,5 +66,24 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public Order updateOrder(Order order) {
 		return orderRepository.save(order);
+	}
+
+	@Override
+	public void updateCancelItemList(List<Map<String, Object>> itemMapList) {
+		for(int i = 0; i < itemMapList.size(); i++) {
+			System.out.println(itemMapList.get(i).get("itemStatus"));
+			
+			if(itemMapList.get(i).get("itemStatus").toString().equals("Y")) {
+				orderRepository.updateCancelItem(Integer.parseInt(itemMapList.get(i).get("itemNo").toString()),
+						 						 Integer.parseInt(itemMapList.get(i).get("orderItemCnt").toString()),
+						 						 itemMapList.get(i).get("itemStatus").toString().charAt(0));
+			} else if(itemMapList.get(i).get("itemStatus").toString().equals("S")) {
+				itemMapList.get(i).replace("itemStatus", "Y");
+				orderRepository.updateCancelItem(Integer.parseInt(itemMapList.get(i).get("itemNo").toString()),
+												 Integer.parseInt(itemMapList.get(i).get("orderItemCnt").toString()),
+												 itemMapList.get(i).get("itemStatus").toString().charAt(0));
+			}
+		}
+		
 	}
 }

@@ -333,19 +333,19 @@ public class OrderController {
 //		}
 //	}
 	
-	@PostMapping("/payCancel/{orderNo}")
-	public ResponseEntity<?> cancelReady( @PathVariable("orderNo") long orderNo,
+	@PostMapping("/payCancel")
+	public CancelResponseDTO cancelReady(
 			OrderDTO orderDTO, HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails customUser,
 			@RequestParam("itemList") String itemList, HttpSession session) throws JsonMappingException, JsonProcessingException {
 		
-		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
-		
-		try {
+//		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
+//		
+//		try {
 			Order returnOrder = Order.builder()
-									.orderNo(orderNo)
+									.orderNo(orderDTO.getOrderNo())
 									.userId(customUser.getUsername())
 									.orderDate(LocalDateTime.parse(orderDTO.getOrderDate()))
-									.orderStatus(orderDTO.getOrderStatus())
+									.orderStatus("PC")
 									.reciName(orderDTO.getReciName())
 									.reciTel(orderDTO.getReciTel())
 									.shippingAddr1(orderDTO.getShippingAddr1())
@@ -364,30 +364,19 @@ public class OrderController {
 									.build();
 
 			// 카카오페이 결제취소 준비: 결제취소요청 service 실행
-			CancelResponseDTO cancelResponseDTO = kakaoPayService.cancelReady(orderDTO, itemList);
+			CancelResponseDTO cancelResponseDTO = kakaoPayService.cancelReady(orderDTO);
 			
 			
+			// Order 정보를 모델에 저장
 			orderService.updateOrder(returnOrder);
 			
-			Map<String, Object> returnMap = new HashMap<String, Object>();
+			List<Map<String, Object>> itemMapList = new ObjectMapper().readValue(itemList, new TypeReference<List<Map<String, Object>>>() {});
 			
-			returnMap.put("getOrder", returnOrder);
+			orderService.updateCancelItemList(itemMapList);
+				
+			return cancelResponseDTO;
 			
-			responseDTO.setItem(returnMap);
-			
-			return ResponseEntity.ok().body(responseDTO);
-		} catch(Exception e) {
-			responseDTO.setErrorMessage(e.getMessage());
-			
-			return ResponseEntity.badRequest().body(responseDTO);
-		}		
 		
 		
-		// Order 정보를 모델에 저장
-		session.setAttribute("order", orderDTO);
-		
-		session.setAttribute("itemList", itemList);
-		
-		return cancelResponseDTO;
 	}
 }

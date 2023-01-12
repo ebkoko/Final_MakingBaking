@@ -33,7 +33,7 @@ public class KakaoPayServiceImpl implements KakaoPayService {
 	
 	@Override
 	public ReadyResponseDTO payReady(int totalAmount, String itemList) throws JsonMappingException, JsonProcessingException {
-		System.out.println(itemList);
+		System.out.println(totalAmount);
 		
 		List<Map<String, Object>> itemMapList = new ObjectMapper().readValue(itemList, new TypeReference<List<Map<String, Object>>>() {});
 		
@@ -112,11 +112,11 @@ public class KakaoPayServiceImpl implements KakaoPayService {
 	}
 
 	@Override
-	public CancelResponseDTO cancelReady(OrderDTO orderDTO, String itemList)
+	public CancelResponseDTO cancelReady(OrderDTO orderDTO/*, String itemList*/)
 			throws JsonMappingException, JsonProcessingException {
 
-		List<Map<String, Object>> itemMapList = new ObjectMapper().readValue(itemList, new TypeReference<List<Map<String, Object>>>() {});
-		
+		//List<Map<String, Object>> itemMapList = new ObjectMapper().readValue(itemList, new TypeReference<List<Map<String, Object>>>() {});
+		System.out.println(orderDTO.getOrderTotalPayPrice());
 		// 카카오가 요구한 결제취소 요청 request값을 담아줍니다. 
 		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
 		parameters.add("cid", "TC0ONETIME"); // 가맹점 코드
@@ -134,7 +134,6 @@ public class KakaoPayServiceImpl implements KakaoPayService {
         // template으로 값을 보내고 받아온 CancelResponse값 cancelResponse에 저장.
 		CancelResponseDTO cancelResponse = template.postForObject(url, requestEntity, CancelResponseDTO.class);
 		System.out.println("결제취소 응답객체: " + cancelResponse);
-		cancelResponse.setOrderNo(orderDTO.getOrderNo());
 		
 		return cancelResponse;
 	}
