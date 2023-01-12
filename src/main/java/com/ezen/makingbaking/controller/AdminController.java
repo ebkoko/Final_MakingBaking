@@ -29,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.makingbaking.common.FileUtils;
-import com.ezen.makingbaking.dto.BoardDTO;
 import com.ezen.makingbaking.dto.DayclassDTO;
 import com.ezen.makingbaking.dto.ImgFileDTO;
 import com.ezen.makingbaking.dto.ItemDTO;
@@ -38,7 +37,6 @@ import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.dto.ReviewDTO;
 import com.ezen.makingbaking.dto.UserDTO;
-import com.ezen.makingbaking.entity.Board;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
@@ -51,7 +49,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 
 
 @RestController
