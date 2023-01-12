@@ -286,8 +286,23 @@ public class AdminServiceImpl implements AdminService {
 	   }
 	
 	@Override
-	public Review getUserRvwList(String rvwWriter) {
-		return reviewRepository.getUserRvwList(rvwWriter);
+	public void saveUserList(List<Map<String, Object>> changeRowsList) {
+		for(int i = 0; i < changeRowsList.size(); i++) {
+			User duser = User.builder()
+							.userName(changeRowsList.get(i).get("userName").toString()) 
+							//아이디로 변경
+							.build();
+			
+			userRepository.delete(duser);
+			 
+		}
+		
+	}
+	
+	
+	@Override
+	public Page<Review> getUserRvwList(String rvwWriter, Pageable pageable) {
+		return reviewRepository.getUserRvwList(rvwWriter, pageable);
 	}
 	
 	

@@ -48,8 +48,10 @@ public interface AdminService {
 	//user
 	Page<User> getPageUserList(User user, Pageable pageable);
 	
+	void saveUserList(List<Map<String, Object>> changeRowsList);
+	
 	//user_review
-	Review getUserRvwList(String rvwWriter);
+	Page<Review> getUserRvwList(String rvwWriter, Pageable pageable);
 	
 	
 	//reser_dayclass

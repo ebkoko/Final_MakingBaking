@@ -274,7 +274,127 @@
 						
 					});
 
+//페이지이이이이이이이잉ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ
+				$(document).on("click", ".pagination a", function(e) {
+					e.preventDefault();
+					const page = $(this).attr("href");
+					itemListPaging(page, $("#searchCondition").val());
 				});
+				
+
+				});
+				
+				
+				function itemListPaging(page, condition) {
+					console.log(page);
+					console.log(condition);
+
+						$.ajax({
+						url: '/admin/itemList',
+						type: 'post',
+						data: {
+							page: page,
+							searchCondition: condition
+						},
+						success: function(obj) {
+							console.log(obj);
+							
+							let htmlStr = "";
+							
+							htmlStr += `
+							
+								<tr>
+					        		<th class="itemList_T_10"></th>
+							        <th class="itemList_T_10">No.</th>
+							        <th class="itemList_T_20">상품 이름</th>
+							        <th class="itemList_T_20">상품 가격</th>
+							        <th class="itemList_T_15">상품 등록일</th>
+							        <th class="itemList_T_15">판매 상태</th>
+							        <th class="itemList_T_10">상품 관리</th>
+					      		</tr>
+					      	`;
+							
+							for(let i=0; i<obj.pageItems.content.length; i++) {
+								htmlStr += `
+									
+									<tr>
+										<td>
+											<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].itemNo}"
+											value="${obj.pageItems.content[i].itemNo}">
+										</td>
+										<td>${obj.pageItems.content[i].itemNo}</td>
+										<td name="itemName" data-item-name="${obj.pageItems.content[i].itemName}">${obj.pageItems.content[i].itemName}</td>
+										<td>${obj.pageItems.content[i].itemPrice}</td>
+										<td>${obj.pageItems.content[i].itemRegdate == null ? '' : obj.pageItems.content[i].itemRegdate.substr(0, 10)}</td>
+										<td>${obj.pageItems.content[i].itemStatus}</td>
+										<td>
+							        		<a id="itemMod"
+												href="/admin/itemUpdate/${obj.pageItems.content[i].itemNo}">수정
+											</a>
+							        	</td>
+									</tr>
+								`;
+							}
+							
+							$("#itemList_T").html(htmlStr);
+							
+							htmlstr = "";
+						
+							let pageNumber = obj.pageItems.pageable.pageNumber;
+							let pageSize = obj.pageItems.pageable.pageSize;
+							let totalPages = obj.pageItems.totalPages;
+							let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
+							let tempEndPage = startPage + pageSize -1;
+							let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
+							console.log(pageNumber);
+							console.log(pageSize);
+							console.log(totalPages);
+							console.log(startPage);
+							console.log(tempEndPage);
+							console.log(endPage);
+							
+							if(pageNumber > 0) {
+								htmlstr += `
+									<li class="pagination_button">
+										<a style="border: 0px;" href="${pageNumber - 1}">&#60;</a>
+									</li>
+								`;
+							}
+							
+							let realStart = totalPages - startPage < pageSize ? 
+												totalPages < pageSize ? 1 : totalPages - pageSize + 1 
+											: startPage;
+							
+							for(let i = realStart; i <= endPage; i++) {
+								if(pageNumber == i) {
+									htmlstr += `<li id="present" class="pagination_button">
+											   	   <a href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								} else {
+									htmlstr += `<li class="pagination_button">
+											   	   <a href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								}
+							}
+							
+							if(pageNumber < totalPages - 1) {
+								htmlstr += `<li class="pagination_button">
+										       <a style="border: 0px;" href="${pageNumber + 1}">&#62;</a>
+									        </li>
+								`;
+							}
+							
+							$(".pagination").html(htmlstr);
+						},
+						error: function(e) {
+							console.log(e);
+						}
+					}); 
+					
+					
+				}; 
 			</script>
 		</th:block>
 	</head>
@@ -334,7 +454,8 @@
 			        <th class="itemList_T_15">판매 상태</th>
 			        <th class="itemList_T_10">상품 관리</th>
 	      		</tr>
-	      		<tr th:each="item: ${getItemList.content}">
+	      		<tbody>
+	      		<tr th:each="item: ${pageItemList}">
 	      			<td><input type="checkbox" class="check" name="chk" th:value="${item.itemNo}"></td>
 		        	<td th:text="${item.itemNo}"></td>
 		        	
@@ -352,8 +473,29 @@
 						</a>
 		        	</td>
 		     	 </tr>
+	      		</tbody>
 		    </table>
 		</div>
+		
+		<div class="paging">
+				<ul class="pagination" th:if="${pageItemList.totalElements > 0}"
+									   th:with="pageNumber = ${pageItemList.pageable.pageNumber},
+												pageSize = ${pageItemList.pageable.pageSize},
+												totalPages = ${pageItemList.totalPages},
+												startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+												tempEndPage = ${startPage + pageSize - 1},
+												endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+					<li class="pagination_button" th:if="${pageNumber > 0}">
+						<a style="border: 0px;" th:href="${pageNumber - 1}">&#60;</a>
+					</li>
+					<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
+						<a th:href="${page - 1}" th:text="${page}"></a>
+					</li>
+					<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+						<a style="border: 0px;" th:href="${pageNumber + 1}">&#62;</a>
+					</li>
+				</ul>
+			</div>
 		
 		<!-- 삭제/등록버튼 -->
 	    <div id="itemTotalBtn">

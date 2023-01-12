@@ -72,17 +72,17 @@
 			        <th class="AuserList_T_20">작성일</th>
 			        <th class="AuserList_T_20">별점</th>
 	      		</tr>
-	      		<tr th:each="reser: ${getOrderItemList}">
-		        	<td th:text="${reser.rvwNo}"></td>
+	      		<tr th:each="review: ${getUserRvwList}">
+		        	<td th:text="${review.rvwNo}"></td>
 		        	<!--<td>       회원이름 누르면 회원정보 모달?페이지? 띄우기
 						<a id="a_itemName" th:text="${item.itemName}"
 							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">
 						</a>
 					</td>-->
-					<td th:text="${reser.rvwType}"></td>
-					<td th:text="${reser.rvwWriter}"></td>
-		        	<td th:text="${reser.rvwRegdate eq null ? '' : #strings.substring(reser.rvwRegdat, 0, 10)}"></td>
-		        	<td th:text="${reser.rwvScore}"></td>
+					<td th:text="${review.rvwType}"></td>
+					<td th:text="${review.rvwWriter}"></td>
+		        	<td th:text="${review.rvwRegdate eq null ? '' : #strings.substring(review.rvwRegdate, 0, 10)}"></td>
+		        	<td th:text="${review.rvwScore}"></td>
 		     	 </tr>
 		    </table>
 		</div>
