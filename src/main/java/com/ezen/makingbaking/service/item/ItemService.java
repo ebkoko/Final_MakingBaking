@@ -15,7 +15,7 @@ public interface ItemService {
 	
 	Page<CamelHashMap> getItemList(Pageable pageable);
 	
-	Page<Item> getPageItemList(Pageable pageable);
+	Page<CamelHashMap> getPageItemList(Pageable pageable);
 
 	Item getItem(int itemNo);
 	
