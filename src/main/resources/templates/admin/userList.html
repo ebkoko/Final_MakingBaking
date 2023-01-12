@@ -213,7 +213,7 @@
 						$("input:checkbox[name='chk']").each(function() {
 							if($(this).is(":checked")) {
 								const delUser = {
-										userNm: $(this).val()
+										userId: $(this).val()
 									};
 									
 									changeRows.push(delUser);
@@ -234,8 +234,8 @@
 									htmlStr += `
 										<tr>
 											<td>
-												<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].userNm}"
-												value="${obj.pageItems.content[i].userNm}">
+												<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].userId}"
+												value="${obj.pageItems.content[i].userId}">
 											</td>
 											<td>${obj.pageItems.content[i].userNm}</td>
 											<td>${obj.pageItems.content[i].userId}</td>
@@ -306,7 +306,7 @@
 			        <th class="userList_T_25">개인 게시판</th>
 	      		</tr>
 	      		<tr th:each="user: ${getUserList.content}">
-	      			<td><input type="checkbox" class="check" name="chk" th:value="${user.userNm}"></td>
+	      			<td><input type="checkbox" class="check" name="chk" th:value="${user.userId}"></td>
 		        	<!--<td>       회원이름 누르면 회원정보 모달?페이지? 띄우기
 						<a id="a_itemName" th:text="${item.itemName}"
 							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">

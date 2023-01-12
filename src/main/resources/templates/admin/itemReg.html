@@ -79,6 +79,7 @@
 					font-size: 15px;
 					padding-top: 10px;
 					padding-bottom: 10px;
+					resize: none;
 				}
 				/* 상품가격 */
 				#itemPrice {
@@ -106,6 +107,7 @@
 					font-size: 15px;
 					padding-top: 10px;
 					padding-bottom: 10px;
+					resize: none;
 				}
 				
 				/* 파일 첨부 */
@@ -268,7 +270,7 @@
 								return;
 							}
 			         })
-			      });
+			      }); //function 끝
 			      
 			      // 미리보기 영역에 들어갈 img태그 생성 및 선택된 파일을 Base64 인코딩된 문자열 형태로 미리보기 가능하게 해줌
 			      function imageLoader(file) {
@@ -291,7 +293,7 @@
 			         
 			         // 파일을 Base64 인코딩된 문자열로 변경
 			         reader.readAsDataURL(file);
-			      };
+			      }; //function 끝
 			      
 			      // 미리보기 영역에 들어갈 div(img + button + p)를 생성하고 리턴
 			      function makeDiv(img, file) {
@@ -353,8 +355,16 @@
 			         
 			         // 완성된 div 리턴
 			         return div;
-			      }
+			      } //function 끝
 			      
+			      //상품상태 '판매종료'인 경우 재고 0으로 자동 변경
+			      //재고 0인 경우 상품상태 '판매종료'로 자동 변경
+			      /*
+			      $(function() {
+					  
+					  }
+				  }); //function 끝
+			      */
 			      
 			      //가격 천단위 콤마
 			      function inputNumberFormat(obj) {

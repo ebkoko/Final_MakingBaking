@@ -74,13 +74,9 @@ public class AdminController {
 	//상품리스트
 	@GetMapping("/itemList")
 	public ModelAndView getItemList(ItemDTO itemDTO,
-			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+			@PageableDefault(page = 0, size = 10) Pageable pageable) {
 		
 		Item item = Item.builder()
-							.itemName(itemDTO.getItemName())
-							.itemPrice(itemDTO.getItemPrice())
-							.itemRegdate(LocalDateTime.now())
-							.itemStatus(itemDTO.getItemStatus())
 							.searchCondition(itemDTO.getSearchCondition())
 							.searchKeyword(itemDTO.getSearchKeyword())
 							.build();
@@ -119,14 +115,10 @@ public class AdminController {
 	//상품리스트 - ajax로 처리한 페이징 글 목록 보여주기
 	@PostMapping("/itemList")
 	public ResponseEntity<?> getItemPageList(ItemDTO itemDTO,
-			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+			@PageableDefault(page = 0, size = 10) Pageable pageable) {
 		ResponseDTO<ItemDTO> response = new ResponseDTO<>();
 		try {
 			Item item = Item.builder()
-							.itemName(itemDTO.getItemName())
-							.itemPrice(itemDTO.getItemPrice())
-							.itemRegdate(LocalDateTime.now())
-							.itemStatus(itemDTO.getItemStatus())
 							.searchCondition(itemDTO.getSearchCondition())
 							.searchKeyword(itemDTO.getSearchKeyword())
 							.build();
@@ -223,8 +215,7 @@ public class AdminController {
 	@GetMapping("/item/{itemNo}")
 	public ModelAndView getItem(@PathVariable int itemNo) {
 		Item item = adminService.getItem(itemNo);
-		
-		//System.out.println(item.toString());
+
 		
 		ItemDTO itemDTO = ItemDTO.builder()
 									.itemNo(item.getItemNo())
@@ -493,7 +484,7 @@ public class AdminController {
 	//관리자가 상품을 삭제하는 경우 ajax를 이용해 백단에 전송
 	@PostMapping("/saveItemList")
 	public ResponseEntity<?> saveItemList(@RequestParam("changeRows") String changeRows,
-			@PageableDefault(page = 0, size = 50) Pageable pageable) throws JsonMappingException, JsonProcessingException {
+			@PageableDefault(page = 0, size = 5) Pageable pageable) throws JsonMappingException, JsonProcessingException {
 		ResponseDTO<ItemDTO> response = new ResponseDTO<>();
 		List<Map<String, Object>> changeRowsList = new ObjectMapper().readValue(changeRows, 
 											new TypeReference<List<Map<String, Object>>>() {});
@@ -551,7 +542,7 @@ public class AdminController {
 	//데이클래스 리스트
 	@GetMapping("/dayclassList")
 	public ModelAndView getDayclassList(DayclassDTO dayclassDTO,
-			@PageableDefault(page = 0, size = 50) Pageable pageable) {
+			@PageableDefault(page = 0, size = 10) Pageable pageable) {
 		Dayclass dayclass = Dayclass.builder()
 									.searchCondition(dayclassDTO.getSearchCondition())
 									.searchKeyword(dayclassDTO.getSearchKeyword())
@@ -571,7 +562,7 @@ public class AdminController {
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/dayclassList.html");
-		mv.addObject("getDayclassList", pageDayclassDTOList);
+		mv.addObject("pageDayclassList", pageDayclassDTOList);
 		
 		if(dayclassDTO.getSearchCondition() != null && !dayclassDTO.getSearchCondition().equals("")) {
 			mv.addObject("searchCondition", dayclassDTO.getSearchCondition());
@@ -582,6 +573,38 @@ public class AdminController {
 		}
 		
 		return mv;
+	}
+	
+	//데이클래스리스트 - ajax로 처리한 페이징 글 목록 보여주기
+	@PostMapping("/dayclassList")
+	public ResponseEntity<?> getDayclassPageList(DayclassDTO dayclassDTO,
+			@PageableDefault(page = 0, size = 10) Pageable pageable) {
+		ResponseDTO<DayclassDTO> response = new ResponseDTO<>();
+		try {
+			Dayclass dayclass = Dayclass.builder()
+										.searchCondition(dayclassDTO.getSearchCondition())
+										.searchKeyword(dayclassDTO.getSearchKeyword())
+										.build();
+			
+			Page<Dayclass> pageDayclassList = adminService.getPageDayclassList(dayclass, pageable);
+			
+			Page<DayclassDTO> pageDayclassDTOList = pageDayclassList.map(pageDayclass -> 
+													            DayclassDTO.builder()
+																            .dayclassNo(pageDayclass.getDayclassNo())
+					                                 						.dayclassName(pageDayclass.getDayclassName())
+					                                 						.dayclassPrice(pageDayclass.getDayclassPrice())
+					                                 						.dayclassTime(pageDayclass.getDayclassTime())
+					                                 						.dayclassUseYn(pageDayclass.getDayclassUseYn())
+					                                 						.build()
+											   				);
+			response.setPageItems(pageDayclassDTOList);
+			
+			return ResponseEntity.ok().body(response);
+			
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
 	}
 	
 	//데이클래스 등록
@@ -881,7 +904,7 @@ public class AdminController {
 	//관리자가 클래스를 삭제하는 경우 ajax를 이용해 백단에 전송
 	@PostMapping("/saveDayclassList")
 	public ResponseEntity<?> saveDayclassList(@RequestParam("changeRows") String changeRows,
-			@PageableDefault(page = 0, size = 50) Pageable pageable) throws JsonMappingException, JsonProcessingException {
+			@PageableDefault(page = 0, size = 10) Pageable pageable) throws JsonMappingException, JsonProcessingException {
 		ResponseDTO<DayclassDTO> response = new ResponseDTO<>();
 		List<Map<String, Object>> changeRowsList = new ObjectMapper().readValue(changeRows, 
 											new TypeReference<List<Map<String, Object>>>() {});
