@@ -557,7 +557,7 @@
 						const formData = new FormData();
 						
 						formData.append("itemList", JSON.stringify(transferItemList));
-						formData.append("total_amount", parseInt(totalPrice));
+						formData.append("total_amount", parseInt(totalPrice)+parseInt(orderDeliFee));
 						formData.append("orderName", orderName);
 						formData.append("itemPriceSum", parseInt(itemPriceSum));
 						formData.append("orderDeliFee", parseInt(orderDeliFee));

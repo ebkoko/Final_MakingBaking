@@ -1,6 +1,7 @@
 package com.ezen.makingbaking.service.order;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,4 +26,6 @@ public interface OrderService {
 	List<CamelHashMap> getOrderItem(long orderNo);
 	
 	Order updateOrder(Order order);
+
+	void updateCancelItemList(List<Map<String, Object>> itemMapList);
 }

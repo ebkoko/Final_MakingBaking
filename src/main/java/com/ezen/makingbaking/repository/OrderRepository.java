@@ -1,17 +1,19 @@
 package com.ezen.makingbaking.repository;
 
 import java.util.List;
-import java.util.Optional;
+
+import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Order;
-
+@Transactional
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 	
 	//관리자 주문 검색_선민
@@ -82,6 +84,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 			+ "     , C.ITEM_NAME\r\n"
 			+ "     , C.ITEM_PRICE\r\n"
 			+ "     , C.ITEM_CATE\r\n"
+			+ "		, C.ITEM_STATUS"	
 			+ "     , D.FILE_NAME\r\n"
 			+ "	FROM T_MB_ORDER A\r\n"
 			+ "	   , T_MB_ORDER_ITEM B\r\n"
@@ -144,4 +147,11 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 					+ "		ORDER BY A.ORDER_NO DESC"
 					+ ") AA", nativeQuery=true)
 	Page<CamelHashMap> findAllOrderByOrderCondition(@Param("userId") String userId, @Param("orderCondition") String orderCondition, Pageable pageable);
+	
+	@Modifying
+	@Query(value = "UPDATE T_MB_ITEM"
+			+ "		  SET ITEM_STOCK = ITEM_STOCK + :orderItemCnt,"
+			+ "			  ITEM_STATUS = :itemStatus"
+			+ "		  WHERE ITEM_NO = :itemNo", nativeQuery=true)
+	void updateCancelItem(@Param("itemNo") int itemNo, @Param("orderItemCnt") int orderItemCnt, @Param("itemStatus") char itemStatus);
 }

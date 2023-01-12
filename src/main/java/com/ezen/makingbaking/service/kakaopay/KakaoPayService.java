@@ -12,5 +12,5 @@ public interface KakaoPayService {
 	
 	ApproveResponseDTO payApprove(String tid, String pgToken, long orderNo);
 	
-	CancelResponseDTO cancelReady(OrderDTO orderDTO, String itemList) throws JsonMappingException, JsonProcessingException;
+	CancelResponseDTO cancelReady(OrderDTO orderDTO/*, String itemList*/) throws JsonMappingException, JsonProcessingException;
 }
