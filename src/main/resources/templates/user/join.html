@@ -55,22 +55,7 @@
 						
 					$("#userPw").on("keyup", function(e) {
 				        let password = document.querySelector('#userPw').value;
-						/*
-				        let strength = Strength(password);
-				        if(strength <= 2) {
-				          $(".pw-check").addClass('weak');
-				          $(".pw-check").removeClass('normal');
-				          $(".pw-check").removeClass('strong');
-				        } else if(strength > 2 && strength < 4 ) {
-				          $(".pw-check").removeClass('weak');
-				          $(".pw-check").addClass('normal');
-				          $(".pw-check").removeClass('strong');
-				        } else {
-				          $(".pw-check").removeClass('weak');
-				          $(".pw-check").removeClass('normal');
-				          $(".pw-check").addClass('strong');
-				        }
-				        */
+				        
 				        let strength = Strength(password);
 				        if(strength <= 2) {
 				          $(".pw-check").addClass('weak');
@@ -159,7 +144,7 @@
 						}
 					});
 					
-					//갯수제한(작동이상)
+					
 					function Strength(password) {
 				        let i = 0;
 				        if(password.length > 5) {

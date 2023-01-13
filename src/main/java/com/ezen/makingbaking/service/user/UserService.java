@@ -20,5 +20,5 @@ public interface UserService {
 
 	void pwUser(String userId);
 
-	int changeInfo(UserDTO userDTO);
+	void updateUser(User user);
 }

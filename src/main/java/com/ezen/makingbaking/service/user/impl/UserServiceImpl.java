@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int changeInfo(UserDTO userDTO) {
-		return userRepository.changeInfo(userDTO);
+	public void updateUser(User user) {
+		userRepository.updateUser(user);
 	}
 }
