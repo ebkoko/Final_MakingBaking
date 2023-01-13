@@ -22,9 +22,9 @@ public interface DayclassRepository extends JpaRepository<Dayclass, Integer> {
 			+ "								SELECT MIN(FILE_NO)"
 			+ "								FROM T_MB_FILE C"
 			+ "								WHERE A.DAYCLASS_NO = C.FILE_REFER_NO"
-			+ "								AND C.FILE_TYPE = 'dayclass'"
+			+ "								AND C.FILE_TYPE = 'class'"
 			+ "							)"
-			+ "		   AND B.FILE_TYPE = 'dayclass'"
+			+ "		   AND B.FILE_TYPE = 'class'"
 			+ "	   WHERE A.DAYCLASS_NO = :dayclassNo\r\n"
 			+ "		 ", nativeQuery=true)
 	CamelHashMap findByFileNoAndDayclassNo(@Param("dayclassNo") int dayclassNo);
