@@ -44,7 +44,7 @@ public interface CartRepository extends JpaRepository<Cart, CartId> {
 			+ "	LEFT OUTER JOIN T_MB_FILE D\r\n"
 			+ "    ON C.ITEM_NO = D.FILE_REFER_NO\r\n"
 			+ "    AND D.FILE_NO = 1\r\n"
-			+ "    AND D.FILE_TYPE = 'ITEM'", nativeQuery = true)
+			+ "    AND D.FILE_TYPE = 'item'", nativeQuery = true)
 	List<CamelHashMap> findAllItemInfoinCart(@Param("userId") String userId);
 	
 	@Modifying
