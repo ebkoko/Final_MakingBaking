@@ -12,7 +12,7 @@ import com.ezen.makingbaking.entity.Reser;
 public interface DayclassService {
 	Dayclass getDayclass (int dayclassNo);
 	
-	Page<Dayclass> getOneDayclass(Pageable pageable);
+	Page<CamelHashMap> getOneDayclass(Pageable pageable);
 	
 	String getLikeYn(String loginUserId, int dayclassNo);
 	
@@ -27,4 +27,5 @@ public interface DayclassService {
 	int getPersonCnt(Reser reser);
 
 	List<CamelHashMap> getUserReserStatus(String loginUserId, int dayclassNo);
+	
 }
