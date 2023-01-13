@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findid(UserDTO userDTO) {
 		System.out.println(userDTO.toString());
-		return userRepository.findByUserNameAndUserTel(userDTO.getUserNm(), userDTO.getUserTel());
+		return userRepository.findByUserNameAndUserTel(userDTO.getUserName(), userDTO.getUserTel());
 	}
 
 	@Override
