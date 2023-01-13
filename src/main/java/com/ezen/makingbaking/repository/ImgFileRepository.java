@@ -18,9 +18,8 @@ public interface ImgFileRepository extends JpaRepository<ImgFile, FileId> {
 	List<ImgFile> findByFileReferNoAndFileType(int itemNo, String fileType);
 	
 	//dayclass
-	@Query(value="SELECT IFNULL(MAX(F.FILE_NO), 0) + 1 FROM T_MB_FILE F WHERE F.FILE_REFER_NO =:dayclassNo AND F.FILE_TYPE = 'dayclass'", 
+	@Query(value="SELECT IFNULL(MAX(F.FILE_NO), 0) + 1 FROM T_MB_FILE F WHERE F.FILE_REFER_NO =:dayclassNo AND F.FILE_TYPE = 'class'", 
 			nativeQuery=true)
 	int getDayclassMaxFileNo(@Param("dayclassNo") int dayclassNo);
 
-	//List<ImgFile> findByFileReferNoAndFileType(int dayclassNo, String fileType);
 }
