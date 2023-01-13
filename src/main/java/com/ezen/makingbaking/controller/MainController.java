@@ -63,7 +63,7 @@ public class MainController {
 				} else {
 					UserDTO loginUser = UserDTO.builder()
 											   .userId(userDTO.getUserId())
-											   .userNm(userDTO.getUserNm())
+											   .userName(userDTO.getUserName())
 											   .userNo(userDTO.getUserNo())
 											   .userBirth(userDTO.getUserBirth())
 											   .userGender(userDTO.getUserGender())

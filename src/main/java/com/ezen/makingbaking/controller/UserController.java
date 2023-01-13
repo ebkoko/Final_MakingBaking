@@ -85,7 +85,7 @@ public class UserController {
 			User user = User.builder()
 							.userId(userDTO.getUserId())
 							.userPw(passwordEncoder.encode(userDTO.getUserPw()))
-							.userName(userDTO.getUserNm())
+							.userName(userDTO.getUserName())
 							.userNo(userDTO.getUserNo())
 							.userBirth(userDTO.getUserBirth())
 							.userGender(userDTO.getUserGender())
@@ -279,7 +279,7 @@ public class UserController {
 		    			.userId(userDTO.getUserId())
 		    			.userPw(userDTO.getUserPw() == null || userDTO.getUserPw().equals("") ?
 		    					customUserDetails.getUser().getUserPw() : passwordEncoder.encode(userDTO.getUserPw()))
-						.userName(userDTO.getUserNm())
+						.userName(userDTO.getUserName())
 						.userBirth(userDTO.getUserBirth())
 						.userGender(userDTO.getUserGender())
 						.userTel(userDTO.getUserTel())
