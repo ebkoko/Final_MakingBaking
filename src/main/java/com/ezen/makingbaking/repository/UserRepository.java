@@ -46,10 +46,18 @@ public interface UserRepository extends JpaRepository<User, String> {
 
 	@Modifying
 	@Query(value="UPDATE T_MB_USER"
-			+ " SET USER_ID = :userId"
-			+ " WHERE USER_ID = :userId",
+			+ " SET USER_ID = :#{#userId.userId},"
+			+ "		USER_NAME = :#{#userId.userName},"
+			+ "		USER_BIRTH = :#{#userId.userBirth},"
+			+ "		USER_GENDER = :#{#userId.userGender},"
+			+ "		USER_TEL = :#{#userId.userTel},"
+			+ "		USER_MAIL = :#{#userId.userMail},"
+			+ "		USER_ADDR1 = :#{#userId.userAddr1},"
+			+ "		USER_ADDR2 = :#{#userId.userAddr2},"
+			+ "		USER_ADDR3 = :#{#userId.userAddr3}"
+			+ " WHERE USER_ID = :#{#userId.userId}",
 			nativeQuery=true)
-	int changeInfo(@Param("userId") UserDTO userId);
+	int updateUser(@Param("userId") User userId);
 	
 	//관리자 회원 검색_선민
 	Page<User> findByUserNameContaining(String searchKeyword, Pageable pageable); //이름

@@ -12,10 +12,12 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +32,7 @@ import com.ezen.makingbaking.dto.UserDTO;
 import com.ezen.makingbaking.entity.CustomUserDetails;
 import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.service.user.UserService;
+import com.ezen.makingbaking.service.user.impl.UserDetailsServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -44,6 +47,9 @@ public class UserController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private UserDetailsServiceImpl userDetailsServiceImpl;
 	
 	@GetMapping("/join")
 	public ModelAndView joinView(HttpSession session, 
@@ -265,12 +271,14 @@ public class UserController {
 	}
     
     //정보수정
-    @PostMapping("/mypage/changeInfo")
+    @PostMapping("/changeInfo")
     public ModelAndView changeInfo(UserDTO userDTO, HttpSession session,
     		@AuthenticationPrincipal CustomUserDetails customUserDetails, 
     		HttpServletResponse response, Model model) throws IOException {
     	User user = User.builder()
 		    			.userId(userDTO.getUserId())
+		    			.userPw(userDTO.getUserPw() == null || userDTO.getUserPw().equals("") ?
+		    					customUserDetails.getUser().getUserPw() : passwordEncoder.encode(userDTO.getUserPw()))
 						.userName(userDTO.getUserNm())
 						.userBirth(userDTO.getUserBirth())
 						.userGender(userDTO.getUserGender())
@@ -281,27 +289,21 @@ public class UserController {
 						.userAddr3(userDTO.getUserAddr3())
 						.build();
 
-    	User infoUser = userService.idcheck(user);
 		model.addAttribute("user", userDTO);
 		ModelAndView mv = new ModelAndView();
 		
 		//수정하는 로직이 없다
+		userService.updateUser(user);
 		
 		//소셜로그인 참조하여 @GetMapping("/join") securityContext에 등록되어 있는 athenticationToken을 수정된 정보로 변경
-		if(customUserDetails != null)
-			infoUser = customUserDetails.getUser();
-		
-		if(user == null || user.getJoinYn().equals("N")) {
-			SecurityContext securityContext = SecurityContextHolder.getContext();
-			Authentication authentication = null;
-			securityContext.setAuthentication(authentication);
-			session.setAttribute("SPRING_SERCURITY_CONTEXT", securityContext);
+		SecurityContext securityContext = SecurityContextHolder.getContext();
+		UserDetails newUserInfo = userDetailsServiceImpl.loadUserByUsername(userDTO.getUserId());
+		Authentication authentication = new UsernamePasswordAuthenticationToken(newUserInfo, null, newUserInfo.getAuthorities());
+		securityContext.setAuthentication(authentication);
+		session.setAttribute("SPRING_SERCURITY_CONTEXT", securityContext);
 			
-			mv.setViewName("mypage/changeInfo.html");
-			mv.addObject("socialUser", user);
-		} else {
-			response.sendRedirect("/user/changeInfoPw");
-		}
+		mv.setViewName("mypage/changeInfo.html");
+		mv.addObject("socialUser", user);
 		
 		return mv;
     }
