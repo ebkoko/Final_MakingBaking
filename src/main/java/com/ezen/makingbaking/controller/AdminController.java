@@ -764,7 +764,7 @@ public class AdminController {
 							imgFile.setFileReferNo(dayclassDTO.getDayclassNo());
 							imgFile.setFileNo(originFileList.get(i).getFileNo());
 							imgFile.setFileStatus("U");
-							imgFile.setFileType("dayclass");
+							imgFile.setFileType("class");
 							
 							uFileList.add(imgFile);
 						}
@@ -776,7 +776,7 @@ public class AdminController {
 					imgFile.setFileReferNo(dayclassDTO.getDayclassNo());
 					imgFile.setFileNo(originFileList.get(i).getFileNo());
 					imgFile.setFileStatus("D");
-					imgFile.setFileType("dayclass");
+					imgFile.setFileType("class");
 					
 					//실제 파일 삭제
 					File dFile = new File(attachPath + originFileList.get(i).getFileName());
@@ -799,7 +799,7 @@ public class AdminController {
 						
 						imgFile.setFileReferNo(dayclassDTO.getDayclassNo());
 						imgFile.setFileStatus("I");
-						imgFile.setFileType("dayclass");
+						imgFile.setFileType("class");
 						
 						uFileList.add(imgFile);
 					}
@@ -958,7 +958,7 @@ public class AdminController {
 	public ModelAndView getUserList(UserDTO userDTO,
 			@PageableDefault(page = 0, size = 50) Pageable pageable) {
 		User user = User.builder()
-						.userName(userDTO.getUserNm())
+						.userName(userDTO.getUserName())
 						.userId(userDTO.getUserId())
 						.userRegdate(LocalDateTime.now())
 						.searchCondition(userDTO.getSearchCondition())
@@ -970,7 +970,7 @@ public class AdminController {
 		Page<UserDTO> pageUserDTOList = pageUserList.map(pageUser -> 
 	                             						UserDTO.builder()
 	                             								.userNo(pageUser.getUserNo())
-	                             								.userNm(pageUser.getUserName())
+	                             								.userName(pageUser.getUserName())
 	                             								.userId(pageUser.getUserId())
 	                             								.userRegdate(pageUser.getUserRegdate() == null?
 	 	                                                               null :
@@ -1046,7 +1046,7 @@ public class AdminController {
 			Page<UserDTO> pageUserDTOList = pageUserList.map(pageUser ->
 														UserDTO.builder()
 																.userNo(pageUser.getUserNo())
-		                         								.userNm(pageUser.getUserName())
+		                         								.userName(pageUser.getUserName())
 		                         								.userId(pageUser.getUserId())
 		                         								.userRegdate(pageUser.getUserRegdate() == null?
 			                                                               null :

@@ -194,7 +194,7 @@ public class AdminServiceImpl implements AdminService {
 			
 			int imgFileNo = imgFileRepository.getDayclassMaxFileNo(dayclass.getDayclassNo());
 			imgFile.setFileNo(imgFileNo);
-			imgFile.setFileType("dayclass");
+			imgFile.setFileType("class");
 			imgFileRepository.save(imgFile);
 		}
 		
@@ -207,7 +207,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public List<ImgFile> getDayclassFileList(int dayclassNo) {
-		return imgFileRepository.findByFileReferNoAndFileType(dayclassNo, "dayclass");
+		return imgFileRepository.findByFileReferNoAndFileType(dayclassNo, "class");
 	}
 	
 	@Override
@@ -254,7 +254,7 @@ public class AdminServiceImpl implements AdminService {
 			
 			ImgFile dImgFile = ImgFile.builder()
 									  .fileReferNo(Integer.parseInt(String.valueOf(changeRowsList.get(i).get("dayclassNo"))))
-									  .fileType("dayclass")
+									  .fileType("class")
 									  .build();
 			
 			dayclassRepository.delete(ddayclass);

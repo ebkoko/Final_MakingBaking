@@ -237,7 +237,7 @@
 												<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].userId}"
 												value="${obj.pageItems.content[i].userId}">
 											</td>
-											<td>${obj.pageItems.content[i].userNm}</td>
+											<td>${obj.pageItems.content[i].userName}</td>
 											<td>${obj.pageItems.content[i].userId}</td>
 											<td>${obj.pageItems.content[i].userRegdate == null ? '' : obj.pageItems.content[i].userRegdate.substr(0, 10)}</td>
 											<td>
@@ -312,7 +312,7 @@
 							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">
 						</a>
 					</td>-->
-					<td th:text="${user.userNm}"></td>
+					<td th:text="${user.userName}"></td>
 					<td th:text="${user.userId}"></td>
 		        	<td th:text="${user.userRegdate eq null ? '' : #strings.substring(user.userRegdate, 0, 10)}"></td>
 		        	<td>
