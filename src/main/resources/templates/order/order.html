@@ -341,7 +341,8 @@
 							totalItemPrice: $("#orderTotalPrice").val(),
 							fileName: itemList[i].fileName,
 							cartItemCnt: itemList[i].cartItemCnt,
-							deliFee: $("#orderDeliFee").val()
+							deliFee: $("#orderDeliFee").val(),
+							itemStock: itemList[i].itemStock
 						}
 						
 						transferItemList.push(item);
@@ -420,6 +421,14 @@
 							e.preventDefault();
 							alert("결제방법을 선택해주세요.");
 							return;
+						}
+						
+						for(let i = 0; i < itemList.length; i++) {
+							if(transferItemList[i].cartItemCnt == transferItemList[i].itemStock) {
+								transferItemList[i].itemStatus = 'S';
+							} else {
+								transferItemList[i].itemStatus = 'Y';
+							}
 						}
 						
 						
@@ -551,6 +560,14 @@
 						let orderTel = orderTelNums.join('-');
 						let reciTelNums = [$("#reciTel1").val(), $("#reciTel2").val(), $("#reciTel3").val()];
 						let reciTel = reciTelNums.join('-');
+						
+						for(let i = 0; i < itemList.length; i++) {
+							if(transferItemList[i].cartItemCnt == transferItemList[i].itemStock) {
+								transferItemList[i].itemStatus = 'S';
+							} else {
+								transferItemList[i].itemStatus = 'Y';
+							}
+						}
 						
 						console.log(msg);
 						

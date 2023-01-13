@@ -35,6 +35,7 @@ import com.ezen.makingbaking.entity.CustomUserDetails;
 import com.ezen.makingbaking.entity.Order;
 import com.ezen.makingbaking.entity.OrderItem;
 import com.ezen.makingbaking.service.cart.CartService;
+import com.ezen.makingbaking.service.kakaopay.KakaoPayOrderCancelService;
 import com.ezen.makingbaking.service.kakaopay.KakaoPayService;
 import com.ezen.makingbaking.service.order.OrderService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -54,6 +55,9 @@ public class OrderController {
 	@Autowired
 	@Qualifier("kakaoOrder")
 	private KakaoPayService kakaoPayService;
+	
+	@Autowired
+	private KakaoPayOrderCancelService kakaoPayOrderCancelService;
 	
 	@GetMapping("/order")
 	public ModelAndView orderView() {
@@ -130,6 +134,7 @@ public class OrderController {
 		}
 		
 		cartService.deleteCartItem(cartItemList);
+		orderService.updateOrderItemSt(itemMapList);
 		
 		mv.setViewName("order/orderComplete.html");
 		return mv;
@@ -194,6 +199,7 @@ public class OrderController {
 		}
 		
 		cartService.deleteCartItem(cartItemList);
+		orderService.updateOrderItemSt(itemMapList);
 		
 		mv.setViewName("order/orderComplete.html");
 		
@@ -364,7 +370,7 @@ public class OrderController {
 									.build();
 
 			// 카카오페이 결제취소 준비: 결제취소요청 service 실행
-			CancelResponseDTO cancelResponseDTO = kakaoPayService.cancelReady(orderDTO);
+			CancelResponseDTO cancelResponseDTO = kakaoPayOrderCancelService.cancelReady(orderDTO);
 			
 			
 			// Order 정보를 모델에 저장

@@ -86,4 +86,14 @@ public class OrderServiceImpl implements OrderService {
 		}
 		
 	}
+
+	@Override
+	public void updateOrderItemSt(List<Map<String, Object>> itemMapList) {
+		// TODO Auto-generated method stub
+		for(int i = 0; i < itemMapList.size(); i++) {
+			orderRepository.updateOrderItemSt(Integer.parseInt(itemMapList.get(i).get("itemNo").toString()),
+											  Integer.parseInt(itemMapList.get(i).get("cartItemCnt").toString()),
+											  itemMapList.get(i).get("itemStatus").toString().charAt(0));
+		}
+	}
 }

@@ -274,9 +274,10 @@
 					
 					$("#btnPayCancel").on('click', function() {
 						$.ajax({
-							url: `/reser/payCancel/${reser.reserNo}`,
-							type: 'put',
+							url: `/reser/payCancel/`,
+							type: 'post',
 							data: {
+								reserNo: reser.reserNo,
 								reserDate: reser.reserDateStr,
 								reserStatus: 'PC',
 								partiName: reser.partiName,
@@ -292,7 +293,8 @@
 								depositor: reser.depositor,
 								reserTotalPrice: reser.reserTotalPrice,
 								classPrice: reser.classPrice,
-								partiStatus: reser.partiStatus
+								partiStatus: reser.partiStatus,
+								tid: reser.tid
 							},
 							success: function(obj) {
 								console.log(obj);
@@ -320,7 +322,7 @@
 	            <h1 id="reser_title">내 예약 내역</h1>
 	            <div id="top">
 	                <span class="reserNoMent">예약번호: </span><span class="realReserNo" th:text="${reser.reserNo}"></span><span class="reserStatus"></span>&ensp;
-	                <span th:if="${reser.reserCancelDate != null}">취소일시: </span><span th:if="${reser.reserCancelDate != null}" th:text="${#strings.substring(reser.reserCancelDate, 0, 16)}"></span>
+	                <span class="cancelDateMent" th:if="${reser.reserCancelDate != null}">취소일시: </span><span class="cancelDate" th:if="${reser.reserCancelDate != null}" th:text="${#strings.substring(reser.reserCancelDate, 0, 16)}"></span>
 	            </div>
 	            <hr>
 	            <div id="list_title">

@@ -28,4 +28,6 @@ public interface OrderService {
 	Order updateOrder(Order order);
 
 	void updateCancelItemList(List<Map<String, Object>> itemMapList);
+
+	void updateOrderItemSt(List<Map<String, Object>> itemMapList);
 }

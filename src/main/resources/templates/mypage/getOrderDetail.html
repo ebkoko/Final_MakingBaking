@@ -361,7 +361,7 @@
 	            <h1 id="order_title">내 주문 확인</h1>
 	            <div id="top">
 	                <span class="orderNoMent">주문번호: </span><span class="realOrderNo" th:text="${order.orderNo}"></span><span class="orderStatus"></span>&ensp;
-	                <span th:if="${order.orderCancelDate != null}">취소일시: </span><span th:if="${order.orderCancelDate != null}" th:text="${#strings.substring(order.orderCancelDate, 0, 16)}"></span>
+	                <span class="cancelDateMent" th:if="${order.orderCancelDate != null}">취소일시: </span><span class="cancelDate" th:if="${order.orderCancelDate != null}" th:text="${#strings.substring(order.orderCancelDate, 0, 16)}"></span>
 	            </div>
 	            <hr>
 	            <div id="list_title">

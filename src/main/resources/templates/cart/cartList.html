@@ -194,15 +194,28 @@
 					});
 					
 					// 상품리스트 중 하나라도 체크가 안되어있을 때 전체선택 체크박스 체크 해제, 상품리스트 전체가 체크되면 전체선택 체크박스 체크
-					$(".check").click(function() {
+					$(".check").click(function(e) {
 						$("#selectAllCancel").prop("checked", false);
 						if($("input[name='select_item']:checked").length < $("input[name='select_item']").length) {
 							$("#selectAll").prop("checked", false);
 						} else if($("input[name='select_item']:checked").length == $("input[name='select_item']").length) {
 							$("#selectAll").prop("checked", true);
 						}
+						
+						// 판매중지된 상품, 품절된 상품 체크박스 체크시 체크 해제 및 방지
+						if($(e.target).attr("data-item-status") == 'N') {
+							$(e.target).prop("checked", false);
+							$(e.target).attr("disabled", true);
+							alert("판매중지된 상품은 주문하실 수 없습니다.");
+							return;
+						} else if($(e.target).attr("data-item-status") == 'S') {
+							$(e.target).prop("checked", false);
+							$(e.target).attr("disabled", true);
+							alert("품절된 상품은 주문하실 수 없습니다.");
+							return;
+						}
+						
 					});
-					
 					
 					// 수량 변경시 변경된 수량으로 상품금액 계산
 					$(document).on("change", "input[name='Quantity']", function(e) {
@@ -216,22 +229,47 @@
 								if($(e.target).val() > obj ) {
 									alert("재고가 부족합니다.");
 									$(e.target).val(obj);
+									const idx = $("input[name='Quantity']").index($(e.target));
+									$("#itemPrice" + idx).text((getCartList[idx].itemPrice * obj).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+									
+									let ttip = 0;
+									let delF = 0;
+									
+									$("input[name='select_item']").each(function() {
+										if($(this).is(":checked")) {
+											const indx = $("input[name='select_item']").index($(this));
+											ttip +=  getCartList[indx].itemPrice * $("input[name='Quantity']").eq(indx).val();
+										} 
+									});
+									
+									console.log("ttip================================" + ttip);
+									
+									if(ttip < 30000 && ttip != 0) {
+										delF = 3000;
+									}
+									
+									$("#realTotalItemPrice").text(ttip.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+									$("#realDeliFee").text(delF.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+									$("#totalPayPrice").text((ttip + delF).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+									
+									$("#totalItemPrice").val(ttip);
+									$("#deliFee").val(delF);
 								}
+								
+								const index = $(this).attr("data-current-index");
+								const itemPrice = $(this).attr("data-default-price");
+								const quantity = $(e.target).val();
+								const totalP = itemPrice*quantity;
+								const totalPComma = totalP.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+								
+								$(`#itemPrice${index}`).text(`${totalPComma}`);
+								fnTotalItemPrice();
 								
 							}, error: function(e) {
 								console.log(e);
 							}
 							
 						})
-						
-						const index = $(this).attr("data-current-index");
-						const itemPrice = $(this).attr("data-default-price");
-						const quantity = $(this).val();
-						const totalP = itemPrice*quantity;
-						const totalPComma = totalP.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-						
-						$(`#itemPrice${index}`).text(`${totalPComma}`);
-						fnTotalItemPrice();
 					});
 					
 					$(document).on("change", "input[name='select_item']", function() {
@@ -322,6 +360,7 @@
 							for(let i = 0; i < checkedList.length; i++) {
 								if(item.itemNo == checkedList[i].itemNo) {
 									checkedList[i].cartItemCnt = $(this).val();
+									checkedList[i].itemStock = $(this).attr("data-item-stock");
 									sameNo = true;
 									break;
 								}
@@ -380,7 +419,7 @@
 		            <div id="cart_item">
 		                <div class="item1" th:each="cart : ${getCartList}">
 		                    <div class="itemSelect">
-		                        <input type="checkbox" class="check" th:id="'chk' + ${cartStat.index}" name="select_item">                    
+		                        <input type="checkbox" class="check" th:id="'chk' + ${cartStat.index}" name="select_item" th:data-item-status="${cart.itemStatus}">                    
 		                    </div>
 		                    <div class="itemView">
 		                        <img class="item_Img" th:src="@{'/item/' + ${cart.fileName}}">
@@ -392,7 +431,7 @@
 		                    <div class="item_Quantity">
 		                        <input type="number" name="Quantity" class="Quantity" th:data-current-index="${cartStat.index}" 
 		                         th:id="'quantity' + ${cartStat.index}" min="1" th:value="${cart.cartItemCnt > cart.itemStock ? cart.itemStock : cart.cartItemCnt}" th:data-default-price="${cart.itemPrice}"
-		                         th:data-item-no="${cart.itemNo}">
+		                         th:data-item-no="${cart.itemNo}" th:data-item-stock="${cart.itemStock}">
 		                    </div>                    
 		                    <div class="item_Price" th:id="'itemPrice' + ${cartStat.index}" th:text="${#numbers.formatInteger(cart.cartItemCnt * cart.itemPrice, 3, 'COMMA')}"></div><span>원</span>
 		                    <div class="item_Del">

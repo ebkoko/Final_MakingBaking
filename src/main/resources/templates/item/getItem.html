@@ -69,6 +69,11 @@
 						
 						}
 						
+						if(getItem.itemStock == 0) {
+							alert("상품이 일시품절되었습니다.");
+							return;
+						}
+						
 						if(!cartClick) {
 							$.ajax({
 								url: '/cart/insertCart',
