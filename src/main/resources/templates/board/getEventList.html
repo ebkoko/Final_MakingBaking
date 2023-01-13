@@ -10,19 +10,26 @@
 	<th:block layout:fragment="script">
 		<script th:inline="javascript">
 			$(function() {
-				$(".pagination_button a").on("click", function(e) {
+				
+				$(".present").on('click', function(e) {
+					$(e.target).css("color", "white");
+				})
+				
+				$(document).on("click", ".pagination_button a", function(e) {
 					e.preventDefault();
 					$.ajax({
 						url: '/board/eventList/4',
 						type: 'post',
-						data: {	page: $(e.target).attr("data-page-num")},
+						data: {	
+							page:  $(this).attr("href")
+						},
 						success: function(obj) {
 							console.log(obj);
 							
-							let htmlStr = "";
+							let htmlstr = "";
 							
 							for(let i=0; i<obj.pageItems.content.length; i++) {
-								htmlStr += `
+								htmlstr += `
 									<tr>
 										<td class="list-title">
 											<a href="/board/updateEventCnt/${obj.pageItems.content[i].boardNo}">
@@ -35,7 +42,61 @@
 								`;
 							}
 							$("#list-table").children(":first").children().not(":first").remove();
-							$("#list-table").children(":first").append(htmlStr);
+							$("#list-table").children(":first").append(htmlstr);
+							
+							$("#boxxWrapper").html(htmlstr);
+							
+							htmlstr = "";
+							
+							let pageNumber = obj.pageItems.pageable.pageNumber;
+							let pageSize = obj.pageItems.pageable.pageSize;
+							let totalPages = obj.pageItems.totalPages;
+							let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
+							let tempEndPage = startPage + pageSize - 1;
+							let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
+							
+							console.log(pageNumber);
+							console.log(pageSize);
+							console.log(totalPages);
+							console.log(startPage);
+							console.log(tempEndPage);
+							console.log(endPage);
+							
+							if(pageNumber > 0) {
+								htmlstr += `
+									<li class="pagination_button">
+										<a style="border: 0px;" href="${pageNumber - 1}">&#60;</a>
+									</li>
+								`;
+							}
+							
+							let realStart = totalPages - startPage < pageSize ? 
+												totalPages < pageSize ? 1 : totalPages - pageSize + 1 
+											: startPage;
+							
+							for(let i = realStart; i <= endPage; i++) {
+								if(pageNumber == i-1) {
+									htmlstr += `<li class="pagination_button">
+											   	   <a class="present" href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								} else {
+									htmlstr += `<li class="pagination_button">
+											   	   <a href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								}
+							}
+							
+							if(pageNumber < totalPages - 1) {
+								htmlstr += `<li class="pagination_button">
+										       <a style="border: 0px;" href="${pageNumber + 1}">&#62;</a>
+									        </li>
+								`;
+							}
+							
+							$(".pagination").html(htmlstr);
+							
 						},
 						error: function(e) {
 							console.log(e);
@@ -51,7 +112,7 @@
 	</th:block>
 </head>
 <body>
-<div layout:fragment="content" style="height: 80%;">
+<div layout:fragment="content" style="height: 90%;">
 	<div id="container">
 	  <div id="high-nav">
 	    <button id="event-button">
@@ -66,7 +127,7 @@
 	          <th width="20%" id="th-date">작성일</th>
 	          <th width="7%" id="th-cnt">조회수</th>
 	        </tr>
-	        <tr th:each="event: ${getBoardList}">
+	        <tr th:each="event: ${getBoardList}" id="boxxWrapper" style="height: 40px;">
 	          <td class="list-title">
 	          	<a th:text="${event.boardTitle}"
 				   th:href="@{/board/updateEventCnt/{boardNo} (boardNo=${event.boardNo})}">
@@ -77,7 +138,7 @@
 	        </tr>
 	      </table>
 	      <br/>
-		  <div style="text-align:center;">
+		  <div style="text-align:center;" class="paging">
 			<ul class="pagination" style="display: flex; justify-content: center;" 
 				th:if="${getBoardList.totalElements > 0}"
 				th:with="pageNumber = ${getBoardList.pageable.pageNumber},
@@ -87,13 +148,13 @@
 									tempEndPage = ${startPage + pageSize -1}, 
 									endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
 					<li class="pagination_button" th:if="${pageNumber > 0}">
-						<a th:data-page-num="${pageNumber - 1}"><</a>
+						<a style="border: 0px;" th:href="${pageNumber - 1}"><</a>
 					</li>
-					<li class="pagination_button" th:each="page : ${#numbers.sequence(startPage, endPage)}">
-						<a th:data-page-num="${page - 1}" th:text="${page}"></a>
+					<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
+						<a th:href="${page - 1}" th:text="${page}"></a>
 					</li>
 					<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
-						<a th:data-page-num="${pageNumber + 1}">></a>
+						<a style="border: 0px;" th:href="${pageNumber + 1}">></a>
 					</li>
 				</ul>
 			</div>

@@ -9,20 +9,27 @@
 	</th:block>
 	<th:block layout:fragment="script">
 		<script th:inline="javascript">
-			$(function() {				
-				$(".pagination_button a").on("click", function(e) {
+			$(function() {		
+				
+				$(".present").on('click', function(e) {
+					$(e.target).css("color", "white");
+				})
+						
+				$(document).on("click", ".pagination_button a", function(e) {
 					e.preventDefault();
 					$.ajax({
 						url: '/board/qnaList/1',
 						type: 'post',
-						data: {	page: $(e.target).attr("data-page-num")},
+						data: {	
+							page: $(this).attr("href")
+						},
 						success: function(obj) {
 							console.log(obj);
 							
-							let htmlStr = "";
+							let htmlstr = "";
 							
 							for(let i=0; i<obj.pageItems.content.length; i++) {
-								htmlStr += `
+								htmlstr += `
 									<tr>
 										<td class="list-title">
 											<a href="/board/updateQnaCnt/${obj.pageItems.content[i].boardNo}">
@@ -37,7 +44,62 @@
 								`;
 							}
 							$("#list-table").children(":first").children().not(":first").remove();
-							$("#list-table").children(":first").append(htmlStr);
+							$("#list-table").children(":first").append(htmlstr);
+							
+							$("#boxxWrapper").html(htmlstr);
+							
+							htmlstr = "";
+							
+							let pageNumber = obj.pageItems.pageable.pageNumber;
+							let pageSize = obj.pageItems.pageable.pageSize;
+							let totalPages = obj.pageItems.totalPages;
+							let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
+							let tempEndPage = startPage + pageSize - 1;
+							let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
+							
+							console.log(pageNumber);
+							console.log(pageSize);
+							console.log(totalPages);
+							console.log(startPage);
+							console.log(tempEndPage);
+							console.log(endPage);
+							
+							if(pageNumber > 0) {
+								htmlstr += `
+									<li class="pagination_button">
+										<a style="border: 0px;" href="${pageNumber - 1}">&#60;</a>
+									</li>
+								`;
+							}
+							
+							let realStart = totalPages - startPage < pageSize ? 
+												totalPages < pageSize ? 1 : totalPages - pageSize + 1 
+											: startPage;
+							
+							for(let i = realStart; i <= endPage; i++) {
+								if(pageNumber == i-1) {
+									htmlstr += `<li class="pagination_button">
+											   	   <a class="present" href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								} else {
+									htmlstr += `<li class="pagination_button">
+											   	   <a href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								}
+							}
+							
+							if(pageNumber < totalPages - 1) {
+								htmlstr += `<li class="pagination_button">
+										       <a style="border: 0px;" href="${pageNumber + 1}">&#62;</a>
+									        </li>
+								`;
+							}
+							
+							$(".pagination").html(htmlstr);
+							
+						
 						},
 						error: function(e) {
 							console.log(e);
@@ -60,10 +122,10 @@
 						success: function(obj) {
 							console.log(obj);
 							
-							let htmlStr = "";
+							let htmlstr = "";
 							
 							for(let i=0; i<obj.pageItems.content.length; i++) {
-								htmlStr += `
+								htmlstr += `
 									<tr>
 										<td class="list-title">
 											<a href="/board/updateQnaCnt/${obj.pageItems.content[i].boardNo}">
@@ -78,7 +140,61 @@
 								`;
 							}
 							$("#list-table").children(":first").children().not(":first").remove();
-							$("#list-table").children(":first").append(htmlStr);
+							$("#list-table").children(":first").append(htmlstr);
+							
+							$("#boxxWrapper").html(htmlstr);
+							
+							htmlstr = "";
+							
+							let pageNumber = obj.pageItems.pageable.pageNumber;
+							let pageSize = obj.pageItems.pageable.pageSize;
+							let totalPages = obj.pageItems.totalPages;
+							let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
+							let tempEndPage = startPage + pageSize - 1;
+							let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
+							
+							console.log(pageNumber);
+							console.log(pageSize);
+							console.log(totalPages);
+							console.log(startPage);
+							console.log(tempEndPage);
+							console.log(endPage);
+							
+							if(pageNumber > 0) {
+								htmlstr += `
+									<li class="pagination_button">
+										<a style="border: 0px;" href="${pageNumber - 1}">&#60;</a>
+									</li>
+								`;
+							}
+							
+							let realStart = totalPages - startPage < pageSize ? 
+												totalPages < pageSize ? 1 : totalPages - pageSize + 1 
+											: startPage;
+							
+							for(let i = realStart; i <= endPage; i++) {
+								if(pageNumber == i-1) {
+									htmlstr += `<li class="pagination_button">
+											   	   <a class="present" href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								} else {
+									htmlstr += `<li class="pagination_button">
+											   	   <a href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								}
+							}
+							
+							if(pageNumber < totalPages - 1) {
+								htmlstr += `<li class="pagination_button">
+										       <a style="border: 0px;" href="${pageNumber + 1}">&#62;</a>
+									        </li>
+								`;
+							}
+							
+							$(".pagination").html(htmlstr);
+							
 						},
 						error: function(e) {
 							console.log(e);
@@ -91,9 +207,12 @@
 				});
 				
 				$("#item-button").on("click", function(e) {
+					
 					$("#dayclass-button").css("color", "#28693F").css("background", "white").css("border", "1px solid #28693F");
 					$("#item-button").css("color", "white").css("background", "#28693F");
+					
 					e.preventDefault();
+					
 					$.ajax({
 						url: '/board/qnaList/2',
 						type: 'post',
@@ -103,10 +222,10 @@
 						success: function(obj) {
 							console.log(obj);
 							
-							let htmlStr = "";
+							let htmlstr = "";
 							
 							for(let i=0; i<obj.pageItems.content.length; i++) {
-								htmlStr += `
+								htmlstr += `
 									<tr>
 										<td class="list-title">
 											<a href="/board/updateQnaCnt/${obj.pageItems.content[i].boardNo}">
@@ -121,7 +240,61 @@
 								`;
 							}
 							$("#list-table").children(":first").children().not(":first").remove();
-							$("#list-table").children(":first").append(htmlStr);
+							$("#list-table").children(":first").append(htmlstr);
+							
+							$("#boxxWrapper").html(htmlstr);
+							
+							htmlstr = "";
+							
+							let pageNumber = obj.pageItems.pageable.pageNumber;
+							let pageSize = obj.pageItems.pageable.pageSize;
+							let totalPages = obj.pageItems.totalPages;
+							let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
+							let tempEndPage = startPage + pageSize - 1;
+							let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
+							
+							console.log(pageNumber);
+							console.log(pageSize);
+							console.log(totalPages);
+							console.log(startPage);
+							console.log(tempEndPage);
+							console.log(endPage);
+							
+							if(pageNumber > 0) {
+								htmlstr += `
+									<li class="pagination_button">
+										<a style="border: 0px;" href="${pageNumber - 1}">&#60;</a>
+									</li>
+								`;
+							}
+							
+							let realStart = totalPages - startPage < pageSize ? 
+												totalPages < pageSize ? 1 : totalPages - pageSize + 1 
+											: startPage;
+							
+							for(let i = realStart; i <= endPage; i++) {
+								if(pageNumber == i-1) {
+									htmlstr += `<li class="pagination_button">
+											   	   <a class="present" href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								} else {
+									htmlstr += `<li class="pagination_button">
+											   	   <a href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								}
+							}
+							
+							if(pageNumber < totalPages - 1) {
+								htmlstr += `<li class="pagination_button">
+										       <a style="border: 0px;" href="${pageNumber + 1}">&#62;</a>
+									        </li>
+								`;
+							}
+							
+							$(".pagination").html(htmlstr);
+							
 						},
 						error: function(e) {
 							console.log(e);
@@ -174,7 +347,7 @@
 	          <th width="15%" id="th-date">작성일</th>
 	          <th width="7%" id="th-cnt">조회수</th>
 	        </tr>
-	        <tr th:each="qna: ${getQnaList}">
+	        <tr th:each="qna: ${getQnaList}" id="boxxWrapper" style="height: 40px;">
 				<td class="list-title">
 					<a th:text="${qna.boardTitle}"
 					   th:href="@{/board/updateQnaCnt/{boardNo} (boardNo=${qna.boardNo})}">
@@ -187,24 +360,24 @@
 			</tr>
 	      </table>
 	      <br/>
-		  <div style="text-align:center;">
-			<ul class="pagination" style="display: flex; justify-content: center;" 
-				th:if="${getQnaList.totalElements > 0}"
-				th:with="pageNumber = ${getQnaList.pageable.pageNumber},
-									pageSize = ${getQnaList.pageable.pageSize},
-									totalPages = ${getQnaList.totalPages},
-									startPage =${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
-									tempEndPage = ${startPage + pageSize -1}, 
-									endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
-					<li class="pagination_button" th:if="${pageNumber > 0}">
-						<a th:data-page-num="${pageNumber - 1}"><</a>
-					</li>
-					<li class="pagination_button" th:each="page : ${#numbers.sequence(startPage, endPage)}">
-						<a th:data-page-num="${page - 1}" th:text="${page}"></a>
-					</li>
-					<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
-						<a th:data-page-num="${pageNumber + 1}">></a>
-					</li>
+		  <div style="text-align:center;" class="paging">
+				<ul class="pagination" style="display: flex; justify-content: center;" 
+								th:if="${getQnaList.totalElements > 0}"
+								th:with="pageNumber = ${getQnaList.pageable.pageNumber},
+										pageSize = ${getQnaList.pageable.pageSize},
+										totalPages = ${getQnaList.totalPages},
+										startPage =${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+										tempEndPage = ${startPage + pageSize -1}, 
+										endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+				<li class="pagination_button" th:if="${pageNumber > 0}">
+					<a style="border: 0px;" th:href="${pageNumber - 1}"><</a>
+				</li>
+				<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
+					<a th:href="${page - 1}" th:text="${page}"></a>
+				</li>
+				<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+					<a style="border: 0px;" th:href="${pageNumber + 1}">></a>
+				</li>
 			  </ul>
 		  </div>
 		  <th:block sec:authorize="hasRole('ROLE_USER')" th:remove="tag">

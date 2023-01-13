@@ -12,12 +12,11 @@
 	<script th:inline="javascript">
 		$(function() {			
 			
-			
 			$(".present").on('click', function(e) {
 					$(e.target).css("color", "white");
 			});
 			
-			$(".pagination_button a").on("click", function(e) {
+			$(document).on("click", ".pagination_button a", function(e) {
 				e.preventDefault();
 				$.ajax({
 					url: '/mypage/qnaList',
@@ -33,7 +32,7 @@
 						for(let i=0; i<obj.pageItems.content.length; i++) {
 							htmlstr += `
 								<tr>
-									<td class="list-category">${obj.pageItems.content[i].cateCode == 3 ? '원데이클래스' : '제품구매'}</td>
+									<td class="list-category">${obj.pageItems.content[i].cateCode == 1 ? '원데이클래스' : '제품구매'}</td>
 									<td class="list-title">
 										<a href="/board/updateQnaCnt/${obj.pageItems.content[i].boardNo}">
 										${obj.pageItems.content[i].boardTitle}
@@ -56,8 +55,9 @@
 						let pageSize = obj.pageItems.pageable.pageSize;
 						let totalPages = obj.pageItems.totalPages;
 						let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
-						let tempEndPage = startPage + pageSize -1;
+						let tempEndPage = startPage + pageSize - 1;
 						let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
+						
 						console.log(pageNumber);
 						console.log(pageSize);
 						console.log(totalPages);
@@ -79,8 +79,8 @@
 						
 						for(let i = realStart; i <= endPage; i++) {
 							if(pageNumber == i-1) {
-								htmlstr += `<li id="present" class="pagination_button">
-										   	   <a href="${i - 1}">${i}</a>
+								htmlstr += `<li class="pagination_button">
+										   	   <a class="present" href="${i - 1}">${i}</a>
 									        </li>
 								`;
 							} else {
@@ -158,14 +158,14 @@
 		    <div id="mid-container">
 		      <table id="list-table">
 		        <tr>
-		          <th width="15%" id="th-category">분류</th>
-		          <th width="48%" id="th-title">제목</th>
-		          <th width="12%" id="th-answer">답변여부</th>
+		          <th width="17%" id="th-category">분류</th>
+		          <th width="45%" id="th-title">제목</th>
+		          <th width="13%" id="th-answer">답변여부</th>
 		          <th width="17%" id="th-date">작성일</th>
 		          <th width="8%" id="th-cnt">조회수</th>
 		        </tr>
-		        <tr th:each="qna: ${getQnaList}" id="boxxWrapper">
-		        	<td class="list-category" th:text="${qna.cateCode == 3 ? '원데이클래스' : '제품구매'}"></td>
+		        <tr th:each="qna: ${getQnaList}" id="boxxWrapper" style="height: 40px;">
+		        	<td class="list-category" th:text="${qna.cateCode eq 1 ? '원데이클래스' : '제품구매'}"></td>
 					<td class="list-title">
 						<a th:text="${qna.boardTitle}"
 						   th:href="@{/board/updateQnaCnt/{boardNo} (boardNo=${qna.boardNo})}">
@@ -186,16 +186,16 @@
 										startPage =${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
 										tempEndPage = ${startPage + pageSize -1}, 
 										endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
-						<li class="pagination_button" th:if="${pageNumber > 0}">
-							<a style="border: 0px;" th:href="${pageNumber - 1}"><</a>
-						</li>
-						<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
-							<a th:href="${page - 1}" th:text="${page}"></a>
-						</li>
-						<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
-							<a style="border: 0px;" th:href="${pageNumber + 1}">></a>
-						</li>
-				  </ul>
+					<li class="pagination_button" th:if="${pageNumber > 0}">
+						<a style="border: 0px;" th:href="${pageNumber - 1}"><</a>
+					</li>
+					<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
+						<a th:href="${page - 1}" th:text="${page}"></a>
+					</li>
+					<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+						<a style="border: 0px;" th:href="${pageNumber + 1}">></a>
+					</li>
+				 </ul>
 			  </div>
 		    </div>
 		</div>
