@@ -35,8 +35,8 @@ public class DayclassServiceImpl implements DayclassService {
 	}
 	
 	@Override
-	public Page<Dayclass> getOneDayclass(Pageable pageable) {
-		return dayclassRepository.findAll(pageable);
+	public Page<CamelHashMap> getOneDayclass(Pageable pageable) {
+		return dayclassRepository.findDayclassAndFile(pageable);
 	}
 
 	@Override

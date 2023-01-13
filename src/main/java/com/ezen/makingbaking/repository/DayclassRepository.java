@@ -40,4 +40,29 @@ public interface DayclassRepository extends JpaRepository<Dayclass, Integer> {
 			countQuery="" ,nativeQuery=true)
 	public Page<CamelHashMap> getDayclassFileList(@Param("fileNo") int fileNo, Pageable pageable);
 	
+	//데이클래스 이미지
+	@Query(value="SELECT A.*"
+			+ "		   , B.FILE_NO"
+			+ "		   , B.FILE_NAME"
+			+ "		   , B.FILE_ORIGIN_NAME"
+			+ "		   , B.FILE_PATH"
+			+ "		FROM T_MB_DAYCLASS A"
+			+ "		LEFT OUTER JOIN T_MB_FILE B"
+			+ "		ON A.DAYCLASS_NO = B.FILE_REFER_NO"
+			+ "		AND B.FILE_TYPE = 'class'"
+			+ "		AND B.FILE_NO = 1",
+			countQuery = "SELECT COUNT(*)"
+					+ "		FROM ("
+					+ "					SELECT A.*"
+					+ "						 , B.FILE_NAME"
+					+ "						 , B.FILE_ORIGIN_NAME"
+					+ "						 , B.FILE_PATH"
+					+ "						FROM T_MB_DAYCLASS A"
+					+ "						LEFT OUTER JOIN T_MB_FILE B"
+					+ "						ON A.DAYCLASS_NO = B.FILE_REFER_NO"
+					+ "						AND B.FILE_TYPE = 'class'"
+					+ "						AND B.FILE_NO = 1"
+					+ "			 ) C",
+			nativeQuery = true)
+	Page<CamelHashMap> findDayclassAndFile(Pageable pageable);
 }
