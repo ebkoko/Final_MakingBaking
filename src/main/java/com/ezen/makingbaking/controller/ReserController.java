@@ -24,11 +24,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.makingbaking.dto.ApproveResponseDTO;
+import com.ezen.makingbaking.dto.CancelResponseDTO;
 import com.ezen.makingbaking.dto.ReadyResponseDTO;
 import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.entity.CustomUserDetails;
 import com.ezen.makingbaking.entity.Reser;
+import com.ezen.makingbaking.service.kakaopay.KakaoPayReserCancelService;
 import com.ezen.makingbaking.service.kakaopay.KakaoPayService;
 import com.ezen.makingbaking.service.reser.ReserService;
 import com.ezen.makingbaking.service.user.UserService;
@@ -47,6 +49,9 @@ public class ReserController {
 	@Autowired
 	@Qualifier("kakaoReser")
 	private KakaoPayService kakaoPayService;
+	
+	@Autowired
+	private KakaoPayReserCancelService kakaoPayReserCancelService;
 	
 	@GetMapping("/reser")
 	public ModelAndView reserView() {
@@ -228,18 +233,61 @@ public class ReserController {
 		}
 	}
 	
-	@Transactional
-	@PutMapping("/payCancel/{reserNo}")
-	public ResponseEntity<?> payCancel(@PathVariable("reserNo") long reserNo, ReserDTO reserDTO,
-			HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails customUser) {
-		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
+//	@Transactional
+//	@PutMapping("/payCancel/{reserNo}")
+//	public ResponseEntity<?> payCancel(@PathVariable("reserNo") long reserNo, ReserDTO reserDTO,
+//			HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails customUser) {
+//		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
+//		
+//		try {
+//			Reser returnReser = Reser.builder()
+//									.reserNo(reserNo)
+//									.userId(customUser.getUsername())
+//									.reserDate(LocalDateTime.parse(reserDTO.getReserDate()))
+//									.reserStatus(reserDTO.getReserStatus())
+//									.partiName(reserDTO.getPartiName())
+//									.partiTel(reserDTO.getPartiTel())
+//									.partiDate(reserDTO.getPartiDate())
+//									.partiTime(reserDTO.getPartiTime())
+//									.classNo(reserDTO.getClassNo())
+//									.reserPersonCnt(reserDTO.getReserPersonCnt())
+//									.orderName(reserDTO.getOrderName())
+//									.orderTel(reserDTO.getOrderTel())
+//									.request(reserDTO.getRequest())
+//									.reserPayment(reserDTO.getReserPayment())
+//									.depositor(reserDTO.getDepositor())
+//									.reserTotalPrice(reserDTO.getReserTotalPrice())
+//									.classPrice(reserDTO.getClassPrice())
+//									.partiStatus(reserDTO.getPartiStatus())
+//									.reserCancelDate(LocalDateTime.now())
+//									.build();
+//			reserService.updateReser(returnReser);
+//			
+//			Map<String, Object> returnMap = new HashMap<String, Object>();
+//			
+//			returnMap.put("getReser", returnReser);
+//			
+//			responseDTO.setItem(returnMap);
+//			
+//			return ResponseEntity.ok().body(responseDTO);
+//		} catch(Exception e) {
+//			responseDTO.setErrorMessage(e.getMessage());
+//			
+//			return ResponseEntity.badRequest().body(responseDTO);
+//		}
+//	}
+	
+	@PostMapping("/payCancel")
+	public CancelResponseDTO cancelReady(ReserDTO reserDTO,
+			HttpServletResponse response, @AuthenticationPrincipal CustomUserDetails customUser) throws JsonMappingException, JsonProcessingException {
+//		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
 		
-		try {
+//		try {
 			Reser returnReser = Reser.builder()
-									.reserNo(reserNo)
+									.reserNo(reserDTO.getReserNo())
 									.userId(customUser.getUsername())
 									.reserDate(LocalDateTime.parse(reserDTO.getReserDate()))
-									.reserStatus(reserDTO.getReserStatus())
+									.reserStatus("PC")
 									.partiName(reserDTO.getPartiName())
 									.partiTel(reserDTO.getPartiTel())
 									.partiDate(reserDTO.getPartiDate())
@@ -256,19 +304,12 @@ public class ReserController {
 									.partiStatus(reserDTO.getPartiStatus())
 									.reserCancelDate(LocalDateTime.now())
 									.build();
+			
+			CancelResponseDTO cancelResponseDTO = kakaoPayReserCancelService.cancelReserReady(reserDTO);
+			
 			reserService.updateReser(returnReser);
 			
-			Map<String, Object> returnMap = new HashMap<String, Object>();
-			
-			returnMap.put("getReser", returnReser);
-			
-			responseDTO.setItem(returnMap);
-			
-			return ResponseEntity.ok().body(responseDTO);
-		} catch(Exception e) {
-			responseDTO.setErrorMessage(e.getMessage());
-			
-			return ResponseEntity.badRequest().body(responseDTO);
-		}
+			return cancelResponseDTO;
+		
 	}
 }

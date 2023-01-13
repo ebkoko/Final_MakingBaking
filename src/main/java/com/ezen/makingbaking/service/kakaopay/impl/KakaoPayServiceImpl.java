@@ -17,6 +17,7 @@ import com.ezen.makingbaking.dto.OrderDTO;
 import com.ezen.makingbaking.dto.ReadyResponseDTO;
 import com.ezen.makingbaking.repository.CartRepository;
 import com.ezen.makingbaking.repository.OrderRepository;
+import com.ezen.makingbaking.service.kakaopay.KakaoPayOrderCancelService;
 import com.ezen.makingbaking.service.kakaopay.KakaoPayService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -24,7 +25,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service("kakaoOrder")
-public class KakaoPayServiceImpl implements KakaoPayService {
+public class KakaoPayServiceImpl implements KakaoPayService, KakaoPayOrderCancelService {
 	@Autowired
 	private CartRepository cartRepository;
 	
@@ -112,10 +113,9 @@ public class KakaoPayServiceImpl implements KakaoPayService {
 	}
 
 	@Override
-	public CancelResponseDTO cancelReady(OrderDTO orderDTO/*, String itemList*/)
+	public CancelResponseDTO cancelReady(OrderDTO orderDTO)
 			throws JsonMappingException, JsonProcessingException {
 
-		//List<Map<String, Object>> itemMapList = new ObjectMapper().readValue(itemList, new TypeReference<List<Map<String, Object>>>() {});
 		System.out.println(orderDTO.getOrderTotalPayPrice());
 		// 카카오가 요구한 결제취소 요청 request값을 담아줍니다. 
 		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
@@ -124,7 +124,6 @@ public class KakaoPayServiceImpl implements KakaoPayService {
 		parameters.add("cancel_amount", String.valueOf(orderDTO.getOrderTotalPayPrice())); // 상품 총액
 		parameters.add("cancel_tax_free_amount", "0"); // 상품 비과세 금액
 		parameters.add("approval_url", "http://localhost:9900/mypage/getOrderDetail/" + orderDTO.getOrderNo()); // 결제취소 승인시 넘어갈 url
-//		parameters.add("cancel_url", "http://localhost:9900/order/kakaoOrderCancel"); // 결제취소시 넘어갈 url
 		parameters.add("fail_url", "http://localhost:9900/mypage/myPage"); // 결제취소 실패시 넘어갈 url
 		
 		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());

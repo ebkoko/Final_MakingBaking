@@ -1,7 +1,5 @@
 package com.ezen.makingbaking.service.kakaopay.impl;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -11,16 +9,17 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.ezen.makingbaking.dto.ApproveResponseDTO;
+import com.ezen.makingbaking.dto.CancelResponseDTO;
 import com.ezen.makingbaking.dto.ReadyResponseDTO;
+import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.repository.ReserRepository;
+import com.ezen.makingbaking.service.kakaopay.KakaoPayReserCancelService;
 import com.ezen.makingbaking.service.kakaopay.KakaoPayService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service("kakaoReser")
-public class KakaoPayClassServiceImpl implements KakaoPayService {	
+public class KakaoPayClassServiceImpl implements KakaoPayService, KakaoPayReserCancelService {	
 	@Autowired
 	private ReserRepository reserRepository;
 	
@@ -91,5 +90,28 @@ public class KakaoPayClassServiceImpl implements KakaoPayService {
 		return headers;
 	}
 
-	
+	@Override
+	public CancelResponseDTO cancelReserReady(ReserDTO reserDTO)
+			throws JsonMappingException, JsonProcessingException {
+
+		System.out.println(reserDTO.getReserTotalPrice());
+		// 카카오가 요구한 결제취소 요청 request값을 담아줍니다. 
+		MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
+		parameters.add("cid", "TC0ONETIME"); // 가맹점 코드
+		parameters.add("tid", reserDTO.getTid()); // tid
+		parameters.add("cancel_amount", String.valueOf(reserDTO.getReserTotalPrice())); // 상품 총액
+		parameters.add("cancel_tax_free_amount", "0"); // 상품 비과세 금액
+		parameters.add("approval_url", "http://localhost:9900/mypage/getReserDetail/" + reserDTO.getReserNo()); // 결제취소 승인시 넘어갈 url
+		parameters.add("fail_url", "http://localhost:9900/mypage/myReserList"); // 결제취소 실패시 넘어갈 url
+		
+		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
+		// 외부url요청 통로 열기.
+		RestTemplate template = new RestTemplate();
+		String url = "https://kapi.kakao.com/v1/payment/cancel";
+        // template으로 값을 보내고 받아온 CancelResponse값 cancelResponse에 저장.
+		CancelResponseDTO cancelResponse = template.postForObject(url, requestEntity, CancelResponseDTO.class);
+		System.out.println("결제취소 응답객체: " + cancelResponse);
+		
+		return cancelResponse;
+	}
 }

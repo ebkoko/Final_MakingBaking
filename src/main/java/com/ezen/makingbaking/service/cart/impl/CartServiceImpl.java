@@ -60,8 +60,6 @@ public class CartServiceImpl implements CartService {
 	public void deleteCartItem(List<Cart> cartItemList) {
 		for(int i = 0; i < cartItemList.size(); i++) {
 			cartRepository.updateCartStatus(cartItemList.get(i));
-			cartRepository.flush();
-			cartRepository.updateItemStock(cartItemList.get(i).getItemNo(), cartItemList.get(i).getCartItemCnt());
 		}
 	}
 }
