@@ -227,7 +227,7 @@
 		            //div 생성
 		            let div = document.createElement("div");
 		            div.setAttribute("style", "display: inline-block; position: relative;"
-		            + " width: 150px; height: 120px; margin: 5px; border: 1px solid #00f; z-index: 1;");
+		            + " width: 280px; height: 210px; margin: 5px; border: 1px solid #00f; z-index: 1;");
 		            
 		            //button 생성
 		            let btn = document.createElement("input");
@@ -561,7 +561,7 @@
 			              <p style="color: red; font-size: 0.9rem;">클래스 대표이미지를 변경하려면 이미지를 클릭하고, 다운로드하려면 이미지의 파일명을 클릭하세요.</p>
 			              <div id="attZone">
 			              	<div th:each="imgFile : ${dayclassFileList}" style="display: inline-block; position: relative; 
-								width: 150px; height: 120px; margin: 5px; border: 1px solid #00f; z-index: 1;">
+								width: 280px; height: 210px; margin: 5px; border: 1px solid #00f; z-index: 1;">
 								<input type="hidden" th:id="'fileNo' + ${imgFileStat.index}" 
 									th:name="'fileNo' + ${imgFileStat.index}" 
 									th:value="${imgFile.fileNo}">

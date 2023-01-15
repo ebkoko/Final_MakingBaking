@@ -13,6 +13,10 @@
 					text-decoration: none;
 					color: inherit;
 				}
+				.a_userName {
+					text-decoration: none;
+					color: inherit;
+				}
 				#userAdmin {
 					font-size: 40px;
 				}
@@ -88,7 +92,7 @@
 				*/
 				
 				/* 회원 개인리뷰 버튼 */
-			    #userReview {
+			    #adminUserReview {
 					width: 70px;
 					display: inline-block;
 					height: 30px;
@@ -176,10 +180,49 @@
 					font-weight: 550;
 					cursor: pointer;
 				}
+				
+				/* 페이징처리 */
+			    .paging {
+					text-align: center;
+					margin-top: 50px;
+				}
+			    .pagination {
+			      display: flex;
+			      justify-content: center;
+			      align-items: center;
+			      margin-bottom: 20px;
+			    }    
+			    .paging a{
+				  display: block;
+				  margin: 0 3px;
+				  border: 1px solid #ccc;
+				  width: 40px;
+				  height: 40px;
+				  line-height: 35px;
+				  text-align: center;
+			      color: #8c8c8c;
+			      font-size: 25px;
+			      font-weight: 600;
+			    }
+			    .paging a:hover {
+			      color: #28693F;
+			    }
+			    .paging a:focus {
+					background:#28693F;
+					color: white;
+				}
+				.paging .pagination .pagination_button a.present {
+					border-color: #28693F;
+					background: #28693F;
+					color: white;
+				}
  			</style>
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
+				let changeRows = [];
+				let pageNum;
+				
 				$(function() {
 					//검색창 검색버튼 클릭 시
 					$("#btnSearch").on('click',function() {
@@ -206,7 +249,8 @@
 					});
 				});
 				
-				//선택회원 삭제
+				
+				//선택상품 삭제
 				$(function() {
 					//삭제버튼 클릭 시 체크된 게시물들 삭제 상태로 변경
 					$("#userDelete").on('click', function() {
@@ -224,12 +268,26 @@
 						
 						if(confirm("선택한 회원을 삭제하시겠습니까?")) {
 						$.ajax({
-							url: '/admin/saveUserList',
+							url: '/admin/userList',
 							type: 'post',
-							data: {changeRows: JSON.stringify(changeRows)},
+							data: {
+								changeRows: JSON.stringify(changeRows),
+								page: pageNum
+							},
 							success: function(obj) {
 								console.log(obj);
 								let htmlStr = "";
+								
+								htmlStr += `
+							
+								<tr>
+					        		<th class="userList_T_10"></th>
+							        <th class="userList_T_20">회원 이름</th>
+							        <th class="userList_T_25">회원 아이디</th>
+							        <th class="userList_T_20">가입일</th>
+							        <th class="userList_T_25">개인 게시판</th>
+					      		</tr>
+					      	`;
 								for(let i = 0; i < obj.pageItems.content.length; i++) {
 									htmlStr += `
 										<tr>
@@ -241,7 +299,7 @@
 											<td>${obj.pageItems.content[i].userId}</td>
 											<td>${obj.pageItems.content[i].userRegdate == null ? '' : obj.pageItems.content[i].userRegdate.substr(0, 10)}</td>
 											<td>
-								        		<a id="userReview"
+								        		<a id="adminUserReview"
 													href="@{/admin/userRvwList?rvwWriter=" + ${obj.pageItems.content[i].userId}}">Review
 												</a>
 												<a id="userQnA"
@@ -252,8 +310,7 @@
 									`;
 								}
 								
-								$("#userList_T").children(":first").children().not(':first').remove();
-								$("#userList_T").children(":first").append(htmlStr);
+								$("#userList_T").html(htmlStr);
 							},
 							error: function(e) {
 								console.log(e);
@@ -264,10 +321,137 @@
 							alert("삭제를 취소하였습니다.");
 						}
 						console.log(changeRows);
-						
 					});
 
+				//회원리스트 페이징 처리
+				$(document).on("click", ".pagination a", function(e) {
+					e.preventDefault();
+					pageNum = $(this).attr("href");
+					userListPaging(pageNum, $("#searchCondition").val());
 				});
+				
+
+				}); //function 닫음
+				
+				
+				function userListPaging(page, condition) {
+					console.log(page);
+					console.log(condition);
+
+						$.ajax({
+						url: '/admin/userList',
+						type: 'post',
+						data: {
+							page: page,
+							searchCondition: condition
+						},
+						success: function(obj) {
+							console.log(obj);
+							
+							let htmlStr = "";
+							
+							htmlStr += `
+							
+								<tr>
+					        		<th class="userList_T_10"></th>
+							        <th class="userList_T_20">회원 이름</th>
+							        <th class="userList_T_25">회원 아이디</th>
+							        <th class="userList_T_20">가입일</th>
+							        <th class="userList_T_25">개인 게시판</th>
+					      		</tr>
+					      	`;
+							
+							for(let i=0; i<obj.pageItems.content.length; i++) {
+								htmlStr += `
+									
+									<tr>
+										<td>
+											<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].userId}"
+											value="${obj.pageItems.content[i].userId}">
+										</td>
+										<td>${obj.pageItems.content[i].userName}</td>
+										<td>${obj.pageItems.content[i].userId}</td>
+										<td>${obj.pageItems.content[i].userRegdate == null ? '' : obj.pageItems.content[i].userRegdate.substr(0, 10)}</td>
+										<td>
+							        		<a id="adminUserReview"
+												href="@{/admin/userRvwList?rvwWriter=" + ${obj.pageItems.content[i].userId}}">Review
+											</a>
+											<a id="userQnA"
+												href="@{/admin/userRvwList?boardWriter=" + ${obj.pageItems.content[i].userId}}">QnA
+											</a>
+							        	</td>
+									</tr>
+								`;
+							}
+							
+							$("#userList_T").html(htmlStr);
+							
+							htmlstr = "";
+						
+							let pageNumber = obj.pageItems.pageable.pageNumber;
+							let pageSize = obj.pageItems.pageable.pageSize;
+							let totalPages = obj.pageItems.totalPages;
+							let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
+							let tempEndPage = startPage + pageSize -1;
+							let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
+							console.log(pageNumber);
+							console.log(pageSize);
+							console.log(totalPages);
+							console.log(startPage);
+							console.log(tempEndPage);
+							console.log(endPage);
+							
+							if(pageNumber > 0) {
+								htmlstr += `
+									<li class="pagination_button">
+										<a style="border: 0px;" href="${pageNumber - 1}">&#60;</a>
+									</li>
+								`;
+							}
+							
+							let realStart = totalPages - startPage < pageSize ? 
+												totalPages < pageSize ? 1 : totalPages - pageSize + 1 
+											: startPage;
+							
+							for(let i = realStart; i <= endPage; i++) {
+								if(pageNumber == i-1) {
+									htmlstr += `<li class="pagination_button">
+											   	   <a class="present" href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								} else {
+									htmlstr += `<li class="pagination_button">
+											   	   <a href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								}
+							}
+							
+							if(pageNumber < totalPages - 1) {
+								htmlstr += `<li class="pagination_button">
+										       <a style="border: 0px;" href="${pageNumber + 1}">&#62;</a>
+									        </li>
+								`;
+							}
+							
+							$(".pagination").html(htmlstr);
+							
+						}, error: function(e) {
+							console.log(e);
+						}
+					});
+				} //function 닫음
+				
+				$(function() {
+					$("#adminUserReview").click(function() {
+					reviewPopup();
+					})
+				});
+				
+				function reviewPopup() {
+					window.open("userRvwList?rvwWriter=hi", "getUserRvwListPop", 
+						"width=1000px, height=530px, top=150, left=200");
+				}
 			</script>
 		</th:block>
 	</head>
@@ -305,22 +489,46 @@
 			        <th class="userList_T_20">가입일</th>
 			        <th class="userList_T_25">개인 게시판</th>
 	      		</tr>
-	      		<tr th:each="user: ${getUserList.content}">
+	      		<tr th:each="user: ${pageUserList}">
 	      			<td><input type="checkbox" class="check" name="chk" th:value="${user.userId}"></td>
 		        	<!--<td>       회원이름 누르면 회원정보 모달?페이지? 띄우기
 						<a id="a_itemName" th:text="${item.itemName}"
 							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">
 						</a>
 					</td>-->
-					<td th:text="${user.userName}"></td>
+					<td>
+						<a class="a_userName" th:text="${user.userName}"
+							th:href="@{/admin/userInfoCheck/{userId} (userId=${user.userId})}"></td>
 					<td th:text="${user.userId}"></td>
 		        	<td th:text="${user.userRegdate eq null ? '' : #strings.substring(user.userRegdate, 0, 10)}"></td>
 		        	<td>
-		        		<a id="userReview" th:text="Review" th:herf="'/admin/userRvwList?rvwWriter=' + ${user.userId}"></a>
-						<a id="userQnA" th:text="QnA" th:herf="'/admin/userRvwList?boardWriter=' + ${user.userId}"></a>
+		        		<a id="adminUserReview" th:text="Review" onclick="reviewPopup();"></a>
+						<a id="userQnA" th:text="QnA"
+							th:href="@{/admin/userRvwList?boardWriter={userId} (userId=${user.userId})}"></a>
 		        	</td>
 		     	 </tr>
 		    </table>
+		</div>
+		
+		<!-- 페이징 -->
+		<div class="paging">
+			<ul class="pagination" th:if="${pageUserList.totalElements > 0}"
+								   th:with="pageNumber = ${pageUserList.pageable.pageNumber},
+											pageSize = ${pageUserList.pageable.pageSize},
+											totalPages = ${pageUserList.totalPages},
+											startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+											tempEndPage = ${startPage + pageSize - 1},
+											endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+				<li class="pagination_button" th:if="${pageNumber > 0}">
+					<a style="border: 0px;" th:href="${pageNumber - 1}">&#60;</a>
+				</li>
+				<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
+					<a th:href="${page - 1}" th:text="${page}"></a>
+				</li>
+				<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+					<a style="border: 0px;" th:href="${pageNumber + 1}">&#62;</a>
+				</li>
+			</ul>
 		</div>
 		
 		<!-- 탈퇴/메일전송/MMS전송 버튼 -->

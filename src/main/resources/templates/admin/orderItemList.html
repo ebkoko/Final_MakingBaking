@@ -82,7 +82,7 @@
 				*/
 				
 				/* 개인 주문취소 버튼 */
-			    #orderCancel {
+			    .orderCancel {
 					width: 70px;
 					display: inline-block;
 					height: 30px;
@@ -92,7 +92,7 @@
 					margin-right: 10px;
 			    }
 			    /* 개인 결제취소 버튼 */
-			    #payCancel {
+			    .payCancel {
 					width: 70px;
 					display: inline-block;
 					height: 30px;
@@ -100,10 +100,49 @@
 					color: #28693F;
 					cursor: pointer; 
 			    }
+			    
+			    /* 페이징처리 */
+			    .paging {
+					text-align: center;
+					margin-top: 50px;
+				}
+			    .pagination {
+			      display: flex;
+			      justify-content: center;
+			      align-items: center;
+			      margin-bottom: 20px;
+			    }    
+			    .paging a{
+				  display: block;
+				  margin: 0 3px;
+				  border: 1px solid #ccc;
+				  width: 40px;
+				  height: 40px;
+				  line-height: 35px;
+				  text-align: center;
+			      color: #8c8c8c;
+			      font-size: 25px;
+			      font-weight: 600;
+			    }
+			    .paging a:hover {
+			      color: #28693F;
+			    }
+			    .paging a:focus {
+					background:#28693F;
+					color: white;
+				}
+				.paging .pagination .pagination_button a.present {
+					border-color: #28693F;
+					background: #28693F;
+					color: white;
+				}
 			</style>
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
+				let changeRows = [];
+				let pageNum;
+				
 				$(function() {
 					//검색창(상품카테, 판매상태)
 					$("#searchCondition").on("change", function() {
@@ -146,7 +185,124 @@
 							$("input[name='chk']").prop("checked", false);
 						}
 					});
+					
+					
+					//상품 주문 리스트 페이징 처리
+					$(document).on("click", ".pagination a", function(e) {
+						e.preventDefault();
+						pageNum = $(this).attr("href");
+						orderListPaging(pageNum, $("#searchCondition").val());
+					});
 				});
+				
+				function orderListPaging(page, condition) {
+					console.log(page);
+					console.log(condition);
+
+						$.ajax({
+						url: '/admin/orderItemList',
+						type: 'post',
+						data: {
+							page: page,
+							searchCondition: condition
+						},
+						success: function(obj) {
+							console.log(obj);
+							
+							let htmlStr = "";
+							
+							htmlStr += `
+							
+								<tr>
+							        <th class="orderList_T_15">주문번호</th>
+							        <th class="orderList_T_10">회원아이디</th>
+							        <th class="orderList_T_10">주문자명</th>
+							        <th class="orderList_T_10">주문 총금액</th>
+							        <th class="orderList_T_10">결제방법</th>
+							        <th class="orderList_T_20">주문일</th>
+							        <th class="orderList_T_10">주문상태</th>
+							        <th class="orderList_T_15">취소관리</th>
+					      		</tr>
+					      	`;
+							
+							for(let i=0; i<obj.pageItems.content.length; i++) {
+								htmlStr += `
+									
+									<tr>
+										<td>${obj.pageItems.content[i].orderNo}</td>
+										<td>${obj.pageItems.content[i].userId}</td>
+										<td>${obj.pageItems.content[i].orderName}</td>
+										<td>${(obj.pageItems.content[i].orderTotalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+										<td>${obj.pageItems.content[i].orderPayment}</td>
+										<td>${obj.pageItems.content[i].orderDate == null ? '' : obj.pageItems.content[i].orderDate.substr(0, 10)}</td>
+										<td>${obj.pageItems.content[i].orderStatus}</td>
+										<td>
+							        		<a class="orderCancel">주문취소
+											</a>
+											<a class="payCancel">결제취소
+											</a>
+							        	</td>
+									</tr>
+								`;
+							}
+							
+							$("#orderList_T").html(htmlStr);
+							
+							htmlstr = "";
+						
+							let pageNumber = obj.pageItems.pageable.pageNumber;
+							let pageSize = obj.pageItems.pageable.pageSize;
+							let totalPages = obj.pageItems.totalPages;
+							let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
+							let tempEndPage = startPage + pageSize -1;
+							let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
+							console.log(pageNumber);
+							console.log(pageSize);
+							console.log(totalPages);
+							console.log(startPage);
+							console.log(tempEndPage);
+							console.log(endPage);
+							
+							if(pageNumber > 0) {
+								htmlstr += `
+									<li class="pagination_button">
+										<a style="border: 0px;" href="${pageNumber - 1}">&#60;</a>
+									</li>
+								`;
+							}
+							
+							let realStart = totalPages - startPage < pageSize ? 
+												totalPages < pageSize ? 1 : totalPages - pageSize + 1 
+											: startPage;
+							
+							for(let i = realStart; i <= endPage; i++) {
+								if(pageNumber == i-1) {
+									htmlstr += `<li class="pagination_button">
+											   	   <a class="present" href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								} else {
+									htmlstr += `<li class="pagination_button">
+											   	   <a href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								}
+							}
+							
+							if(pageNumber < totalPages - 1) {
+								htmlstr += `<li class="pagination_button">
+										       <a style="border: 0px;" href="${pageNumber + 1}">&#62;</a>
+									        </li>
+								`;
+							}
+							
+							$(".pagination").html(htmlstr);
+							
+						}, error: function(e) {
+							console.log(e);
+						}
+					});
+				} //function 닫음
 			</script>
 		</th:block>
 	</head>
@@ -210,7 +366,7 @@
 			        <th class="orderList_T_10">주문상태</th>
 			        <th class="orderList_T_15">취소관리</th>
 	      		</tr>
-	      		<tr th:each="order: ${getOrderList.content}">
+	      		<tr th:each="order: ${getOrderList}">
 		        	<td th:text="${order.orderNo}"></td>
 		        	<!--<td>       예약번호 누르면 예약정보 모달?페이지? 띄우기
 						<a id="a_itemName" th:text="${item.itemName}"
@@ -221,18 +377,39 @@
 					<td th:text="${order.orderName}"></td>
 					<td th:text="${order.orderTotalPrice >= 1000 ? #numbers.formatInteger(order.orderTotalPrice , 3, 'COMMA') : order.orderTotalPrice}"></td>
 					<td th:text="${order.orderPayment}"></td>
-					<td th:text="${order.orderDate}"></td>
+					<td th:text="${order.orderDate eq null ? '' : #strings.substring(order.orderDate, 0, 10)}"></td>
 					<td th:text="${order.orderStatus}"></td>
 		        	<td>
-		        		<a id="orderCancel" th:text="주문취소">
+		        		<a class="orderCancel" th:text="주문취소">
 							<!--th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">-->
 						</a>
-						<a id="payCancel" th:text="결제취소">
+						<a class="payCancel" th:text="결제취소">
 							<!--th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">-->
 						</a>
 		        	</td>
 		     	 </tr>
 		    </table>
+		</div>
+		
+		<!-- 페이징 -->
+		<div class="paging">
+			<ul class="pagination" th:if="${getOrderList.totalElements > 0}"
+								   th:with="pageNumber = ${getOrderList.pageable.pageNumber},
+											pageSize = ${getOrderList.pageable.pageSize},
+											totalPages = ${getOrderList.totalPages},
+											startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+											tempEndPage = ${startPage + pageSize - 1},
+											endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+				<li class="pagination_button" th:if="${pageNumber > 0}">
+					<a style="border: 0px;" th:href="${pageNumber - 1}">&#60;</a>
+				</li>
+				<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
+					<a th:href="${page - 1}" th:text="${page}"></a>
+				</li>
+				<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+					<a style="border: 0px;" th:href="${pageNumber + 1}">&#62;</a>
+				</li>
+			</ul>
 		</div>
 	</div>
 </body>

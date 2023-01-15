@@ -70,7 +70,7 @@ public class AdminController {
 	}
 	
 	
-	//item
+//////////////////////////////item//////////////////////////////
 	//상품리스트
 	@GetMapping("/itemList")
 	public ModelAndView getItemList(ItemDTO itemDTO,
@@ -529,16 +529,8 @@ public class AdminController {
 		}
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//dayclass
+
+//////////////////////////////dayclass//////////////////////////////
 	//데이클래스 리스트
 	@GetMapping("/dayclassList")
 	public ModelAndView getDayclassList(DayclassDTO dayclassDTO,
@@ -944,19 +936,11 @@ public class AdminController {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	//user
+//////////////////////////////user//////////////////////////////
 	//회원 리스트
 	@GetMapping("/userList")
 	public ModelAndView getUserList(UserDTO userDTO,
-			@PageableDefault(page = 0, size = 50) Pageable pageable) {
+			@PageableDefault(page = 0, size = 10) Pageable pageable) {
 		User user = User.builder()
 						.userName(userDTO.getUserName())
 						.userId(userDTO.getUserId())
@@ -980,7 +964,7 @@ public class AdminController {
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/userList.html");
-		mv.addObject("getUserList", pageUserDTOList);
+		mv.addObject("pageUserList", pageUserDTOList);
 		
 		if(userDTO.getSearchCondition() != null && !userDTO.getSearchCondition().equals("")) {
 			mv.addObject("searchCondition", userDTO.getSearchCondition());
@@ -993,42 +977,43 @@ public class AdminController {
 		return mv;
 	}
 	
-	//회원 리스트_개인 리뷰리스트 확인
-	@GetMapping("/userRvwList")
-	public ModelAndView getUserRvwList(ReviewDTO reviewDTO,
-			@PageableDefault(page = 0, size = 50) Pageable pageable) {
-		Page<Review> reviewList = adminService.getUserRvwList(reviewDTO.getRvwWriter(), pageable);
-		
-		Page<ReviewDTO> reviewListDTO = reviewList.map(review -> 
-								ReviewDTO.builder()
-										.rvwNo(review.getRvwNo())
-										.rvwReferNo(review.getRvwReferNo())
-										.rvwType(review.getRvwType())
-										.rvwContent(review.getRvwContent())
-										.rvwWriter(review.getRvwWriter())
-										.rvwRegdate(review.getRvwRegdate().toString())
-										.rvwScore(review.getRvwScore())
-										.build()
-										);
-		
-		
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("admin/userRvwList.html");
-		mv.addObject("getUserRvwList", reviewListDTO);
-		
-		if(reviewDTO.getSearchCondition() != null && !reviewDTO.getSearchCondition().equals("")) {
-			mv.addObject("searchCondition", reviewDTO.getSearchCondition());
+	//회원리스트 - ajax로 처리한 페이징 글 목록 보여주기
+	@PostMapping("/userList")
+	public ResponseEntity<?> getUserPageList(UserDTO userDTO,
+			@PageableDefault(page = 0, size = 10) Pageable pageable) {
+		ResponseDTO<UserDTO> response = new ResponseDTO<>();
+		try {
+			User user = User.builder()
+							.searchCondition(userDTO.getSearchCondition())
+							.searchKeyword(userDTO.getSearchKeyword())
+							.build();
+
+			Page<User> pageUserList = adminService.getPageUserList(user, pageable);
+			
+			Page<UserDTO> pageUserDTOList = pageUserList.map(pageUser -> 
+													            UserDTO.builder()
+															            .userNo(pageUser.getUserNo())
+			                             								.userName(pageUser.getUserName())
+			                             								.userId(pageUser.getUserId())
+			                             								.userRegdate(pageUser.getUserRegdate() == null?
+			 	                                                               null :
+			 		                                                               pageUser.getUserRegdate().toString())
+			                                         					.build()
+											   				);
+			response.setPageItems(pageUserDTOList);
+			
+			return ResponseEntity.ok().body(response);
+			
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
 		}
-		
-		
-		
-		return mv;
 	}
 	
 	//관리자가 회원을 삭제하는 경우 ajax를 이용해 백단에 전송
 	@PostMapping("/saveUserList")
 	public ResponseEntity<?> saveUserList(@RequestParam("changeRows") String changeRows,
-			@PageableDefault(page = 0, size = 50) Pageable pageable) throws JsonMappingException, JsonProcessingException {
+			@PageableDefault(page = 0, size = 10) Pageable pageable) throws JsonMappingException, JsonProcessingException {
 		ResponseDTO<UserDTO> response = new ResponseDTO<>();
 		List<Map<String, Object>> changeRowsList = new ObjectMapper().readValue(changeRows, 
 											new TypeReference<List<Map<String, Object>>>() {});
@@ -1036,7 +1021,7 @@ public class AdminController {
 		try {
 			adminService.saveUserList(changeRowsList);
 			
-			User user  = User.builder()
+			User user = User.builder()
 							.searchCondition("")
 							.searchKeyword("")
 							.build();
@@ -1063,21 +1048,103 @@ public class AdminController {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
+///////////////////////////////////////////팝업해결중///////////////////////
+	//회원 리스트_리뷰팝업
+	@GetMapping("/userRvwList")
+	public ModelAndView getUserRvwList(ReviewDTO reviewDTO,
+			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+		Page<Review> reviewList = adminService.getUserRvwList(reviewDTO.getRvwWriter(), pageable);
+		
+		Page<ReviewDTO> reviewListDTO = reviewList.map(review -> 
+								ReviewDTO.builder()
+										.rvwNo(review.getRvwNo())
+										.rvwReferNo(review.getRvwReferNo())
+										.rvwType(review.getRvwType())
+										.rvwContent(review.getRvwContent())
+										.rvwWriter(review.getRvwWriter())
+										.rvwRegdate(review.getRvwRegdate().toString())
+										.rvwScore(review.getRvwScore())
+										.build()
+										);
+		
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("admin/userRvwList.html");
+		mv.addObject("getUserRvwList", reviewListDTO);
+		
+		if(reviewDTO.getSearchCondition() != null && !reviewDTO.getSearchCondition().equals("")) {
+			mv.addObject("searchCondition", reviewDTO.getSearchCondition());
+		}
+
+		return mv;
+	}
+
+
+	//회원 리스트_리뷰팝업 - ajax로 처리한 페이징 글 목록 보여주기
+	@PostMapping("/userRvwList")
+	public ResponseEntity<?> getUserRvwPageList(ReviewDTO reviewDTO,
+			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+		ResponseDTO<ReviewDTO> response = new ResponseDTO<>();
+		try {
+			Review review = Review.builder()
+							.searchCondition(reviewDTO.getSearchCondition())
+							.searchKeyword(reviewDTO.getSearchKeyword())
+							.build();
+
+			Page<Review> pageReviewList = adminService.getUserRvwPageList(review, pageable);
+			
+			Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview -> 
+													            ReviewDTO.builder()
+													            .rvwNo(review.getRvwNo())
+																.rvwReferNo(review.getRvwReferNo())
+																.rvwType(review.getRvwType())
+																.rvwContent(review.getRvwContent())
+																.rvwWriter(review.getRvwWriter())
+																.rvwRegdate(review.getRvwRegdate().toString())
+																.rvwScore(review.getRvwScore())
+																.build()
+											   				);
+			response.setPageItems(pageReviewDTOList);
+			
+			return ResponseEntity.ok().body(response);
+			
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+	
+	//회원상세보기
+	@GetMapping("/userInfoCheck/{userId}")
+	public ModelAndView getUserInfoCheck(@PathVariable String userId) {
+		User user = adminService.getUserInfoCheck(userId);
+
+		
+		UserDTO userDTO = UserDTO.builder()
+									.userId(user.getUserId())
+									.userName(user.getUserName())
+									.userBirth(user.getUserBirth())
+									.userGender(user.getUserGender())
+									.userTel(user.getUserTel())
+									.userAddr1(user.getUserAddr1())
+									.userAddr2(user.getUserAddr2())
+									.userAddr3(user.getUserAddr3())
+									.build();
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("admin/userInfoCheck.html");
+		mv.addObject("getUserInfoCheck", userDTO);;
+		
+		return mv;
+	}
 	
 	
+//////////////////////////////주문(order) 및 예약(reser)관리//////////////////////////////
 	//reser_dayclass 리스트
 	@GetMapping("/reserDayclassList")
 	public ModelAndView getReserDayclassList(ReserDTO reserDTO,
-			@PageableDefault(page = 0, size = 50) Pageable pageable) {
+			@PageableDefault(page = 0, size = 10) Pageable pageable) {
 		Reser reser = Reser.builder()
-							.reserNo(reserDTO.getReserNo())
-							.partiName(reserDTO.getPartiName())
-							.userId(reserDTO.getUserId())
-							.classNo(reserDTO.getClassNo())
-							.partiDate(reserDTO.getPartiDate())
-							.partiTime(reserDTO.getPartiTime())
-							.reserStatus(reserDTO.getReserStatus())
-							.partiStatus(reserDTO.getPartiStatus())
 							.searchCondition(reserDTO.getSearchCondition())
 							.searchKeyword(reserDTO.getSearchKeyword())
 							.build();
@@ -1099,7 +1166,7 @@ public class AdminController {
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/reserDayclassList.html");
-		mv.addObject("getReserList", pageReserDTOList);
+		mv.addObject("pageReserList", pageReserDTOList);
 		
 		if(reserDTO.getSearchCondition() != null && !reserDTO.getSearchCondition().equals("")) {
 			mv.addObject("searchCondition", reserDTO.getSearchCondition());
@@ -1112,10 +1179,45 @@ public class AdminController {
 		return mv;
 	}
 	
+	//클래스 예약 리스트 - ajax로 처리한 페이징 글 목록 보여주기
+	@PostMapping("/reserDayclassList")
+	public ResponseEntity<?> getReserDayclassPageList(ReserDTO reserDTO,
+			@PageableDefault(page = 0, size = 10) Pageable pageable) {
+		ResponseDTO<ReserDTO> response = new ResponseDTO<>();
+		try {
+			Reser reser = Reser.builder()
+							.searchCondition(reserDTO.getSearchCondition())
+							.searchKeyword(reserDTO.getSearchKeyword())
+							.build();
+			Page<Reser> pageReserList = adminService.getPageReserList(reser, pageable);
+			
+			Page<ReserDTO> pageReserDTOList = pageReserList.map(pageReser -> 
+											            ReserDTO.builder()
+													            .reserNo(pageReser.getReserNo())
+		                         								.partiName(pageReser.getPartiName())
+		                         								.userId(pageReser.getUserId())
+		                         								.classNo(pageReser.getClassNo())
+		                         								.partiDate(pageReser.getPartiDate())
+		                         								.partiTime(pageReser.getPartiTime())
+		                         								.reserStatus(pageReser.getReserStatus())
+		                         								.partiStatus(pageReser.getPartiStatus())
+		                         								.build()
+											   				);
+			response.setPageItems(pageReserDTOList);
+			
+			return ResponseEntity.ok().body(response);
+			
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+	
+	//주문 및 예약관리
 	//order_item 리스트
 	@GetMapping("/orderItemList")
 	public ModelAndView getOrderItemList(OrderDTO orderDTO,
-			@PageableDefault(page = 0, size = 500) Pageable pageable) {
+			@PageableDefault(page = 0, size = 10) Pageable pageable) {
 		Order order = Order.builder()
 							.searchCondition(orderDTO.getSearchCondition())
 							.searchKeyword(orderDTO.getSearchKeyword())
@@ -1152,8 +1254,83 @@ public class AdminController {
 		return mv;
 	}
 	
+	//상품 주문 리스트 - ajax로 처리한 페이징 글 목록 보여주기
+	@PostMapping("/orderItemList")
+	public ResponseEntity<?> getOrderItemPageList(OrderDTO orderDTO,
+			@PageableDefault(page = 0, size = 10) Pageable pageable) {
+		ResponseDTO<OrderDTO> response = new ResponseDTO<>();
+		try {
+			Order order = Order.builder()
+								.searchCondition(orderDTO.getSearchCondition())
+								.searchKeyword(orderDTO.getSearchKeyword())
+								.build();
+			Page<Order> pageOrderList = adminService.getPageOrderList(order, pageable);
+			
+			Page<OrderDTO> pageOrderDTOList = pageOrderList.map(pageOrder -> 
+											            OrderDTO.builder()
+													            .orderNo(pageOrder.getOrderNo())
+		                         								.userId(pageOrder.getUserId())
+		                         								.orderName(pageOrder.getOrderName())
+		                         								.orderTotalPrice(pageOrder.getOrderTotalPrice())
+		                         								.orderPayment(pageOrder.getOrderPayment())
+		                         								.orderDate(pageOrder.getOrderDate() == null ?
+		                         										null :
+		                         										pageOrder.getOrderDate().toString())
+		                         								.orderStatus(pageOrder.getOrderStatus())
+		                         								.build()
+											   				);
+			response.setPageItems(pageOrderDTOList);
+			
+			return ResponseEntity.ok().body(response);
+			
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
 	
 	
+//////////////////////////////review//////////////////////////////
+	//리뷰관리
+//	@GetMapping("/reviewList")
+//	public ModelAndView getReviewList(ReviewDTO reviewDTO,
+//			@PageableDefault(page = 0, size = 10) Pageable pageable) {
+//		
+//		Review review = Review.builder()
+//							.searchCondition(reviewDTO.getSearchCondition())
+//							.searchKeyword(reviewDTO.getSearchKeyword())
+//							.build();
+//		
+//		Page<Review> pageReviewList = adminService.getPageReviewList(review, pageable);
+//	      
+//	    Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview -> 
+//																    ReviewDTO.builder()
+//																				.rvwNo(pageReview.getRvwNo())
+//																				.rvwReferNo(pageReview.getRvwReferNo())
+//																				.rvwType(pageReview.getRvwType())
+//																				.rvwContent(pageReview.getRvwContent())
+//																				.rvwWriter(pageReview.getRvwWriter())
+//																				.rvwRegdate(pageReview.getRvwRegdate() == null ?
+//																						null :
+//																						pageReview.getRvwRegdate().toString())
+//																				.rvwScore(pageReview.getRvwScore())
+//																				.build()
+//	                                             );
+//		
+//		ModelAndView mv = new ModelAndView();
+//		mv.setViewName("admin/reviewList.html");
+//		mv.addObject("getPageReviewList", pageReviewDTOList);
+//		
+//		if(reviewDTO.getSearchCondition() != null && !reviewDTO.getSearchCondition().equals("")) {
+//			mv.addObject("searchCondition", reviewDTO.getSearchCondition());
+//		}
+//		
+//		if(reviewDTO.getSearchKeyword() != null && !reviewDTO.getSearchKeyword().equals("")) {
+//			mv.addObject("searchKeyword", reviewDTO.getSearchKeyword());
+//		}
+//		
+//		return mv;
+//	}
 	
 	
 	
@@ -1165,7 +1342,7 @@ public class AdminController {
 		
 		ModelAndView mv = new ModelAndView();
 		
-		mv.setViewName("admin/userRvwList.html");
+		mv.setViewName("admin/reviewList.html");
 			
 		return mv;
 	}

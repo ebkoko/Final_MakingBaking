@@ -171,27 +171,22 @@
 					//클래스 삭제
 					$("#dayclassDelBtn").on('click', function(e) {
 						e.preventDefault(); //a태그가 이벤트가 동작하지 않도록.
-
+						
+						if(confirm("해당 클래스를 삭제하시겠습니까?")) {
 						$.ajax({
 							url: '/admin/delDayclass/',
 							type: 'delete',
 							data: {dayclassNo: $("#dayclassNo").val()},
 							success: function () {
-								alert("삭제되었습니다.");
 								window.location.href = "/admin/dayclassList";
-								/* 삭제전에 삭제하겠냐고 묻고싶어요오오ㅠㅜㅠㅜㅠㅜㅠㅜ
-								if(confirm("클래스를 삭제하시겠습니까?")) {
-									alert("삭제되었습니다.");
-									return window.location.href = "/admin/dayclassList";
-								} else {
-									e.preventDefault();
-									alert("삭제가 취소되었습니다.");
-									
-								}*/
 							}, error: function (e) {
 								console.log(e);
 							}
 						});
+						alert("삭제를 완료하였습니다.");
+						} else {
+							alert("삭제를 취소하였습니다.");
+						}
 					});
 				});
 				
@@ -225,7 +220,7 @@
 			          <td>
 			          	<div id="attZone">
 			          		<div th:each="imgFile : ${dayclassFileList}" style="display: inline-block; position: relative; 
-										width: 150px; height: 120px; margin: 5px; border: 1px solid #28693F; z-index: 1;">
+										width: 280px; height: 210px; margin: 5px; border: 1px solid #28693F; z-index: 1;">
 								<img th:id="'img' + ${imgFile.fileNo}" 
 										th:src="@{'/dayclass/' + ${imgFile.fileName}}"
 										style="width: 100%; height: 100%; z-index: none; cursor: pointer;"
