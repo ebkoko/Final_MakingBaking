@@ -41,7 +41,19 @@
 						}
 						
 					});
-					// 리뷰 작성 버튼 
+					
+					// 비회원이 메뉴바-후기 클릭시 로그인창
+					$(".m_rvw_a").on("click", function(){
+						const isAuthenticated = $(".header > input[name='authenticate']").val();
+                  	
+		                  if(isAuthenticated == "false") { // false면 로그인 창 띄우기
+		                     $('.login-form-container').toggleClass('active');
+		                  } else { // 아니면 예약페이지 위치로 이동
+							  $('html').animate({scrollTop : offset.top}, 300);
+						  }
+					})
+					
+					// 비회원이 리뷰 작성 버튼 클릭시
 					$("#it_rvw_writeBtn").on("click", function(){
 						
 					var offset = $("#item_hr2").offset();
@@ -60,9 +72,8 @@
 					});
 					
 					
-					// 장바구니 버튼 클릭시
+					// 비회원이 장바구니 버튼 클릭시 로그인창 띄우기
 					$("#itemCartBtn").on("click", function() {
-						// 비회원이 버튼 클릭시 로그인창 띄우기
 						const isAuthenticated = $(".header > input[name='authenticate']").val();
 						if(isAuthenticated == "false") {
 							$('.login-form-container').toggleClass('active');
@@ -209,6 +220,7 @@
 						reviewPagingAndOrder($(e.target).attr("href"), $("#it_rvw_array").val());
 					});
 					
+					// 
 					$("input[name='reviewOrderNo']").on("click", function() {
 						$(".rvwWriteSection").css("display", "block");
 						$("#rvwOrderNo").val($(this).val());
@@ -353,12 +365,15 @@
 	              <div class="it_rvw_write">
 	              	<div class="it_rvw_write_member">	   	            
 	              		<form class="it_rvw_write_form" action="/item/insertItemRvw" method="post">	              			             			
-						 	<div th:each="reviewChk : ${reviewChkList}">
+						 	<div class="rvw_orderInfo">
+	              			<p>작성할 상품을 선택해주세요.</p>
+	              			</div>
+						 	<div class="rvw_orderNo" th:each="reviewChk : ${reviewChkList}">
 						 		<span th:if="${reviewChk.orderStatus == 'DC' && reviewChk.reviewYn == 'N'}">
 							 		<input type="radio" name="reviewOrderNo" th:value="${reviewChk.orderNo}"
 							 			   th:id="'radio' + ${reviewChk.orderNo}">
 							 		<label th:for="'radio' + ${reviewChk.orderNo}"
-							 			   th:text="'주문번호 : ' + ${reviewChk.orderNo}"></label>
+							 			   th:text="'주문 날짜 : ' + ${reviewChk.orderDate eq null ? '' : #strings.substring(reviewChk.orderDate, 0 ,10)}"></label>
 						 		</span>
 						 	</div>	
 	             			<input type="hidden" id="rvwContent" name="rvwContent">
