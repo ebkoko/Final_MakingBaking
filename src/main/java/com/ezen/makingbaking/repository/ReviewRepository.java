@@ -1,5 +1,7 @@
 package com.ezen.makingbaking.repository;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.ezen.makingbaking.entity.Review;
 
+@Transactional
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
 	//Page<Review> findByRvwReferNo (@Param("rvwReferNo") int rvwReferNo, Pageable pageable);
 	
@@ -31,6 +34,15 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 	@Query(value="SELECT * FROM T_MB_REVIEW"
 			+ " WHERE RVW_WRITER = :rvwWriter", nativeQuery=true)
 	Page<Review> getUserRvwList(@Param("rvwWriter") String rvwWriter, Pageable pageable);
+
+	//개인 리뷰팝업_선민
+//	Page<Review> findbyItemContaining(String searchKeyword, Pageable pageable); //item
+//	Page<Review> findbyClassContaining(String searchKeyword, Pageable pageable); //class
+	
+	//관리자 리뷰 검색_선민
+//	Page<Review> findbyRvwWriterContaining(String searchKeyword, Pageable pageable); //리뷰작성자
+//	Page<Review> findbyRvwTypeContaining(String searchKeyword, Pageable pageable); //리뷰타입
+//	Page<Review> findbyRvwWriterContainingOrRvwTypeContaining(String searchKeyword1, String searchKeyword2, Pageable pageable);
 
 	// 마이페이지 리뷰리스트
 	@Query(value="SELECT F.*\r\n"

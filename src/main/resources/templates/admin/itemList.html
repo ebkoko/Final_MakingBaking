@@ -17,6 +17,11 @@
 					text-decoration: none;
 					color: inherit;
 				}
+				#td_itemName:hover {
+					text-decoration: underline;
+					color: #28693F;
+					font-weight: bold;
+				}
 				.itemAdmin {
 					font-size: 40px;
 				}
@@ -83,14 +88,8 @@
 					height: 80px;
 				}
 				
-				/* 상품이름 a태그 */
-				#a_itemName {
-					text-decoration: none;
-					color: inherit;
-				}
- 
 				/* 수정버튼 */
-			    #itemMod {
+			    .itemMod {
 					width: 80px;
 					display: inline-block;
 					height: 25px;
@@ -292,16 +291,17 @@
 												value="${obj.pageItems.content[i].itemNo}">
 											</td>
 											<td>${obj.pageItems.content[i].itemNo}</td>
-											<td name="itemName" data-item-name="${obj.pageItems.content[i].itemName}">
+											<td name="itemName" id="td_itemName"
+												data-item-name="${obj.pageItems.content[i].itemName}">
 												<a  class="a_itemName"
 													href="/admin/item/${obj.pageItems.content[i].itemNo}">${obj.pageItems.content[i].itemName}
 												</a>
 											</td>
-											<td>${obj.pageItems.content[i].itemPrice}</td>
+											<td>${obj.pageItems.content[i].itemPrice > 100 ? obj.pageItems.content[i].itemPricetoString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : obj.pageItems.content[i].itemPrice}</td>
 											<td>${obj.pageItems.content[i].itemRegdate == null ? '' : obj.pageItems.content[i].itemRegdate.substr(0, 10)}</td>
 											<td>${obj.pageItems.content[i].itemStatus}</td>
 											<td>
-								        		<a id="itemMod"
+								        		<a class="itemMod"
 													href="@{/admin/itemUpdate/${obj.pageItems.content[i].itemNo}}">수정
 												</a>
 								        	</td>
@@ -322,12 +322,12 @@
 						console.log(changeRows);
 					});
 
-				//상품리스트 페이징 처리
-				$(document).on("click", ".pagination a", function(e) {
-					e.preventDefault();
-					pageNum = $(this).attr("href");
-					itemListPaging(pageNum, $("#searchCondition").val());
-				});
+					//상품리스트 페이징 처리
+					$(document).on("click", ".pagination a", function(e) {
+						e.preventDefault();
+						pageNum = $(this).attr("href");
+						itemListPaging(pageNum, $("#searchCondition").val());
+					});
 				
 
 				}); //function 닫음
@@ -371,16 +371,17 @@
 											value="${obj.pageItems.content[i].itemNo}">
 										</td>
 										<td>${obj.pageItems.content[i].itemNo}</td>
-										<td name="itemName" data-item-name="${obj.pageItems.content[i].itemName}">
+										<td name="itemName" id="td_itemName"
+											data-item-name="${obj.pageItems.content[i].itemName}">
 												<a class="a_itemName"
 													href="/admin/item/${obj.pageItems.content[i].itemNo}">${obj.pageItems.content[i].itemName}
 												</a>
 										</td>
-										<td>${obj.pageItems.content[i].itemPrice}</td>
+										<td> ${(obj.pageItems.content[i].itemPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
 										<td>${obj.pageItems.content[i].itemRegdate == null ? '' : obj.pageItems.content[i].itemRegdate.substr(0, 10)}</td>
 										<td>${obj.pageItems.content[i].itemStatus}</td>
 										<td>
-							        		<a id="itemMod"
+							        		<a class="itemMod"
 												href="/admin/itemUpdate/${obj.pageItems.content[i].itemNo}">수정
 											</a>
 							        	</td>
@@ -418,9 +419,9 @@
 											: startPage;
 							
 							for(let i = realStart; i <= endPage; i++) {
-								if(pageNumber == i - 1) {
-									htmlstr += `<li id="present" class="pagination_button">
-											   	   <a href="${i - 1}">${i}</a>
+								if(pageNumber == i-1) {
+									htmlstr += `<li class="pagination_button">
+											   	   <a class="present" href="${i - 1}">${i}</a>
 										        </li>
 									`;
 								} else {
@@ -439,13 +440,12 @@
 							}
 							
 							$(".pagination").html(htmlstr);
-						},
-						error: function(e) {
+							
+						}, error: function(e) {
 							console.log(e);
 						}
-					}); 
-					
-				}; //function 닫음
+					});
+				} //function 닫음
 			</script>
 		</th:block>
 	</head>
@@ -509,8 +509,8 @@
 	      			<td><input type="checkbox" class="check" name="chk" th:value="${item.itemNo}"></td>
 		        	<td th:text="${item.itemNo}"></td>
 		        	
-		        	<td>
-						<a id="a_itemName" th:text="${item.itemName}"
+		        	<td id="td_itemName">
+						<a class="a_itemName" th:text="${item.itemName}"
 							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">
 						</a>
 					</td>
@@ -518,7 +518,7 @@
 		        	<td th:text="${item.itemRegdate eq null ? '' : #strings.substring(item.itemRegdate, 0, 10)}"></td>
 		        	<td th:text="${item.itemStatus}"></td>
 		        	<td>
-		        		<a id="itemMod" th:text="수정"
+		        		<a class="itemMod" th:text="수정"
 							th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">
 						</a>
 		        	</td>
@@ -526,6 +526,7 @@
 		    </table>
 		</div>
 		
+		<!-- 페이징 -->
 		<div class="paging">
 				<ul class="pagination" th:if="${pageItemList.totalElements > 0}"
 									   th:with="pageNumber = ${pageItemList.pageable.pageNumber},

@@ -13,20 +13,20 @@
 					text-decoration: none;
 					color: inherit;
 				}
-				.a_dayclassName {
+				.a_reviewName {
 					text-decoration: none;
 					color: inherit;
 				}
-				#td_dayclassName:hover {
+				#td_reviewName:hover {
 					text-decoration: underline;
 					color: #28693F;
 					font-weight: bold;
 				}
-				.dayclassAdmin {
+				.reviewAdmin {
 					font-size: 40px;
 				}
 				/* 검색 div */
-				#dayclass_search {
+				#review_search {
 					margin: 80px auto;
 				}
 				/* 검색창 */
@@ -52,13 +52,13 @@
 				}
 				
 				/* 전체선택 Select */
-				#div_dayclass_totalSelect {
+				#div_review_totalSelect {
 					margin: 15px auto;
 					text-align: right;
 				}
 				
 				/* 테이블 */
-				#dayclassList_T {
+				#reviewList_T {
 					width: 1200px;
 					border: 1.2px solid #28693F;
 					border-collapse: collapse;
@@ -66,81 +66,51 @@
 					border-right: hidden;
 					border-top:hidden;
 				}
-				#dayclassList_T th {
+				
+				#reviewList_T th {
 					background: #28693F;
 					color: white;
 					height: 35px;
 				}
 				
-				.dayclassList_T_05 {
+				.reviewList_T_05 {
 					 width: 5%
 				}
-				.dayclassList_T_10 {
+				.reviewList_T_10 {
 					 width: 10%
 				}
-				.dayclassList_T_15 {
+				.reviewList_T_15 {
 					 width: 15%
 				}
-				.dayclassList_T_20 {
+				.reviewList_T_20 {
 					 width: 20%
 				}
-				.dayclassList_T_25 {
+				.reviewList_T_25 {
 					 width: 25%
 				}
-				.dayclassList_T_30 {
-					 width: 30%
+				.reviewList_T_40 {
+					 width: 40%
 				}
 				
-				#dayclassList_T td {
+				#reviewList_T td {
 					border-bottom: 1.2px solid #28693F;
 					text-align: center;
 					height: 80px;
 				}
 				
 				/* 상품이름 a태그 */
-				#a_dayclassName {
+				#a_reviewName {
 					text-decoration: none;
 					color: inherit;
 				}
- 
-				/* 수정버튼 */
-			    #dayclassMod {
-					width: 80px;
-					display: inline-block;
-					height: 25px;
-					border: 1.2px solid #28693F;
-					color: #28693F;
-					cursor: pointer; 
-			    }
-			    
-			    /* 상품삭제&등록 버튼 div */
-			    #dayclassTotalBtn {
+
+			    /* 리뷰삭제 버튼 div */
+			    #reviewTotalBtn {
 					 text-align:right;
 					 margin: 50px auto;
 				}
-				/* 상품등록버튼 */
-			    #dayclassRegistration {
-			     	width: 150px;
-			      	height: 50px;
-			     	border: 1.2px solid #28693F;
-					border-radius: 4px;
-					background-color: white;
-					text-align: center;
-					display: inline-block;
-					color: #28693F;
-					font-size: 18px;
-					font-weight: 550;
-					letter-spacing:1px;
-					margin-right: 30px;
-			    }
-			    #dayclassRegistration:hover {
-					background-color: #28693F;
-					color: white;
-					font-weight: 550;
-					cursor: pointer;
-				}
 			    /* 상품삭제버튼 */
-			    #dayclassDelete {
+			    #reviewDelete {
 					width: 150px;
 			      	height: 50px;
 			     	border: 1.2px solid #28693F;
@@ -153,7 +123,7 @@
 					font-weight: 550;
 					letter-spacing:1px;
 			    }
-			    #dayclassDelete:hover {
+			    #reviewDelete:hover {
 					background-color: #28693F;
 					color: white;
 					font-weight: 550;
@@ -206,27 +176,16 @@
 				$(function() {
 					//검색창(상품카테, 판매상태)
 					$("#searchCondition").on("change", function() {
-						if($(this).val() == 'DAYCLASSTIME') {
+						if($(this).val() == 'RVWTYPE') {
 							$("#inputSearch").hide();
-							$("#selectSearch2").hide();
-							$("#selectSearch1").show();
+							$("#selectSearch").show();
 							$("#inputSearch").attr("disabled", true);
-							$("#selectSearch2").attr("disabled", true);
-							$("#selectSearch1").attr("disabled", false);
-						} else if($(this).val() == 'DAYCLASSUSEYN') {
-							$("#inputSearch").hide();
-							$("#selectSearch1").hide();
-							$("#selectSearch2").show();
-							$("#inputSearch").attr("disabled", true);
-							$("#selectSearch2").attr("disabled", false);
-							$("#selectSearch1").attr("disabled", true);
-						} else if($(this).val() != 'DAYCLASSTIME' && $(this).val() != 'DAYCLASSUSEYN') {
+							$("#selectSearch").attr("disabled", false);
+						} else if($(this).val() != 'RVWTYPE') {
 							$("#inputSearch").show();
-							$("#selectSearch1").hide();
-							$("#selectSearch2").hide();
+							$("#selectSearch").hide();
 							$("#inputSearch").attr("disabled", false);
-							$("#selectSearch2").attr("disabled", true);
-							$("#selectSearch1").attr("disabled", true);
+							$("#selectSearch").attr("disabled", true);
 						}
 					});
 					
@@ -236,10 +195,9 @@
 						$("#searchForm").submit();
 					});
 					
-					
 					// 전체선택 버튼 클릭했을 때
-					$("#dayclassSelectAll").click(function() {
-						var chk = $("#dayclassSelectAll").prop("checked");
+					$("#reviewSelectAll").click(function() {
+						var chk = $("#reviewSelectAll").prop("checked");
 						if(chk) {
 							$("input[name='chk']").prop("checked", true);
 						} else {
@@ -250,14 +208,14 @@
 					// 원데이클래스 리스트 중 전체선택을 누른 뒤 상품 체크박스를 풀면, 전체선택 체크박스도 풀림
 					$(".check").click(function() {
 						if($("input[name='chk']:checked").length < $("input[name='chk']").length) {
-							$("#dayclassSelectAll").prop("checked", false);
+							$("#reviewSelectAll").prop("checked", false);
 						} else if($("input[name='chk']:checked").length == $("input[name='chk']").length) {
-							$("#dayclassSelectAll").prop("checked", true);
+							$("#reviewSelectAll").prop("checked", true);
 						}
 					});
 				});
 				
-				
+				/*
 				//선택클래스 삭제
 				$(function() {
 					//삭제버튼 클릭 시 체크된 게시물들 삭제 상태로 변경
@@ -461,7 +419,7 @@
 						}
 					});
 				} //function 닫음
-				
+				*/
 				
 			</script>
 		</th:block>
@@ -471,31 +429,20 @@
 <body>
 	<div id="container" layout:fragment="content">
 		<div>
-			<a href="dayclassList" id="a_Title"><h1 class="dayclassAdmin">원데이클래스 관리</h1></a>
+			<a href="reviewList" id="a_Title"><h1 class="reviewAdmin">리뷰 관리</h1></a>
 		</div>
-		<form id="searchForm" action="/admin/dayclassList" method="get">
-			<div id="dayclass_search">
+		<form id="searchForm" action="/admin/reviewList" method="get">
+			<div id="review_search">
 				<select name="searchCondition" id="searchCondition">
 					<option value="ALL" th:selected="${searchCondition == 'ALL' || searchCondition == '' || searchCondition == null}">전체</option>
-					<option value="DAYCLASSNAME" th:selected="${searchCondition} == 'DAYCLASSNAME'">이름</option>
-					<option value="DAYCLASSTIME" th:selected="${searchCondition} == 'DAYCLASSTIME'">운영시간</option>
-					<option value="DAYCLASSUSEYN" th:selected="${searchCondition} == 'DAYCLASSUSEYN'">진행상태</option>
+					<option value="RVWWRITER" th:selected="${searchCondition} == 'RVWWRITER'">작성자</option>
+					<option value="RVWTYPE" th:selected="${searchCondition} == 'RVWTYPE'">리뷰타입</option>
 	            </select>
-	            <input type="text" name="searchKeyword" th:value="${searchKeyword}" id="inputSearch" 
-	            	th:style="${ searchCondition != 'DAYCLASSTIME' && searchCondition != 'DAYCLASSUSEYN'  ? 'display: inline-block;' : 'display: none;'}"
-	            	th:disabled="${ searchCondition != 'DAYCLASSTIME' && searchCondition != 'DAYCLASSUSEYN'} ? false : true">
-	            <select name="searchKeyword" id="selectSearch1" th:style="${searchCondition == 'DAYCLASSTIME' ? 'display: inline-block;' : 'display: none;'}"
-	            		th:disabled="${searchCondition == 'DAYCLASSTIME'} ? false : true">
+	            <input type="text" name="searchKeyword" value="" id="inputSearch" th:style="${searchCondition != 'RVWTYPE'  ? 'display: inline-block;' : 'display: none;'}">
+	            <select name="searchKeyword" id="selectSearch" th:style="${searchCondition == 'RVWTYPE' ? 'display: inline-block;' : 'display: none;'}">
 	            	<option>선택하세요.</option>
-	            	<option value="A" th:selected="${searchKeyword} == 'A'">AM</option>
-	              	<option value="P" th:selected="${searchKeyword} == 'P'">PM</option>
-	            </select>
-	            <select name="searchKeyword" id="selectSearch2" th:style="${searchCondition == 'DAYCLASSUSEYN' ? 'display: inline-block;' : 'display: none;'}"
-	            		th:disabled="${searchCondition == 'DAYCLASSUSEYN'} ? false : true">
-	            <option>선택하세요.</option>
-	            	<option value="Y" th:selected="${searchKeyword} == 'Y'">진행중(Y)</option>
-	              	<option value="S" th:selected="${searchKeyword} == 'S'">진행예정(S)</option>
-	              	<option value="N" th:selected="${searchKeyword} == 'N'">진행완료(N)</option>
+	            	<option value="item" th:selected="${searchKeyword} == 'item'">item</option>
+	              	<option value="class" th:selected="${searchKeyword} == 'class'">class</option>
 	            </select>
 	            
 	            <button type="button" id="btnSearch">검색</input>
@@ -503,44 +450,37 @@
         </form>
         
 		<!-- 전체선택 Select -->
-		<div id="div_dayclass_totalSelect">
-			<label for="selectAll"><input type="checkbox" name="select" id="dayclassSelectAll"> <span>전체선택</span></label>
+		<div id="div_review_totalSelect">
+			<label for="selectAll"><input type="checkbox" name="select" id="reviewSelectAll"> <span>전체선택</span></label>
 		</div>
         
-        <!-- 상품 리스트 Table -->
-        <div id="div_dayclassList_T">
-	        <table border="1" id="dayclassList_T">
+        <!-- 리뷰 리스트 Table -->
+        <div id="div_reviewList_T">
+	        <table border="1" id="reviewList_T">
 	        	<tr>
 	        		<th class="dayclassList_T_05"></th>
 			        <th class="dayclassList_T_10">No.</th>
-			        <th class="dayclassList_T_25">클래스 이름</th>
-			        <th class="dayclassList_T_20">클래스 가격</th>
-			        <th class="dayclassList_T_15">운영시간</th>
-			        <th class="dayclassList_T_15">진행 상태</th>
-			        <th class="dayclassList_T_10">클래스 관리</th>
+			        <th class="dayclassList_T_10">타입</th>
+			        <th class="dayclassList_T_15">작성자</th>
+			        <th class="dayclassList_T_40">내용</th>
+			        <th class="dayclassList_T_10">등록일</th>
+			        <th class="dayclassList_T_10">별점</th>
 	      		</tr>
-	      		<tr th:each="dayclass: ${pageDayclassList}">
-	      			<td><input type="checkbox" class="check" name="chk" th:value="${dayclass.dayclassNo}"></td>
-		        	<td th:text="${dayclass.dayclassNo}"></td>
+	      		<tr th:each="review: ${reviewList}">
+	      			<td><input type="checkbox" class="check" name="chk" th:value="${review.rvwNo}"></td>
+		        	<td th:text="${review.rvwNo}"></td>
+		        	<td th:text="${review.rvwType}"></td>
+		        	<td th:text="${review.rvwWriter}"></td>
+		        	<td th:text="${review.rvwContente}"></td>
+		        	<td th:text="${review.rvwRegdate eq null ? '' : #strings.substring(review.rvwRegdate, 0, 10)}"></td>
+		        	<td th:text="${review.rvwScore}"></td>
 		        	
-		        	<td id="td_dayclassName">
-						<a id="a_dayclassName" th:text="${dayclass.dayclassName}"
-							th:href="@{/admin/dayclass/{dayclassNo} (dayclassNo=${dayclass.dayclassNo})}">
-						</a>
-					</td>
-		        	<td th:text="${dayclass.dayclassPrice >= 1000 ? #numbers.formatInteger(dayclass.dayclassPrice , 3, 'COMMA') : dayclass.dayclassPrice}"></td>
-		        	<td th:text="${dayclass.dayclassTime}"></td>
-		        	<td th:text="${dayclass.dayclassUseYn}"></td>
-		        	<td>
-		        		<a id="dayclassMod" th:text="수정"
-		        			th:href="@{/admin/dayclassUpdate/{dayclassNo} (dayclassNo=${dayclass.dayclassNo})}">
-						</a>
-		        	</td>
 		     	 </tr>
 		    </table>
 		</div>
 		
 		<!-- 페이징 -->
+		<!--
 		<div class="paging">
 			<ul class="pagination" th:if="${pageDayclassList.totalElements > 0}"
 								   th:with="pageNumber = ${pageDayclassList.pageable.pageNumber},
@@ -560,11 +500,10 @@
 				</li>
 			</ul>
 		</div>
-		
+		-->
 		<!-- 삭제/등록버튼 -->
-	    <div id="dayclassTotalBtn">
-	    	<a href="/admin/insertDayclassView"><input type="button" value="클래스 등록" id="dayclassRegistration"></a>
-	    	<input type="button" value="클래스 삭제" id="dayclassDelete">
+	    <div id="reviewTotalBtn">
+	    	<input type="button" value="리뷰 삭제" id="reviewDelete">
 	    </div>
 	</div>
 

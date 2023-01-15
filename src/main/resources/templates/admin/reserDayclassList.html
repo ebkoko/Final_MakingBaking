@@ -99,10 +99,49 @@
 					color: #28693F;
 					cursor: pointer; 
 			    }
+			    
+			    /* 페이징처리 */
+			    .paging {
+					text-align: center;
+					margin-top: 50px;
+				}
+			    .pagination {
+			      display: flex;
+			      justify-content: center;
+			      align-items: center;
+			      margin-bottom: 20px;
+			    }    
+			    .paging a{
+				  display: block;
+				  margin: 0 3px;
+				  border: 1px solid #ccc;
+				  width: 40px;
+				  height: 40px;
+				  line-height: 35px;
+				  text-align: center;
+			      color: #8c8c8c;
+			      font-size: 25px;
+			      font-weight: 600;
+			    }
+			    .paging a:hover {
+			      color: #28693F;
+			    }
+			    .paging a:focus {
+					background:#28693F;
+					color: white;
+				}
+				.paging .pagination .pagination_button a.present {
+					border-color: #28693F;
+					background: #28693F;
+					color: white;
+				}
 			</style>
 		</th:block>
 		<th:block layout:fragment="script">
 			<script th:inline="javascript">
+				let changeRows = [];
+				let pageNum;
+				
 				$(function() {
 					//검색창(상품카테, 판매상태)
 					$("#searchCondition").on("change", function() {
@@ -160,7 +199,124 @@
 							$("input[name='chk']").prop("checked", false);
 						}
 					});
+					
+					
+					//예약리스트 페이징 처리
+					$(document).on("click", ".pagination a", function(e) {
+						e.preventDefault();
+						pageNum = $(this).attr("href");
+						reserListPaging(pageNum, $("#searchCondition").val());
+					});
 				});
+				
+				function reserListPaging(page, condition) {
+					console.log(page);
+					console.log(condition);
+
+						$.ajax({
+						url: '/admin/reserDayclassList',
+						type: 'post',
+						data: {
+							page: page,
+							searchCondition: condition
+						},
+						success: function(obj) {
+							console.log(obj);
+							
+							let htmlStr = "";
+							
+							htmlStr += `
+							
+								<tr>
+							        <th class="reserList_T_15">예약번호</th>
+							        <th class="reserList_T_10">예약자</th>
+							        <th class="reserList_T_10">클래스번호</th>
+							        <th class="reserList_T_15">예약날짜</th>
+							        <th class="reserList_T_10">예약시간</th>
+							        <th class="reserList_T_10">예약상태</th>
+							        <th class="reserList_T_10">참여현황</th>
+							        <th class="reserList_T_20">취소관리</th>
+					      		</tr>
+					      	`;
+							
+							for(let i=0; i<obj.pageItems.content.length; i++) {
+								htmlStr += `
+									
+									<tr>
+										<td>${obj.pageItems.content[i].reserNo}</td>
+										<td>${obj.pageItems.content[i].partiName}</td>
+										<td>${obj.pageItems.content[i].classNo}</td>
+										<td>${obj.pageItems.content[i].partiDate == null ? '' : obj.pageItems.content[i].partiDate.substr(0, 10)}</td>
+										<td>${obj.pageItems.content[i].partiTime}</td>
+										<td>${obj.pageItems.content[i].reserStatus}</td>
+										<td>${obj.pageItems.content[i].partiStatus}</td>
+										<td>
+											<a id="reserCancel">예약취소
+											</a>
+											<a id="payCancel">결제취소
+											</a>
+										</td>
+									</tr>
+								`;
+							}
+							
+							$("#reserList_T").html(htmlStr);
+							
+							htmlstr = "";
+						
+							let pageNumber = obj.pageItems.pageable.pageNumber;
+							let pageSize = obj.pageItems.pageable.pageSize;
+							let totalPages = obj.pageItems.totalPages;
+							let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
+							let tempEndPage = startPage + pageSize -1;
+							let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
+							console.log(pageNumber);
+							console.log(pageSize);
+							console.log(totalPages);
+							console.log(startPage);
+							console.log(tempEndPage);
+							console.log(endPage);
+							
+							if(pageNumber > 0) {
+								htmlstr += `
+									<li class="pagination_button">
+										<a style="border: 0px;" href="${pageNumber - 1}">&#60;</a>
+									</li>
+								`;
+							}
+							
+							let realStart = totalPages - startPage < pageSize ? 
+												totalPages < pageSize ? 1 : totalPages - pageSize + 1 
+											: startPage;
+							
+							for(let i = realStart; i <= endPage; i++) {
+								if(pageNumber == i-1) {
+									htmlstr += `<li class="pagination_button">
+											   	   <a class="present" href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								} else {
+									htmlstr += `<li class="pagination_button">
+											   	   <a href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								}
+							}
+							
+							if(pageNumber < totalPages - 1) {
+								htmlstr += `<li class="pagination_button">
+										       <a style="border: 0px;" href="${pageNumber + 1}">&#62;</a>
+									        </li>
+								`;
+							}
+							
+							$(".pagination").html(htmlstr);
+							
+						}, error: function(e) {
+							console.log(e);
+						}
+					});
+				} //function 닫음
 			</script>
 		</th:block>
 	</head>
@@ -230,7 +386,7 @@
 			        <th class="reserList_T_10">참여현황</th>
 			        <th class="reserList_T_20">취소관리</th>
 	      		</tr>
-	      		<tr th:each="reser: ${getReserList.content}">
+	      		<tr th:each="reser: ${pageReserList}">
 		        	<td th:text="${reser.reserNo}"></td>
 		        	<!--<td>       예약번호 누르면 예약정보 모달?페이지? 띄우기
 						<a id="a_itemName" th:text="${item.itemName}"
@@ -253,6 +409,27 @@
 		        	</td>
 		     	 </tr>
 		    </table>
+		</div>
+		
+		<!-- 페이징 -->
+		<div class="paging">
+			<ul class="pagination" th:if="${pageReserList.totalElements > 0}"
+								   th:with="pageNumber = ${pageReserList.pageable.pageNumber},
+											pageSize = ${pageReserList.pageable.pageSize},
+											totalPages = ${pageReserList.totalPages},
+											startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+											tempEndPage = ${startPage + pageSize - 1},
+											endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+				<li class="pagination_button" th:if="${pageNumber > 0}">
+					<a style="border: 0px;" th:href="${pageNumber - 1}">&#60;</a>
+				</li>
+				<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
+					<a th:href="${page - 1}" th:text="${page}"></a>
+				</li>
+				<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+					<a style="border: 0px;" th:href="${pageNumber + 1}">&#62;</a>
+				</li>
+			</ul>
 		</div>
 	</div>
 </body>

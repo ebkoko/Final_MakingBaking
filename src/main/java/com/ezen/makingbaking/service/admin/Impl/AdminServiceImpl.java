@@ -157,7 +157,15 @@ public class AdminServiceImpl implements AdminService {
 		}
 		
 	}
-		
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	//dayclass
 	@Override
@@ -265,6 +273,14 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
 	//user
 	@Override
 	public Page<User> getPageUserList(User user, Pageable pageable) {
@@ -289,7 +305,7 @@ public class AdminServiceImpl implements AdminService {
 	public void saveUserList(List<Map<String, Object>> changeRowsList) {
 		for(int i = 0; i < changeRowsList.size(); i++) {
 			User duser = User.builder()
-							.userName(changeRowsList.get(i).get("userId").toString()) 
+							.userId(changeRowsList.get(i).get("userId").toString()) 
 							.build();
 			
 			userRepository.delete(duser);
@@ -297,14 +313,78 @@ public class AdminServiceImpl implements AdminService {
 		}
 		
 	}
-	
-	
+	/////////////////////해결중////////////////////////////////////////////////////////////////////////
 	@Override
 	public Page<Review> getUserRvwList(String rvwWriter, Pageable pageable) {
+		// TODO Auto-generated method stub
 		return reviewRepository.getUserRvwList(rvwWriter, pageable);
+	}
+
+
+	@Override
+	public Page<Review> getUserRvwPageList(Review review, Pageable pageable) {
+//		if(review.getSearchCondition().equals("item")) {
+//			return reviewRepository.findbyItemContaining(review.getSearchKeyword(), pageable);
+//		} else if(review.getSearchCondition().equals("class")) {
+//			return reviewRepository.findbyClassContaining(review.getSearchKeyword(), pageable);
+//		}
+		return null;
 	}
 	
 	
+//	@Override
+//	public User getUserRvwList(String userId) {
+//		return userRepository.findById(userId).get();
+//	}
+//	
+//	@Override
+//	public Page<Review> getPageReviewList(Review review, Pageable pageable) {
+//		if(review.getSearchKeyword() != null && !review.getSearchKeyword().equals("")) {
+//			if (review.getSearchCondition().equals("item")) {
+//				return reviewRepository.findByItemContaining(review.getSearchKeyword(), pageable);
+//			} else if (review.getSearchCondition().equals("class")) {
+//			    	  return reviewRepository.findByClassContaining(review.getSearchKeyword(), pageable);
+//			} else {
+//				return reviewRepository.findAll(pageable);
+//			      }
+//		  } else {
+//			  return reviewRepository.findAll(pageable);
+//		  }
+//	      
+//	   }
+//	
+//	
+//	
+//	
+//	
+//	@Override
+//	public Page<Review> getUserRvwList(String rvwWriter, Pageable pageable) {
+//		return reviewRepository.getUserRvwList(rvwWriter, pageable);
+//	}
+	
+	//회원상세보기
+	@Override
+	public User getUserInfoCheck(String userId) {
+		return userRepository.findById(userId).get();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//주문 및 예약관리
 	//reser_dayclassList
 	@Override
 	public Page<Reser> getPageReserList(Reser reser, Pageable pageable) {
@@ -336,6 +416,7 @@ public class AdminServiceImpl implements AdminService {
 	      
 	   }
 	
+	//주문 및 예약관리
 	//order_itemList
 	@Override
 	public Page<Order> getPageOrderList(Order order, Pageable pageable) {
@@ -362,8 +443,26 @@ public class AdminServiceImpl implements AdminService {
 		  }
 	      
 	   }
-	
 
-	
+
+	//리뷰관리
+//	@Override
+//	public Page<Review> getPageReviewList(Review review, Pageable pageable) {
+//		if(review.getSearchKeyword() != null && !review.getSearchKeyword().equals("")) {
+//			if(review.getSearchCondition().equals("ALL")) {
+//				return reviewRepository.findbyRvwWriterContaining
+//						(review.getSearchKeyword(),  pageable);
+//			      } else if (review.getSearchCondition().equals("RVWWRITER")) {
+//			         return reviewRepository.findbyRvwWriterContaining(review.getSearchKeyword(), pageable);
+////			      } else if (review.getSearchCondition().equals("RVWTYPE")) {
+////			    	  return reviewRepository.findbyRvwTypeContaining(review.getSearchKeyword(), pageable);
+//			      } else {
+//			    	  return reviewRepository.findAll(pageable);
+//			      }
+//		  } else {
+//			  return reviewRepository.findAll(pageable);
+//		  }
+//	      
+//	   }
 	
 }

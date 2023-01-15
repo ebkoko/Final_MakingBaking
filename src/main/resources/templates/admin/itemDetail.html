@@ -211,18 +211,22 @@
 					//상품 삭제
 					$("#itemDelBtn").on('click', function(e) {
 						e.preventDefault(); //a태그가 이벤트가 동작하지 않도록.
-
+						
+						if(confirm("해당 상품을 삭제하시겠습니까?")) {
 						$.ajax({
 							url: '/admin/delItem/',
 							type: 'delete',
 							data: {itemNo: $("#itemNo").val()},
 							success: function () {
-								alert("삭제되었습니다.");
 								window.location.href = "/admin/itemList";
 							}, error: function (e) {
 								console.log(e);
 							}
 						});
+						alert("삭제를 완료하였습니다.");
+						} else {
+							alert("삭제를 취소하였습니다.");
+						}
 					});
 				});
 				
