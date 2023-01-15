@@ -50,6 +50,7 @@
 				font-weight: 600;
 				margin: 40px 0 30px 0;
 			}
+			
 			/*배너 상세정보*/
 			.it_explainList_div {
 				margin: 20px auto;
@@ -111,8 +112,7 @@
 		      color: white;
 		      font-weight: 520;
 		    }
-		    #itemLikeBtn:hover {
-			  
+		    #itemLikeBtn:hover {		  
 			  border: 1.2px solid #28693F;
 		      background-color: white;
 		      color: #28693F;
@@ -135,7 +135,7 @@
 			}			
 			.it_cintro textarea{
 			  width: 100%;
-    		  height: 12em;   		  
+    		  height: 14em;   		  
     		  
     		  font-size: 18px;
     		  border: none;
@@ -149,8 +149,14 @@
 			
 		    /* 영양 정보*/
 			.it_cDetatils {
-			  margin-top: 70px 0 70px 0;
+				text-align: center;
+			  	margin: 70px 0 70px 0;
 			}
+			.it_cDetatils_main_img {
+				text-align: center;
+				width:500px;		
+			}
+			
 		    /* 메뉴바 dc_menu */
 		    .it_menu {
 		      margin-top: 60px;
@@ -177,41 +183,71 @@
 		      color: #28693F; 
 		    }		
 		   
-		   
 		    /* it_cotents */
 		    .it_contents_container {
 		      margin-top: 100px;
 		    }
 
-
+			/* 구매자 후기작성 */
+			.rvw_orderInfo {
+				margin: 20px auto;
+				color:rgb(102, 102, 102);
+			}			
+			.rvw_orderNo {
+		 	  font-size: 15px;		 	  
+ 			} 
+			.rvw_orderNo input[name='reviewOrderNo']{
+		 	  display:none;		 	  
+ 			} 		
+			.rvw_orderNo label{
+    		  color: transparent;
+    		  text-shadow: 0 0 0 #dde0e3;
+			}
+			.rvw_orderNo label:hover{
+    		  text-shadow: 0 0 0 #28693F;;
+    		  font-weight: 600;
+    		  
+			}
+			/*
+			.rvw_orderNo label:hover ~ label{
+    		  text-shadow: 0 0 0 #28693F;
+    		  font-weight: 600;
+			}
+			*/
+			.rvw_orderNo input[name='reviewOrderNo']:checked ~ label{
+   			  text-shadow: 0 0 0 #28693F;
+   			  font-weight: 600;
+   			  font-size: 18px;
+			}	
+			
 		    /* 후기 작성  */
 		    .it_rvw_write_member{
 			  margin-bottom: 100px;
 			}
-		    .it_rvw_write_form fieldset{
+		    .rvwWriteSection fieldset{
 			  display: inline-block;
     		  direction: rtl;
     		  border:0;
     		  margin: 40px 0 15px 0;
 			}
-			.it_rvw_write_form input[type=radio]{
+			.rvwWriteSection input[name='rvwScore']{
 		 	  display: none;
  			} 			
-			.it_rvw_write_form label{
+			.rvwWriteSection label{
     		  font-size: 30px;
     		  color: transparent;
     		  text-shadow: 0 0 0 #f0f0f0;
 			}
-			.it_rvw_write_form label:hover{
+			.rvwWriteSection label:hover{
     		  text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 			}
-			.it_rvw_write_form label:hover ~ label{
+			.rvwWriteSection label:hover ~ label{
     		  text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 			}
-			.it_rvw_write_form input[type=radio]:checked ~ label{
+			.rvwWriteSection input[name='rvwScore']:checked ~ label{
    			  text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 			}		
-			.it_rvw_write_form textarea {	  
+			.rvwWriteSection textarea {	  
 			  width: 100%;
     		  height: 6.3em;
     		  border: 1px solid rgb(102, 102, 102);

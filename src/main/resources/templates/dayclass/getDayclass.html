@@ -47,7 +47,7 @@
 					
 					        // 인포윈도우로 장소에 대한 설명을 표시합니다
 					        var infowindow = new kakao.maps.InfoWindow({
-					            content: '<div style="width:150px;text-align:center;padding:6px 0;">내 건물</div>'
+					            content: '<div style="width:150px;text-align:center;padding:6px 0;">나라건물</div>'
 					        });
 					        infowindow.open(map, marker);
 					
@@ -78,19 +78,28 @@
 						  }
 					});
 					
+					// 비회원이 메뉴바-후기 클릭시 로그인창
+					$(".m_rvw_a").on("click", function(){
+						const isAuthenticated = $(".header > input[name='authenticate']").val();
+                  	
+		                  if(isAuthenticated == "false") { // false면 로그인 창 띄우기
+		                     $('.login-form-container').toggleClass('active');
+		                  } else { // 아니면 예약페이지 위치로 이동
+							  $('html').animate({scrollTop : offset.top}, 300);
+						  }
+					})
+					
 					// 리뷰 작성 버튼
 					$("#rvw_writeBtn").on("click", function(){
 						
 					var offset = $("#dayclass_hr2").offset();
                   	const isAuthenticated = $(".header > input[name='authenticate']").val();
-                  		  
-                  		  
+                  		                  		  
 		                  if(isAuthenticated == "false") { // false면 로그인 창 띄우기
 		                     $('.login-form-container').toggleClass('active');
 		                  } else { // 아니면 예약페이지 위치로 이동
 							  $('html').animate({scrollTop : offset.top}, 300);
-						  } 
-						
+						  } 						
 					});
 					
 					$("#rvwContentText").on("keyup", function(e) {
@@ -142,7 +151,7 @@
 						});
 					});
 					
-					$("#rsrvtDate").datepicker({ dateFormat: 'yy-mm-dd', minDate: 0});
+					$("#rsrvtDate").datepicker({ dateFormat: 'yy-mm-dd', minDate: 1, maxDate:30 });
 					//$("#rsrvtDate").datepicker('setDate', 'today');
 					
 					
@@ -182,13 +191,11 @@
 					$("#dayclassRsrvtBtn").on("click", function() {
 						
 						const isAuthenticated = $(".header > input[name='authenticate']").val();
-              	
-              			
+              	       			
 	                  	if(isAuthenticated == "false") { // false면 로그인 창 띄우기
 	                     	$('.login-form-container').toggleClass('active');
 	                    	 return;
-	                  	}
-	                  	
+	                  	}                  	
 						if(!$("#rsrvtDate").val() || !$("select[name='partiTime']").val()) {
 							alert("예약 날짜와 시간을 선택하세요.");
 							return;
@@ -218,6 +225,7 @@
 										alert("예약 시간을 선택하세요.");
 										returnYN = 'Y';
 									}
+									
 									if($(".c_apply_timeOp").val() == "A") {
 										reserTime = "오전 09:30~12:30";
 									} else if($(".c_apply_timeOp").val() == "P") {
@@ -229,8 +237,7 @@
 															+ "\n예약 인원 : " + $("#peopleNm_cnt").val() 
 															+"명\n\n예약하시겠습니까?" )) {						
 										
-										$("#rsvtForm").submit();
-									
+										$("#rsvtForm").submit();								
 									} 
 									else {
 										alert("취소되었습니다.");
@@ -238,8 +245,7 @@
 									}
 								}
 							}
-						});
-						
+						});						
 						console.log(returnYN);
 						if(returnYN == 'Y') {
 							return;
@@ -271,6 +277,7 @@
 									console.log(e);
 								}
 							});
+							
 						} else {
 							$.ajax({
 								url: '/dayclass/like',
@@ -291,8 +298,7 @@
 					
 					// 리뷰 등록	
 					$("#rvw_writeBtn").on("click", function(){
-						console.log($("#rvwContent").val());
-						 
+						console.log($("#rvwContent").val());						 
 						 
 						 if( ! $("input[name='rvwScore']:checked").val()){
 							 alert('별점을 선택해주세요.');
@@ -320,8 +326,7 @@
 								}
 							});
 								
-							} 
-						
+							} 						
 					}); 
 					
 					// 리뷰 글자 제한
@@ -355,6 +360,7 @@
 						reviewPagingAndOrder($(e.target).attr("href"), $("#rvw_array").val());
 					});
 					
+					// 수업날짜 클릭시 리뷰창 나타내기
 					$("input[name='reviewReserNo']").on("click", function() {
 						$(".rvwWriteSection").css("display", "block");
 						$("#rvwReserNo").val($(this).val());
@@ -399,6 +405,7 @@
 							}
 							
 							$(".rvw_list tbody").html(htmlStr);
+
 						},
 						error: function(e) {
 							console.log(e);
@@ -409,7 +416,7 @@
 				}; 
 				
 			</script>
-		</th:block>
+		</th:block>  
 	</head>
 	<!-- head 영역 끝 -->
 	
@@ -438,7 +445,7 @@
 	              <div class="banner_explain_details">
 	                <span><img src="/images/class_day.png" width="17px">&ensp;원데이 클래스&ensp;</span>  
 	                <span><img src="/images/class_time.png" width="16.5px" th:text="${dayclass.dayclassDurationTime}">시간</span>
-	                <span><img src="/images/class_location.png" width="18px" th:text="${#strings.substring(dayclass.dayclassAddress, 0, 6)}"></span>
+	                <span><img src="/images/class_location.png" width="18px" th:text="${#strings.substring(dayclass.dayclassAddress, 0, 6)}">서울 서초구</span>
 	              </div>
 	              <div class="banner_explain_KRW">
 	                <span>KRW&nbsp;</span><span th:text="${#numbers.formatInteger(dayclass.dayclassPrice, 3, 'COMMA')}" class="dayclassPrice"></span>
@@ -485,18 +492,24 @@
 	            </div>
 	            
 				<hr class="dayclass_hr" id="dayclass_hr1">
+	          	<div>
+					<p></p>
+	          	</div>
 	            <div class="c_apply" id="classApply" >
-	              <ul style="padding-left: 0;">
-	                <li><img src="/images/class_day.png" width="17px"> 예약 날짜  <input type="text" id="rsrvtDate" name="reserDate"></li>
-	           
-	                <li><img src="/images/class_time.png" width="17px"> 예약 시간  
+	              <ul >
+	                <li><img class="apply_img" src="/images/class_day.png" width="17px"> 예약 날짜  
+	                	<input type="text" id="rsrvtDate" name="reserDate">
+	                </li>	           
+	                <li><img class="apply_img" src="/images/class_time.png" width="17px"> 예약 시간  
 	                	<select class="c_apply_timeOp" name="partiTime">
 	                		<option disabled selected>날짜 선택</option>
 	              			<option value="A">오전 09:30~12:30</option>
 	               			<option value="P">오후 14:00~17:00</option>
 						</select>
 					</li>
-					<li><img src="/images/class_people.png" width="23px"> 예약 인원
+					<li><img class="apply_img" src="/images/class_people.png" width="23px"> 예약 인원
+					</li>
+					<li>	
 						<div class="peopleNm">
 							<button type="button" name="수량내리기" id="peopleNm_minus" class="peopleNm_minus">－</button>
 							<input type="number" id="peopleNm_cnt" class="peopleNm_cnt" min="1" max="4" value="1" name="reserPersonCnt">
@@ -520,12 +533,15 @@
 	              <div class="c_rvw_write">
 	              	<div class="rvw_write_member">
 	              		<form class="rvw_write_form" action="/dayclass/insertClassRvw" method="post" >
-	              			<div th:each="reviewChk : ${reviewChkList}">
-						 		<span th:if="${reviewChk.reserStatus == 'PE' && reviewChk.reviewYn == 'N'}">
+	              			<div class="rvw_reserInfo">
+	              			<p>작성할 클래스 후기를 선택해주세요.</p>
+	              			</div>
+	              			<div class="rvw_reserNo" th:each="reviewChk : ${reviewChkList}">						 	
+						 		<span th:if="${reviewChk.reserStatus == 'PE' && reviewChk.reviewYn == 'N'}">							 		
 							 		<input type="radio" name="reviewReserNo" th:value="${reviewChk.reserNo}"
 							 			   th:id="'radio' + ${reviewChk.reserNo}">
 							 		<label th:for="'radio' + ${reviewChk.reserNo}"
-							 			   th:text="'예약번호 : ' + ${reviewChk.reserNo}"></label>
+							 			   th:text="'수업 날짜 : ' + ${reviewChk.partiDate}"></label>
 						 		</span>
 						 	</div>	
 	              			<input type="hidden" id="rvwContent" name="rvwContent">
@@ -547,7 +563,7 @@
 							      <p class="textCount">0자</p>
 							      <p class="textTotal">/200자</p>
 								</div>  
-								<textarea class="rvwContentText" id="rvwContentText" name="rvwContentText" placeholder=" 로그인 후 리뷰를 작성해주세요."></textarea>
+								<textarea class="rvwContentText" id="rvwContentText" name="rvwContentText" placeholder=" 클래스 리뷰를 작성해주세요."></textarea>
 							 	<div class="writeBtn_div"> 
 		              			  <button class="rvw_writeBtn" id="rvw_writeBtn" type="button">등록</button>
 		              			</div>
@@ -606,7 +622,7 @@
 								<li class="paging_btn" th:if="${pageNumber > 0}">
 									<a th:href="@{${pageNumber - 1}}">◀</a>
 								</li>
-								<li class="paging_btn" th:each="page : ${#numbers.sequence(startPage, endPage)}">
+								<li class="paging_btn" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
 									<a th:href="@{${page - 1}}" th:text="${page}"></a>
 								</li>
 								<li class="paging_btn" th:if="${pageNumber < totalPages - 1}">
