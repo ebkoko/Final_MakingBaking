@@ -85,6 +85,12 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 			nativeQuery = true)
 	Page<CamelHashMap> findItemAndFile(Pageable pageable, @Param("itemCate") String itemCate);
 	
+	@Query(value="SELECT COUNT(*) FROM T_MB_ITEM", nativeQuery=true)
+	int getItemListCnt();
+	
+	@Query(value="SELECT COUNT(*) FROM T_MB_ITEM WHERE ITEM_CATE = :itemCate", nativeQuery=true)
+	int getItemListCnt(@Param("itemCate") String itemCate);
+	
 	//Page<Review> findByItemNoAndPageble(int itemNo, Pageable pageable);
 	
 	

@@ -47,6 +47,19 @@
 					}
 					
 				});
+				    $("#userPw").on("keyup", function(e) {
+				        let password = document.querySelector('#userPw').value;
+				        
+				        let strength = Strength(password);
+				        if(strength <= 2) {
+				          $(".pw-check").addClass('weak');
+				          $(".pw-check").removeClass('strong');
+				        } else {
+				          $(".pw-check").removeClass('weak');
+				          $(".pw-check").addClass('strong');
+				        }
+				    });
+				    
 					$("#userPwCheck").on("change", function() {
 						$("#pwRecheck").show();
 					    if($("#userPw").val() == $("#userPwCheck").val()) {
@@ -102,7 +115,17 @@
 				
 				
 				function Strength(password) {
-			       return /^(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=-])(?=.*[0-9]).{6,15}$/.test(password)
+			        let i = 0;
+			        if(password.length > 5) {
+			          i++;
+			        }
+			        if(password.length = 15) {
+			          i++;
+			        }
+			        if(/^(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=-])(?=.*[0-9]).{6,15}$/.test(password)) {
+						i++;
+					}
+			        return i;
 		        }
 		        //이름
 		        function userName(name) {
@@ -224,13 +247,13 @@
 	          <ul class="menu-group">
 	            <li class="menu-name"><a th:href="@{/mypage/myPage}">주문확인</a></li>
 	            <li class="menu-name"><a th:href="@{/mypage/myReserList}">예약확인</a></li>
-	            <li class="menu-name"><a href="#">찜목록</a></li>
+	            <li class="menu-name"><a th:href="@{/mypage/myLikeList}">찜목록</a></li>
 	          </ul>
 	        </div>
 	        <div class="sub-menu">
 	          <ul class="menu-group">
 	            <h3>My 활동</h3>
-	            <li class="menu-name"><a href="#">나의 리뷰</a></li>
+	            <li class="menu-name"><a th:href="@{/mypage/myRvwList}">나의 리뷰</a></li>
 	          </ul>
 	        </div>
 	        <div class="sub-menu">
@@ -242,13 +265,13 @@
 	        </div>
 	        <div class="sub-menu">
 	          <ul class="menu-group">
-	            <li><a th:href="@{/mypage/qnaList}"><h3>나의 QnA</h3></a></li>
+	            <li style="list-style: none;"><a th:href="@{/mypage/qnaList}"><h3>나의 QnA</h3></a></li>
 	          </ul>
 	        </div>
 	      </div>
 	    </div>
 	    
-	    <div class="c1" style="margin:24px 50px">
+	    <div class="c1" style="margin:24px 150px">
 	      
 	      <form action="/user/changeInfo" id="joinForm" class="form" method="post">
 	        <h3 class="changeInfo">회원정보수정</h3>
@@ -272,13 +295,13 @@
 	          <p id="pwRecheck" style="font-size: 12px; font-weight: bolder; margin-left: 5px; text-align: left;"></p>
 	        </div>
 	
-	        <input type="text" id="userNm" name="userNm" placeholder="이름" class="box" th:value="${#authentication.principal.user.userName}">
+	        <input type="text" id="userName" name="userName" placeholder="이름" class="box" th:value="${#authentication.principal.user.userName}">
 	        <input type="text" id="userBirth" name="userBirth" placeholder="생년월일 ex)19901010" class="box" th:value="${#authentication.principal.user.userBirth}">
-	        <select id="userGender" name="userGender" class="box" th:value="${#authentication.principal.user.userGender}">
+	        <select id="userGender" name="userGender" class="box">
 	          <option selected disabled>성별</option>
-	          <option value="m">남자</option>
-	          <option value="f">여자</option>
-	          <option value="n">선택 안함</option>
+	          <option value="m" th:selected="${userGender == 'm'}">남자</option>
+	          <option value="f" th:selected="${userGender == 'f'}">여자</option>
+	          <option value="n" th:selected="${userGender == 'n'}">선택 안함</option>
 	        </select>
 	        <input type="text" id="userTel" name="userTel" placeholder="전화번호 ex)01012345678" class="box" th:value="${#authentication.principal.user.userTel}">
 	        <input type="text" id="userMail" name="userMail" placeholder="이메일 ex)xxx@xxx.com" th:value="${#authentication.principal.user.userMail}" class="box">

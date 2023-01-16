@@ -7,15 +7,22 @@
 	<th:block layout:fragment="script">
 		<script th:inline="javascript">
 				$(function(){
+					const itemCateVal = /*[[${itemCate}]]*/;
+					if(itemCateVal != null && itemCateVal != "") {
+						$("#itemCate").css("border-bottom-color", "red");
+					}
+					
 		      	  const itemList = /*[[${itemList}]]*/;
 		      	  //console.log(itemList);
 			      $("#more").click(function(e){
+					  console.log($("#itemCate").val());
 					  $.ajax({
 						  url:"/item/list",
 						  type: "post",
 						  data: {
 							  searchKeyword: $("#searchKeyword").val(),
-							  page: $(".card").parent().length/4
+							  page: $(".card").parent().length/4,
+							  itemCate: $("#itemCate").val()
 						  },
 						  success: function(obj) {
 							  let htmlStr = "";
@@ -53,11 +60,10 @@
 						              </div>
 						          </div>
 						        `;
-						        /*.replace(/\B(?=(\d{3})+(?!\d))/g, ",")*/
 							  }
 							  $("#prod").append(htmlStr);
 							  
-							  //console.log(obj.pageItems);
+							  console.log(obj.pageItems);
 							  if(obj.pageItems.totalElements == $(".card").parent().length) {
 								  $('#more').hide();
 							  }
@@ -75,6 +81,7 @@
 			    $("#cateForm").on("submit", function() {
 					$("#page").val(0);
 				});
+				
 		    });
 		    
 		    //탑버튼
@@ -99,21 +106,20 @@
 </head>
 
 <body>
-	<div layout:fragment="content">
+	<div layout:fragment="content" style="min-height: 100%;">
 	  <main class="centre">
 	    <nav>
 		    <form action="/item/list" id="cateForm" method="get">
 		    	<input type="hidden" name="page" id="page">
 			    <div id="sub-navbar" class="sub-navbar"> 
 			      <select name="itemCate" id="itemCate">
-			      	<option value="전체" th:selected="${itemCate == '전체' || itemCate == '' || itemCate == null}">전체</option>
+			      	<option value="ALL" th:selected="${itemCate == 'ALL' || itemCate == '' || itemCate == null}">전체</option>
 			      	<option value="빵" th:selected="${itemCate == '빵'}">빵</option>
 			      	<option value="케이크" th:selected="${itemCate == '케이크'}">케이크</option>
 			      	<option value="쿠키" th:selected="${itemCate == '쿠키'}">쿠키</option>
 			      	<option value="비건" th:selected="${itemCate == '비건'}">비건</option>
 			      	<option value="디저트" th:selected="${itemCate == '디저트'}">디저트</option>
 			      </select>
-			      <label for="select" class="control-label">Selectbox</label><i class="bar"></i>
 				</div>
 		    </form>
 	    </nav>
@@ -136,10 +142,11 @@
 	        </div>
       	  </div>
     	</div>
-	    <div id="more">
-	      <!-- <a href="/footer">더보기+</a> -->
-	      <button type="button" id="show-more" class="show-more">더보기+</button>
-	    </div>
+    	<div id="more_btn">
+		    <div id="more" th:if="${listCnt} > 8">
+		      <button type="button" id="show-more" class="show-more">더보기+</button>
+		    </div>
+    	</div>
 	    <a id="topBtn" href="#">
            <img src="https://widit2.knu.ac.kr/~kiyang/teaching/IT/stPrj/happydpqhs/jam/%ED%83%91%EB%B2%84%ED%8A%BC.png"
            style="width:2.5rem; height:2.5rem">

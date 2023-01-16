@@ -301,7 +301,7 @@ public class UserController {
 		Authentication authentication = new UsernamePasswordAuthenticationToken(newUserInfo, null, newUserInfo.getAuthorities());
 		securityContext.setAuthentication(authentication);
 		session.setAttribute("SPRING_SERCURITY_CONTEXT", securityContext);
-			
+		
 		mv.setViewName("mypage/changeInfo.html");
 		mv.addObject("socialUser", user);
 		
