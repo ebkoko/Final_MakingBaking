@@ -15,6 +15,16 @@
 				#orderAndReserBtn  {
 					margin: 50px 0 0 0;
 				}
+				.a_orderNo {
+					text-decoration: none;
+					color: inherit;
+					cursor: pointer;
+				}
+				.td_orderNo:hover {
+					text-decoration: underline;
+					color: #28693F;
+					font-weight: bold;
+				}
 				/* 검색 div */
 				#order_search {
 					margin: 80px auto;
@@ -55,16 +65,12 @@
 					color: white;
 					height: 35px;
 				}
-				
-				
+
 				.orderList_T_10 {
 					 width: 10%;
 				}
 				.orderList_T_15 {
 					 width: 15%;
-				}
-				.orderList_T_20 {
-					 width: 20%;
 				}
 				
 				#orderList_T td {
@@ -73,32 +79,27 @@
 					height: 80px;
 				}
 				
-				/* 회원 이름 a태그 */
-				/*
-				#a_userName {
-					text-decoration: none;
-					color: inherit;
-				}
-				*/
-				
 				/* 개인 주문취소 버튼 */
-			    .orderCancel {
-					width: 70px;
-					display: inline-block;
-					height: 30px;
+			    .btnOrderCancel {
+					width: 90px;
+					height: 40px;
 					border: 1.2px solid #28693F;
+					background-color: white;
 					color: #28693F;
 					cursor: pointer;
-					margin-right: 10px;
+					font-size: 15px;
+					font-weight: bold;
 			    }
 			    /* 개인 결제취소 버튼 */
-			    .payCancel {
-					width: 70px;
-					display: inline-block;
-					height: 30px;
+			    .btnPayCancel {
+					width: 90px;
+					height: 40px;
 					border: 1.2px solid #28693F;
+					background-color: white;
 					color: #28693F;
-					cursor: pointer; 
+					cursor: pointer;
+					font-size: 15px;
+					font-weight: bold;
 			    }
 			    
 			    /* 페이징처리 */
@@ -215,13 +216,12 @@
 							
 								<tr>
 							        <th class="orderList_T_15">주문번호</th>
-							        <th class="orderList_T_10">회원아이디</th>
+							        <th class="orderList_T_15">회원아이디</th>
 							        <th class="orderList_T_10">주문자명</th>
-							        <th class="orderList_T_10">주문 총금액</th>
-							        <th class="orderList_T_10">결제방법</th>
-							        <th class="orderList_T_20">주문일</th>
-							        <th class="orderList_T_10">주문상태</th>
-							        <th class="orderList_T_15">취소관리</th>
+							        <th class="orderList_T_15">주문 총금액</th>
+							        <th class="orderList_T_15">결제방법</th>
+							        <th class="orderList_T_15">주문일</th>
+							        <th class="orderList_T_15">주문상태</th>
 					      		</tr>
 					      	`;
 							
@@ -229,19 +229,16 @@
 								htmlStr += `
 									
 									<tr>
-										<td>${obj.pageItems.content[i].orderNo}</td>
+										<td class="td_orderNo">
+											<a class="a_orderNo"
+											href="/mypage/getOrderDetail/${obj.pageItems.content[i].orderNo}">${obj.pageItems.content[i].orderNo}</td>
 										<td>${obj.pageItems.content[i].userId}</td>
 										<td>${obj.pageItems.content[i].orderName}</td>
 										<td>${(obj.pageItems.content[i].orderTotalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
 										<td>${obj.pageItems.content[i].orderPayment}</td>
 										<td>${obj.pageItems.content[i].orderDate == null ? '' : obj.pageItems.content[i].orderDate.substr(0, 10)}</td>
 										<td>${obj.pageItems.content[i].orderStatus}</td>
-										<td>
-							        		<a class="orderCancel">주문취소
-											</a>
-											<a class="payCancel">결제취소
-											</a>
-							        	</td>
+
 									</tr>
 								`;
 							}
@@ -303,6 +300,7 @@
 						}
 					});
 				} //function 닫음
+				
 			</script>
 		</th:block>
 	</head>
@@ -314,8 +312,8 @@
   			<h1 id="orderAndReserAdmin">주문 및 예약 관리</h1>
 		</div>
 		<div id="orderAndReserBtn">
-			<a href="orderItemList">상품 주문 내역</a>&ensp;&ensp;
-			<a href="reserDayclassList">원데이클래스 예약 내역</a>
+			<a href="reserDayclassList">원데이클래스 예약 내역</a>&ensp;&ensp;
+			<a href="orderItemList">상품 주문 내역</a>
 		</div>
 		
 		<form id="searchForm" action="/admin/orderItemList" method="get">
@@ -351,42 +349,32 @@
 	            
 				<button type="button" id="btnSearch">검색</button>
 	        </div>
-	    </form>
+	    </form >
 	    
 		<!-- 원데이클래스 예약 리스트 Table -->
 	    <div id="div_orderList_T">
 	        <table border="1" id="orderList_T">
 	        	<tr>
 			        <th class="orderList_T_15">주문번호</th>
-			        <th class="orderList_T_10">회원아이디</th>
+			        <th class="orderList_T_15">회원아이디</th>
 			        <th class="orderList_T_10">주문자명</th>
-			        <th class="orderList_T_10">주문 총금액</th>
-			        <th class="orderList_T_10">결제방법</th>
-			        <th class="orderList_T_20">주문일</th>
-			        <th class="orderList_T_10">주문상태</th>
-			        <th class="orderList_T_15">취소관리</th>
+			        <th class="orderList_T_15">주문 총금액</th>
+			        <th class="orderList_T_15">결제방법</th>
+			        <th class="orderList_T_15">주문일</th>
+			        <th class="orderList_T_15">주문상태</th>
 	      		</tr>
 	      		<tr th:each="order: ${getOrderList}">
-		        	<td th:text="${order.orderNo}"></td>
-		        	<!--<td>       예약번호 누르면 예약정보 모달?페이지? 띄우기
-						<a id="a_itemName" th:text="${item.itemName}"
-							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">
+		        	<td class="td_orderNo">
+						<a class="a_orderNo" th:text="${order.orderNo}"
+							th:href="@{/mypage/getOrderDetail/{orderNo} (orderNo=${order.orderNo})}">
 						</a>
-					</td>-->
+					</td>
 					<td th:text="${order.userId}"></td>
 					<td th:text="${order.orderName}"></td>
 					<td th:text="${order.orderTotalPrice >= 1000 ? #numbers.formatInteger(order.orderTotalPrice , 3, 'COMMA') : order.orderTotalPrice}"></td>
 					<td th:text="${order.orderPayment}"></td>
 					<td th:text="${order.orderDate eq null ? '' : #strings.substring(order.orderDate, 0, 10)}"></td>
 					<td th:text="${order.orderStatus}"></td>
-		        	<td>
-		        		<a class="orderCancel" th:text="주문취소">
-							<!--th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">-->
-						</a>
-						<a class="payCancel" th:text="결제취소">
-							<!--th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">-->
-						</a>
-		        	</td>
 		     	 </tr>
 		    </table>
 		</div>

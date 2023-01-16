@@ -64,4 +64,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 	Page<User> findByUserIdContaining(String searchKeyword, Pageable pageable); //아이디
 	Page<User> findByUserNameContainingOrUserId(String searchKeyword1, String searchKeyword2, Pageable pageable);
 	
+	@Query(value="SELECT * FROM T_MB_USER WHERE USER_ID = :userId", nativeQuery=true)
+	User getUserInfoCheck(@Param("userId") String userId);
+	
 }

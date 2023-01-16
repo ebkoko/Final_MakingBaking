@@ -16,6 +16,12 @@
 				.a_userName {
 					text-decoration: none;
 					color: inherit;
+					cursor: pointer;
+				}
+				.td_userName:hover {
+					text-decoration: underline;
+					color: #28693F;
+					font-weight: bold;
 				}
 				#userAdmin {
 					font-size: 40px;
@@ -222,6 +228,7 @@
 			<script th:inline="javascript">
 				let changeRows = [];
 				let pageNum;
+				const pageUserList = /*[[${pageUserList}]]*/;
 				
 				$(function() {
 					//검색창 검색버튼 클릭 시
@@ -295,7 +302,9 @@
 												<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].userId}"
 												value="${obj.pageItems.content[i].userId}">
 											</td>
-											<td>${obj.pageItems.content[i].userName}</td>
+											<td class="td_userName">
+												<a class="a_userName">${obj.pageItems.content[i].userName}</a>
+											</td>
 											<td>${obj.pageItems.content[i].userId}</td>
 											<td>${obj.pageItems.content[i].userRegdate == null ? '' : obj.pageItems.content[i].userRegdate.substr(0, 10)}</td>
 											<td>
@@ -369,7 +378,9 @@
 											<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].userId}"
 											value="${obj.pageItems.content[i].userId}">
 										</td>
-										<td>${obj.pageItems.content[i].userName}</td>
+										<td class="td_userName">
+											<a class="a_userName">${obj.pageItems.content[i].userName}</a>
+										</td>
 										<td>${obj.pageItems.content[i].userId}</td>
 										<td>${obj.pageItems.content[i].userRegdate == null ? '' : obj.pageItems.content[i].userRegdate.substr(0, 10)}</td>
 										<td>
@@ -442,6 +453,21 @@
 					});
 				} //function 닫음
 				
+				//회원상세 팝업
+				$(function() {
+					$(".a_userName").click(function(e) {
+						e.preventDefault();
+						const userId = $(this).attr("data-user-id");
+					userInfoCheckPopup(userId);
+					})
+				});
+				
+				function userInfoCheckPopup(userId) {
+					window.open("userInfoCheck/" + userId, "getUserInfoCheck", 
+						"width=450px, height=570px, top=100, left=200");
+				}
+				
+				//리뷰 팝업
 				$(function() {
 					$("#adminUserReview").click(function() {
 					reviewPopup();
@@ -491,14 +517,9 @@
 	      		</tr>
 	      		<tr th:each="user: ${pageUserList}">
 	      			<td><input type="checkbox" class="check" name="chk" th:value="${user.userId}"></td>
-		        	<!--<td>       회원이름 누르면 회원정보 모달?페이지? 띄우기
-						<a id="a_itemName" th:text="${item.itemName}"
-							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">
-						</a>
-					</td>-->
-					<td>
-						<a class="a_userName" th:text="${user.userName}"
-							th:href="@{/admin/userInfoCheck/{userId} (userId=${user.userId})}"></td>
+					<td class="td_userName">
+						<a class="a_userName" th:text="${user.userName}" th:data-user-id="${user.userId}"></a>
+					</td>
 					<td th:text="${user.userId}"></td>
 		        	<td th:text="${user.userRegdate eq null ? '' : #strings.substring(user.userRegdate, 0, 10)}"></td>
 		        	<td>

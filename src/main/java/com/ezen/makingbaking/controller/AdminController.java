@@ -2,6 +2,7 @@ package com.ezen.makingbaking.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.common.FileUtils;
 import com.ezen.makingbaking.dto.DayclassDTO;
 import com.ezen.makingbaking.dto.ImgFileDTO;
@@ -37,6 +40,7 @@ import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.dto.ReviewDTO;
 import com.ezen.makingbaking.dto.UserDTO;
+import com.ezen.makingbaking.entity.CustomUserDetails;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
@@ -45,6 +49,8 @@ import com.ezen.makingbaking.entity.Reser;
 import com.ezen.makingbaking.entity.Review;
 import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.service.admin.AdminService;
+import com.ezen.makingbaking.service.order.OrderService;
+import com.ezen.makingbaking.service.reser.ReserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -56,6 +62,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AdminController {
 	@Autowired
 	private AdminService adminService;
+	
+	@Autowired
+	private OrderService orderService;
+	
+	@Autowired
+	private ReserService reserService;
 	
 	
 	//관리자 메인페이지
@@ -1120,7 +1132,7 @@ public class AdminController {
 		User user = adminService.getUserInfoCheck(userId);
 
 		
-		UserDTO userDTO = UserDTO.builder()
+		/*UserDTO userDTO = UserDTO.builder()
 									.userId(user.getUserId())
 									.userName(user.getUserName())
 									.userBirth(user.getUserBirth())
@@ -1129,11 +1141,11 @@ public class AdminController {
 									.userAddr1(user.getUserAddr1())
 									.userAddr2(user.getUserAddr2())
 									.userAddr3(user.getUserAddr3())
-									.build();
+									.build();*/
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/userInfoCheck.html");
-		mv.addObject("getUserInfoCheck", userDTO);;
+		mv.addObject("getUserInfoCheck", user);
 		
 		return mv;
 	}
@@ -1292,45 +1304,45 @@ public class AdminController {
 	
 //////////////////////////////review//////////////////////////////
 	//리뷰관리
-//	@GetMapping("/reviewList")
-//	public ModelAndView getReviewList(ReviewDTO reviewDTO,
-//			@PageableDefault(page = 0, size = 10) Pageable pageable) {
-//		
-//		Review review = Review.builder()
-//							.searchCondition(reviewDTO.getSearchCondition())
-//							.searchKeyword(reviewDTO.getSearchKeyword())
-//							.build();
-//		
-//		Page<Review> pageReviewList = adminService.getPageReviewList(review, pageable);
-//	      
-//	    Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview -> 
-//																    ReviewDTO.builder()
-//																				.rvwNo(pageReview.getRvwNo())
-//																				.rvwReferNo(pageReview.getRvwReferNo())
-//																				.rvwType(pageReview.getRvwType())
-//																				.rvwContent(pageReview.getRvwContent())
-//																				.rvwWriter(pageReview.getRvwWriter())
-//																				.rvwRegdate(pageReview.getRvwRegdate() == null ?
-//																						null :
-//																						pageReview.getRvwRegdate().toString())
-//																				.rvwScore(pageReview.getRvwScore())
-//																				.build()
-//	                                             );
-//		
-//		ModelAndView mv = new ModelAndView();
-//		mv.setViewName("admin/reviewList.html");
-//		mv.addObject("getPageReviewList", pageReviewDTOList);
-//		
-//		if(reviewDTO.getSearchCondition() != null && !reviewDTO.getSearchCondition().equals("")) {
-//			mv.addObject("searchCondition", reviewDTO.getSearchCondition());
-//		}
-//		
-//		if(reviewDTO.getSearchKeyword() != null && !reviewDTO.getSearchKeyword().equals("")) {
-//			mv.addObject("searchKeyword", reviewDTO.getSearchKeyword());
-//		}
-//		
-//		return mv;
-//	}
+	@GetMapping("/reviewList")
+	public ModelAndView getReviewList(ReviewDTO reviewDTO,
+			@PageableDefault(page = 0, size = 10) Pageable pageable) {
+		
+		Review review = Review.builder()
+							.searchCondition(reviewDTO.getSearchCondition())
+							.searchKeyword(reviewDTO.getSearchKeyword())
+							.build();
+		
+		Page<Review> pageReviewList = adminService.getPageReviewList(review, pageable);
+	      
+	    Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview -> 
+																    ReviewDTO.builder()
+																				.rvwNo(pageReview.getRvwNo())
+																				.rvwReferNo(pageReview.getRvwReferNo())
+																				.rvwType(pageReview.getRvwType())
+																				.rvwContent(pageReview.getRvwContent())
+																				.rvwWriter(pageReview.getRvwWriter())
+																				.rvwRegdate(pageReview.getRvwRegdate() == null ?
+																						null :
+																						pageReview.getRvwRegdate().toString())
+																				.rvwScore(pageReview.getRvwScore())
+																				.build()
+	                                             );
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("admin/reviewList.html");
+		mv.addObject("getPageReviewList", pageReviewDTOList);
+		
+		if(reviewDTO.getSearchCondition() != null && !reviewDTO.getSearchCondition().equals("")) {
+			mv.addObject("searchCondition", reviewDTO.getSearchCondition());
+		}
+		
+		if(reviewDTO.getSearchKeyword() != null && !reviewDTO.getSearchKeyword().equals("")) {
+			mv.addObject("searchKeyword", reviewDTO.getSearchKeyword());
+		}
+		
+		return mv;
+	}
 	
 	
 	
@@ -1342,7 +1354,7 @@ public class AdminController {
 		
 		ModelAndView mv = new ModelAndView();
 		
-		mv.setViewName("admin/reviewList.html");
+		mv.setViewName("admin/userInfoCheck.html");
 			
 		return mv;
 	}

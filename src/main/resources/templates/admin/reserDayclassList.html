@@ -81,23 +81,26 @@
 				*/
 				
 				/* 개인 예약취소 버튼 */
-			    #reserCancel {
-					width: 70px;
-					display: inline-block;
-					height: 30px;
+			    #btnReserCancel {
+					width: 90px;
+					height: 40px;
 					border: 1.2px solid #28693F;
+					background-color: white;
 					color: #28693F;
 					cursor: pointer;
-					margin-right: 10px;
+					font-size: 15px;
+					font-weight: bold;
 			    }
 			    /* 개인 결제취소 버튼 */
-			    #payCancel {
-					width: 70px;
-					display: inline-block;
-					height: 30px;
+			    #btnPayCancel {
+					width: 90px;
+					height: 40px;
 					border: 1.2px solid #28693F;
+					background-color: white;
 					color: #28693F;
-					cursor: pointer; 
+					cursor: pointer;
+					font-size: 15px;
+					font-weight: bold;
 			    }
 			    
 			    /* 페이징처리 */
@@ -251,9 +254,9 @@
 										<td>${obj.pageItems.content[i].reserStatus}</td>
 										<td>${obj.pageItems.content[i].partiStatus}</td>
 										<td>
-											<a id="reserCancel">예약취소
+											<a id="btnReserCancel">예약취소
 											</a>
-											<a id="payCancel">결제취소
+											<a id="btnPayCancel">결제취소
 											</a>
 										</td>
 									</tr>
@@ -400,12 +403,8 @@
 					<td th:text="${reser.reserStatus}"></td>
 					<td th:text="${reser.partiStatus}"></td>
 		        	<td>
-		        		<a id="reserCancel" th:text="예약취소">
-							<!--th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">-->
-						</a>
-						<a id="payCancel" th:text="결제취소">
-							<!--th:href="@{/admin/itemUpdate/{itemNo} (itemNo=${item.itemNo})}">-->
-						</a>
+		        		<input type="button" name="CancelOption" id="btnReserCancel" value="예약취소" th:if="${reser.reserStatus == 'MV'}">
+                    	<input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${reser.reserStatus == 'PE'}">
 		        	</td>
 		     	 </tr>
 		    </table>

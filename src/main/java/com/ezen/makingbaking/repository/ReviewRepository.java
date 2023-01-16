@@ -41,9 +41,9 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 //	Page<Review> findbyClassContaining(String searchKeyword, Pageable pageable); //class
 	
 	//관리자 리뷰 검색_선민
-//	Page<Review> findbyRvwWriterContaining(String searchKeyword, Pageable pageable); //리뷰작성자
-//	Page<Review> findbyRvwTypeContaining(String searchKeyword, Pageable pageable); //리뷰타입
-//	Page<Review> findbyRvwWriterContainingOrRvwTypeContaining(String searchKeyword1, String searchKeyword2, Pageable pageable);
+	Page<Review> findByRvwWriterContaining(String searchKeyword, Pageable pageable); //리뷰작성자
+	Page<Review> findByRvwTypeContaining(String searchKeyword, Pageable pageable); //리뷰타입
+	Page<Review> findByRvwWriterContainingOrRvwTypeContaining(String searchKeyword1, String searchKeyword2, Pageable pageable);
 
 	// 마이페이지 리뷰리스트
 	@Query(value="SELECT F.*\r\n"
