@@ -82,6 +82,7 @@ public class CartController {
 			
 			List<CamelHashMap> cartList = cartService.getCartList(customUser.getUsername());
 			response.setItems(cartList);
+			System.out.println(cartList);
 			
 			model.addAttribute("getCartList", cartList);
 			

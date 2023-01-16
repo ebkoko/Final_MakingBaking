@@ -240,71 +240,99 @@
 					let reserNo = reser.reserNo;
 					
 					$("#btnReserCancel").on('click', function() {
-						$.ajax({
-							url: '/reser/reserCancel/' + reser.reserNo,
-							type: 'put',
-							data: { 
-								reserDate: reser.reserDateStr,
-								reserStatus: 'RC',
-								partiName: reser.partiName,
-								partiTel: reser.partiTel,
-								partiTime: reser.partiTime,
-								partiDate: reser.partiDate,
-								classNo: reser.classNo,
-								reserPersonCnt: reser.reserPersonCnt,
-								orderName: reser.orderName,
-								orderTel: reser.orderTel,
-								request: reser.request,
-								reserPayment: reser.reserPayment,
-								depositor: reser.depositor,
-								reserTotalPrice: reser.reserTotalPrice,
-								classPrice: reser.classPrice,
-								partiStatus: reser.partiStatus
-								},
-							success: function(obj) {
-								console.log(obj);
-								$(".reserStatus").text("예약취소");
-								$("#CancelOption").css("display", "none");
-								$("#moveList").show();
-							}, error: function(e) {
-								console.log(e);
-							}
-						});
+						if(confirm("예약을 취소하시겠습니까?")) {
+							$.ajax({
+								url: '/reser/reserCancel/' + reser.reserNo,
+								type: 'put',
+								data: { 
+									reserDate: reser.reserDateStr,
+									reserStatus: 'RC',
+									partiName: reser.partiName,
+									partiTel: reser.partiTel,
+									partiTime: reser.partiTime,
+									partiDate: reser.partiDate,
+									classNo: reser.classNo,
+									reserPersonCnt: reser.reserPersonCnt,
+									orderName: reser.orderName,
+									orderTel: reser.orderTel,
+									request: reser.request,
+									reserPayment: reser.reserPayment,
+									depositor: reser.depositor,
+									reserTotalPrice: reser.reserTotalPrice,
+									classPrice: reser.classPrice,
+									partiStatus: reser.partiStatus
+									},
+								success: function(obj) {
+									console.log(obj);
+									$(".reserStatus").text("예약취소");
+									$("#CancelOption").css("display", "none");
+									$("#moveList").show();
+									
+									let htmlstr = "";
+									
+									htmlstr += `									
+										<span class="cancelDateMent" style="color: black; font-weight: 400;">취소일시: </span>
+										<span class="cancelDate" style="color: black; font-weight: 400;">${obj.item.getReser.reserCancelDate.substring(0, 10)} ${obj.item.getReser.reserCancelDate.substring(11, 16)}</span>
+									`;
+									$("#top").children(":last").append(htmlstr);
+								}, error: function(e) {
+									console.log(e);
+								}
+																
+							});
+							alert("에약이 취소되었습니다.");
+							
+						} else {
+							alert("예약취소가 취소되었습니다.");
+						}
 					});
 					
 					$("#btnPayCancel").on('click', function() {
-						$.ajax({
-							url: `/reser/payCancel/`,
-							type: 'post',
-							data: {
-								reserNo: reser.reserNo,
-								reserDate: reser.reserDateStr,
-								reserStatus: 'PC',
-								partiName: reser.partiName,
-								partiTel: reser.partiTel,
-								partiTime: reser.partiTime,
-								partiDate: reser.partiDate,
-								classNo: reser.classNo,
-								reserPersonCnt: reser.reserPersonCnt,
-								orderName: reser.orderName,
-								orderTel: reser.orderTel,
-								request: reser.request,
-								reserPayment: reser.reserPayment,
-								depositor: reser.depositor,
-								reserTotalPrice: reser.reserTotalPrice,
-								classPrice: reser.classPrice,
-								partiStatus: reser.partiStatus,
-								tid: reser.tid
-							},
-							success: function(obj) {
-								console.log(obj);
-								$(".reserStatus").text("결제취소");
-								$("#CancelOption").css("display", "none");
-								$("#moveList").show();
-							}, error: function(e) {
-								console.log(e);
-							}
-						});
+						if(confirm("결제를 취소하시겠습니까?")) {
+							$.ajax({
+								url: `/reser/payCancel/`,
+								type: 'post',
+								data: {
+									reserNo: reser.reserNo,
+									reserDate: reser.reserDateStr,
+									reserStatus: 'PC',
+									partiName: reser.partiName,
+									partiTel: reser.partiTel,
+									partiTime: reser.partiTime,
+									partiDate: reser.partiDate,
+									classNo: reser.classNo,
+									reserPersonCnt: reser.reserPersonCnt,
+									orderName: reser.orderName,
+									orderTel: reser.orderTel,
+									request: reser.request,
+									reserPayment: reser.reserPayment,
+									depositor: reser.depositor,
+									reserTotalPrice: reser.reserTotalPrice,
+									classPrice: reser.classPrice,
+									partiStatus: reser.partiStatus,
+									tid: reser.tid
+								},
+								success: function(obj) {
+									console.log(obj);
+									$(".reserStatus").text("결제취소");
+									$("#CancelOption").css("display", "none");
+									$("#moveList").show();
+									
+									let htmlstr = "";
+									
+									htmlstr += `									
+										<span class="cancelDateMent" style="color: black; font-weight: 400;">취소일시: </span>
+										<span class="cancelDate" style="color: black; font-weight: 400;">${obj.canceled_at.substring(0, 10)} ${obj.canceled_at.substring(11, 16)}</span>
+									`;
+									$("#top").children(":last").append(htmlstr);
+								}, error: function(e) {
+									console.log(e);
+								}
+							});
+							alert("결제가 취소되었습니다.");
+						} else {
+							alert("결제취소가 취소되었습니다.");
+						}
 					});
 				});
 				
@@ -403,7 +431,8 @@
 	            </div>
 	            <hr>		            
 	            <div id="CancelOption" th:if="${reser.cancelEnable == 'P'}">
-                    <input type="button" name="CancelOption" id="btnReserCancel" value="예약취소" th:if="${reser.reserStatus == 'MV'}">&emsp;
+	            	<button type="button" id="btnMoveList" onclick="fnBtnMoveList()">목록으로</button>&emsp;
+                    <input type="button" name="CancelOption" id="btnReserCancel" value="예약취소" th:if="${reser.reserStatus == 'MV'}">
                     <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${reser.reserStatus == 'PE'}">
 	            </div>
 	            <div id="moveList" th:style="${reser.reserStatus == 'PC' || reser.reserStatus == 'RC' ? 'display: flex; 

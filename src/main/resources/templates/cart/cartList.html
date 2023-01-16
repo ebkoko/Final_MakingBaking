@@ -84,7 +84,10 @@
 				}
 				.item_Detail .detailName {
 				    font-size: 0.95em;
-				}				
+				}			
+				.item_Detail .detailName a {
+					color: #2E2E2E;
+				}	
 				.item_Detail .detailPrice {
 					display: inline-block;
 				    font-size: 0.8em;
@@ -170,15 +173,36 @@
 			
 				$(function() {
 					fnTotalItemPrice();
-					console.log(getCartList[2].cartItemCnt);
+					console.log(getCartList[0].cartItemCnt);
 					console.log(typeof $(".Quantity").val());
 					console.log($(".Quantity").val());
+									
+					// 체크된 상품이 없을 경우 주문하기 버튼 비활성화	
+					$("#btnSelectedOrder").on('click', function(e) {
+						e.preventDefault;
+						
+						for(let i = 0; i < $("input[name='select_item']").length; i++) {
+							if($("#chk" + i).attr("data-item-status") == 'Y') {
+								if($("input[name='select_item']:checked").length == 0) {
+									alert("주문할 상품을 선택해주세요.");
+									return;
+								}								
+							}
+						}
+						$("#cartForm").submit();
+					});
+										
 										
 					// 전체선택 버튼 클릭했을 때
 					$("#selectAll").click(function() {
 						let chk = $("#selectAll").prop("checked");
 						if(chk) {
-							$("input[name='select_item']").prop("checked", true);
+							for(let i = 0; i < $("input[name='select_item']").length; i++) {
+								if($("#chk" + i).attr("data-item-status") != 'S' &&
+								   $("#chk" + i).attr("data-item-status") != 'N') {
+									   $("#chk" + i).prop("checked", true);
+								   }
+							}
 							$("#selectAllCancel").prop("checked", false);
 						} else {
 							$("input[name='select_item']").prop("checked", false);
@@ -197,7 +221,7 @@
 					});
 					
 					// 상품리스트 중 하나라도 체크가 안되어있을 때 전체선택 체크박스 체크 해제, 상품리스트 전체가 체크되면 전체선택 체크박스 체크
-					$(".check").click(function(e) {
+					$(document).on("click", ".check", function(e) {
 						$("#selectAllCancel").prop("checked", false);
 						if($("input[name='select_item']:checked").length < $("input[name='select_item']").length) {
 							$("#selectAll").prop("checked", false);
@@ -268,27 +292,7 @@
 								$(`#itemPrice${index}`).text(`${totalPComma}`);
 								fnTotalItemPrice();
 								
-								$(".check").click(function(e) {
-									$("#selectAllCancel").prop("checked", false);
-									if($("input[name='select_item']:checked").length < $("input[name='select_item']").length) {
-										$("#selectAll").prop("checked", false);
-									} else if($("input[name='select_item']:checked").length == $("input[name='select_item']").length) {
-										$("#selectAll").prop("checked", true);
-									}
-									
-									// 판매중지된 상품, 품절된 상품 체크박스 체크시 체크 해제 및 방지
-									if($(e.target).attr("data-item-status") == 'N') {
-										$(e.target).prop("checked", false);
-										$(e.target).attr("disabled", true);
-										alert("판매중지된 상품은 주문하실 수 없습니다.");
-										return;
-									} else if($(e.target).attr("data-item-status") == 'S') {
-										$(e.target).prop("checked", false);
-										$(e.target).attr("disabled", true);
-										alert("품절된 상품은 주문하실 수 없습니다.");
-										return;
-									}
-								});
+								
 								
 							}, error: function(e) {
 								console.log(e);
@@ -323,6 +327,8 @@
 							let htmlStr = "";
 							$(".item_Price").text($(".item_Price").text().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 							
+							console.log(result.items);
+							
 							for(let i = 0; i < result.items.length; i++) {
 								const detailPrice = result.items[i].itemPrice;
 								const detailPriceComma = detailPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -330,16 +336,31 @@
 								const itemPriceComma = itemPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 								const itemCnt = result.items[i].cartItemCnt > result.items[i].itemStock ? result.items[i].itemStock : result.items[i].cartItemCnt;
 								
+								$("#selectAll").prop("checked", false);
+								$("input[name='select_item']").prop("checked", false);
 								
 								htmlStr += `
 									<div class="item1">
 					                    <div class="itemSelect">
-					                        <input type="checkbox" class="check" name="select_item" data-item-status="${result.items[i].itemStatus}">                    
+					                        <input type="checkbox" class="check" name="select_item" id="chk${i}" data-item-status="${result.items[i].itemStatus}">                    
 					                    </div>
 					                    <div class="itemView">
 					                        <img class="item_Img" src="${'/item/' + result.items[i].fileName}">
 					                        <div class="item_Detail">
-					                            <div class="detailName"><a href="/item/item/${result.items[i].itemNo}">${result.items[i].itemName}</a></div>
+					                            <div class="detailName"><a href="/item/item/${result.items[i].itemNo}">${result.items[i].itemName}</a>
+					                            `;
+					           if(result.items[i].itemStatus == 'S') {
+								   htmlStr += `
+								   				<span style="color: red;">품절</span>								   
+								   `;
+							   } else if(result.items[i].itemStatus == 'N') {
+								   htmlStr += `
+								   				<span style="color: red;">판매중지</span>
+								   `;
+							   }
+							   
+							   htmlStr += `
+					                            </div>
 					                            <div class="detailPrice">${detailPriceComma}</div><span>원</span>
 					                        </div>    
 					                    </div>
@@ -360,13 +381,15 @@ itemCnt * detailPrice >= 1000 ? (itemCnt * detailPrice).toString().replace(/\B(?
 								
 							}
 							
+							console.log(getCartList);
+							
 							let ttip = 0;
 							let delF = 0;
 							
 							$("input[name='select_item']").each(function() {
 								if($(this).is(":checked")) {
 									const indx = $("input[name='select_item']").index($(this));
-									ttip +=  getCartList[indx].itemPrice * $("input[name='Quantity']").eq(indx).val();
+									ttip +=  result.items[indx].itemPrice * $("input[name='Quantity']").eq(indx).val();
 								} 
 							});
 							
@@ -384,29 +407,9 @@ itemCnt * detailPrice >= 1000 ? (itemCnt * detailPrice).toString().replace(/\B(?
 							$("#deliFee").val(delF);
 							
 							$("#cart_item").html(htmlStr);
-							fnTotalItemPrice();
+									
+							location.reload();
 							
-							$(".check").click(function(e) {
-								$("#selectAllCancel").prop("checked", false);
-								if($("input[name='select_item']:checked").length < $("input[name='select_item']").length) {
-									$("#selectAll").prop("checked", false);
-								} else if($("input[name='select_item']:checked").length == $("input[name='select_item']").length) {
-									$("#selectAll").prop("checked", true);
-								}
-								
-								// 판매중지된 상품, 품절된 상품 체크박스 체크시 체크 해제 및 방지
-								if($(e.target).attr("data-item-status") == 'N') {
-									$(e.target).prop("checked", false);
-									$(e.target).attr("disabled", true);
-									alert("판매중지된 상품은 주문하실 수 없습니다.");
-									return;
-								} else if($(e.target).attr("data-item-status") == 'S') {
-									$(e.target).prop("checked", false);
-									$(e.target).attr("disabled", true);
-									alert("품절된 상품은 주문하실 수 없습니다.");
-									return;
-								}
-							});
 						})
 						.fail(function(error) {
 							console.log(error);
@@ -499,7 +502,8 @@ itemCnt * detailPrice >= 1000 ? (itemCnt * detailPrice).toString().replace(/\B(?
 		                    <div class="itemView">
 		                        <img class="item_Img" th:src="@{'/item/' + ${cart.fileName}}">
 		                        <div class="item_Detail">
-		                            <div class="detailName"><a th:href="@{/item/item/{itemNo} (itemNo=${cart.itemNo})}" th:text="${cart.itemName}"></a></div>
+		                            <div class="detailName"><a th:href="@{/item/item/{itemNo} (itemNo=${cart.itemNo})}" th:text="${cart.itemName}"></a>
+		                            <span th:if="${cart.itemStatus} == 'S'" style="color: red;">품절</span><span th:if="${cart.itemStatus} == 'N'" style="color: red;">판매중지</span></div>
 		                            <div class="detailPrice" th:text="${#numbers.formatInteger(cart.itemPrice, 3, 'COMMA')}"></div><span>원</span>
 		                        </div>    
 		                    </div>
@@ -520,7 +524,7 @@ itemCnt * detailPrice >= 1000 ? (itemCnt * detailPrice).toString().replace(/\B(?
 		                <span>상품 총 금액: </span> <span id="realTotalItemPrice"></span><span>원</span> <span>&#43;</span> <span>배송비: </span> <span id="realDeliFee"></span><span>원</span> <span>&#61;</span> <span>총 결제금액: </span> <span id="totalPayPrice"></span><span>원</span>
 		            </div>
 		            <hr>
-		            <button type="submit" id="btnSelectedOrder">주문하기</button>
+		            <button type="button" id="btnSelectedOrder">주문하기</button>
 	            </form>
 	        </div>
 		</div>
