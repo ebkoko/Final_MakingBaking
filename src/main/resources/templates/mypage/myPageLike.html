@@ -6,146 +6,165 @@
 <head>
 	<th:block layout:fragment="script">
 		<script th:inline="javascript">
-			$(function() {
-				$("#orderCondition").on('change', function() {
-					let page = 0;
-					fnGetOrderListAjax(page);
-				});
-				
-				$(document).on("click", ".pagination a", function(e) {
-					e.preventDefault();
-					const page = $(this).attr("href");
-					fnGetOrderListAjax(page);
-				});
-				
-				$(".present").on('click', function(e) {
-					$(e.target).css("color", "white");
-				})
-			});
+			$(function() {			
 			
-			function fnGetOrderListAjax(page) {
-				$.ajax({
-					url: '/mypage/myPageAjax',
-					type: 'post',
-					data: {
-						page: page,
-						orderCondition: $("#orderCondition").val()
-					}, success: function(obj) {
-						console.log(obj);
-						
-						let htmlstr = "";
-						
-						for(let i = 0; i < obj.pageItems.content.length; i++) {
-							htmlstr += `
-								<div class="boxx">
-	      							<div class="box_product">`;
-	      					if(obj.pageItems.content[i].orderStatus == 'MV') {
-								  htmlstr += `
-										<div class="box_product_detail" style="color: red; font-weight: 600;">입금대기</div>
-								  `;
-							  } else if(obj.pageItems.content[i].orderStatus == 'PE') {
-								  htmlstr += `
-					          			<div class="box_product_detail" style="color: #28693F; font-weight: 600;">결제완료</div>
-							 	  `;
-							  } else if(obj.pageItems.content[i].orderStatus == 'DW') {
-								  htmlstr += `
-					          			<div class="box_product_detail" style="color: lightblue; font-weight: 600;">배송준비중</div>
-							  	  `;
-							  } else if(obj.pageItems.content[i].orderStatus == 'D') {
-								  htmlstr += `
-					          			<div class="box_product_detail" style="color: lightblue; font-weight: 600;">배송중</div>
-								  `;					          		
-							  } else if(obj.pageItems.content[i].orderStatus == 'DC') {
-								  htmlstr += `								  
-							        	<div class="box_product_detail" style="color: dimgray; font-weight: 600;">배송완료</div>
-								  `;
-							  } else if(obj.pageItems.content[i].orderStatus == 'OC') {
-								  htmlstr += `
-					          			<div class="box_product_detail" style="color: lightgray; font-weight: 600;">주문취소</div>
-							 	  `;
-							  } else if(obj.pageItems.content[i].orderStatus == 'PC') {
-								  htmlstr += `
-					          			<div class="box_product_detail" style="color: lightgray; font-weight: 600;">결제취소</div>
-							  	  `;
-							  }
-							  htmlstr += `                                   
-								        <div class="box_product_detail">주문일시: ${obj.pageItems.content[i].orderDateStr.substring(0, 10)} ${obj.pageItems.content[i].orderDateStr.substring(11, 19)}</div>
-								        <div class="box_product_detail">주문번호: ${obj.pageItems.content[i].orderNo}</div>										  
-								    </div>
-							        <div class="box_right">
-							          <span class="box_right_detail"><a href="/mypage/getOrderDetail/${obj.pageItems.content[i].orderNo}">주문 상세보기</a></span>
-							          <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
-							        </div>
-							     </div>
-							  `;
+				$(".present").on('click', function(e) {
+						$(e.target).css("color", "white");
+				});
+				
+				$(".deletebtn").on('click', function(e){
+					
+					$.ajax({
+						url: '/mypage/mypageUnlike',
+						type: 'delete',
+						data: {
+							likeNo: $(".likeNo").val(),
+							cateName: $(".cateName").val()
+						},
+						success: function(){
+							confirm("찜 목록에서 삭제하시겠습니까?");													
+						},
+						error: function(e){
+							console.log(e);
 						}
-						
-						$("#boxxWrapper").html(htmlstr);
-						
-						htmlstr = "";
-						
-						let pageNumber = obj.pageItems.pageable.pageNumber;
-						let pageSize = obj.pageItems.pageable.pageSize;
-						let totalPages = obj.pageItems.totalPages;
-						let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
-						let tempEndPage = startPage + pageSize -1;
-						let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
-						console.log(pageNumber);
-						console.log(pageSize);
-						console.log(totalPages);
-						console.log(startPage);
-						console.log(tempEndPage);
-						console.log(endPage);
-						
-						if(pageNumber > 0) {
-							htmlstr += `
-								<li class="pagination_button">
-									<a style="border: 0px;" href="${pageNumber - 1}">&#60;</a>
-								</li>
-							`;
-						}
-						
-						let realStart = totalPages - startPage < pageSize ? 
-											totalPages < pageSize ? 1 : totalPages - pageSize + 1 
-										: startPage;
-						
-						for(let i = realStart; i <= endPage; i++) {
-							if(pageNumber == i) {
-								htmlstr += `<li id="present" class="pagination_button">
-										   	   <a href="${i - 1}">${i}</a>
-									        </li>
+					});
+				});
+				
+				$(document).on("click", ".pagination_button a", function(e) {
+					e.preventDefault();
+					$.ajax({
+						url: '/mypage/myLikeList',
+						type: 'post',
+						data: {	
+							page: $(this).attr("href")						
+						},
+						success: function(obj) {
+							console.log(obj);
+							
+							let htmlstr = "";
+							
+							if(obj.pageItems.content.length == 0) {
+									htmlstr += `
+										<p class="noReser"><span class="noReserStatus">찜한 내역이 없습니다.</span></p>
+									`;
+									$("#boxxWrapper").html(htmlstr);
+							}
+							
+							else {
+							
+								for(let i = 0; i < obj.pageItems.content.length; i++) {
+									htmlstr += `
+										<div class="boxx">
+										      	<div class="imgWrapper">
+									`;
+										
+									          
+									   if(obj.pageItems.content[i].cateName == 'item') {
+											htmlstr += `
+											
+													<img src="/item/${obj.pageItems.content[i].fileName}" width="130px" margin="10px">
+										      	</div>
+										        <div class="box_product">
+													  <a class="box_product_detail" href="/item/item/${obj.pageItems.content[i].likeNo}">${obj.pageItems.content[i].likeName}</a>
+											`;
+										} else if (obj.pageItems.content[i].cateName == 'class') {
+											htmlstr += `
+													<img src="/dayclass/${obj.pageItems.content[i].fileName}" width="130px" margin="10px">
+										      	</div>
+										        <div class="box_product">
+												  <a class="box_product_detail" href="/dayclass/dayclass/${obj.pageItems.content[i].likeNo}">${obj.pageItems.content[i].likeName}</a>
+											`;
+										}
+									    htmlstr += `
+										     	</div>
+										        <div class="box_right">
+										          <span class="box_right_detail">
+										          	<a href="#" class="deletebtn">
+										          		<img src="/etc/like.png" width="30px" margin="10px"></img>
+										          	</a>
+										          </span>
+										        </div>
+										    </div>
+									`;
+								}
+							
+								$("#boxxWrapper").html(htmlstr);
+							}
+							
+							htmlstr = "";
+							
+							let pageNumber = obj.pageItems.pageable.pageNumber;
+							let pageSize = obj.pageItems.pageable.pageSize;
+							let totalPages = obj.pageItems.totalPages;
+							let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
+							let tempEndPage = startPage + pageSize - 1;
+							let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
+							
+							console.log(pageNumber);
+							console.log(pageSize);
+							console.log(totalPages);
+							console.log(startPage);
+							console.log(tempEndPage);
+							console.log(endPage);
+							
+							if(pageNumber > 0) {
+								htmlstr += `
+									<li class="pagination_button">
+										<a style="border: 0px;" href="${pageNumber - 1}">&#60;</a>
+									</li>
 								`;
-							} else {
+							}
+							
+							let realStart = totalPages - startPage < pageSize ? 
+												totalPages < pageSize ? 1 : totalPages - pageSize + 1 
+											: startPage;
+							
+							for(let i = realStart; i <= endPage; i++) {
+								if(pageNumber == i-1) {
+									htmlstr += `<li class="pagination_button">
+											   	   <a class="present" href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								} else {
+									htmlstr += `<li class="pagination_button">
+											   	   <a href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								}
+							}
+							
+							if(pageNumber < totalPages - 1) {
 								htmlstr += `<li class="pagination_button">
-										   	   <a href="${i - 1}">${i}</a>
+										       <a style="border: 0px;" href="${pageNumber + 1}">&#62;</a>
 									        </li>
 								`;
 							}
+							
+							$(".pagination").html(htmlstr);
+							
+							
+						},
+						error: function(e) {
+							console.log(e);
+							console.log($(e.target).attr("data-page-num"));
 						}
-						
-						if(pageNumber < totalPages - 1) {
-							htmlstr += `<li class="pagination_button">
-									       <a style="border: 0px;" href="${pageNumber + 1}">&#62;</a>
-								        </li>
-							`;
-						}
-						
-						$(".pagination").html(htmlstr);
-						
-					}, error: function(e) {
-						console.log(e);
-					}
+					})
+					/*.done(function(result) {
+						$("#list-table").replaceWith(result);
+					});*/
 				});
-			}
+				
+				
+				
+			});
 		</script>
 	</th:block>
 	<th:block layout:fragment="css">
 		<link rel="stylesheet" th:href="@{/css/myPage/myPage.css}"/>
 	</th:block>
 </head>
-
 <body>
-	<div layout:fragment="content">
+	<div layout:fragment="content" style="height: 75vh;">
 		<main class="centre">
 	    <!-- 사이드 바 -->
 	    <div class="left-nav-bar">
@@ -158,7 +177,7 @@
 	          <ul class="menu-group">
 	            <li class="menu-name"><a th:href="@{/mypage/myPage}">주문확인</a></li>
 	            <li class="menu-name"><a th:href="@{/mypage/myReserList}">예약확인</a></li>
-	            <li class="menu-name"><a href="#">찜 목록</a></li>
+	            <li class="menu-name"><a th:href="@{/mypage/myLikeList}">찜목록</a></li>
 	          </ul>
 	        </div>
 	        <div class="sub-menu">
@@ -184,32 +203,48 @@
 	    <!-- 메인 내용 -->
 	    <div class="mainContentWrapper">
 		    <div class="main-content">
-		      <h3>찜 목록</h3>
-		      <span class="search">
-		        <select class="search-bar" name="likeCondition" id="likeCondition">
-	                  <option value="NEW" th:selected="${searchCondition == '' || searchCondition == 'NEW'}">최신순</option>
-	                  <option value="OLD" th:selected="${searchCondition == 'OLD'}">오래된순</option>
-	                  <option value="HIGH" th:selected="${searchCondition == 'HIGH'}">평점 높은순</option>
-					  <option value="LOW" th:selected="${searchCondition == 'LOW'}"> 평점 낮은순</option>	                    
-		         </select>
-		      </span>
-		      
-		   
+		      <h3>나의 찜 목록</h3>
+		      <form id="deleteForm" enctype="multipart/form-data">
+		      <div id="boxxWrapper">
+			      <div class="boxx" th:each="like : ${pageLikeList}">
+			      	<input type="hidden" name="likeNo" class="likeNo" th:value="${like.likeNo}">
+			      	<p th:text="${like.likeNo + '@@' + like.cateName}"></p>
+			        <input type="hidden" name="cateName" class="cateName" th:value="${like.cateName}">
+			      	<div class="imgWrapper">
+			          <img th:src="@{${like.cateName} == 'class' ? '/dayclass/' + ${like.fileName} : '/item/' + ${like.fileName}}">
+			      	</div>
+			        <div class="box_product">
+			          <a class="box_product_detail" th:if="${like.cateName eq 'item'}" th:text="${like.likeName}" th:href="@{/item/item/{likeNo} (likeNo=${like.likeNo})}"></a>
+			          <a class="box_product_detail" th:if="${like.cateName eq 'class'}" th:text="${like.likeName}" th:href="@{/dayclass/dayclass/{likeNo} (likeNo=${like.likeNo})}"></a>
+			        </div>
+			        <div class="box_right">
+			          <span class="box_right_detail">
+			          	<a href="#" class="deletebtn">
+			          	  <img src="/etc/like.png" width="30px" margin="10px"></img>
+			          	</a>
+			          </span>
+			        </div>
+			      </div>
+		      </div>
+		      </form>
+		      <p class="noReser" th:if="${#lists.size('pageLikeList') == 0}"><span class="noReserStatus">찜한 목록이 없습니다.</span></p>
 		    </div>
-		    <div class="paging">
-				<ul class="pagination" th:if="${getOrderList.totalElements > 0}"
-									   th:with="pageNumber = ${getOrderList.pageable.pageNumber},
-												pageSize = ${getOrderList.pageable.pageSize},
-												totalPages = ${getOrderList.totalPages},
+		  	<div class="paging" style="text-align:center;">
+				<ul class="pagination" th:if="${pageLikeList.totalElements > 0}"
+									   th:with="pageNumber = ${pageLikeList.pageable.pageNumber},
+												pageSize = ${pageLikeList.pageable.pageSize},
+												totalPages = ${pageLikeList.totalPages},
 												startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
 												tempEndPage = ${startPage + pageSize - 1},
 												endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
 					<li class="pagination_button" th:if="${pageNumber > 0}">
 						<a style="border: 0px;" th:href="${pageNumber - 1}">&#60;</a>
 					</li>
+				
 					<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
 						<a th:href="${page - 1}" th:text="${page}"></a>
 					</li>
+				
 					<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
 						<a style="border: 0px;" th:href="${pageNumber + 1}">&#62;</a>
 					</li>
