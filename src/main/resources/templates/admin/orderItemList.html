@@ -231,7 +231,9 @@
 									<tr>
 										<td class="td_orderNo">
 											<a class="a_orderNo"
-											href="/mypage/getOrderDetail/${obj.pageItems.content[i].orderNo}">${obj.pageItems.content[i].orderNo}</td>
+											href="/mypage/getOrderDetail/${obj.pageItems.content[i].orderNo}">${obj.pageItems.content[i].orderNo}
+											</a>
+										</td>
 										<td>${obj.pageItems.content[i].userId}</td>
 										<td>${obj.pageItems.content[i].orderName}</td>
 										<td>${(obj.pageItems.content[i].orderTotalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
