@@ -17,15 +17,23 @@ import com.ezen.makingbaking.entity.Order;
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 	//관리자 주문 검색_선민
 	Page<Order> findAllByOrderByOrderNoDesc(Pageable pageable);
-	@Query(value="select a from Order a where cast(a.orderNo as string) like %:searchKeyword%")
+	@Query(value="select a from Order a where cast(a.orderNo as string) like %:searchKeyword% order by a.orderNo desc")
 	Page<Order> findByOrderNoContainingOrderByOrderNoDesc(@Param("searchKeyword") String searchKeyword, Pageable pageable); //주문번호
 	Page<Order> findByUserIdContainingOrderByOrderNoDesc(String searchKeyword, Pageable pageable); //회원아이디
 	Page<Order> findByOrderNameContainingOrderByOrderNoDesc(String searchKeyword, Pageable pageable); //주문자명
 	Page<Order> findByOrderPaymentContainingOrderByOrderNoDesc(String searchKeyword, Pageable pageable); //결제방법
 	Page<Order> findByOrderStatusContainingOrderByOrderNoDesc(String searchKeyword, Pageable pageable); //주문상태
-	@Query(value="select a from Order a where cast(a.orderNo as string) like %:searchKeyword%")
-	Page<Order> findByOrderNoContainingOrUserIdContainingOrOrderNameContainingOrOrderPaymentContainingOrOrderStatusOrderByOrderNoDesc
-	(long searchKeyword1, String searchKeyword2, String searchKeyword3, String searchKeyword4, String searchKeyword5, Pageable pageable);
+	@Query(value="select a from Order a"
+			+ " where cast(a.orderNo as string) like %:searchKeyword1%"
+			+ " or a.userId like %:searchKeyword2%"
+			+ " or a.orderName like %:searchKeyword3%"
+			+ " or a.orderPayment like %:searchKeyword4%"
+			+ " or a.orderStatus like %:searchKeyword5%"
+			+ " order by a.orderNo desc"
+			)
+	Page<Order> findByOrderItemListOrderByOrderNoDesc
+	(@Param("searchKeyword1") String searchKeyword1, @Param("searchKeyword2") String searchKeyword2, @Param("searchKeyword3") String searchKeyword3,
+			@Param("searchKeyword4") String searchKeyword4, @Param("searchKeyword5") String searchKeyword5, Pageable pageable);
 	
 	
 	@Query(value="SELECT  IFNULL(MAX(ORDER_NO), CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(0, '6', '0'))) + 1 AS ORDER_NO\r\n"

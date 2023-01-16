@@ -15,6 +15,16 @@
 				#orderAndReserBtn  {
 					margin: 50px 0 0 0;
 				}
+				.a_reserNo {
+					text-decoration: none;
+					color: inherit;
+					cursor: pointer;
+				}
+				.td_reserNo:hover {
+					text-decoration: underline;
+					color: #28693F;
+					font-weight: bold;
+				}
 				/* 검색 div */
 				#reser_search {
 					margin: 80px auto;
@@ -62,23 +72,12 @@
 				.reserList_T_15 {
 					 width: 15%;
 				}
-				.reserList_T_20 {
-					 width: 20%;
-				}
 				
 				#reserList_T td {
 					border-bottom: 1.2px solid #28693F;
 					text-align: center;
 					height: 80px;
 				}
-				
-				/* 회원 이름 a태그 */
-				/*
-				#a_userName {
-					text-decoration: none;
-					color: inherit;
-				}
-				*/
 				
 				/* 개인 예약취소 버튼 */
 			    #btnReserCancel {
@@ -231,14 +230,13 @@
 							htmlStr += `
 							
 								<tr>
-							        <th class="reserList_T_15">예약번호</th>
-							        <th class="reserList_T_10">예약자</th>
+					        		<th class="reserList_T_15">예약번호</th>
+							        <th class="reserList_T_15">예약자</th>
 							        <th class="reserList_T_10">클래스번호</th>
 							        <th class="reserList_T_15">예약날짜</th>
-							        <th class="reserList_T_10">예약시간</th>
-							        <th class="reserList_T_10">예약상태</th>
-							        <th class="reserList_T_10">참여현황</th>
-							        <th class="reserList_T_20">취소관리</th>
+							        <th class="reserList_T_15">예약시간</th>
+							        <th class="reserList_T_15">예약상태</th>
+							        <th class="reserList_T_15">참여현황</th>
 					      		</tr>
 					      	`;
 							
@@ -246,19 +244,17 @@
 								htmlStr += `
 									
 									<tr>
-										<td>${obj.pageItems.content[i].reserNo}</td>
+										<td class="td_reserNo">
+											<a class="a_reserNo"
+											href="/mypage/getReserDetail/${obj.pageItems.content[i].reserNo}">${obj.pageItems.content[i].reserNo}
+											</a>
+										</td>
 										<td>${obj.pageItems.content[i].partiName}</td>
 										<td>${obj.pageItems.content[i].classNo}</td>
 										<td>${obj.pageItems.content[i].partiDate == null ? '' : obj.pageItems.content[i].partiDate.substr(0, 10)}</td>
 										<td>${obj.pageItems.content[i].partiTime}</td>
 										<td>${obj.pageItems.content[i].reserStatus}</td>
 										<td>${obj.pageItems.content[i].partiStatus}</td>
-										<td>
-											<a id="btnReserCancel">예약취소
-											</a>
-											<a id="btnPayCancel">결제취소
-											</a>
-										</td>
 									</tr>
 								`;
 							}
@@ -331,8 +327,8 @@
   			<h1 id="orderAndReserAdmin">주문 및 예약 관리</h1>
 		</div>
 		<div id="orderAndReserBtn">
-			<a href="orderItemList">상품 주문 내역</a>&ensp;&ensp;
-			<a href="reserDayclassList">원데이클래스 예약 내역</a>
+			<a href="reserDayclassList">원데이클래스 예약 내역</a>&ensp;&ensp;
+			<a href="orderItemList">상품 주문 내역</a>
 		</div>
 		
 		<form id="searchForm" action="/admin/reserDayclassList" method="get">
@@ -380,32 +376,26 @@
 	    <div id="div_reserList_T">
 	        <table border="1" id="reserList_T">
 	        	<tr>
-			        <th class="reserList_T_15">예약번호</th>
-			        <th class="reserList_T_10">예약자</th>
+	        		<th class="reserList_T_15">예약번호</th>
+			        <th class="reserList_T_15">예약자</th>
 			        <th class="reserList_T_10">클래스번호</th>
 			        <th class="reserList_T_15">예약날짜</th>
-			        <th class="reserList_T_10">예약시간</th>
-			        <th class="reserList_T_10">예약상태</th>
-			        <th class="reserList_T_10">참여현황</th>
-			        <th class="reserList_T_20">취소관리</th>
+			        <th class="reserList_T_15">예약시간</th>
+			        <th class="reserList_T_15">예약상태</th>
+			        <th class="reserList_T_15">참여현황</th>
 	      		</tr>
 	      		<tr th:each="reser: ${pageReserList}">
-		        	<td th:text="${reser.reserNo}"></td>
-		        	<!--<td>       예약번호 누르면 예약정보 모달?페이지? 띄우기
-						<a id="a_itemName" th:text="${item.itemName}"
-							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">
+		        	<td class="td_reserNo">
+						<a class="a_reserNo" th:text="${reser.reserNo}"
+							th:href="@{/mypage/getReserDetail/{reserNo} (reserNo=${reser.reserNo})}">
 						</a>
-					</td>-->
+					</td>
 					<td th:text="${reser.partiName}"></td>
 					<td th:text="${reser.classNo}"></td>
 					<td th:text="${reser.partiDate}"></td>
 					<td th:text="${reser.partiTime}"></td>
 					<td th:text="${reser.reserStatus}"></td>
 					<td th:text="${reser.partiStatus}"></td>
-		        	<td>
-		        		<input type="button" name="CancelOption" id="btnReserCancel" value="예약취소" th:if="${reser.reserStatus == 'MV'}">
-                    	<input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${reser.reserStatus == 'PE'}">
-		        	</td>
 		     	 </tr>
 		    </table>
 		</div>

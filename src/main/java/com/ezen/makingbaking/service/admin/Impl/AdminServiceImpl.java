@@ -422,8 +422,8 @@ public class AdminServiceImpl implements AdminService {
 	public Page<Order> getPageOrderList(Order order, Pageable pageable) {
 		if(order.getSearchKeyword() != null && !order.getSearchKeyword().equals("")) {
 			if(order.getSearchCondition().equals("ALL")) {
-				return orderRepository.findByOrderNoContainingOrUserIdContainingOrOrderNameContainingOrOrderPaymentContainingOrOrderStatusOrderByOrderNoDesc
-						(Long.parseLong(order.getSearchKeyword()), order.getSearchKeyword(),
+				return orderRepository.findByOrderItemListOrderByOrderNoDesc
+						(order.getSearchKeyword(), order.getSearchKeyword(),
 								order.getSearchKeyword(), order.getSearchKeyword(), order.getSearchKeyword(), pageable);
 			      } else if (order.getSearchCondition().equals("ORDERNO")) {
 			         return orderRepository.findByOrderNoContainingOrderByOrderNoDesc(order.getSearchKeyword(), pageable);

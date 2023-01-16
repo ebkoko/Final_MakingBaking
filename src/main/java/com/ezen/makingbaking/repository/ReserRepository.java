@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ezen.makingbaking.common.CamelHashMap;
-import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.entity.Reser;
 
 public interface ReserRepository extends JpaRepository<Reser, Integer> {
