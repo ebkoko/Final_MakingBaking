@@ -37,13 +37,19 @@ public class ItemServiceImpl implements ItemService {
 	
 	
 	@Override
-	public Page<CamelHashMap> getItemList(Pageable pageable) {
-		return itemRepository.findItemAndFile(pageable);
+	public Page<CamelHashMap> getItemList(Pageable pageable, String itemCate) {
+		if(itemCate.equals(""))
+			return itemRepository.findItemAndFile(pageable);
+		else
+			return itemRepository.findItemAndFile(pageable, itemCate);
 	}
 	
 	@Override
-	public Page<CamelHashMap> getPageItemList(Pageable pageable) {
-		return itemRepository.findItemAndFile(pageable);
+	public Page<CamelHashMap> getPageItemList(Pageable pageable, String itemCate) {
+		if(itemCate.equals(""))
+			return itemRepository.findItemAndFile(pageable);
+		else
+			return itemRepository.findItemAndFile(pageable, itemCate);
 	}
 	
 	
@@ -107,5 +113,4 @@ public class ItemServiceImpl implements ItemService {
 	public List<CamelHashMap> getUserOrderStatus(String loginUserId, int itemNo) {	
 		return orderRepository.getByUserIdAndItemNo(loginUserId, itemNo);
 	}
-
 }

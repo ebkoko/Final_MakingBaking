@@ -58,6 +58,33 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 			nativeQuery = true)
 	Page<CamelHashMap> findItemAndFile(Pageable pageable);
 	
+	@Query(value="SELECT A.*"
+			+ "		   , B.FILE_NO"
+			+ "		   , B.FILE_NAME"
+			+ "		   , B.FILE_ORIGIN_NAME"
+			+ "		   , B.FILE_PATH"
+			+ "		FROM T_MB_ITEM A"
+			+ "		LEFT OUTER JOIN T_MB_FILE B"
+			+ "		ON A.ITEM_NO = B.FILE_REFER_NO"
+			+ "		AND B.FILE_TYPE = 'item'"
+			+ "		AND B.FILE_NO = 1"
+			+ "		WHERE A.ITEM_CATE = :itemCate",
+			countQuery = "SELECT COUNT(*)"
+					+ "		FROM ("
+					+ "					SELECT A.*"
+					+ "						 , B.FILE_NAME"
+					+ "						 , B.FILE_ORIGIN_NAME"
+					+ "						 , B.FILE_PATH"
+					+ "						FROM T_MB_ITEM A"
+					+ "						LEFT OUTER JOIN T_MB_FILE B"
+					+ "						ON A.ITEM_NO = B.FILE_REFER_NO"
+					+ "						AND B.FILE_TYPE = 'item'"
+					+ "						AND B.FILE_NO = 1"
+					+ "						WHERE A.ITEM_CATE = :itemCate"
+					+ "			 ) C",
+			nativeQuery = true)
+	Page<CamelHashMap> findItemAndFile(Pageable pageable, @Param("itemCate") String itemCate);
+	
 	//Page<Review> findByItemNoAndPageble(int itemNo, Pageable pageable);
 	
 	

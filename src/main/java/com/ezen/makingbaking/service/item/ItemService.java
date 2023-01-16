@@ -13,9 +13,9 @@ import com.ezen.makingbaking.entity.Item;
 public interface ItemService {
 	int getItemStock(int itemNo);
 	
-	Page<CamelHashMap> getItemList(Pageable pageable);
+	Page<CamelHashMap> getItemList(Pageable pageable, String itemCate);
 	
-	Page<CamelHashMap> getPageItemList(Pageable pageable);
+	Page<CamelHashMap> getPageItemList(Pageable pageable, String itemCate);
 
 	Item getItem(int itemNo);
 	
@@ -30,9 +30,7 @@ public interface ItemService {
 	List<ImgFile> getItemImg(int itemNo);
 
 	List<CamelHashMap> getUserOrderStatus(String loginUserId, int itemNo);
-	
 
-	
 	
 	
 }

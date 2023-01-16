@@ -24,15 +24,36 @@
 						        htmlStr += 
 						        `
 						          <div>
-						            <div class="card">
-						              <img src="/item/${obj.pageItems.content[i].fileName}" alt="NoImg" class="card_img">
-						            </div>
-						            <div class="text">
-						              <h3><a href="/item/item/${obj.pageItems.content[i].itemNo}">${obj.pageItems.content[i].itemName}</a></h3>
-						              <span>${obj.pageItems.content[i].itemPrice}</span><span>원</span>
-						            </div>
+							          <div class="item-box">
+							            <div class="card">
+							              <img src="/item/${obj.pageItems.content[i].fileName}" alt="NoImg" class="card_img">
+							            </div>`
+							            if(obj.pageItems.content[i].itemStatus == 'S'){
+											htmlStr +=
+											`
+											<div class="sold_out">
+								            	<p>임시품절</p>
+							            	</div>
+											`
+										} else if(obj.pageItems.content[i].itemStatus == 'N') {
+											htmlStr +=
+											`
+											<div class="sold_out">
+								            	<p>판매중지</p>
+							            	</div>
+											`
+										}
+										const price = obj.pageItems.content[i].itemPrice + '';
+										const commaPrice = price.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+										htmlStr +=
+							          `</div>
+						              <div class="text">
+						                <h3><a href="/item/item/${obj.pageItems.content[i].itemNo}">${obj.pageItems.content[i].itemName}</a></h3>
+						                <span>${commaPrice}</span><span>원</span>
+						              </div>
 						          </div>
 						        `;
+						        /*.replace(/\B(?=(\d{3})+(?!\d))/g, ",")*/
 							  }
 							  $("#prod").append(htmlStr);
 							  
@@ -46,18 +67,16 @@
 						  }
 					  })
 			      });
-			      /*$(document).ready(function() {
-					 
-					 $("#sub-navbar").click(function() {
-						 let form = $("<form>").attr("action", "/item/list")
-						 					   .attr("class", "sub-navbar")
-						 					   .attr("method", "post").appendTo("body")
-						 					   
-						 let input = $("<input>").attr("name", "itemCate")
-					 							 .attr("value", "빵").appendTo("body")
-					 })
-				  });*/
+				
+				$("#itemCate").on("change", function() {
+					$("#cateForm").submit();
+				});
+				
+			    $("#cateForm").on("submit", function() {
+					$("#page").val(0);
+				});
 		    });
+		    
 		    //탑버튼
 		    $(window).scroll(function() {
 		      if ($(this).scrollTop() > 10) {
@@ -71,7 +90,7 @@
 		       scrollTop : 0
 		      }, 10);
 		      return false;
-		      });
+		     });
 		</script>
 	</th:block>
 	<th:block layout:fragment="css">
@@ -82,45 +101,38 @@
 <body>
 	<div layout:fragment="content">
 	  <main class="centre">
-	  <!--
-	    <div class="search">
-	      <input type="text" id="searchKeyword" class="search-bar" placeholder="검색어 입력">
-	      <a><img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" id="search-icon"></a>
-	    </div>
-	    -->
 	    <nav>
-		    <ul id="sub-navbar" class="sub-navbar"> 
-		    	<li style="--clr:red"> 
-			      <a href="#" data-text="&nbsp;All"&nbsp; value="All">&nbsp;All&nbsp;</a> 
-			    </li> 
-			    <li style="--clr:orange"> 
-			      <a href="#" data-text="&nbsp;Bread"&nbsp; value="빵">&nbsp;Bread&nbsp;</a> 
-			    </li> 
-			    <li style="--clr:rgb(255,223,0);"> 
-			      <a href="#" data-text="&nbsp;Cake" value="케이크">&nbsp;Cake&nbsp;</a> 
-			    </li> 
-			    <li style="--clr:green"> 
-			      <a href="#" data-text="&nbsp;Cookie" value="쿠키">&nbsp;Cookie&nbsp;</a> 
-			    </li> 
-			    <li style="--clr:rgb(0, 103, 163);"> 
-			      <a href="#" data-text="&nbsp;Vegan" value="비건">&nbsp;Vegan&nbsp;</a> 
-			    </li> 
-			    <li style="--clr:rgb(0, 0, 128);"> 
-			      <a href="#" data-text="&nbsp;Dessert" value="디저트">&nbsp;Dessert&nbsp;</a> 
-			    </li>
-			    <li style="--clr:purple"> 
-			      <a href="#" data-text="&nbsp;Etc" value="Etc">&nbsp;Etc&nbsp;</a> 
-			    </li>
-			</ul>
+		    <form action="/item/list" id="cateForm" method="get">
+		    	<input type="hidden" name="page" id="page">
+			    <div id="sub-navbar" class="sub-navbar"> 
+			      <select name="itemCate" id="itemCate">
+			      	<option value="전체" th:selected="${itemCate == '전체' || itemCate == '' || itemCate == null}">전체</option>
+			      	<option value="빵" th:selected="${itemCate == '빵'}">빵</option>
+			      	<option value="케이크" th:selected="${itemCate == '케이크'}">케이크</option>
+			      	<option value="쿠키" th:selected="${itemCate == '쿠키'}">쿠키</option>
+			      	<option value="비건" th:selected="${itemCate == '비건'}">비건</option>
+			      	<option value="디저트" th:selected="${itemCate == '디저트'}">디저트</option>
+			      </select>
+			      <label for="select" class="control-label">Selectbox</label><i class="bar"></i>
+				</div>
+		    </form>
 	    </nav>
 	    <div id="prod">
 	      <div th:each="item : ${itemList}">
-	        <div class="card">
-	          <img th:src="@{'/item/' + ${item.fileName}}" alt="NoImg" class="card_img">
-	        </div>
+	      	<div class="item-box">
+		        <div class="card">
+		          <img th:src="@{'/item/' + ${item.fileName}}" alt="NoImg" class="card_img">
+		        </div>
+		          <div th:if="${item.itemStatus} == 'S'" class="sold_out">
+		              <p>임시품절</p>
+	              </div>
+	              <div th:if="${item.itemStatus} == 'N'" class="no_item">
+		              <p>판매중지</p>
+		          </div>
+	      	</div>
 	        <div class="text">
 	          <h3><a th:href="@{/item/item/{itemNo} (itemNo=${item.itemNo})}" th:text="${item.itemName}"></a></h3>
-	          <span th:text="${item.itemPrice}"></span><span>원</span>
+	          <span th:text="${#numbers.formatInteger(item.itemPrice, 3, 'COMMA')}"></span><span>원</span>
 	        </div>
       	  </div>
     	</div>
