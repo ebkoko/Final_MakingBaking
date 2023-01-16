@@ -11,10 +11,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,6 +30,7 @@ import com.ezen.makingbaking.entity.Board;
 import com.ezen.makingbaking.entity.CustomUserDetails;
 import com.ezen.makingbaking.service.board.BoardService;
 import com.ezen.makingbaking.service.dayclass.DayclassService;
+import com.ezen.makingbaking.service.mypage.MypageService;
 import com.ezen.makingbaking.service.order.OrderService;
 import com.ezen.makingbaking.service.reser.ReserService;
 import com.ezen.makingbaking.service.review.ReviewService;
@@ -49,6 +52,9 @@ public class MypageController {
 	
 	@Autowired
 	private ReviewService reviewService;
+	
+	@Autowired
+	private MypageService mypageService;
 	
 	@GetMapping("/myPage")
 	public ModelAndView myOrderList(OrderDTO orderDTO, @PageableDefault(page = 0, size = 5) Pageable pageable,
@@ -287,7 +293,57 @@ public class MypageController {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
+
+	// 나의 찜 목록
+	@GetMapping("/myLikeList")
+	public ModelAndView myLikeList(@PageableDefault(page=0, size=5) Pageable pageable,
+			@AuthenticationPrincipal CustomUserDetails customUser) {
 	
+		Page<CamelHashMap> pageLikeList = mypageService.getPageMyLikeList(customUser.getUsername(), pageable);
+
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("mypage/myPageLike.html");
+		mv.addObject("pageLikeList", pageLikeList); 
+		
+		return mv;
+	}
+	
+	// [ajax - 페이징] 나의 찜 목록
+	@PostMapping("/myLikeList")
+	public ResponseEntity<?> myLikePageList(@PageableDefault(page=0, size=5) Pageable pageable,
+			@AuthenticationPrincipal CustomUserDetails customUser) {
+		
+		ResponseDTO<CamelHashMap> response = new ResponseDTO<>();
+		
+		try {
+			Page<CamelHashMap> pageLikeList = mypageService.getPageMyLikeList(customUser.getUsername(), pageable);
+			
+			response.setPageItems(pageLikeList);
+			
+			return ResponseEntity.ok().body(response);
+			
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+	
+	// 찜 해제
+	@DeleteMapping("/mypageUnlike")
+	public void mypageUnlike(@RequestParam("likeNo") int likeNo, 
+			@RequestParam("cateName") String cateName,
+			@AuthenticationPrincipal CustomUserDetails customUser) {
+		
+		System.out.println(cateName + "@@@@@@@@@@@@" + likeNo);
+		
+		if(cateName.equals("class")) {
+			mypageService.classUnlike(likeNo, customUser.getUsername());
+			System.out.println("classUnlike");
+		} else if(cateName.equals("item")) {
+			mypageService.itemUnlike(likeNo, customUser.getUsername());
+			System.out.println("itemUnlike");
+		}
+	}
  
 	
 }
