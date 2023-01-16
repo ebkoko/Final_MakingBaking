@@ -239,6 +239,25 @@
 					console.log(typeof reser.reserNo);
 					let reserNo = reser.reserNo;
 					
+					console.log(typeof String(reserNo)); // number
+					console.log(String(reserNo).substring(0,8)); // 20230102000029
+					let reserDateYMD = String(reserNo).substring(0,8); // 20230102
+					let reserDateYear = reserDateYMD.substr(0,4); // 2023
+					let reserDateMonth = reserDateYMD.substr(4,2); // 01
+					let reserDateDate = reserDateYMD.substr(6,2); // 02
+					let reserDate = reserDateYear + "/" + reserDateMonth + "/" + reserDateDate; // 2023-01-02
+					console.log(new Date(reserDate)); // Mon Jan 02 2023 09:00:00 GMT+0900 (한국 표준시)
+					let reserD = new Date(reserDate);
+					reserD.setDate(reserD.getDate()+1);
+					let deadline = reserD.toLocaleDateString('ko-KR', {
+					    year: 'numeric',
+					    month: 'long',
+					    day: 'numeric',
+					});
+					console.log(deadline);
+					$(".deadline").text(deadline);
+					
+					
 					$("#btnReserCancel").on('click', function() {
 						if(confirm("예약을 취소하시겠습니까?")) {
 							$.ajax({
@@ -355,6 +374,7 @@
 	            <div id="top">
 	                <span class="reserNoMent">예약번호: </span><span class="realReserNo" th:text="${reser.reserNo}"></span><span class="reserStatus"></span>&ensp;
 	                <span class="cancelDateMent" th:if="${reser.reserCancelDate != null}">취소일시: </span><span class="cancelDate" th:if="${reser.reserCancelDate != null}" th:text="${#strings.substring(reser.reserCancelDate, 0, 16)}"></span>
+	                <span class="deadlineMent" th:if="${reser.reserStatus} == 'MV'">입금기한: </span><span class="deadline" th:if="${reser.reserStatus} == 'MV'"></span><span th:if="${reser.reserStatus} == 'MV'"> 오후 11시 59분 59초</span>
 	            </div>
 	            <hr>
 	            <div id="list_title">
