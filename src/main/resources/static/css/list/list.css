@@ -1,35 +1,22 @@
-/*.search {
-  position: relative;
-  //width: 200px;
-  //margin-left: 28rem;
-  display: flex;
-  justify-content: center;
-}
-
-.search-bar {
-  width: 60rem;
-  border: 1px solid #bbb;
-  border-radius: 8px;
-  padding: 8px 15px;
-  font-size: 12px;
-}
-
-#search-icon {
-  position : absolute;
-  width: 20px;
-  top: 9px;
-  margin: 0;
-  margin-left: -2rem;
-  cursor: pointer;
-}*/
-
-
-.sub-navbar {
+#sub-navbar {
   margin-top: 3rem;
-  word-spacing: 3rem;
-  display: flex;
-  justify-content: center;
+  text-align: right;
+  margin-right: 16.5rem
 }
+select {
+  width: 25rem;
+  margin-bottom: 20px;
+  padding: 5px;
+  border-bottom: 2px solid #28693F; 
+  font-size: 1.2rem;
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 5px;
+}
+select:focus~ .control-label{
+	border-bottom-color: red;
+}
+/*
 ul{
   position: relative;
   display: flex;
@@ -37,7 +24,7 @@ ul{
 ul li{
   position: relative;
 }
-ul li a{
+ul li span{
   position: relative;
   font-size: 1.1em;
   letter-spacing: 3px;
@@ -45,7 +32,7 @@ ul li a{
   color: transparent;
   -webkit-text-stroke: 1px black;
 }
-ul li a::before{
+ul li span::before{
   content: attr(data-text);
   position: absolute;
   color: var(--clr);
@@ -56,10 +43,11 @@ ul li a::before{
   border-bottom: 1px solid var(--clr);
   -webkit-text-stroke: 1px var(--clr);
 }
-ul li a:hover::before{
+ul li span:hover::before{
   width: 100%;
   filter: drop-shadow(0 0 25px var(--clr));
 }
+*/
 
 #prod {
   display: grid;
@@ -71,32 +59,53 @@ ul li a:hover::before{
   /* display: none; */
 }
 
-.card {
-  position: relative;
-  width: 300px;
-  height: 200px;
-  outline: 2px solid rgb(118 118 118 / 35%);
-  outline-offset: -12px;
-  border-radius: 10px;
-  overflow: hidden;
-  isolation: isolate;
-}
-.card_img {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform .25s;
-  z-index: -1;
-}
-.card:hover .card_img {
-  transform: scale(1.1);
-}
+  .item-box{
+    position: relative;
+    width: 300px;
+    height: 200px;
+    outline: 2px solid rgb(118 118 118 / 35%);
+    outline-offset: -12px;
+    border-radius: 10px;
+    overflow: hidden;
+    isolation: isolate;
+  }
 
-h3 {
-  text-align: center;
-  margin-top: 10px;
-}
+  .card_img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .25s;
+    z-index: -1;
+  }
+
+  .card:hover .card_img {
+    transform: scale(1.1);
+  }
+
+  
+  .sold_out, .no_item{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: table;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    border-radius: 10px;
+  }
+
+  .sold_out > p, .no_item > p{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 2.5rem;
+  }
+
+  h3 {
+    text-align: center;
+    margin-top: 10px;
+  }
+
 h3 a{
 	color: black;
 	cursor:pointer;

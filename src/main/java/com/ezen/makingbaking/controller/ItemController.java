@@ -34,6 +34,7 @@ import com.ezen.makingbaking.entity.CustomUserDetails;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
 import com.ezen.makingbaking.entity.Review;
+import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.service.item.ItemService;
 import com.ezen.makingbaking.service.review.ReviewService;
 
@@ -47,14 +48,23 @@ public class ItemController {
 	private ReviewService reviewService;
 	
 	@GetMapping("/list")
-	//ItemDTO 받기 item cate가 null이 
-	public ModelAndView itemListView(@PageableDefault(page = 0, size = 8) Pageable pageable) {
-		Page<CamelHashMap> itemList = itemService.getItemList(pageable);
+	public ModelAndView itemListView(@PageableDefault(page = 0, size = 8) Pageable pageable,
+			HttpServletRequest request) {
+		String itemCate = "";
+		
+		if(request.getParameter("itemCate") != null) {
+			itemCate = request.getParameter("itemCate");
+		}
+		
+		Page<CamelHashMap> itemList = itemService.getItemList(pageable, itemCate);
 		
 		ModelAndView mv = new ModelAndView();
 		
 		mv.setViewName("list/list.html");
 		mv.addObject("itemList", itemList);
+		
+		mv.addObject("itemCate", itemCate);
+		
 		return mv;
 	}
 	
@@ -72,11 +82,17 @@ public class ItemController {
 	}
 	
 	@PostMapping("/list")
-	public ResponseEntity<?> getPageItemList(@PageableDefault(page=0, size=4) Pageable pageable){
+	public ResponseEntity<?> getPageItemList(@PageableDefault(page=0, size=4) Pageable pageable,
+			HttpServletRequest request){
 		ResponseDTO<CamelHashMap> response = new ResponseDTO<>();
 		System.out.println(pageable.getPageNumber());
 		try {
-			Page<CamelHashMap> pageItemList = itemService.getPageItemList(pageable);
+			String itmeCate = "";
+			
+			if(request.getParameter("itmeCate") != null) {
+				itmeCate = request.getParameter("itmeCate");
+			}
+			Page<CamelHashMap> pageItemList = itemService.getPageItemList(pageable, itmeCate);
 			
 			response.setPageItems(pageItemList);
 			
@@ -274,5 +290,6 @@ public class ItemController {
 		
 	
 	}
+	
 	
 }
