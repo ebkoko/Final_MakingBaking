@@ -62,8 +62,18 @@
 			<script th:inline="javascript">	
 				const getDayclass = /*[[${dayclass}]]*/;
 				const principal = /*[[${#authentication.principal}]]*/;
-						
+				const reviewChkList = /*[[${reviewChkList}]]*/;
+				
 				$(function() {
+					// p태그
+					for(let i = 0; i < reviewChkList.length; i++) {
+						if(reviewChkList[i].reserStatus == 'PE' && reviewChkList[i].reviewYn == 'N') {
+							$("#reserStatusText").text("선택");
+							break;
+						} else {
+							$("#reserStatusText").text("없음");
+						}
+					}
 					
 					// 비회원이 예약하기 버튼 클릭시 로그인창 
 					$("#moveRsrvtBtn").on("click", function() {
@@ -355,7 +365,7 @@
 					});
 					
 					// 리뷰 페이징
-					$(".paging_btn a").on("click", function(e) {
+					$(document).on("click", ".paging_btn a", function(e) {
 						e.preventDefault();
 						reviewPagingAndOrder($(e.target).attr("href"), $("#rvw_array").val());
 					});
@@ -365,7 +375,17 @@
 						$(".rvwWriteSection").css("display", "block");
 						$("#rvwReserNo").val($(this).val());
 					});
-
+	
+						console.log()
+					$('.c_intro_text').each(function() {
+					    var offset = this.offsetHeight - this.clientHeight;
+					 
+					    var resizeTextarea = function(el) {
+					        $(el).css('height', 'auto').css('height', el.scrollHeight + offset);
+					    };
+					    
+					    resizeTextarea(this);
+					});
 				}); 
 				
 				// ?????
@@ -405,7 +425,50 @@
 							}
 							
 							$(".rvw_list tbody").html(htmlStr);
-
+							
+							htmlStr = "";
+							
+							let pageNumber = obj.pageItems.pageable.pageNumber;
+							let pageSize = obj.pageItems.pageable.pageSize;
+							let totalPages = obj.pageItems.totalPages;
+							let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
+							let tempEndPage = startPage + pageSize -1;
+							let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
+							
+							if(pageNumber > 0) {
+								htmlStr += `
+									<li class="paging_btn">
+										<a style="border: 0px;" href="${pageNumber - 1}">&#60;</a>
+									</li>
+								`;
+							}
+							
+							let realStart = totalPages - startPage < pageSize ? 
+												totalPages < pageSize ? 1 : totalPages - pageSize + 1 
+											: startPage;
+							
+							for(let i = realStart; i <= endPage; i++) {
+								if(pageNumber == i-1) {
+									htmlStr += `<li class="paging_btn">
+											   	   <a class="present" href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								} else {
+									htmlStr += `<li class="paging_btn">
+											   	   <a href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								}
+							}
+							
+							if(pageNumber < totalPages - 1) {
+								htmlStr += `<li class="paging_btn">
+										       <a style="border: 0px;" href="${pageNumber + 1}">&#62;</a>
+									        </li>
+								`;
+							}
+						
+							$(".paging").html(htmlStr);
 						},
 						error: function(e) {
 							console.log(e);
@@ -481,7 +544,7 @@
 	            <h3 class="c_intro_title" name="클래스소개" th:text="${dayclass.dayclassName}"></h3>
 	            <div class="c_intro" id="classIntro" >
 	              	             
-	              <textarea class="c_intro_text"  th:text="${dayclass.dayclassDetails}"></textarea>
+	              <textarea class="c_intro_text"  th:text="${dayclass.dayclassDetails}" readonly></textarea>
 	              
 	            </div>	            
 	            <hr class="dayclass_hr">
@@ -534,7 +597,9 @@
 	              	<div class="rvw_write_member">
 	              		<form class="rvw_write_form" action="/dayclass/insertClassRvw" method="post" >
 	              			<div class="rvw_reserInfo">
-	              			<p>작성할 클래스 후기를 선택해주세요.</p>
+	              		
+	              				<p id="reserStatusText"></p>
+	              			
 	              			</div>
 	              			<div class="rvw_reserNo" th:each="reviewChk : ${reviewChkList}">						 	
 						 		<span th:if="${reviewChk.reserStatus == 'PE' && reviewChk.reviewYn == 'N'}">							 		

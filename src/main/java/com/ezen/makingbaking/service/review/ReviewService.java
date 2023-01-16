@@ -3,6 +3,7 @@ package com.ezen.makingbaking.service.review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Review;
 
 public interface ReviewService {
@@ -15,7 +16,7 @@ public interface ReviewService {
 
 	void insertItemRvw(Review review);
 
-	Page<Review> getPageMyRvwList(String userId, Pageable pageable);
+	Page<CamelHashMap> getPageMyRvwList(String userId, Pageable pageable);
 
 	
 }

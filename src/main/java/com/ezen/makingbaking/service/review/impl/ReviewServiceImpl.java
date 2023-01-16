@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Review;
 import com.ezen.makingbaking.repository.ReviewRepository;
 import com.ezen.makingbaking.service.review.ReviewService;
@@ -55,7 +56,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public Page<Review> getPageMyRvwList(String userId, Pageable pageable) {
+	public Page<CamelHashMap> getPageMyRvwList(String userId, Pageable pageable) {
 		return reviewRepository.myPageRvwList(userId, pageable);
 	}
 }

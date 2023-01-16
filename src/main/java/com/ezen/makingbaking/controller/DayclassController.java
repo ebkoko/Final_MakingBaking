@@ -112,6 +112,8 @@ public class DayclassController {
 		mv.addObject("searchCondition", searchCondition);
 		mv.addObject("reviewChkList", reviewChkList);
 		
+		System.out.println("+++++++++++++++++++++++++++++++++++++" + reviewChkList.size());
+		
 		return mv;
 	}
 	
