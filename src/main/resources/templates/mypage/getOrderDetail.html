@@ -278,73 +278,102 @@
 					let orderNo = order.orderNo;
 					
 					$("#btnOrderCancel").on('click', function() {
-						$.ajax({
-							url: '/order/orderCancel/' + order.orderNo,
-							type: 'put',
-							data: { 
-								orderDate: order.orderDateStr,
-								orderStatus: 'OC',
-								reciName: order.reciName,
-								reciTel: order.reciTel,
-								shippingAddr1: order.shippingAddr1,
-								shippingAddr2: order.shippingAddr2,
-								shippingAddr3: order.shippingAddr3,
-								orderDeliFee: order.orderDeliFee,
-								orderTotalPrice: order.orderTotalPrice,
-								orderPayment: order.orderPayment,
-								orderName: order.orderName,
-								orderTel: order.orderTel,
-								orderMessage: order.orderMessage,
-								orderMail: order.orderMail,
-								depositor: order.depositor,
-								orderTotalPayPrice: order.orderTotalPayPrice
-								},
-							success: function(obj) {
-								console.log(obj);
-								$(".orderStatus").text("주문취소");
-								$("#CancelOption").css("display", "none");
-								$("#moveList").show();
-							}, error: function(e) {
-								console.log(e);
-							}
-						});
+						
+						if(confirm("주문을 취소하시겠습니까?")) {
+							$.ajax({
+								url: '/order/orderCancel/' + order.orderNo,
+								type: 'put',
+								data: { 
+									orderDate: order.orderDateStr,
+									orderStatus: 'OC',
+									reciName: order.reciName,
+									reciTel: order.reciTel,
+									shippingAddr1: order.shippingAddr1,
+									shippingAddr2: order.shippingAddr2,
+									shippingAddr3: order.shippingAddr3,
+									orderDeliFee: order.orderDeliFee,
+									orderTotalPrice: order.orderTotalPrice,
+									orderPayment: order.orderPayment,
+									orderName: order.orderName,
+									orderTel: order.orderTel,
+									orderMessage: order.orderMessage,
+									orderMail: order.orderMail,
+									depositor: order.depositor,
+									orderTotalPayPrice: order.orderTotalPayPrice
+									},
+								success: function(obj) {
+									console.log(obj);
+									$(".orderStatus").text("주문취소");
+									$("#CancelOption").css("display", "none");
+									$("#moveList").show();
+									
+									let htmlstr = "";
+									
+									htmlstr += `									
+										<span class="cancelDateMent" style="color: black; font-weight: 400;">취소일시: </span>
+										<span class="cancelDate" style="color: black; font-weight: 400;">${obj.item.getOrder.orderCancelDate.substring(0, 10)} ${obj.item.getOrder.orderCancelDate.substring(11, 16)}</span>
+									`;
+									$("#top").children(":last").append(htmlstr);
+								}, error: function(e) {
+									console.log(e);
+								}
+							});							
+							alert("주문이 취소되었습니다.");							
+						} else {
+							alert("주문취소가 취소되었습니다.");
+						}						
 					});
 					
 					$("#btnPayCancel").on('click', function() {
-						$.ajax({
-							url: `/order/payCancel`,
-							type: 'post',
-							data: { 
-								orderNo: order.orderNo,
-								orderDate: order.orderDateStr,
-								orderStatus: 'PC',
-								reciName: order.reciName,
-								reciTel: order.reciTel,
-								shippingAddr1: order.shippingAddr1,
-								shippingAddr2: order.shippingAddr2,
-								shippingAddr3: order.shippingAddr3,
-								orderDeliFee: order.orderDeliFee,
-								orderTotalPrice: order.orderTotalPrice,
-								orderPayment: order.orderPayment,
-								orderName: order.orderName,
-								orderTel: order.orderTel,
-								orderMessage: order.orderMessage,
-								orderMail: order.orderMail,
-								depositor: order.depositor,
-								orderTotalPayPrice: order.orderTotalPayPrice,
-								tid: order.tid,
-								itemList: JSON.stringify(itemList)
-								},
-							success: function(obj) {
-								console.log(obj);
-								$(".orderStatus").text("결제취소");
-								$("#CancelOption").css("display", "none");
-								$("#moveList").show();
-							}, error: function(e) {
-								console.log(e);
-							}
-						});
+						
+						if(confirm("결제를 취소하시겠습니까?")) {
+							$.ajax({
+								url: `/order/payCancel`,
+								type: 'post',
+								data: { 
+									orderNo: order.orderNo,
+									orderDate: order.orderDateStr,
+									orderStatus: 'PC',
+									reciName: order.reciName,
+									reciTel: order.reciTel,
+									shippingAddr1: order.shippingAddr1,
+									shippingAddr2: order.shippingAddr2,
+									shippingAddr3: order.shippingAddr3,
+									orderDeliFee: order.orderDeliFee,
+									orderTotalPrice: order.orderTotalPrice,
+									orderPayment: order.orderPayment,
+									orderName: order.orderName,
+									orderTel: order.orderTel,
+									orderMessage: order.orderMessage,
+									orderMail: order.orderMail,
+									depositor: order.depositor,
+									orderTotalPayPrice: order.orderTotalPayPrice,
+									tid: order.tid,
+									itemList: JSON.stringify(itemList)
+									},
+								success: function(obj) {
+									console.log(obj);
+									$(".orderStatus").text("결제취소");
+									$("#CancelOption").css("display", "none");
+									$("#moveList").show();
+									
+									let htmlstr = "";
+									
+									htmlstr += `									
+										<span class="cancelDateMent" style="color: black; font-weight: 400;">취소일시: </span>
+										<span class="cancelDate" style="color: black; font-weight: 400;">${obj.canceled_at.substring(0, 10)} ${obj.canceled_at.substring(11, 16)}</span>
+									`;
+									$("#top").children(":last").append(htmlstr);
+								}, error: function(e) {
+									console.log(e);
+								}
+							});							
+							alert("결제가 취소되었습니다.");							
+						} else {
+							alert("결제취소가 취소되었습니다.");
+						}
 					});
+						
 				});	
 				
 				function fnBtnMoveList() {
@@ -444,7 +473,8 @@
 	            </div>
 	            <hr>
 	            <div id="CancelOption" th:if="${order.cancelEnable == 'P'}">
-                    <input type="button" name="CancelOption" id="btnOrderCancel" value="주문취소" th:if="${order.orderStatus == 'MV'}">&emsp;
+	            	<button type="button" id="btnMoveList" onclick="fnBtnMoveList()">목록으로</button>&emsp;
+                    <input type="button" name="CancelOption" id="btnOrderCancel" value="주문취소" th:if="${order.orderStatus == 'MV'}">
                     <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${order.orderStatus == 'PE'}">
 	            </div>
 	            <div id="moveList" th:style="${order.orderStatus == 'PC' || order.orderStatus == 'OC' || order.orderStatus == 'DW' || order.orderStatus == 'D' || order.orderStatus == 'DC' ? 'display: flex; 
