@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Review;
 
 @Transactional
@@ -107,5 +108,5 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 					+ "								)\r\n"
 					+ " 		) T"
 			, nativeQuery=true)
-	Page<Review> myPageRvwList(@Param("userId") String userId, Pageable pageable);
+	Page<CamelHashMap> myPageRvwList(@Param("userId") String userId, Pageable pageable);
 }

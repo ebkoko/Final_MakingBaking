@@ -12,6 +12,8 @@
   <th:block layout:fragment="script">
 	<script th:inline="javascript">
 		$(function() {			
+			const pageReviewList = /*[[${pageReviewList}]]*/;
+			console.log(pageReviewList);
 			
 			$(".present").on('click', function(e) {
 					$(e.target).css("color", "white");
@@ -156,17 +158,20 @@
 		    <div id="mid-container">
 		      <table id="list-table">
 		        <tr>
+		          <th width="17%" id="th-img">이미지</th>
 		          <th width="17%" id="th-category">분류</th>
-		          <th width="17%" id="th-category">분류</th>
-		          <th width="45%" id="th-content">내용</th>
-		          <th width="13%" id="th-score">별점</th>
+		          <th width="40%" id="th-content">내용</th>
+		          <th width="10%" id="th-score">별점</th>
 		          <th width="17%" id="th-date">작성일</th>
 		          
 		        </tr>
 		        <tr th:each="rvw: ${pageReviewList}" id="boxxWrapper" style="height: 40px;">
+		        	<td class="list-img">
+		        		<img width="100px" height="100px" th:src="@{${rvw.rvwType} == 'class' ? '/dayclass/' + ${rvw.fileName}
+		        					    : '/item/' + ${rvw.fileName}}">
+		        	</td>
 		        	<td class="list-category" 
-		        		th:text="${rvw.rvwType eq 'class' ? '원데이클래스' : '제품구매'}"
-		        		th:href="@{/}"></td>
+		        		th:text="${rvw.rvwType eq 'class' ? '원데이클래스' : '제품구매'}"></td>
 					<td class="list-content" th:text="${rvw.rvwContent}">
 						
 					</td>

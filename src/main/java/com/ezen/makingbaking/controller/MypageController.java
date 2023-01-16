@@ -26,7 +26,6 @@ import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.dto.ReviewDTO;
 import com.ezen.makingbaking.entity.Board;
 import com.ezen.makingbaking.entity.CustomUserDetails;
-import com.ezen.makingbaking.entity.Review;
 import com.ezen.makingbaking.service.board.BoardService;
 import com.ezen.makingbaking.service.dayclass.DayclassService;
 import com.ezen.makingbaking.service.order.OrderService;
@@ -253,39 +252,23 @@ public class MypageController {
 	
 	// 나의 리뷰
 	@GetMapping("/myRvwList")
-	public ModelAndView myRvwList(ReviewDTO reviewDTO, @PageableDefault(page=0, size=10) Pageable pageable,
+	public ModelAndView myRvwList(ReviewDTO reviewDTO, @PageableDefault(page=0, size=4) Pageable pageable,
 			@AuthenticationPrincipal CustomUserDetails customUser) {
 				
 	
 	
-		Page<Review> pageReviewList = reviewService.getPageMyRvwList(customUser.getUsername(), pageable);
-		
-		Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview -> 
-						  ReviewDTO.builder()
-						   		   .rvwNo(pageReview.getRvwNo())
-						   		   .rvwReferNo(pageReview.getRvwReferNo())
-						   		   .rvwType(pageReview.getRvwType())						
-						   		   .rvwContent(pageReview.getRvwContent())
-						   		   .rvwRegdate(
-						   				   			pageReview.getRvwRegdate() == null?
-												null :
-													pageReview.getRvwRegdate().toString())
-						   		   .rvwScore(pageReview.getRvwScore())
-
-						   		   .build()
-						   );
-		
+		Page<CamelHashMap> pageReviewList = reviewService.getPageMyRvwList(customUser.getUsername(), pageable);
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("mypage/myPageRvw.html");
-		mv.addObject("pageReviewList", pageReviewDTOList); 
+		mv.addObject("pageReviewList", pageReviewList); 
 		
 		return mv;
 	}
 	
 	// 
 	@PostMapping("/myRvwList")
-	public ResponseEntity<?> myRvwPageList(@PageableDefault(page=0, size=10) Pageable pageable,
+	public ResponseEntity<?> myRvwPageList(@PageableDefault(page=0, size=4) Pageable pageable,
 			@AuthenticationPrincipal CustomUserDetails customUser) {
 		ResponseDTO<BoardDTO> response = new ResponseDTO<>();
 		try {
