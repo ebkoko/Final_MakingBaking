@@ -9,7 +9,9 @@
 	<head>
 		<th:block layout:fragment="css">
 			<style>
-
+				#adminIcon {
+					text-align: center;
+				}
 			</style>
 		</th:block>
 		<th:block layout:fragment="script">
@@ -21,40 +23,45 @@
 	<!-- head 영역 끝 -->
 	
 <body>
-  <div id="container" layout:fragment="content">
-    <h1>관리자 메인페이지</h1>
-    <table style="margin: 0 auto;">
-      <tr>
-        <td>
-          <img src="images/회원 아이콘.png" width="150px"><br>
-          <a href="userList" id="adminMain_user">회원 관리
-        </td>
-        <td></td>
-        <td>
-          <img src="images/원데이클래스 아이콘.png" width="150px"><br>
-          <a href="dayclassList" id="adminMain_dayclass">원데이 클래스 관리
-        </td>
-        <td></td>
-        <td>
-          <img src="images/주문예약 아이콘.png" width="150px"><br>
-          <a href="orderItemList">주문 및 예약관리
-        </td>
-      </tr>
+	<div id="container" layout:fragment="content">
+	
+		<h1>관리자 메인페이지</h1>
+    		<div id="adminIcon">
+			    <div>
+					<img src="images/회원 아이콘.png" width="150px"><br>
+			    	<a href="userList" id="adminMain_user">회원 관리
+			    </div>
+			    <div>
+					<img src="images/회원 아이콘.png" width="150px"><br>
+			    	<a href="userList" id="adminMain_user">상품 관리
+			    </div>
+			    <div>
+					<img src="images/회원 아이콘.png" width="150px"><br>
+			    	<a href="userList" id="adminMain_user">원데이클래스 관리
+			    </div>
+			    <div>
+					<img src="images/회원 아이콘.png" width="150px"><br>
+			    	<a href="userList" id="adminMain_user">주문 및 예약 관리
+			    </div>
+			    
+			    <div>
+					<img src="images/회원 아이콘.png" width="150px"><br>
+			    	<a href="userList" id="adminMain_user">리뷰 관리
+			    </div>
+			    <div>
+					<img src="images/회원 아이콘.png" width="150px"><br>
+			    	<a href="userList" id="adminMain_user">공지사항 관리
+			    </div>
+			    <div>
+					<img src="images/회원 아이콘.png" width="150px"><br>
+			    	<a href="userList" id="adminMain_user">이벤트 관리
+			    </div>
+			    <div>
+					<img src="images/회원 아이콘.png" width="150px"><br>
+			    	<a href="userList" id="adminMain_user">QnA 관리
+			    </div>
+    		</div>
 
-      <tr>
-        <td></td>
-        <td>
-          <img src="images/상품 아이콘.png" width="150px"><br>
-          <a href="itemList">상품 관리
-        </td>
-        <td></td>
-        <td>
-          <img src="images/리뷰 아이콘.png" width="150px"><br>
-          <a href="#">리뷰 게시판
-        </td>
-        <td></td>
-      </tr>
-    </table>
-  </div>
+	</div>
 </body>
 </html>

@@ -15,14 +15,17 @@ import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Order;
 @Transactional
 public interface OrderRepository extends JpaRepository<Order, Integer> {
-	
 	//관리자 주문 검색_선민
-	Page<Order> findByOrderNo(long searchKeyword, Pageable pageable); //주문번호
-	Page<Order> findByUserIdContaining(String searchKeyword, Pageable pageable); //회원아이디
-	Page<Order> findByOrderNameContaining(String searchKeyword, Pageable pageable); //주문자명
-	Page<Order> findByOrderPaymentContaining(String searchKeyword, Pageable pageable); //결제방법
-	Page<Order> findByOrderStatusContaining(String searchKeyword, Pageable pageable); //주문상태
-	Page<Order> findByOrderNoOrUserIdContainingOrOrderNameContainingOrOrderPaymentContainingOrOrderStatus(long searchKeyword1, String searchKeyword2, String searchKeyword3, String searchKeyword4, String searchKeyword5, Pageable pageable);
+	Page<Order> findAllByOrderByOrderNoDesc(Pageable pageable);
+	@Query(value="select a from Order a where cast(a.orderNo as string) like %:searchKeyword%")
+	Page<Order> findByOrderNoContainingOrderByOrderNoDesc(@Param("searchKeyword") String searchKeyword, Pageable pageable); //주문번호
+	Page<Order> findByUserIdContainingOrderByOrderNoDesc(String searchKeyword, Pageable pageable); //회원아이디
+	Page<Order> findByOrderNameContainingOrderByOrderNoDesc(String searchKeyword, Pageable pageable); //주문자명
+	Page<Order> findByOrderPaymentContainingOrderByOrderNoDesc(String searchKeyword, Pageable pageable); //결제방법
+	Page<Order> findByOrderStatusContainingOrderByOrderNoDesc(String searchKeyword, Pageable pageable); //주문상태
+	@Query(value="select a from Order a where cast(a.orderNo as string) like %:searchKeyword%")
+	Page<Order> findByOrderNoContainingOrUserIdContainingOrOrderNameContainingOrOrderPaymentContainingOrOrderStatusOrderByOrderNoDesc
+	(long searchKeyword1, String searchKeyword2, String searchKeyword3, String searchKeyword4, String searchKeyword5, Pageable pageable);
 	
 	
 	@Query(value="SELECT  IFNULL(MAX(ORDER_NO), CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(0, '6', '0'))) + 1 AS ORDER_NO\r\n"

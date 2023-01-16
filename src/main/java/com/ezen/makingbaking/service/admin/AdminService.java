@@ -74,5 +74,5 @@ public interface AdminService {
 	
 	
 	//리뷰관리
-//	Page<Review> getPageReviewList(Review review, Pageable pageable);
+	Page<Review> getPageReviewList(Review review, Pageable pageable);
 }

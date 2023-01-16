@@ -1,297 +1,88 @@
 <!DOCTYPE html>
 <html lang="ko"
 	  xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{layouts/layout}">
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 	<th:block layout:fragment="script">
 	  	<script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
 		<script th:inline="javascript">
-			$(function() {
-				let userPw = false;
-				let pwRecheck = false;
-				let name = false;
-				let birth = false;
-				let gender = false;
-				let tel = false;
-				let mail = false;
-				let addr3 = false;
-				let changeCheck = /*[[${#authentication.principal.user}]]*/;
-				
-				    
-				//비밀번호 입력될때마다 유효성 검사
-				$("#userPw").on("change", function() {
-					//비밀번호 유효성 처리
-					if($("#userPw").val() != "") {
-						if(!Strength($("#userPw").val())) {
-							userPw = false;
-							$("#userPwCheck").hide();
-							$("#userPw").focus();
-						} else {
-							userPw = true;
-							$("#userPwCheck").show();
-						}
-						//비밀번호 확인까지 입력한 후 다시 비밀번호 재설정
-						if($("#userPw").val() == $("#userPwCheck").val()) {
-							userPwCheck = true;
-							$("#pwRecheck").css("color", "#0f0");
-							$("#pwRecheck").text("비밀번호가 일치합니다.");
-						} else {
-							userPwCheck = false;
-							$("#pwRecheck").css("color", "#f00");
-							$("#pwRecheck").text("비밀번호가 일치하지 않습니다.");
-						}
-					} else {
-						userPw = true;
-						pwRecheck = true;
-					}
-					
-				});
-					$("#userPwCheck").on("change", function() {
-						$("#pwRecheck").show();
-					    if($("#userPw").val() == $("#userPwCheck").val()) {
-					      pwRecheck = true;
-					      $(".check2").addClass('right1');
-				          $(".check2").removeClass('wrong1');
-					      $("#pwRecheck").css("color", "#0f0");
-					      $("#pwRecheck").text("비밀번호가 일치합니다.");
-						} else {
-					      pwRecheck = false;
-					      $(".check2").removeClass('right1');
-				          $(".check2").addClass('wrong1');
-					      $("#pwRecheck").css("color", "#f00");
-					      $("#pwRecheck").text("비밀번호가 일치하지 않습니다.");
-					    }
-					});
-			    //이름 유효성
-		        $("#userNm").on("change", function() {
-					if(!userName($("#userNm").val())) {
-						name = false;
-						$("#userNm").focus();
-					} else {
-						name = true;
-					}
-				});
-				//생일 유효성
-				$("#userBirth").on("change", function() {
-					if(!userBirth($("#userBirth").val())) {
-						birth = false;
-						$("#userBirth").focus();
-					} else {
-						birth = true;
-					}
-				});
-				//번호 유효성
-				$("#userTel").on("change", function() {
-					if(!userTel($("#userTel").val())) {
-						tel = false;
-						$("#userTel").focus();
-					} else {
-						tel = true;
-					}
-				});
-				//이메일 유효성
-				$("#userMail").on("change", function() {
-					if(!userMail($("#userMail").val())) {
-						mail = false;
-						$("#userMail").focus();
-					} else {
-						mail = true;
-					}
-				});
-				
-				
-				function Strength(password) {
-			       return /^(?=.*[a-zA-Z])(?=.*[!@#$%^&*+=-])(?=.*[0-9]).{6,15}$/.test(password)
-		        }
-		        //이름
-		        function userName(name) {
-					return /^[a-zA-Zㄱ-힣]$/.test(name);
-				}
-		        //생일
-		        function userBirth(birth) {
-		        	return /^(19|20)\d{2}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[0-1])$/.test(birth); 
-		        	//return true;
-				}
-		        //핸드폰번호
-		        function userTel(tel){
-					return /^(010)[0-9]{3,4}[0-9]{4}$/.test(tel);
-				}
-				//이메일
-				function userMail(character) {
-					return /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/.test(character);
-				}
-			      
-			      
-		      	$("#joinForm").on("submit", function(e) {
-					
-					if(confirm("수정하시겠습니까?")){
-						if($("#userPw").val() != "" && $("#uerPwCheck").val() != "") {
-							if(!userPw) {
-								alert("비밀번호를 다시 입력해주세요.");
-								$("#userPw").focus();
-								e.preventDefault();
-								return;
-							}
-							if(!pwRecheck) {
-								alert("비밀번호가 일치하지 않습니다.");
-								$("#userPwCheck").focus();
-								e.preventDefault();
-								return;
-							}
-						}
-						
-						if(changeCheck.userBirth != $("#userBirth").val()) {
-							if(!birth) {
-								alert("생년월일을 입력해주세요.");
-								$("#userBirth").focus();
-								e.preventDefault();
-								return;
-							}
-						}
-						
-						if(changeCheck.userTel != $("#userTel").val()) {
-							if(!tel) {
-								alert("전화번호를 입력해주세요.");
-								$("#userTel").focus();
-								e.preventDefault();
-								return;
-							}
-						}
-						
-						if(changeCheck.userMail != $("#userMail").val()) {
-							if(!mail) {
-								alert("이메일을 입력해주세요.");
-								$("#userMail").focus();
-								e.preventDefault();
-								return;
-							}
-						}
-					} else {
-				        e.preventDefault();
-						alert("취소하셨습니다.");
-						return;
-				    }
-				});
-			});
 			
-			//작동
-		    function findAddr(){
-		      new daum.Postcode({
-		        oncomplete: function(data) {
-		          let addr1 = data.roadAddress;
-		          let addr2 = data.jibunAddress;
-		          document.getElementById('post').value = data.zonecode;
-		          if(addr1 !== ''){
-		          document.getElementById("addr").value = addr1;
-		          } else if(addr2 !== '') {
-		            document.getElementById("userAddr3").value = addr2;
-		          }
-		        }
-		      }).open();
-		    }
-		    
-		    function fnPwShow(div) {
-				let pswrd = document.querySelector('#userPw');
-		        if(pswrd.type === 'password') {
-		          pswrd.setAttribute('type', 'text');
-		          div.classList.replace('show', 'hide');
-		        }
-		        else {
-		          pswrd.setAttribute('type', 'password');
-		          div.classList.replace('hide', 'show');
-		        }
-			}
 		</script>
 	</th:block>
 	
 	<th:block layout:fragment="css">
-		<link rel="stylesheet" th:href="@{/css/myPage/changeInfo.css}"/>
+		<style>
+		/* 메인 */
+		.c1 {
+	      	display: flex;
+	    }
+	    .form{
+	      text-align: center;
+	      padding:1rem;
+	      width:25rem;
+	      border-radius: .5rem;
+	      box-shadow: 0 .5rem 1rem rgba(0,0,0,.1);
+	      border:1px solid black;
+	      background: #fff;
+	    }
+	    .box{
+	      margin: 10px 0;
+	      width: 90%;
+	      font-size: 1rem;
+	      color: black;
+	      text-transform: none;
+	      border: 1px solid black;
+	      padding: 0.6rem 0.6rem;
+	      border-radius: 0.5rem;
+	      margin-bottom: 1rem;
+	    }
+	    .userInfo{
+	      padding-bottom:1rem;
+	      font-size: 2rem;
+	      color:black;
+	    }
+	
+	    /* 우편 */
+	    #post, #addr, #userAddr3 {
+	      margin: 1px 10px;
+	      width: 90%;
+	      font-size: 1rem;
+	      border: 1px solid black;
+	      padding: 0.6rem 0.6rem;
+	      border-radius: 0.5rem;
+	    }
+	    #post {
+	      font-size: 12px;
+	      cursor: pointer;
+	      width: 19%;
+	      float: left;
+	      background:#28693F;
+	  	  color:white;
+	  	  border: 1px solid #28693F;
+	      border-style: none;
+	    }
+		</style>
 	</th:block>
 </head>
 
 <body>
 <div layout:fragment="content">
-  <main class="centre">
-  		<!-- 사이드 바 -->
-	    <div class="left-nav-bar">
-	      <div class="mypage2">
-	        <h2><a href="/mypage/myPage">마이페이지<a></h2>
-	      </div>
-	      <div class="menu">
-	        <div class="sub-menu">
-	          <h3>My 쇼핑</h3>
-	          <ul class="menu-group">
-	            <li class="menu-name"><a th:href="@{/mypage/myPage}">주문확인</a></li>
-	            <li class="menu-name"><a th:href="@{/mypage/myReserList}">예약확인</a></li>
-	            <li class="menu-name"><a href="#">찜목록</a></li>
-	          </ul>
-	        </div>
-	        <div class="sub-menu">
-	          <ul class="menu-group">
-	            <h3>My 활동</h3>
-	            <li class="menu-name"><a href="#">나의 리뷰</a></li>
-	          </ul>
-	        </div>
-	        <div class="sub-menu">
-	          <ul class="menu-group">
-	            <h3>My 정보</h3>
-	            <li class="menu-name"><a th:href="@{/user/changeInfoPw}">개인정보확인</a></li>
-	            <li class="menu-name"><a th:href="@{/mypage/quit}">회원탈퇴</a></li>
-	          </ul>
-	        </div>
-	        <div class="sub-menu">
-	          <ul class="menu-group">
-	            <li><a th:href="@{/mypage/qnaList}"><h3>나의 QnA</h3></a></li>
-	          </ul>
-	        </div>
-	      </div>
-	    </div>
-	    
-	    <div class="c1" style="margin:24px 50px">
-	      
-	      <form action="/user/changeInfo" id="joinForm" class="form" method="get">
-	        <h3 class="changeInfo">회원정보수정</h3>
-	        <div style="display: flex;">
-	          <input type="text" readonly class="box" id="userId" name="userId" th:value="${#authentication.principal.user.userId}">
-	        </div>
-	
-	        <div class="pw-check">
-	          <div class="inputBox light">
-	            <input type="password" id="userPw" name="userPw" class="input" placeholder="비밀번호-수정시 입력해주세요."><label for="userPw" class="input-label"></label>
-	            <div id="show" class="show" onclick="fnPwShow(this);"></div>
-	          </div>
-	          <div class="check-light"></div>
-	        </div>
-	
-	        <div class=" check2">
-	          <div class="inputBox light">
-	            <input type="password" id="userPwCheck" name="userPwCheck" class="input" placeholder="비밀번호확인-수정시 입력해주세요." style="margin-top: 12px;"><label for="userPwCheck" class="input-label"></label>
-	          </div>
-	          <div class="check-light"></div>
-	          <p id="pwRecheck" style="font-size: 12px; font-weight: bolder; margin-left: 5px; text-align: left;"></p>
-	        </div>
-	
-	        <input type="text" id="userNm" name="userNm" placeholder="이름" class="box" th:value="${#authentication.principal.user.userName}">
-	        <input type="text" id="userBirth" name="userBirth" placeholder="생년월일 ex)19901010" class="box" th:value="${#authentication.principal.user.userBirth}">
-	        <select id="userGender" name="userGender" class="box" th:value="${#authentication.principal.user.userGender}">
-	          <option selected disabled>성별</option>
-	          <option value="m">남자</option>
-	          <option value="f">여자</option>
-	          <option value="n">선택 안함</option>
-	        </select>
-	        <input type="text" id="userTel" name="userTel" placeholder="전화번호 ex)01012345678" class="box" th:value="${#authentication.principal.user.userTel}">
-	        <input type="text" id="userMail" name="userMail" placeholder="이메일 ex)xxx@xxx.com" th:value="${#authentication.principal.user.userMail}" class="box">
-	        <input id="post"  name="userAddr1" type="text" placeholder="우편번호" readonly onclick="findAddr()" th:value="${#authentication.principal.user.userAddr1}">
-	        <input id="addr" name="userAddr2" type="text" placeholder="주소" readonly th:value="${#authentication.principal.user.userAddr2}"> <br>
-	        <input id="userAddr3" name="userAddr3" type="text" placeholder="상세주소" th:value="${#authentication.principal.user.userAddr3}">
-	        <div class="button2">
-	          <input type="submit" id="update" value="수정하기" class="btn2">
-	          <input type="reset" id="cancel" value="취소" class="btn2" onclick="history.back()">
-	        </div>
-	      </form>
-	    </div>
-  </main>
+	<main class="centre">
+		<div class="c1" style="margin:24px 50px">
+			<form id="joinForm" class="form" method="get">
+				<h3 class="userInfo">회원정보</h3>
+					<input type="text" readonly class="box" id="userId" name="userId" th:value="${getUserInfoCheck.userId}">
+					<input type="text" id="userNm" name="userName" placeholder="이름" class="box" th:value="${getUserInfoCheck.userName}" readonly>
+			        <input type="text" id="userBirth" name="userBirth" placeholder="생년월일 ex)19901010" class="box" th:value="${getUserInfoCheck.userBirth}" readonly>
+			        <input id="userGender" name="userGender" class="box" th:value="${getUserInfoCheck.userGender}" readonly>
+			        <input type="text" id="userTel" name="userTel" placeholder="전화번호 ex)01012345678" class="box" th:value="${getUserInfoCheck.userTel}" readonly>
+			        <input type="text" id="userMail" name="userMail" placeholder="이메일 ex)xxx@xxx.com" th:value="${getUserInfoCheck.userMail}" class="box" readonly>
+			        <input id="post"  name="userAddr1" type="text" placeholder="우편번호" onclick="findAddr()" th:value="${getUserInfoCheck.userAddr1}" readonly>
+			        <input id="addr" name="userAddr2" type="text" placeholder="주소" th:value="${getUserInfoCheck.userAddr2}" readonly> <br>
+			        <input id="userAddr3" name="userAddr3" type="text" placeholder="상세주소" th:value="${getUserInfoCheck.userAddr3}" readonly>
+			</form>
+		</div>
+	</main>
 </div>
 </body>
 </html>

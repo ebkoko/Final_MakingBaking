@@ -466,12 +466,12 @@
 			        <th class="dayclassList_T_10">등록일</th>
 			        <th class="dayclassList_T_10">별점</th>
 	      		</tr>
-	      		<tr th:each="review: ${reviewList}">
+	      		<tr th:each="review: ${getPageReviewList}">
 	      			<td><input type="checkbox" class="check" name="chk" th:value="${review.rvwNo}"></td>
 		        	<td th:text="${review.rvwNo}"></td>
 		        	<td th:text="${review.rvwType}"></td>
 		        	<td th:text="${review.rvwWriter}"></td>
-		        	<td th:text="${review.rvwContente}"></td>
+		        	<td th:text="${review.rvwContent}"></td>
 		        	<td th:text="${review.rvwRegdate eq null ? '' : #strings.substring(review.rvwRegdate, 0, 10)}"></td>
 		        	<td th:text="${review.rvwScore}"></td>
 		        	

@@ -365,7 +365,7 @@ public class AdminServiceImpl implements AdminService {
 	//회원상세보기
 	@Override
 	public User getUserInfoCheck(String userId) {
-		return userRepository.findById(userId).get();
+		return userRepository.getUserInfoCheck(userId);
 	}
 	
 	
@@ -422,47 +422,47 @@ public class AdminServiceImpl implements AdminService {
 	public Page<Order> getPageOrderList(Order order, Pageable pageable) {
 		if(order.getSearchKeyword() != null && !order.getSearchKeyword().equals("")) {
 			if(order.getSearchCondition().equals("ALL")) {
-				return orderRepository.findByOrderNoOrUserIdContainingOrOrderNameContainingOrOrderPaymentContainingOrOrderStatus
+				return orderRepository.findByOrderNoContainingOrUserIdContainingOrOrderNameContainingOrOrderPaymentContainingOrOrderStatusOrderByOrderNoDesc
 						(Long.parseLong(order.getSearchKeyword()), order.getSearchKeyword(),
 								order.getSearchKeyword(), order.getSearchKeyword(), order.getSearchKeyword(), pageable);
 			      } else if (order.getSearchCondition().equals("ORDERNO")) {
-			         return orderRepository.findByOrderNo(Long.parseLong(order.getSearchKeyword()), pageable);
+			         return orderRepository.findByOrderNoContainingOrderByOrderNoDesc(order.getSearchKeyword(), pageable);
 			      } else if (order.getSearchCondition().equals("USERID")) {
-			    	  return orderRepository.findByUserIdContaining(order.getSearchKeyword(), pageable);
+			    	  return orderRepository.findByUserIdContainingOrderByOrderNoDesc(order.getSearchKeyword(), pageable);
 			      } else if (order.getSearchCondition().equals("ORDERNAME")) {
-				         return orderRepository.findByOrderNameContaining(order.getSearchKeyword(), pageable);
+				         return orderRepository.findByOrderNameContainingOrderByOrderNoDesc(order.getSearchKeyword(), pageable);
 			      } else if (order.getSearchCondition().equals("ORDERPAYMENT")) {
-			    	  return orderRepository.findByOrderPaymentContaining(order.getSearchKeyword(), pageable);
+			    	  return orderRepository.findByOrderPaymentContainingOrderByOrderNoDesc(order.getSearchKeyword(), pageable);
 			      } else if (order.getSearchCondition().equals("ORDERSTATUS")) {
-			    	  return orderRepository.findByOrderStatusContaining(order.getSearchKeyword(), pageable);
+			    	  return orderRepository.findByOrderStatusContainingOrderByOrderNoDesc(order.getSearchKeyword(), pageable);
 			      } else {
-			    	  return orderRepository.findAll(pageable);
+			    	  return orderRepository.findAllByOrderByOrderNoDesc(pageable);
 			      }
 		  } else {
-			  return orderRepository.findAll(pageable);
+			  return orderRepository.findAllByOrderByOrderNoDesc(pageable);
 		  }
 	      
 	   }
 
 
 	//리뷰관리
-//	@Override
-//	public Page<Review> getPageReviewList(Review review, Pageable pageable) {
-//		if(review.getSearchKeyword() != null && !review.getSearchKeyword().equals("")) {
-//			if(review.getSearchCondition().equals("ALL")) {
-//				return reviewRepository.findbyRvwWriterContaining
-//						(review.getSearchKeyword(),  pageable);
-//			      } else if (review.getSearchCondition().equals("RVWWRITER")) {
-//			         return reviewRepository.findbyRvwWriterContaining(review.getSearchKeyword(), pageable);
-////			      } else if (review.getSearchCondition().equals("RVWTYPE")) {
-////			    	  return reviewRepository.findbyRvwTypeContaining(review.getSearchKeyword(), pageable);
-//			      } else {
-//			    	  return reviewRepository.findAll(pageable);
-//			      }
-//		  } else {
-//			  return reviewRepository.findAll(pageable);
-//		  }
-//	      
-//	   }
+	@Override
+	public Page<Review> getPageReviewList(Review review, Pageable pageable) {
+		if(review.getSearchKeyword() != null && !review.getSearchKeyword().equals("")) {
+			if(review.getSearchCondition().equals("ALL")) {
+				return reviewRepository.findByRvwWriterContaining
+						(review.getSearchKeyword(),  pageable);
+			      } else if (review.getSearchCondition().equals("RVWWRITER")) {
+			         return reviewRepository.findByRvwWriterContaining(review.getSearchKeyword(), pageable);
+			      } else if (review.getSearchCondition().equals("RVWTYPE")) {
+			    	  return reviewRepository.findByRvwTypeContaining(review.getSearchKeyword(), pageable);
+			      } else {
+			    	  return reviewRepository.findAll(pageable);
+			      }
+		  } else {
+			  return reviewRepository.findAll(pageable);
+		  }
+	      
+	   }
 	
 }
