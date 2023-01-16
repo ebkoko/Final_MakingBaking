@@ -17,8 +17,8 @@
       margin-top: 1.5rem;
     }
     .centre .left-nav-bar .mypage2 h2 a{
-		color:white;
-	}
+      color:white;
+   }
 
     .menu {
       width: 170px;
@@ -27,18 +27,18 @@
     }
     
     .menu-group, .menu-name {
-		margin-top:5px;
-	}
+      margin-top:5px;
+   }
     
     .centre .left-nav-bar .menu .sub-menu .menu-group .menu-name a,
     .centre .left-nav-bar .menu .sub-menu .menu-group a {
-		color: black;
-	}
-	
+      color: black;
+   }
+   
     .centre .left-nav-bar .menu .sub-menu .menu-group .menu-name a:hover,
     .centre .left-nav-bar .menu .sub-menu .menu-group a:hover {
-		color: #28693F;
-	}
+      color: #28693F;
+   }
     
     .centre .left-nav-bar .menu .sub-menu{
       margin: 30px 20px;
@@ -51,18 +51,18 @@
 
     /* 메인 내용 */
     .mainContentWrapper {
-		margin-left: 50px;
-		height: 100%;
-	}
+      margin-left: 50px;
+      height: 100%;
+   }
     .main-content {
       padding: 20px;
       margin-left: 1rem;
       height: 92%;
     }
     h3 {
-		display: inline-block;
-		margin-bottom: 10px;
-	}
+      display: inline-block;
+      margin-bottom: 10px;
+   }
     .search {
       display: inline-block;
       margin-left: 360px;
@@ -79,8 +79,8 @@
 
     /* 아이템 */
     #boxxWrapper {
-		height: 90%;
-	}
+      height: 90%;
+   }
     .boxx {
       display: flex;
       align-items: center;
@@ -91,16 +91,16 @@
       margin-bottom: 10px;
     }
     .imgWrapper {
-		width: 120px;
-		height: 90px;
-		margin-right: 10px;
-	}
-	.imgWrapper>img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		margin-left: 5px;
-	}
+      width: 120px;
+      height: 90px;
+      margin-right: 10px;
+   }
+   .imgWrapper>img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      margin-left: 5px;
+   }
     .box_product {
       display: flex;
       flex-direction: column;
@@ -128,12 +128,12 @@
       color: black;
     }
     .noOrder {
-		margin-top: 20px;
-		text-align: center;
-	}
-	.paging {
-		text-align: center;
-	}
+      margin-top: 20px;
+      text-align: center;
+   }
+   .paging {
+      text-align: center;
+   }
     .pagination {
       display: flex;
       justify-content: center;
@@ -141,13 +141,13 @@
       margin-bottom: 20px;
     }    
     .paging a{
-	  display: block;
-	  margin: 0 3px;
-	  border: 1px solid #ccc;
-	  width: 28px;
-	  height: 28px;
-	  line-height: 26px;
-	  text-align: center;
+     display: block;
+     margin: 0 3px;
+     border: 1px solid #ccc;
+     width: 28px;
+     height: 28px;
+     line-height: 26px;
+     text-align: center;
       color: #8c8c8c;
       font-size: 16px;
       font-weight: 600;
@@ -156,11 +156,11 @@
       color: #28693F;
     }
     .paging a:focus {
-		background:#28693F;
-		color: white;
-	}
-	.paging .pagination .pagination_button a.present {
-		border-color: #28693F;
-		background: #28693F;
-		color: white;
-	}
+      background:#28693F;
+      color: white;
+   }
+   .paging .pagination .pagination_button a.present {
+      border-color: #28693F;
+      background: #28693F;
+      color: white;
+   }

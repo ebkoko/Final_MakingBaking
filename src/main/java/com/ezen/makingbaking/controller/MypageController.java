@@ -270,29 +270,15 @@ public class MypageController {
 	@PostMapping("/myRvwList")
 	public ResponseEntity<?> myRvwPageList(@PageableDefault(page=0, size=4) Pageable pageable,
 			@AuthenticationPrincipal CustomUserDetails customUser) {
-		ResponseDTO<BoardDTO> response = new ResponseDTO<>();
+		
+		ResponseDTO<CamelHashMap> response = new ResponseDTO<>();
+		
 		try {
-			Board board = Board.builder()
-							   .boardWriter(customUser.getUsername())
-							   .build();
-			Page<Board> pageBoardList = boardService.getPageMyQnaList(board, pageable);
 			
-			Page<BoardDTO> pageBoardDTOList = pageBoardList.map(pageQna -> 
-							   BoardDTO.builder()
-									   .boardNo(pageQna.getBoardNo())
-							   		   .boardTitle(pageQna.getBoardTitle())
-							   		   .boardContent(pageQna.getBoardContent())
-							   		   .boardWriter(pageQna.getBoardWriter())
-							   		   .boardReply(pageQna.getBoardReply())
-							   		   .boardRegdate(
-							   				   		pageQna.getBoardRegdate() == null?
-													null :
-													pageQna.getBoardRegdate().toString())
-							   		   .cateCode(pageQna.getCateCode())
-							   		   .boardCnt(pageQna.getBoardCnt())
-							   		   .build()
-							   );  
-			response.setPageItems(pageBoardDTOList);
+			Page<CamelHashMap> pageReviewList = reviewService.getPageMyRvwList(customUser.getUsername(), pageable);
+			
+			 
+			response.setPageItems(pageReviewList);
 			
 			return ResponseEntity.ok().body(response);
 			
@@ -302,5 +288,6 @@ public class MypageController {
 		}
 	}
 	
+ 
 	
 }

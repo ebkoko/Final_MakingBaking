@@ -5,21 +5,38 @@
 	  border: none;
 	  text-decoration: none;
 	}
-	
+	.centre{
+		display: flex;
+      
+      height:100%;
+      margin-left: 23rem;
+	}
+	.menu h2 {
+		color:#4A4A4A;
+	}
+	.menu li {
+		color: #666666; 
+	}
 	#container {
-	  width: 750px; 
-	  margin: 0 0 100px 10px;
+	  	width: 750px; 
+	  	margin: 0 0 100px 100px;
+	  
+		height: 92%;
 	}
 	
-	#container > h3 {
-		margin: 40px 0 0 40px;
-		font-size: 24px;
+	/* 마이페이지 타이틀*/
+	#container h2 {
+		color:#4A4A4A;
+	}
+	#container > h2 {
+		margin: 40px 0 0 35px;
+		
 	}
 	
 	#mid-container {
 	  width: 100%; height: fit-content;
 	  background-color: #fff;
-	  padding: 30px 30px 70px;
+	  margin: 30px 30px 0;
 	}
 	
 	#list-table { width: 100%; border-collapse: collapse; }
