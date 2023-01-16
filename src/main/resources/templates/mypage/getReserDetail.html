@@ -347,7 +347,7 @@
 	<body>
 		<div layout:fragment="content">
 			<div id="container">
-	            <h1 id="reser_title">내 예약 내역</h1>
+	            <h1 id="reser_title">예약 내역</h1>
 	            <div id="top">
 	                <span class="reserNoMent">예약번호: </span><span class="realReserNo" th:text="${reser.reserNo}"></span><span class="reserStatus"></span>&ensp;
 	                <span class="cancelDateMent" th:if="${reser.reserCancelDate != null}">취소일시: </span><span class="cancelDate" th:if="${reser.reserCancelDate != null}" th:text="${#strings.substring(reser.reserCancelDate, 0, 16)}"></span>

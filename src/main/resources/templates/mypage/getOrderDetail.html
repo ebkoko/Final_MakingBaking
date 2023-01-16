@@ -378,6 +378,10 @@
 				
 				function fnBtnMoveList() {
 					window.location.href = '/mypage/myPage'
+				}
+				
+				function fnBtnMoveAdminList() {
+					window.location.href = '/admin/orderItemList'
 				}			
 			</script>
 		</th:block>
@@ -387,7 +391,7 @@
 	<body>
 		<div layout:fragment="content">
 			<div id="container">
-	            <h1 id="order_title">내 주문 확인</h1>
+	            <h1 id="order_title">주문 확인</h1>
 	            <div id="top">
 	                <span class="orderNoMent">주문번호: </span><span class="realOrderNo" th:text="${order.orderNo}"></span><span class="orderStatus"></span>&ensp;
 	                <span class="cancelDateMent" th:if="${order.orderCancelDate != null}">취소일시: </span><span class="cancelDate" th:if="${order.orderCancelDate != null}" th:text="${#strings.substring(order.orderCancelDate, 0, 16)}"></span>
@@ -410,7 +414,7 @@
 	                <hr>
 	                <div id="totalPrice">
 	                    <span>상품 총 금액: </span> <span class="item_PriceSum" th:text="${#numbers.formatInteger(order.orderTotalPrice, 3, 'COMMA')}"></span><span >원</span> <span>&#43;</span> 
-	                    <span>배송비: </span> <span class="deliFee" th:text="${#numbers.formatInteger(order.orderDeliFee, 3, 'COMMA')}"></span><span >원</span> <span>&#61;</span> 
+	                    <span>배송비: </span> <span class="deliFee" th:text="${order.orderDeliFee >= 1000 ? #numbers.formatInteger(order.orderDeliFee, 3, 'COMMA') : order.orderDeliFee}"></span><span >원</span> <span>&#61;</span> 
 	                    <span>총 결제금액: </span> <span class="totalPrice" th:text="${#numbers.formatInteger(order.orderTotalPayPrice, 3, 'COMMA')}"></span><span >원</span>
 	                </div>
 	                <hr>
@@ -473,7 +477,8 @@
 	            </div>
 	            <hr>
 	            <div id="CancelOption" th:if="${order.cancelEnable == 'P'}">
-	            	<button type="button" id="btnMoveList" onclick="fnBtnMoveList()">목록으로</button>&emsp;
+	            	<button type="button" id="btnMoveList" sec:authorize="hasRole('ROLE_ADMIN')" onclick="fnBtnMoveAdminList()">목록으로</button>&emsp;
+	            	<button type="button" id="btnMoveList" sec:authorize="hasRole('ROLE_USER')" onclick="fnBtnMoveList()">목록으로</button>&emsp;
                     <input type="button" name="CancelOption" id="btnOrderCancel" value="주문취소" th:if="${order.orderStatus == 'MV'}">
                     <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${order.orderStatus == 'PE'}">
 	            </div>
