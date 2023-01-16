@@ -17,8 +17,10 @@
 				let cartClick = false;
 				const getItem = /*[[${item}]]*/;
 				const principal = /*[[${#authentication.principal}]]*/;
+				const reviewChkList = /*[[${reviewChkList}]]*/;
 				
 				$(function() {
+		
 					// 취소환불 문의 자세히 보기
 					$(".refundGuideBtn").on("click", function(){
 						if($("#refundGuide").css("display") == "none") {
@@ -52,6 +54,15 @@
 							  $('html').animate({scrollTop : offset.top}, 300);
 						  }
 					})
+					// 후기작성 안내문구
+					for(let i = 0; i < reviewChkList.length; i++) {
+						if(reviewChkList[i].orderStatus == 'DC' && reviewChkList[i].reviewYn == 'N') {
+							$("#orderStatusText").text("작성할 상품을 선택해주세요.");
+							break;
+						} else {
+							$("#orderStatusText").text("작성할 상품이 없습니다.");
+						}
+					}
 					
 					// 비회원이 리뷰 작성 버튼 클릭시
 					$("#it_rvw_writeBtn").on("click", function(){
@@ -366,7 +377,9 @@
 	              	<div class="it_rvw_write_member">	   	            
 	              		<form class="it_rvw_write_form" action="/item/insertItemRvw" method="post">	              			             			
 						 	<div class="rvw_orderInfo">
-	              			<p>작성할 상품을 선택해주세요.</p>
+	              			
+	              			<p id="orderStatusText"></p>
+	              			
 	              			</div>
 						 	<div class="rvw_orderNo" th:each="reviewChk : ${reviewChkList}">
 						 		<span th:if="${reviewChk.orderStatus == 'DC' && reviewChk.reviewYn == 'N'}">

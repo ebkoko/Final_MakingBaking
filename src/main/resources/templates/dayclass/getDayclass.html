@@ -65,13 +65,13 @@
 				const reviewChkList = /*[[${reviewChkList}]]*/;
 				
 				$(function() {
-					// p태그
+					// 후기작성 안내문구
 					for(let i = 0; i < reviewChkList.length; i++) {
 						if(reviewChkList[i].reserStatus == 'PE' && reviewChkList[i].reviewYn == 'N') {
-							$("#reserStatusText").text("선택");
+							$("#reserStatusText").text("작성할 클래스를 선택해주세요.");
 							break;
 						} else {
-							$("#reserStatusText").text("없음");
+							$("#reserStatusText").text("작성할 클래스가 없습니다.");
 						}
 					}
 					

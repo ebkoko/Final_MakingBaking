@@ -19,14 +19,13 @@
 			
 		    /* 내용 h2, p 글씨색상 공통 */
 		    .c_map_title, .c_rvw_title, .c_cancel_title {
-		       margin-bottom: 10px;
-		       
-		       color: rgb(74, 74, 74);
+		       margin-bottom: 10px;		       
+		       color: #4A4A4A;
 		       font-weight: 600;
 		    }
 		    .c_intro_text, .c_map_text {
 		       font-size: 15px;
-		       color: rgb(102, 102, 102);
+		       color: #666666 ;
 		       line-height: 28px;
 		    }
 			.c_intro_text {
@@ -38,15 +37,13 @@
 			
 			/*클래스 소개*/
 			.c_intro_title{
-			  color: rgb(102, 102, 102);	 
+			  color: #666666 ;	 
 			  font-size: 20px;				
 			  text-align: center;
 			  font-style:italic;
 			}
 			.c_intro textarea{
 			  width: 100%;
-    		  	  
-    		  
     		  font-size: 18px;
     		  border: none;
     		  resize: none;	
@@ -77,22 +74,22 @@
 		      
 		    }
 		    .class_hr1{
-				color:rgb(74, 74, 74);	
+				color:#4A4A4A;	
 			}
 		    .banner_explain_MinName {
 			  margin-top: 15px;			 
-			  color:rgb(102, 102, 102);	
+			  color:#666666 ;	
 			}
 		    .banner_explain_details {
 		      margin: 80px 0 10px 0;
 		      font-size: 17px;
-		      color:rgb(74, 74, 74);	
+		      color:#4A4A4A;	
 		    }
 		    .banner_explain_KRW{
 			  margin-top: 10px;
 			  font-size: 17px;
 			  font-weight: 600;
-			  color:rgb(102, 102, 102);	
+			  color:#666666 ;	
 			}
 		    .banner_explain_btn {
 		      margin-top: 30px;
@@ -191,7 +188,7 @@
 		      list-style:none;
 		      font-size: 17px;
 		      font-weight: 700;
-		      color: rgb(74, 74, 74);
+		      color: #4A4A4A;
 		      margin-bottom: 100px;
 		    }
 			.apply_img {
@@ -199,7 +196,7 @@
 			}
 		    #rsrvtDate {
 			  margin-left: 10px;
-		      border: 1px solid rgb(102, 102, 102); 
+		      border: 1px solid #666666 ; 
 		      border-radius: 4px;
 		      background: transparent;
 		      width: 120px;
@@ -210,7 +207,7 @@
 		    }
 		    .c_apply_timeOp{
 			  margin-left: 10px;
-			  border: 1px solid rgb(102, 102, 102); 
+			  border: 1px solid #666666 ; 
 		      border-radius: 4px;
 		      width: 150px;
 			  height: 30px;
@@ -278,7 +275,7 @@
 			/* 예약자 후기작성 */
 			.rvw_reserInfo {
 				margin: 20px auto;
-				color:rgb(102, 102, 102);
+				color:#666666 ;
 			}
 			
 			.rvw_reserNo {
@@ -342,7 +339,7 @@
 			.rvwWriteSection textarea {	  
 			  width: 100%;
     		  height: 6.3em;
-    		  border: 1px solid rgb(102, 102, 102);
+    		  border: 1px solid #666666 ;
     		  resize: none;		 
 			}
 			.textLength {
@@ -350,7 +347,7 @@
 			  float: right;
 			  margin-top:70px;
 			  font-size: 14px;
-			  color: rgb(102, 102, 102);
+			  color: #666666 ;
 			}			
 			textarea::placeholder {
   			  font-size: 1.1em;
@@ -387,7 +384,7 @@
 		      float:right;
 		    }
 		    #rvw_array {
-			 border: 1px solid rgb(102, 102, 102);
+			 border: 1px solid #666666 ;
 			 width: 100px;
 			 height: 28px;			 
 			}
@@ -399,20 +396,20 @@
 		      height: 25px;
 		    }
 		    .rvw_list th{
-		      border:1px solid rgb(102, 102, 102);
+		      border:1px solid #666666 ;
 		      border-left: none;
 		      border-right: none;
 		      height: 30px;
 		      font-size: 13.5px;
-		      color: rgb(102, 102, 102);
+		      color: #666666 ;
 		    }
 		    .rvw_list td{
-		      border:1px solid rgb(102, 102, 102);
+		      border:1px solid #666666 ;
 		      border-left: none;
 		      border-right: none;
 		      height: 90px;
 		      font-size: 13.5px;
-		      color: rgb(102, 102, 102);
+		      color: #666666 ;
 		    }		 
 
 		    .rvw_paging{
@@ -431,7 +428,7 @@
 		    .paging_btn a {
 		      text-decoration: none;
 		      padding: 3px 10px 3px 10px ;
-		      color: rgb(102, 102, 102);
+		      color: #666666 ;
 		      font-size: 16px;      
 		      
 		    }
@@ -448,13 +445,13 @@
 		      margin-bottom: -5px;
 		      font-weight: 600;
 		      font-size: 16px;
-		      color: rgb(102, 102, 102);
+		      color: #666666 ;
 		     
 		    }
 		    .c_cancel_text_B{ 
 			  margin-top: 13px;	
 		      font-size: 14px;
-		      color: rgb(102, 102, 102);
+		      color: #666666 ;
 		    }
 		
 		    /* 문의 */
@@ -475,13 +472,13 @@
 		    .c_Qna_text_A, .c_Qna_text_B {
 			  margin-top:5px;
 		      font-size: 15px;
-		      color: rgb(102, 102, 102);
+		      color: #666666 ;
 		      line-height: 28px;
 		    }
 		    .c_Qna_text_C {
 		      margin-top: 5px;
 		      font-size: 13px;
-		      color: rgb(102, 102, 102);
+		      color: #666666 ;
 		     
 		    }
 		
@@ -526,7 +523,7 @@
 			  margin-top:15px;
 		      margin-left: 50px;
 		      font-size: 15px;
-		      color: rgb(102, 102, 102);
+		      color: #666666 ;
 		    }
 		    .refundGuideBtn, .cancelGuideBtn {
 		      position: absolute;
@@ -554,7 +551,7 @@
 			    padding-left: 31px;
 			    font-weight: 600;
 			    font-size: 14px;
-			    color: rgb(102, 102, 102);
+			    color: #666666 ;
 			    line-height: 25px;
 			}
 			.c_refundG_01text_A {
@@ -578,7 +575,7 @@
 			    padding-left: 31px;
 			    font-weight: 600;
 			    font-size: 14px;
-			    color: rgb(102, 102, 102);
+			    color: #666666 ;
 			    line-height: 25px;
 			}
 			.c_refundG_02text {
@@ -608,7 +605,7 @@
 			    padding-left: 31px;
 			    font-weight: 600;
 			    font-size: 14px;
-			    color: rgb(102, 102, 102);
+			    color: #666666 ;
 			    line-height: 25px;
 			}
 			.c_refundG_03text {
@@ -632,7 +629,7 @@
 			    padding-left: 31px;
 			    font-weight: 600;
 			    font-size: 14px;
-			    color: rgb(102, 102, 102);
+			    color: #666666 ;
 			    line-height: 25px;
 			}
 			.c_cancelG_01text {
@@ -654,7 +651,7 @@
 			    padding-left: 31px;
 			    font-weight: 600;
 			    font-size: 14px;
-			    color: rgb(102, 102, 102);
+			    color: #666666 ;
 			    line-height: 25px;
 			}
 			.c_cancelG_02text {					

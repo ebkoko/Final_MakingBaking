@@ -6,7 +6,6 @@
 <head>
   <th:block layout:fragment="css">
     <link rel="stylesheet" th:href="@{/css/myPage/myPage.css}"/>
-	<link rel="stylesheet" th:href="@{/css/myPage/qnaList.css}"/>
 	<link rel="stylesheet" th:href="@{/css/myPage/myPageRvw.css}"/>
   </th:block>
   <th:block layout:fragment="script">
@@ -35,10 +34,22 @@
 						for(let i=0; i<obj.pageItems.content.length; i++) {
 							htmlstr += `
 								<tr>
-									<td class="list-category">${obj.pageItems.content[i].rvwType == 1 ? '원데이클래스' : '제품구매'}</td>
+									<td class="list-img">
+							`;
+						if(obj.pageItems.content[i].rvwType == 'class') {
+							htmlstr += `
+									<img src="/dayclass/${obj.pageItems.content[i].fileName}" width="90px" height="90px"></img></td>							
+							`;
+						} else {
+							htmlstr += `
+									<img src="/item/${obj.pageItems.content[i].fileName}" width="90px" height="90px"></img></td>						
+							`;
+						}		
+							htmlstr += `
+									<td class="list-category">${obj.pageItems.content[i].rvwType == 'class' ? '원데이클래스' : '제품구매'}</td>
 									<td class="list-content">${obj.pageItems.content[i].rvwContent}</td>
-									<td class="list-answer">${obj.pageItems.content[i].rvwScore}</td>
-									<td class="list-date">${obj.pageItems.content[i].boardRegdate == null ? '' : obj.pageItems.content[i].boardRegdate.substring(0, 10)}</td>
+									<td class="list-score">${obj.pageItems.content[i].rvwScore}</td>
+									<td class="list-date">${obj.pageItems.content[i].rvwRegdate.substring(0,10)}</td>
 
 								</tr>
 							`;
@@ -57,12 +68,7 @@
 						let tempEndPage = startPage + pageSize - 1;
 						let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
 						
-						console.log(pageNumber);
-						console.log(pageSize);
-						console.log(totalPages);
-						console.log(startPage);
-						console.log(tempEndPage);
-						console.log(endPage);
+					
 						
 						if(pageNumber > 0) {
 							htmlstr += `
@@ -103,7 +109,7 @@
 					},
 					error: function(e) {
 						console.log(e);
-						console.log($(e.target).attr("data-page-num"));
+						
 					}
 				})
 				/*.done(function(result) {
@@ -153,56 +159,55 @@
 	        </div>
 	      </div>
 	    </div>
-		<div id="container">
-			<h3>나의 리뷰</h3>
-		    <div id="mid-container">
-		      <table id="list-table">
-		        <tr>
-		          <th width="17%" id="th-img">이미지</th>
-		          <th width="17%" id="th-category">분류</th>
-		          <th width="40%" id="th-content">내용</th>
-		          <th width="10%" id="th-score">별점</th>
-		          <th width="17%" id="th-date">작성일</th>
-		          
-		        </tr>
-		        <tr th:each="rvw: ${pageReviewList}" id="boxxWrapper" style="height: 40px;">
-		        	<td class="list-img">
-		        		<img width="100px" height="100px" th:src="@{${rvw.rvwType} == 'class' ? '/dayclass/' + ${rvw.fileName}
-		        					    : '/item/' + ${rvw.fileName}}">
-		        	</td>
-		        	<td class="list-category" 
-		        		th:text="${rvw.rvwType eq 'class' ? '원데이클래스' : '제품구매'}"></td>
-					<td class="list-content" th:text="${rvw.rvwContent}">
+	    <div class="mainContentWrapper">
+			<div id="container">
+				<h2>나의 리뷰</h2>
+			    <div id="mid-container">
+			      <table id="list-table">
+			        <tr>
+			          <th width="17%" id="th-img">이미지</th>
+			          <th width="20%" id="th-category">분류</th>
+			          <th width="40%" id="th-content">내용</th>
+			          <th width="10%" id="th-score">별점</th>
+			          <th width="17%" id="th-date">작성일</th>
+			          
+			        </tr>
+			        <tr th:each="rvw: ${pageReviewList}" id="boxxWrapper">
+			        	<td class="list-img">
+			        		<img th:src="@{${rvw.rvwType} == 'class' ? '/dayclass/' + ${rvw.fileName}
+			        					    : '/item/' + ${rvw.fileName}}" width="90px" height="90px" ></td>
+			        	<td class="list-category" 
+			        		th:text="${rvw.rvwType eq 'class' ? '원데이클래스' : '제품구매'}"></td>
+						<td class="list-content" th:text="${rvw.rvwContent}"></td>
+						<td class="list-score" th:text="${rvw.rvwScore}"></td>
+						<td class="list-date" th:text="${rvw.rvwRegdate eq null ? '' : #strings.substring(rvw.rvwRegdate, 0, 10)}"></td>
 						
-					</td>
-					<td class="list-score" th:text="${rvw.rvwScore}"></td>
-					<td class="list-date" th:text="${rvw.rvwRegdate eq null ? '' : #strings.substring(rvw.rvwRegdate, 0, 10)}"></td>
-					
-				</tr>
-		      </table>
-		      <br/>
-			  <div style="text-align:center;" class="paging">
-				<ul class="pagination" style="display: flex; justify-content: center;" 
-								th:if="${pageReviewList.totalElements > 0}"
-								th:with="pageNumber = ${pageReviewList.pageable.pageNumber},
-										pageSize = ${pageReviewList.pageable.pageSize},
-										totalPages = ${pageReviewList.totalPages},
-										startPage =${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
-										tempEndPage = ${startPage + pageSize -1}, 
-										endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
-					<li class="pagination_button" th:if="${pageNumber > 0}">
-						<a style="border: 0px;" th:href="${pageNumber - 1}"><</a>
-					</li>
-					<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
-						<a th:href="${page - 1}" th:text="${page}"></a>
-					</li>
-					<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
-						<a style="border: 0px;" th:href="${pageNumber + 1}">></a>
-					</li>
-				 </ul>
-			  </div>
-		    </div>
-		</div>
+					</tr>
+			      </table>
+			      <br/>
+				  <div style="text-align:center;" class="paging">
+					<ul class="pagination" style="display: flex; justify-content: center;" 
+									th:if="${pageReviewList.totalElements > 0}"
+									th:with="pageNumber = ${pageReviewList.pageable.pageNumber},
+											pageSize = ${pageReviewList.pageable.pageSize},
+											totalPages = ${pageReviewList.totalPages},
+											startPage =${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+											tempEndPage = ${startPage + pageSize -1}, 
+											endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+						<li class="pagination_button" th:if="${pageNumber > 0}">
+							<a style="border: 0px;" th:href="${pageNumber - 1}"><</a>
+						</li>
+						<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
+							<a th:href="${page - 1}" th:text="${page}"></a>
+						</li>
+						<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+							<a style="border: 0px;" th:href="${pageNumber + 1}">></a>
+						</li>
+					 </ul>
+				  </div>
+			    </div>
+			</div>
+	    </div>
   	</main>
   </div>
 </body>
