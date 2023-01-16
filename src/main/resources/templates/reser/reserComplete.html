@@ -118,7 +118,7 @@
 	                <div class="reserNumber">예약번호: <span th:text="${reserNo}"></span></div>
 	                <p class="reserCompleteMent">예약 완료되었습니다!</p>
 	                <div id="bankPayment" th:if="${reserPayment == '무통장입금'}">
-	                    <span>입금계좌: 국민은행 799502-04-026913 예금주: 메이킹베이킹</span>
+	                    <span>입금계좌: 이젠은행 0507-1305-6509 예금주: 메이킹베이킹</span>
 	                    <p class="deposit"><span>입금액: </span><span class="totalPrice" th:text="${#numbers.formatInteger(totalPayPrice, 3, 'COMMA')}"></span><span>원</span>&emsp;
 	                    <span>입금기한: </span><span class="deadline"></span><span> 오후 11시 59분 59초</span></p>
 	                </div>

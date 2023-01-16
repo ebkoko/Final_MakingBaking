@@ -277,8 +277,26 @@
 					
 					let orderNo = order.orderNo;
 					
-					$("#btnOrderCancel").on('click', function() {
-						
+					console.log(typeof String(orderNo)); // number
+					console.log(String(orderNo).substring(0,8)); // 20230102000029
+					let DateYMD = String(orderNo).substring(0,8); // 20230102
+					let orderDateYear = DateYMD.substr(0,4); // 2023
+					let orderDateMonth = DateYMD.substr(4,2); // 01
+					let orderDateDate = DateYMD.substr(6,2); // 02
+					let orderDate = orderDateYear + "/" + orderDateMonth + "/" + orderDateDate; // 2023-01-02
+					console.log(new Date(orderDate)); // Mon Jan 02 2023 09:00:00 GMT+0900 (한국 표준시)
+					let orderD = new Date(orderDate);
+					orderD.setDate(orderD.getDate()+1);
+					let deadline = orderD.toLocaleDateString('ko-KR', {
+					    year: 'numeric',
+					    month: 'long',
+					    day: 'numeric',
+					});
+					console.log(deadline);
+					$(".deadline").text(deadline);
+					
+					
+					$("#btnOrderCancel").on('click', function() {						
 						if(confirm("주문을 취소하시겠습니까?")) {
 							$.ajax({
 								url: '/order/orderCancel/' + order.orderNo,
@@ -395,6 +413,7 @@
 	            <div id="top">
 	                <span class="orderNoMent">주문번호: </span><span class="realOrderNo" th:text="${order.orderNo}"></span><span class="orderStatus"></span>&ensp;
 	                <span class="cancelDateMent" th:if="${order.orderCancelDate != null}">취소일시: </span><span class="cancelDate" th:if="${order.orderCancelDate != null}" th:text="${#strings.substring(order.orderCancelDate, 0, 16)}"></span>
+	                <span class="deadlineMent" th:if="${order.orderStatus} == 'MV'">입금기한: </span><span class="deadline" th:if="${order.orderStatus} == 'MV'"></span><span th:if="${order.orderStatus} == 'MV'"> 오후 11시 59분 59초</span>
 	            </div>
 	            <hr>
 	            <div id="list_title">

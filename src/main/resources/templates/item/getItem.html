@@ -91,8 +91,11 @@
 						
 						}
 						
-						if(getItem.itemStock == 0) {
+						if(getItem.itemStock == 0 || getItem.itemStatus == 'S') {
 							alert("상품이 일시품절되었습니다.");
+							return;
+						} else if(getItem.itemStatus == 'N') {
+							alert("상품이 판매중지되었습니다.");
 							return;
 						}
 						
