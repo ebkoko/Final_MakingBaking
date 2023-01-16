@@ -488,7 +488,8 @@
 				    margin-bottom: 10px;
 					width: 100%;
 					height: 25px;' : 'display: none;'}">
-	            	<button type="button" id="btnMoveList" onclick="fnBtnMoveList()">목록으로</button>
+	            	<button type="button" id="btnMoveList" sec:authorize="hasRole('ROLE_ADMIN')" onclick="fnBtnMoveAdminList()">목록으로</button>
+	            	<button type="button" id="btnMoveList" sec:authorize="hasRole('ROLE_USER')" onclick="fnBtnMoveList()">목록으로</button>
 	            </div>
 	        </div>
 		</div>

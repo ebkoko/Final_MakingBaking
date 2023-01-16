@@ -339,6 +339,10 @@
 				function fnBtnMoveList() {
 					window.location.href = '/mypage/myReserList'
 				}
+				
+				function fnBtnMoveAdminList() {
+					window.location.href = '/admin/orderItemList'
+				}	
 			</script>
 		</th:block>
 	</head>
@@ -431,7 +435,8 @@
 	            </div>
 	            <hr>		            
 	            <div id="CancelOption" th:if="${reser.cancelEnable == 'P'}">
-	            	<button type="button" id="btnMoveList" onclick="fnBtnMoveList()">목록으로</button>&emsp;
+	            	<button type="button" id="btnMoveList" sec:authorize="hasRole('ROLE_ADMIN')" onclick="fnBtnMoveAdminList()">목록으로</button>&emsp;
+	            	<button type="button" id="btnMoveList" sec:authorize="hasRole('ROLE_USER')" onclick="fnBtnMoveList()">목록으로</button>&emsp;
                     <input type="button" name="CancelOption" id="btnReserCancel" value="예약취소" th:if="${reser.reserStatus == 'MV'}">
                     <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${reser.reserStatus == 'PE'}">
 	            </div>
@@ -441,7 +446,8 @@
 				    margin-bottom: 10px;
 					width: 100%;
 					height: 25px;' : 'display: none;'}">
-	            	<button type="button" id="btnMoveList" onclick="fnBtnMoveList()">목록으로</button>
+	            	<button type="button" id="btnMoveList" sec:authorize="hasRole('ROLE_ADMIN')" onclick="fnBtnMoveAdminList()">목록으로</button>
+	            	<button type="button" id="btnMoveList" sec:authorize="hasRole('ROLE_USER')" onclick="fnBtnMoveList()">목록으로</button>
 	            </div>
 	        </div>
 		</div>
