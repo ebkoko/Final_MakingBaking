@@ -57,6 +57,7 @@ public class ItemController {
 		}
 		
 		Page<CamelHashMap> itemList = itemService.getItemList(pageable, itemCate);
+		int listCnt = itemService.getItemListCnt(itemCate);
 		
 		ModelAndView mv = new ModelAndView();
 		
@@ -64,6 +65,7 @@ public class ItemController {
 		mv.addObject("itemList", itemList);
 		
 		mv.addObject("itemCate", itemCate);
+		mv.addObject("listCnt", listCnt);
 		
 		return mv;
 	}
@@ -89,8 +91,8 @@ public class ItemController {
 		try {
 			String itmeCate = "";
 			
-			if(request.getParameter("itmeCate") != null) {
-				itmeCate = request.getParameter("itmeCate");
+			if(request.getParameter("itemCate") != null) {
+				itmeCate = request.getParameter("itemCate");
 			}
 			Page<CamelHashMap> pageItemList = itemService.getPageItemList(pageable, itmeCate);
 			

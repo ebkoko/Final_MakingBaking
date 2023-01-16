@@ -31,6 +31,8 @@ public interface ItemService {
 
 	List<CamelHashMap> getUserOrderStatus(String loginUserId, int itemNo);
 
+	int getItemListCnt(String itemCate);
+
 	
 	
 }

@@ -47,6 +47,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 	@Modifying
 	@Query(value="UPDATE T_MB_USER"
 			+ " SET USER_ID = :#{#userId.userId},"
+			+ "		USER_PW = :#{#userId.userPw},"
 			+ "		USER_NAME = :#{#userId.userName},"
 			+ "		USER_BIRTH = :#{#userId.userBirth},"
 			+ "		USER_GENDER = :#{#userId.userGender},"

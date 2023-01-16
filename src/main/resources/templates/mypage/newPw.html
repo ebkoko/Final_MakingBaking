@@ -29,25 +29,25 @@
 	          <ul class="menu-group">
 	            <li class="menu-name"><a th:href="@{/mypage/myPage}">주문확인</a></li>
 	            <li class="menu-name"><a th:href="@{/mypage/myReserList}">예약확인</a></li>
-	            <li class="menu-name"><a href="#">찜목록</a></li>
+	            <li class="menu-name"><a th:href="@{/mypage/myLikeList}">찜목록</a></li>
 	          </ul>
 	        </div>
 	        <div class="sub-menu">
 	          <ul class="menu-group">
 	            <h3>My 활동</h3>
-	            <li class="menu-name"><a href="#">나의 리뷰</a></li>
+	            <li class="menu-name"><a th:href="@{/mypage/myRvwList}">나의 리뷰</a></li>
 	          </ul>
 	        </div>
 	        <div class="sub-menu">
 	          <ul class="menu-group">
 	            <h3>My 정보</h3>
-	            <li class="menu-name"><a th:href="@{/mypage/changeInfo}">개인정보확인</a></li>
+	            <li class="menu-name"><a th:href="@{/user/changeInfoPw}">개인정보확인</a></li>
 	            <li class="menu-name"><a th:href="@{/mypage/quit}">회원탈퇴</a></li>
 	          </ul>
 	        </div>
 	        <div class="sub-menu">
 	          <ul class="menu-group">
-	            <li><a th:href="@{/mypage/qnaList}"><h3>나의 QnA</h3></a></li>
+	            <li style="list-style: none;"><a th:href="@{/mypage/qnaList}"><h3>나의 QnA</h3></a></li>
 	          </ul>
 	        </div>
 	      </div>

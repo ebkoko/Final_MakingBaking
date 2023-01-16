@@ -38,7 +38,7 @@ public class ItemServiceImpl implements ItemService {
 	
 	@Override
 	public Page<CamelHashMap> getItemList(Pageable pageable, String itemCate) {
-		if(itemCate.equals(""))
+		if(itemCate.equals("") || itemCate.equals("ALL"))
 			return itemRepository.findItemAndFile(pageable);
 		else
 			return itemRepository.findItemAndFile(pageable, itemCate);
@@ -46,7 +46,7 @@ public class ItemServiceImpl implements ItemService {
 	
 	@Override
 	public Page<CamelHashMap> getPageItemList(Pageable pageable, String itemCate) {
-		if(itemCate.equals(""))
+		if(itemCate.equals("") || itemCate.equals("ALL"))
 			return itemRepository.findItemAndFile(pageable);
 		else
 			return itemRepository.findItemAndFile(pageable, itemCate);
@@ -112,5 +112,15 @@ public class ItemServiceImpl implements ItemService {
 	@Override
 	public List<CamelHashMap> getUserOrderStatus(String loginUserId, int itemNo) {	
 		return orderRepository.getByUserIdAndItemNo(loginUserId, itemNo);
+	}
+
+
+	@Override
+	public int getItemListCnt(String itemCate) {
+		// TODO Auto-generated method stub
+		if(itemCate.equals("") || itemCate.equals("ALL"))
+			return itemRepository.getItemListCnt();
+		else
+			return itemRepository.getItemListCnt(itemCate);
 	}
 }
