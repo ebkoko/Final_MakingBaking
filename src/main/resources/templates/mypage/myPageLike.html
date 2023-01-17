@@ -12,31 +12,47 @@
 						$(e.target).css("color", "white");
 				});
 				
-				$(".deletebtn").on('click', function(e){
+				$(document).on('click', ".deletebtn", function(e){
+					console.log($(this).attr("data-like-no"));
+					const likeNo = $(this).attr("data-like-no");
+					const pageNum = $(this).attr("data-page-num");
 					
-					$.ajax({
-						url: '/mypage/mypageUnlike',
-						type: 'delete',
-						data: {
-							likeNo: $(".likeNo").val(),
-							cateName: $(".cateName").val()
-						},
-						success: function(){
-							confirm("찜 목록에서 삭제하시겠습니까?");													
-						},
-						error: function(e){
-							console.log(e);
-						}
-					});
+					if(confirm("찜 목록에서 삭제하시겠습니까?")) {
+						$.ajax({
+							url: '/mypage/mypageUnlike',
+							type: 'delete',
+							data: {
+								likeNo: likeNo,
+								cateName: $(".cateName").val()
+							},
+							success: function(){
+								fnCallAjax(pageNum);										
+							},
+							error: function(e){
+								console.log(e);
+							}
+						});
+					}
 				});
 				
 				$(document).on("click", ".pagination_button a", function(e) {
 					e.preventDefault();
-					$.ajax({
+					const page = $(this).attr("href");
+					$(".deletebtn").attr("data-page-num", page);
+					fnCallAjax(page);
+					
+					/*.done(function(result) {
+						$("#list-table").replaceWith(result);
+					});*/
+				});
+			});
+			
+			function fnCallAjax(page) {
+				$.ajax({
 						url: '/mypage/myLikeList',
 						type: 'post',
 						data: {	
-							page: $(this).attr("href")						
+							page: page						
 						},
 						success: function(obj) {
 							console.log(obj);
@@ -55,6 +71,8 @@
 								for(let i = 0; i < obj.pageItems.content.length; i++) {
 									htmlstr += `
 										<div class="boxx">
+											<input type="hidden" name="likeNo" class="likeNo" value="${obj.pageItems.content[i].likeNo}">
+			        						<input type="hidden" name="cateName" class="cateName" value="${obj.pageItems.content[i].cateName}">
 										      	<div class="imgWrapper">
 									`;
 										
@@ -79,7 +97,8 @@
 										     	</div>
 										        <div class="box_right">
 										          <span class="box_right_detail">
-										          	<a href="#" class="deletebtn">
+										          	<a href="#" class="deletebtn" data-like-no="${obj.pageItems.content[i].likeNo}"
+										          		data-page-num="${obj.pageItems.pageable.pageNumber}">
 										          		<img src="/etc/like.png" width="30px" margin="10px"></img>
 										          	</a>
 										          </span>
@@ -148,15 +167,8 @@
 							console.log(e);
 							console.log($(e.target).attr("data-page-num"));
 						}
-					})
-					/*.done(function(result) {
-						$("#list-table").replaceWith(result);
-					});*/
-				});
-				
-				
-				
-			});
+					});
+			}
 		</script>
 	</th:block>
 	<th:block layout:fragment="css">
@@ -208,7 +220,6 @@
 		      <div id="boxxWrapper">
 			      <div class="boxx" th:each="like : ${pageLikeList}">
 			      	<input type="hidden" name="likeNo" class="likeNo" th:value="${like.likeNo}">
-			      	<p th:text="${like.likeNo + '@@' + like.cateName}"></p>
 			        <input type="hidden" name="cateName" class="cateName" th:value="${like.cateName}">
 			      	<div class="imgWrapper">
 			          <img th:src="@{${like.cateName} == 'class' ? '/dayclass/' + ${like.fileName} : '/item/' + ${like.fileName}}">
@@ -219,7 +230,8 @@
 			        </div>
 			        <div class="box_right">
 			          <span class="box_right_detail">
-			          	<a href="#" class="deletebtn">
+			          	<a href="#" class="deletebtn" th:data-like-no="${like.likeNo}"
+			          	   th:data-page-num="${pageLikeList.pageable.pageNumber}">
 			          	  <img src="/etc/like.png" width="30px" margin="10px"></img>
 			          	</a>
 			          </span>
