@@ -189,7 +189,7 @@
   </th:block>
 </head>
 <body>
-  <div layout:fragment="content" style="height: 75vh;">
+  <div layout:fragment="content" style="height: 80vh;">
   	<main class="centre">
 	    <!-- 사이드 바 -->
 	    <div class="left-nav-bar">
@@ -230,20 +230,22 @@
 			<div id="container">
 				<h2>나의 리뷰</h2>
 			    <div id="mid-container">
-			      <div id="selectbox">
-	                <label for="selectAll"><input type="checkbox" name="select" id="selectAll"> <span>전체선택</span></label>
-	              </div>
-	              <div id="itemTotalBtn">	
-			    	<input type="button" name="deleteBtn" value="삭제" id="reviewDelete" th:data-page-num="${pageReviewList.pageable.pageNumber}">
-			      </div>
+			    <div style="display: flex;">
+				      <div id="selectbox">
+		                <label for="selectAll"><input type="checkbox" name="select" id="selectAll"><span> 전체선택</span></label>
+		              </div>
+		              <div id="itemTotalBtn">	
+				    	<input type="button" name="deleteBtn" value="선택삭제" id="reviewDelete" th:data-page-num="${pageReviewList.pageable.pageNumber}">
+				      </div>
+			    </div>
 			      <table id="list-table">
 			        <tr>
-			          <th width="5%" id="th-chkbox"></th>
-			          <th width="15%" id="th-img">이미지</th>
-			          <th width="16%" id="th-category">분류</th>
-			          <th width="40%" id="th-content">내용</th>
-			          <th width="8%" id="th-score">별점</th>
-			          <th width="18%" id="th-date">작성일</th>			          
+			          <th width="4%" id="th-chkbox"></th>
+			          <th width="10%" id="th-img">상 품&ensp;&ensp;</th>
+			          <th width="15%" id="th-category">분&ensp;류</th>
+			          <th width="52%" id="th-content">내&ensp;&ensp;용</th>
+			          <th width="7%" id="th-score">별점</th>
+			          <th width="13%" id="th-date">작성일</th>			          
 			        </tr>
 			        <tr th:each="rvw: ${pageReviewList}">
 			        	<td><input type="checkbox" class="check" name="chk" th:value="${rvw.rvwNo}"></td>
