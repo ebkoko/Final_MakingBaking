@@ -3,23 +3,22 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin: 5rem auto 3rem;
+	margin: 10rem auto 3rem;
 	flex-direction: column;
 }
 
 .boxx {
   display: flex;
   align-items: center;
-  border: 1px solid black;
-  border-radius: 7px;
-  width: 60rem;
-  height: 180px;
+  border-bottom: 1px solid lightgray;
+  width: 55rem;
+  height: 210px;
   position: relative;
   margin-bottom: 10px;
 }
 .card {
   width: 270px;
-  height: 183px;
+  height: 190px;
 }
 .card_img {
   width: 100%;
@@ -30,25 +29,25 @@
   margin-right: 20px;
 }
 .container .boxx img {
-  padding: 10px;
+  padding: 25px 10px 10px 10px;
   width:17rem;
 }
 .box_product {
   display: flex;
   flex-direction: column;
-  margin-bottom: 4rem;
+  margin: 0 0 4rem 2rem;
   height: 50%;
 }
 .box_product_detail {
-  margin: 5px;
+  margin: 14px 5px 5px 5px;
   font-size: 1.5rem;
 }
 .box_product_detail2{
-	margin: 5px;
+	margin: 13px 5px 5px 5px;
 }
 .container .boxx .box_product .box_product_detail a {
 	color:black;
-	font-weight: 500;
+	font-weight: 600;
 }
 .container .boxx .box_product .box_product_detail a:hover{
 	color: #28693F;
@@ -64,13 +63,13 @@
 
 .box_right_detail_b {
   position: absolute;
-  bottom: 10px;
-  right: 33px;
+  bottom: 15px;
+  right: 50px;
 }
 .currency {
 	position: absolute;
-	bottom: 10px;
-  	right: 10px;
+	bottom: 15px;
+  	right: 25px;
 }
 #more {
   text-align: center;
