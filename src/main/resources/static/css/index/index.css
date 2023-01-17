@@ -1,62 +1,192 @@
+@font-face {
+  font-family: 'GowunBatang-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunBatang-Regular.woff') format('woff'); 
+  font-weight: normal; 
+  font-style: normal;
+}
+
 .swiper {
-	      width: 100%;
-	      height: 20rem;
-	      margin-top: 10px;
-	    }
-	    .swiper-slide {
-	      text-align: center;
-	      font-size: 18px;
-	      background: #fff;
-	      display: -webkit-box;
-	      display: -ms-flexbox;
-	      display: -webkit-flex;
-	      display: flex;
-	      -webkit-box-pack: center;
-	      -ms-flex-pack: center;
-	      -webkit-justify-content: center;
-	      justify-content: center;
-	      -webkit-box-align: center;
-	      -ms-flex-align: center;
-	      -webkit-align-items: center;
-	      align-items: center;
-	    }
-	    .swiper-slide img {
-	      display: block;
-	      width: 100%;
-	      height: 100%;
-	      object-fit: cover;
-	    }
+  width: 100%;
+  height: 30rem;
+  margin-top: 10px;
+}
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 메인 */
+main {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.content {
+  width: 100%;
+}
+.content1, .content2{
+  padding: 10px;
+  margin: 30px auto;
+}
+.content1 img{
+  float: right;
+  display: block;
+  margin-left: 10px;
+}
+.content2 img{
+  float: left;
+  clear: both;
+  margin-right: 10px;
+}
+.content .content1 p, .content .content2 p{
+  margin-top: 15px;
+}
+.content1-t {
+  text-align: left;
+}
+.content2-t {
+  clear: right;
+}
+
+/*---------------*/
+#main_container {
+	width: 100%;
+}
+
+.banner {
+	width: 100%; height: fit-content;
+	background-color: #7F462C;
+}
+
+#banner_content {
+	width: 1100px; height: 70px;
+	line-height: 70px;
+	color: white;
+	font-size: 20px;
+	margin: 0 auto;
+	font-family: 'GowunBatang-Regular';
+}
+
+.dayclass {
+	width: 100%; height: 434px;
+	margin: 0 auto;
+	padding: 20px 0;
+	background-color: #FFF8DC; /*#FFFDF7*/
 	
-	    /* 메인 */
-	    main {
-	      height: 100%;
-	      display: flex;
-	      justify-content: center;
-	      align-items: center;
-	    }
-	    .content {
-	      width: 70%;
-	    }
-	    .content1, .content2{
-	      padding: 10px;
-	      margin: 30px;
-	    }
-	    .content1 img{
-	      float: right;
-	      display: block;
-	      margin-left: 10px;
-	    }
-	    .content2 img{
-	      float: left;
-	      clear: both;
-	      margin-right: 10px;
-	    }
-	    .content .content1 p, .content .content2 p{
-	      margin-top: 15px;
-	    }
-	    .content1-t {
-	      text-align: left;
-	    }
-	    .content2-t {
-	      clear: right;
-	    }
+}
+
+.dayclass_img, .dayclass_detail, .bakery_img, .bakery_detail {
+	display:inline-block;
+}
+
+.dayclass_img {
+	float: left;
+}
+
+.dayclass_content, .bakery_content {
+	width: 1100px;
+	margin: 20px auto;	
+}
+
+.main_img > img {
+	width: 530px;
+	height: 350px;
+}
+
+.dayclass_detail {
+	width: 520px; height: 100%;
+	margin: auto 0 auto 30px;
+}
+
+.bakery {
+	width: 100%;  height: 434px;
+	margin: 0 auto;
+	padding: 20px 0;
+}
+
+.bakery_detail {
+	width: 520px; height: 100%;
+	margin: auto 30px auto 0;
+}
+
+.dayclass_detail > h4, .bakery_detail > h4 {
+	margin: 60px 0 20px 0;
+	font-family: 'GowunBatang-Regular';
+	font-size: 28px;
+}
+
+.dayclass_detail > p, .bakery_detail > p {
+	font-family: 'GowunBatang-Regular';
+	font-size: 20px;
+}
+
+.bakery_img {
+	float: right;
+}
+
+.vegan {
+	width: 100%; height: 600px;
+	margin: 0 auto;
+	padding: 20px 0;
+	background-color: #FFF8DC;
+}
+
+.vegan > h3 {
+	margin: 30px 0 0 0;
+	font-size: 28px;
+	text-align: center;
+	font-family: 'GowunBatang-Regular';
+}
+.vegan_content {
+	width: 1100px;
+	margin: 20px auto;	
+}
+
+.vegan_box {
+	width: 260px; height: 380px;
+	margin: 20px 20px 20px 0;
+	background-color: #fff;
+	display: inline-block;
+	float: left;
+}
+
+.vegan_box:last-child {
+	margin: 20px 0px 20px 0;
+}
+
+.sub_menu_img {
+	width: 260px; height: 260px;
+}
+.vegan_detail > h5 {
+	padding: 15px 0 0 0;
+	font-size: 22px;
+	text-align: center;
+	font-weight: bold;
+	font-family: 'GowunBatang-Regular';
+}
+.vegan_detail > p {
+	padding: 10px 10px;
+	font-size: 16px;
+	font-family: 'GowunBatang-Regular';
+}
