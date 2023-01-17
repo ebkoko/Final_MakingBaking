@@ -90,7 +90,7 @@
 				}
 
 				/* 회원 개인리뷰 버튼 */
-			    #adminUserReview {
+			    a[name="adminUserReview"] {
 					width: 70px;
 					display: inline-block;
 					height: 30px;
@@ -101,7 +101,7 @@
 					margin-right: 30px;
 			    }
 			    /* 회원 개인QnA 버튼 */
-			    #userQnA {
+			    a[name="adminUserQnA"] {
 					width: 70px;
 					display: inline-block;
 					height: 30px;
@@ -324,14 +324,18 @@
 						console.log(changeRows);
 					});
 
-				//회원리스트 페이징 처리
-				$(document).on("click", ".pagination a", function(e) {
-					e.preventDefault();
-					pageNum = $(this).attr("href");
-					userListPaging(pageNum, $("#searchCondition").val());
-				});
+					//회원리스트 페이징 처리
+					$(document).on("click", ".pagination a", function(e) {
+						e.preventDefault();
+						pageNum = $(this).attr("href");
+						userListPaging(pageNum, $("#searchCondition").val());
+					});
 				
-
+					$(document).on("click", "a[name='adminUserReview']", function(e) {
+						e.preventDefault();
+						window.open("/admin/userRvwList?rvwWriter=" + $(this).attr("data-user-id"), "getUserRvwListPop", 
+						"width=907px, height=530px, top=150, left=200");
+					})
 				}); //function 닫음
 				
 				
@@ -376,10 +380,11 @@
 										<td>${obj.pageItems.content[i].userId}</td>
 										<td>${obj.pageItems.content[i].userRegdate == null ? '' : obj.pageItems.content[i].userRegdate.substr(0, 10)}</td>
 										<td>
-							        		<a id="adminUserReview"
-												href="@{/admin/userRvwList?rvwWriter=" + ${obj.pageItems.content[i].userId}}">Review
+							        		<a id="adminUserReview${i}" name="adminUserReview"
+												href="@{/admin/userRvwList?rvwWriter=" + ${obj.pageItems.content[i].userId}}"
+												data-user-id="${obj.pageItems.content[i].userId}">Review
 											</a>
-											<a id="userQnA"
+											<a id="adminUserQnA${i}" name="adminUserQnA"
 												href="@{/admin/userRvwList?boardWriter=" + ${obj.pageItems.content[i].userId}}">QnA
 											</a>
 							        	</td>
@@ -469,7 +474,7 @@
 				});
 				
 				function reviewPopup(userId) {
-					window.open("userRvwList?rvwWriter=" + userId, "getUserRvwListPop", 
+					window.open("/admin/userRvwList?rvwWriter=" + userId, "getUserRvwListPop", 
 						"width=1000px, height=530px, top=150, left=200");
 				}
 			</script>
@@ -517,8 +522,8 @@
 					<td th:text="${user.userId}"></td>
 		        	<td th:text="${user.userRegdate eq null ? '' : #strings.substring(user.userRegdate, 0, 10)}"></td>
 		        	<td>
-		        		<a id="adminUserReview" th:text="Review" th:data-user-id="${user.userId}"></a>
-						<a id="adminUserQnA" th:text="QnA" th:data-user-id="${user.userId}"></a>
+		        		<a th:id="'adminUserReview' + ${userStat.index}" name="adminUserReview" th:text="Review" th:data-user-id="${user.userId}"></a>
+						<a th:id="'adminUserQnA' + ${userStat.index}" name="adminUserQnA" th:text="QnA" th:data-user-id="${user.userId}"></a>
 		        	</td>
 		     	 </tr>
 		    </table>

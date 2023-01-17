@@ -27,9 +27,7 @@
 					margin-right: 50px;
 				}
 				#reserDayclass:hover {
-					text-decoration: underline;
-					text-decoration-color: #4A4A4A;
-					color: #4A4A4A;
+					color: #28693F;
 					font-weight: bold;
 					font-size: 25px;
 				}
@@ -39,9 +37,7 @@
 					font-size: 25px;
 				}
 				#orderItemList:hover {
-					text-decoration: underline;
-					text-decoration-color: #4A4A4A;
-					color: #4A4A4A;
+					color: #28693F;
 					font-weight: bold;
 					font-size: 25px;
 				}
@@ -428,6 +424,12 @@
 					<td th:text="${reser.partiTime}"></td>
 					<td th:text="${reser.reserStatus}"></td>
 					<td th:text="${reser.partiStatus}"></td>
+						<select>
+							<option value="DW">배송준비중</option>
+			        		<option value="D">배송중</option>
+			        		<option value="DC">배송완료</option>
+						</select>
+					</td>
 		     	 </tr>
 		    </table>
 		</div>

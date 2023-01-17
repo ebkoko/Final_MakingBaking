@@ -1063,34 +1063,70 @@ public class AdminController {
 	}
 	
 	//회원 리스트_리뷰팝업
-//	@GetMapping("/userRvwList")
-//	public ModelAndView getUserRvwList(ReviewDTO reviewDTO,
-//			@PageableDefault(page = 0, size = 5) Pageable pageable) {
-//		Page<Review> reviewList = adminService.getUserRvwPageList(reviewDTO.getRvwWriter(), pageable);
-//		
-//		Page<ReviewDTO> reviewListDTO = reviewList.map(review -> 
-//								ReviewDTO.builder()
-//										.rvwNo(review.getRvwNo())
-//										.rvwReferNo(review.getRvwReferNo())
-//										.rvwType(review.getRvwType())
-//										.rvwContent(review.getRvwContent())
-//										.rvwWriter(review.getRvwWriter())
-//										.rvwRegdate(review.getRvwRegdate().toString())
-//										.rvwScore(review.getRvwScore())
-//										.build()
-//										);
-//		
-//		
-//		ModelAndView mv = new ModelAndView();
-//		mv.setViewName("admin/userRvwList.html");
-//		mv.addObject("getUserRvwPageList", reviewListDTO);
-//		
-//		if(reviewDTO.getSearchCondition() != null && !reviewDTO.getSearchCondition().equals("")) {
-//			mv.addObject("searchCondition", reviewDTO.getSearchCondition());
-//		}
-//
-//		return mv;
-//	}
+	@GetMapping("/userRvwList")
+	public ModelAndView getUserRvwList(ReviewDTO reviewDTO,
+			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+		Review reviewParam = Review.builder()
+							  .rvwWriter(reviewDTO.getRvwWriter())
+							  .rvwType(reviewDTO.getRvwType())
+							  .build();
+		
+		Page<Review> reviewList = adminService.getUserRvwPageList(reviewParam, pageable);
+		
+		Page<ReviewDTO> reviewListDTO = reviewList.map(review -> 
+															ReviewDTO.builder()
+																	.rvwNo(review.getRvwNo())
+																	.rvwReferNo(review.getRvwReferNo())
+																	.rvwType(review.getRvwType())
+																	.rvwContent(review.getRvwContent())
+																	.rvwWriter(review.getRvwWriter())
+																	.rvwRegdate(review.getRvwRegdate().toString())
+																	.rvwScore(review.getRvwScore())
+																	.build()
+																	);
+		
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("admin/userRvwList.html");
+		mv.addObject("getUserRvwPageList", reviewListDTO);
+
+		return mv;
+	}
+	
+	//회원 리스트_리뷰팝업 - ajax로 처리한 페이징 글 목록 보여주기
+	@PostMapping("/userRvwList")
+	public ResponseEntity<?> getUserRvwPageList(ReviewDTO reviewDTO,
+			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+		ResponseDTO<ReviewDTO> response = new ResponseDTO<>();
+		try {
+			Review reviewParam = Review.builder()
+					  .rvwWriter(reviewDTO.getRvwWriter())
+					  .rvwType(reviewDTO.getRvwType())
+					  .build();
+
+			Page<Review> pageUserReviewList = adminService.getUserRvwPageList(reviewParam, pageable);
+			
+			Page<ReviewDTO> pageUserReviewDTOList = pageUserReviewList.map(pageReview -> 
+																			ReviewDTO.builder()
+																					.rvwNo(pageReview.getRvwNo())
+																					.rvwReferNo(pageReview.getRvwReferNo())
+																					.rvwType(pageReview.getRvwType())
+																					.rvwContent(pageReview.getRvwContent())
+																					.rvwWriter(pageReview.getRvwWriter())
+																					.rvwRegdate(pageReview.getRvwRegdate().toString())
+																					.rvwScore(pageReview.getRvwScore())
+																					.build()
+
+											   				);
+			response.setPageItems(pageUserReviewDTOList);
+			
+			return ResponseEntity.ok().body(response);
+			
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
 
 
 
