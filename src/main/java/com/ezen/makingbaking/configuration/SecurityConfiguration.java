@@ -53,7 +53,15 @@ public class SecurityConfiguration {
 									.antMatchers("/item/list").permitAll()
 									.antMatchers("/item/item").permitAll()
 									.antMatchers("/item/**").permitAll()
-									.antMatchers("/board/**").permitAll()
+									.antMatchers("/board/qnaList/**").permitAll()
+									.antMatchers("/board/updateQnaCnt/**").permitAll()
+									.antMatchers("/board/qna/**").permitAll()
+									.antMatchers("/board/noticeList/**").permitAll()
+									.antMatchers("/board/updateNoticeCnt/**").permitAll()
+									.antMatchers("/board/notice/**").permitAll()
+									.antMatchers("/board/eventList/**").permitAll()
+									.antMatchers("/board/updateEventCnt/**").permitAll()
+									.antMatchers("/board/event/**").permitAll()
 									.anyRequest().authenticated();  /* 인증받은 사용자만 접근 가능하게 나중에 .anyRequest().authenticated();로 바꿔야함 */
 			
 			//로그인
