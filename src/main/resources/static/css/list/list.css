@@ -1,10 +1,10 @@
 #sub-navbar {
   margin-top: 3rem;
   text-align: right;
-  margin-right: 16.5rem
+  margin-right: 17rem
 }
 .sub-navbar select {
-  width: 25rem;
+  width: 10rem;
   margin-bottom: 20px;
   padding: 5px;
   border-bottom: 2px solid #28693F; 
