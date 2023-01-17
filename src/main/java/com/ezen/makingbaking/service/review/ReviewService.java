@@ -1,5 +1,8 @@
 package com.ezen.makingbaking.service.review;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,5 +21,10 @@ public interface ReviewService {
 
 	Page<CamelHashMap> getPageMyRvwList(String userId, Pageable pageable);
 
+	void deleteRvw(List<Map<String, Object>> changeRowsList);
+
+	
+
+	
 	
 }

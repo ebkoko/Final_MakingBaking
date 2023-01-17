@@ -2,6 +2,7 @@ package com.ezen.makingbaking.controller;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,12 +30,17 @@ import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.dto.ReviewDTO;
 import com.ezen.makingbaking.entity.Board;
 import com.ezen.makingbaking.entity.CustomUserDetails;
+import com.ezen.makingbaking.entity.Review;
 import com.ezen.makingbaking.service.board.BoardService;
 import com.ezen.makingbaking.service.dayclass.DayclassService;
 import com.ezen.makingbaking.service.mypage.MypageService;
 import com.ezen.makingbaking.service.order.OrderService;
 import com.ezen.makingbaking.service.reser.ReserService;
 import com.ezen.makingbaking.service.review.ReviewService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/mypage")
@@ -272,7 +279,7 @@ public class MypageController {
 		return mv;
 	}
 	
-	// 
+	// 나의 리뷰 페이징
 	@PostMapping("/myRvwList")
 	public ResponseEntity<?> myRvwPageList(@PageableDefault(page=0, size=4) Pageable pageable,
 			@AuthenticationPrincipal CustomUserDetails customUser) {
@@ -293,7 +300,32 @@ public class MypageController {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
-
+	// 나의 리뷰 삭제
+	@PostMapping("/deleteMyRvw")
+	public ResponseEntity<?> deleteRvwList(@RequestParam("changeRows") String changeRows,
+			@PageableDefault(page = 0, size = 4) Pageable pageable,
+			@AuthenticationPrincipal CustomUserDetails customUser) throws JsonMappingException, JsonProcessingException {
+		ResponseDTO<CamelHashMap> response = new ResponseDTO<>();
+		List<Map<String, Object>> changeRowsList = new ObjectMapper().readValue(changeRows, 
+											new TypeReference<List<Map<String, Object>>>() {});
+		
+		try {
+			reviewService.deleteRvw(changeRowsList);
+			
+		
+			Page<CamelHashMap> pageReviewList = reviewService.getPageMyRvwList(customUser.getUsername(), pageable);
+			
+			response.setPageItems(pageReviewList);
+			
+			return ResponseEntity.ok().body(response);
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+	
+	
+	
 	// 나의 찜 목록
 	@GetMapping("/myLikeList")
 	public ModelAndView myLikeList(@PageableDefault(page=0, size=5) Pageable pageable,

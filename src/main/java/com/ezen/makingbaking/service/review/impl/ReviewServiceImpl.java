@@ -1,5 +1,8 @@
 package com.ezen.makingbaking.service.review.impl;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,4 +62,23 @@ public class ReviewServiceImpl implements ReviewService {
 	public Page<CamelHashMap> getPageMyRvwList(String userId, Pageable pageable) {
 		return reviewRepository.myPageRvwList(userId, pageable);
 	}
+
+	@Override
+	public void deleteRvw(List<Map<String, Object>> changeRowsList) {
+		for(int i = 0; i < changeRowsList.size(); i++) {
+			Review review = Review.builder()
+							.rvwNo(Integer.parseInt(String.valueOf(changeRowsList.get(i).get("rvwNo"))))
+							.build();
+			
+			reviewRepository.delete(review);
+			 
+		}
+		
+	}
+
+
+
+	
+
+	
 }
