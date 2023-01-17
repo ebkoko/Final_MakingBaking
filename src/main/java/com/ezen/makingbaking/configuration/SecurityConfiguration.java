@@ -42,7 +42,7 @@ public class SecurityConfiguration {
 									.antMatchers("/main/login").permitAll()
 									.antMatchers("/user/idcheck").permitAll()
 									.antMatchers("/user/loginProc").permitAll()
-									.anyRequest().permitAll();  /* 인증받은 사용자만 접근 가능하게 나중에 .anyRequest().authenticated();로 바꿔야함 */
+									.anyRequest().authenticated();  /* 인증받은 사용자만 접근 가능하게 나중에 .anyRequest().authenticated();로 바꿔야함 */
 			
 			//로그인
 			http.formLogin()
