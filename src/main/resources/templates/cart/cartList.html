@@ -508,8 +508,8 @@ itemCnt * detailPrice >= 1000 ? (itemCnt * detailPrice).toString().replace(/\B(?
 		                    <div class="itemView">
 		                        <img class="item_Img" th:src="@{'/item/' + ${cart.fileName}}">
 		                        <div class="item_Detail">
-		                            <div class="detailName"><a th:href="@{/item/item/{itemNo} (itemNo=${cart.itemNo})}" th:text="${cart.itemName}"></a>
-		                            <span th:if="${cart.itemStatus} == 'S'" style="color: red;">품절</span><span th:if="${cart.itemStatus} == 'N'" style="color: red;">판매중지</span></div>
+		                            <div class="detailName"><a style="font-weight: 600;" th:href="@{/item/item/{itemNo} (itemNo=${cart.itemNo})}" th:text="${cart.itemName}"></a>
+		                            <span th:if="${cart.itemStatus} == 'S'" style="color: #B40431; font-weight: 600;">품절</span><span th:if="${cart.itemStatus} == 'N'" style="color: #B40431; font-weight: 600;">판매중지</span></div>
 		                            <div class="detailPrice" th:text="${#numbers.formatInteger(cart.itemPrice, 3, 'COMMA')}"></div><span>원</span>
 		                        </div>    
 		                    </div>
