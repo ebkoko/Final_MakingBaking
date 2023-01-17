@@ -323,12 +323,6 @@ public class AdminServiceImpl implements AdminService {
 	/////////////////////해결중////////////////////////////////////////////////////////////////////////
 	//각 회원의 리뷰-팝업창
 //	@Override
-//	public Page<Review> getUserRvwList(String rvwWriter, Pageable pageable) {
-//		return reviewRepository.getUserRvwList(rvwWriter, pageable);
-//	}
-
-
-//	@Override
 //	public Page<Review> getUserRvwPageList(Review review, Pageable pageable) {
 //		if(review.getSearchCondition().equals("item")) {
 //			return reviewRepository.findByItemContaining(review.getSearchKeyword(), pageable);
@@ -336,7 +330,7 @@ public class AdminServiceImpl implements AdminService {
 //			return reviewRepository.findByClassContaining(review.getSearchKeyword(), pageable);
 //		}
 //	}
-	
+//	
 	
 	
 	
@@ -394,9 +388,9 @@ public class AdminServiceImpl implements AdminService {
 			      } else if (order.getSearchCondition().equals("ORDERNAME")) {
 				         return orderRepository.findByOrderNameContainingOrderByOrderNoDesc(order.getSearchKeyword(), pageable);
 			      } else if (order.getSearchCondition().equals("ORDERPAYMENT")) {
-			    	  return orderRepository.findByOrderPaymentContainingOrderByOrderNoDesc(order.getSearchKeyword(), pageable);
+			    	  return orderRepository.findByOrderPaymentOrderByOrderNoDesc(order.getSearchKeyword(), pageable);
 			      } else if (order.getSearchCondition().equals("ORDERSTATUS")) {
-			    	  return orderRepository.findByOrderStatusContainingOrderByOrderNoDesc(order.getSearchKeyword(), pageable);
+			    	  return orderRepository.findByOrderStatusOrderByOrderNoDesc(order.getSearchKeyword(), pageable);
 			      } else {
 			    	  return orderRepository.findAllByOrderByOrderNoDesc(pageable);
 			      }

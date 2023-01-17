@@ -55,10 +55,8 @@ public interface AdminService {
 	void saveUserList(List<Map<String, Object>> changeRowsList);
 	//user_회원상세보기
 	User getUserInfoCheck(String userId);
-	//user_리뷰팝업
-//	Page<Review> getUserRvwList(String rvwWriter, Pageable pageable);
-//	
-//	Page<Review> getUserRvwPageList(Review review, Pageable pageable);
+	//user_리뷰팝업	
+//	Page<Review> getUserRvwPageList(String getRvwWriter, Pageable pageable);
 
 	
 	

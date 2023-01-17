@@ -376,7 +376,7 @@
 	              	<option value="PE" th:selected="${searchKeyword} == 'PE'">결제완료(PE)</option>
 	              	<option value="OC" th:selected="${searchKeyword} == 'OC'">주문취소(OC)</option>
 	              	<option value="PC" th:selected="${searchKeyword} == 'PC'">결제취소(PC)</option>
-	              	<option value="DR" th:selected="${searchKeyword} == 'DR'">배송준비중(DR)</option>
+	              	<option value="DW" th:selected="${searchKeyword} == 'DW'">배송준비중(DW)</option>
 	              	<option value="D" th:selected="${searchKeyword} == 'D'">배송중(D)</option>
 	              	<option value="DC" th:selected="${searchKeyword} == 'DC'">배송완료(DC)</option>
 	            </select>
@@ -409,7 +409,14 @@
 					<td th:text="${order.orderTotalPrice >= 1000 ? #numbers.formatInteger(order.orderTotalPrice , 3, 'COMMA') : order.orderTotalPrice}"></td>
 					<td th:text="${order.orderPayment}"></td>
 					<td th:text="${order.orderDate eq null ? '' : #strings.substring(order.orderDate, 0, 10)}"></td>
-					<td th:text="${order.orderStatus}"></td>
+					<td th:text="${order.orderStatus}">
+						<select th:if="${order.orderStatus} == 'PE'">
+							<option value="DW">배송준비중</option>
+			        		<option value="D">배송중</option>
+			        		<option value="DC">배송완료</option>
+						</select>
+					</td>
+					
 		     	 </tr>
 		    </table>
 		</div>

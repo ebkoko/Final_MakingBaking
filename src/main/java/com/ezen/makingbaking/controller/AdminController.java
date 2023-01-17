@@ -1050,7 +1050,7 @@ public class AdminController {
 	}
 	
 //////////////////////////////user-팝업창//////////////////////////////
-	//회원상세보기
+	//회원상세보기_팝업
 	@GetMapping("/userInfoCheck/{userId}")
 	public ModelAndView getUserInfoCheck(@PathVariable String userId) {
 		User user = adminService.getUserInfoCheck(userId);
@@ -1066,7 +1066,7 @@ public class AdminController {
 //	@GetMapping("/userRvwList")
 //	public ModelAndView getUserRvwList(ReviewDTO reviewDTO,
 //			@PageableDefault(page = 0, size = 5) Pageable pageable) {
-//		Page<Review> reviewList = adminService.getUserRvwList(reviewDTO.getRvwWriter(), pageable);
+//		Page<Review> reviewList = adminService.getUserRvwPageList(reviewDTO.getRvwWriter(), pageable);
 //		
 //		Page<ReviewDTO> reviewListDTO = reviewList.map(review -> 
 //								ReviewDTO.builder()
@@ -1083,7 +1083,7 @@ public class AdminController {
 //		
 //		ModelAndView mv = new ModelAndView();
 //		mv.setViewName("admin/userRvwList.html");
-//		mv.addObject("getUserRvwList", reviewListDTO);
+//		mv.addObject("getUserRvwPageList", reviewListDTO);
 //		
 //		if(reviewDTO.getSearchCondition() != null && !reviewDTO.getSearchCondition().equals("")) {
 //			mv.addObject("searchCondition", reviewDTO.getSearchCondition());
@@ -1091,42 +1091,8 @@ public class AdminController {
 //
 //		return mv;
 //	}
-//
-//
-//	//회원 리스트_리뷰팝업 - ajax로 처리한 페이징 글 목록 보여주기
-//	@PostMapping("/userRvwList")
-//	public ResponseEntity<?> getUserRvwPageList(ReviewDTO reviewDTO,
-//			@PageableDefault(page = 0, size = 5) Pageable pageable) {
-//		ResponseDTO<ReviewDTO> response = new ResponseDTO<>();
-//		try {
-//			Review review = Review.builder()
-//							.searchCondition(reviewDTO.getSearchCondition())
-//							.searchKeyword(reviewDTO.getSearchKeyword())
-//							.build();
-//
-//			Page<Review> pageReviewList = adminService.getUserRvwPageList(review, pageable);
-//			
-//			Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview -> 
-//													            ReviewDTO.builder()
-//													            .rvwNo(review.getRvwNo())
-//																.rvwReferNo(review.getRvwReferNo())
-//																.rvwType(review.getRvwType())
-//																.rvwContent(review.getRvwContent())
-//																.rvwWriter(review.getRvwWriter())
-//																.rvwRegdate(review.getRvwRegdate().toString())
-//																.rvwScore(review.getRvwScore())
-//																.build()
-//											   				);
-//			response.setPageItems(pageReviewDTOList);
-//			
-//			return ResponseEntity.ok().body(response);
-//			
-//		} catch(Exception e) {
-//			response.setErrorMessage(e.getMessage());
-//			return ResponseEntity.badRequest().body(response);
-//		}
-//	}
-	
+
+
 
 	
 	
