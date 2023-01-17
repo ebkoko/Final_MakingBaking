@@ -37,61 +37,101 @@
 		</th:block>
 	</head>
 	
-	<body>
-		<div layout:fragment="content">
-		<input type="hidden" id="msg" th:value="${msg}">
-		<input type="hidden" id="quitMsg" name="quitMsg" th:value="${quitMsg}">
-			<div class="swiper mySwiper">
+<body>
+  <div layout:fragment="content">
+	<input type="hidden" id="msg" th:value="${msg}">
+	<input type="hidden" id="quitMsg" name="quitMsg" th:value="${quitMsg}">
+	<div class="swiper mySwiper">
 	    <div class="swiper-wrapper">
-	      <div class="swiper-slide"><img th:src="@{/images/bg.jpg}" alt=""></div>
-	      <div class="swiper-slide">Slide 2</div>
-	      <div class="swiper-slide">Slide 3</div>
-	      <div class="swiper-slide">Slide 4</div>
-	      <div class="swiper-slide">Slide 5</div>
-	      <div class="swiper-slide">Slide 6</div>
-	      <div class="swiper-slide">Slide 7</div>
-	      <div class="swiper-slide">Slide 8</div>
-	      <div class="swiper-slide">Slide 9</div>
+	      <div class="swiper-slide"><img th:src="@{/images/main/main1.PNG}" alt=""></div>
+	      <div class="swiper-slide"><img th:src="@{/images/main/main2.jpg}" alt=""></div>
+	      <div class="swiper-slide"><img th:src="@{/images/main/main3.jpg}" alt=""></div>
+	      <div class="swiper-slide"><img th:src="@{/images/main/main4.jpg}" alt=""></div>
+	      <div class="swiper-slide"><img th:src="@{/images/main/main5.jpg}" alt=""></div>
 	    </div>
 	    <div class="swiper-button-next"></div>
 	    <div class="swiper-button-prev"></div>
-	  </div>
-	  
-	  <main>
-	    <div class="content">
-	      <div class="content1">
-	        <div><img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg"width="300px"></div>
-	        <p class="content1-t">
-	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque iure quas accusantium, culpa nisi commodi repellat architecto ea quae eius impedit numquam atque mollitia. Eligendi magni repellat aperiam exercitationem laudantium!
-	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis provident obcaecati quasi, quia amet voluptatum tempora, possimus tenetur, assumenda nam nesciunt eius perferendis voluptates suscipit rem quaerat odit quo beatae?
-	          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae ipsum molestiae recusandae, libero alias possimus expedita vero maiores explicabo asperiores vel odit cupiditate ab doloribus omnis consequuntur culpa temporibus dolore.
-	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste perspiciatis impedit quisquam perferendis deleniti, deserunt tempore rerum officiis sint consectetur facilis asperiores fugiat debitis. Eos laborum possimus dolor voluptas id!
-	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore nemo recusandae eveniet. Quo voluptas neque natus sed odio, tempore ut nesciunt, delectus eligendi tenetur enim. Voluptas recusandae fuga magni necessitatibus?
-	        </p>
-	      </div>
-	      <div class="content2">
-	        <div><img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg"width="500px"></div>
-	        <p class="content2-t">
-	          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis esse temporibus blanditiis recusandae sint ut totam labore optio dolores explicabo animi, officiis, nemo soluta est minus, atque quo? Eum, obcaecati.
-	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum iure cum sed quos nulla quas non explicabo reiciendis id, ipsum aperiam libero earum saepe. Ducimus quos molestiae id est quas.
-	          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Accusantium, quidem odit. Non aperiam commodi, corrupti quidem officiis, rem vitae, reiciendis cum asperiores earum labore molestias necessitatibus saepe soluta nesciunt illo?
-	          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora aspernatur dignissimos minus sapiente, nulla nemo, dolor tenetur laborum minima eius at deleniti. Quae maiores tenetur architecto saepe ducimus, fugit atque.
-	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis placeat asperiores ipsam necessitatibus, voluptatum ducimus esse libero aliquid odio officiis in consectetur tenetur dicta quod accusamus aliquam voluptas quo nostrum?
-	          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis excepturi quisquam veniam dolore hic officiis a fuga corporis omnis suscipit! Earum saepe nulla repellat soluta quidem labore, odit veritatis nihil?
-	        </p>
-	      </div>
-	      <div class="content1">
-	        <div><img src="https://photo.coolenjoy.co.kr/data/editor/2106/f1cf6e8bf704135d4bedac720a1d71153ba524c8.jpg"width="300px"></div>
-	        <p class="content1-t">
-	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque iure quas accusantium, culpa nisi commodi repellat architecto ea quae eius impedit numquam atque mollitia. Eligendi magni repellat aperiam exercitationem laudantium!
-	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis provident obcaecati quasi, quia amet voluptatum tempora, possimus tenetur, assumenda nam nesciunt eius perferendis voluptates suscipit rem quaerat odit quo beatae?
-	          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae ipsum molestiae recusandae, libero alias possimus expedita vero maiores explicabo asperiores vel odit cupiditate ab doloribus omnis consequuntur culpa temporibus dolore.
-	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste perspiciatis impedit quisquam perferendis deleniti, deserunt tempore rerum officiis sint consectetur facilis asperiores fugiat debitis. Eos laborum possimus dolor voluptas id!
-	          Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore nemo recusandae eveniet. Quo voluptas neque natus sed odio, tempore ut nesciunt, delectus eligendi tenetur enim. Voluptas recusandae fuga magni necessitatibus?
-	        </p>
-	      </div>
-	    </div>
-	  </main>
+	</div>
+  <main>
+	<div id="main_container">
+		<div class="banner">
+			<p id="banner_content">좋은 재료로 만들어 건강하고, 갓 구워 신선한 빵과 케이크를 만날 수 있는 곳&emsp;-&emsp;Making Baking</p>
 		</div>
-	</body>
+		<div class="dayclass">
+			<div class="dayclass_content">
+				<div class="dayclass_img main_img">
+					<img src="/images/main/dayclass.jpg">
+				</div>
+				<div class="dayclass_detail">
+					<h4>Oneday Class</h4>
+					<p>누가 만들어도 항상 맛있는 레시피!<br>
+					쉬운 레시피에 활용도를 더한 커리큘럼으로 구성한<br>
+					여러 종류의 원데이 클래스를 운영하고 있습니다.<br><br>
+					베이킹이 어렵게만 느껴지는 초보 홈 베이커도,<br>
+					카페 사장님도, 취미로 시작해보고 싶은 모든 분들도<br>
+					더 이상 망설이지 마시고 시작해보세요.</p>
+				</div>
+			</div>
+		</div>
+		<div class="bakery">
+			<div class="bakery_content">
+				<div class="bakery_detail">
+					<h4>Bakery</h4>
+					<p>매일 구워 신선한 빵과 케이크를 만날 수 있는 곳.<br>
+					   여기는 신선함이 가득한 베이커리, 메이킹베이킹입니다.<br><br>
+					   고품질 원재료와 뛰어난 생산팀의 기술력을 기반으로,<br>
+					   트렌드를 선도하는 디저트를 생산함으로써<br>
+					   보다 새롭고 맛있는 제품을 제공하여<br>
+					   고객만족 실현에 앞장서고 있습니다.</p>
+				</div>
+				<div class="bakery_img main_img">
+					<img src="/images/main/bakery.jpg">
+				</div>
+			</div>
+		</div>
+		<div class="vegan">
+			<h3>Vegan Products</h3>
+			<div class="vegan_content">
+				<div class="vegan_box">
+					<div class="vegan_img sub_menu_img">
+						<img src="/images/main/vegan/올리브쌀치아바타.png" width="260px">
+					</div>
+					<div class="vegan_detail">
+						<h5>올리브쌀 치아바타</h5>
+						<p>건강한 우리 쌀과 올리브가 가득 들어있는 치아바타입니다.</p>
+					</div>
+				</div>
+				<div class="vegan_box">
+					<div class="vegan_img sub_menu_img">
+						<img src="/images/main/vegan/무화과깜빠뉴.jpg" width="260px">
+					</div>
+					<div class="vegan_detail">
+						<h5>무화과 깜빠뉴</h5>
+						<p>달콤한 무화과가 가득 들어있는 깜빠뉴입니다.</p>
+					</div>
+				</div>
+				<div class="vegan_box">
+					<div class="vegan_img sub_menu_img">
+						<img src="/images/main/vegan/소금빵.jpg" width="260px">
+					</div>
+					<div class="vegan_detail">
+						<h5>소금빵</h5>
+						<p>짭쪼름한 맛이 담백하게 어우러진 깊은 맛의 소금빵입니다.</p>
+					</div>
+				</div>
+				<div class="vegan_box">
+					<div class="vegan_img sub_menu_img">
+						<img src="/images/main/vegan/우리밀식빵.jpg" width="260px">
+					</div>
+					<div class="vegan_detail">
+						<h5>우리 밀 식빵</h5>
+						<p>100% 국내산 밀을 사용한 비건 식빵입니다.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+  </main>
+  </div>
+</body>
 </html>
