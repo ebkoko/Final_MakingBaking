@@ -82,14 +82,8 @@
 				.reviewList_T_15 {
 					 width: 15%
 				}
-				.reviewList_T_20 {
-					 width: 20%
-				}
-				.reviewList_T_25 {
-					 width: 25%
-				}
-				.reviewList_T_40 {
-					 width: 40%
+				.reviewList_T_50 {
+					 width: 50%
 				}
 				
 				#reviewList_T td {
@@ -174,7 +168,7 @@
 				let pageNum;
 				
 				$(function() {
-					//검색창(상품카테, 판매상태)
+					//검색창(작성자, 리뷰타입)
 					$("#searchCondition").on("change", function() {
 						if($(this).val() == 'RVWTYPE') {
 							$("#inputSearch").hide();
@@ -205,7 +199,7 @@
 						}
 					});
 					
-					// 원데이클래스 리스트 중 전체선택을 누른 뒤 상품 체크박스를 풀면, 전체선택 체크박스도 풀림
+					// 리뷰 리스트 중 전체선택을 누른 뒤 리뷰 체크박스를 풀면, 전체선택 체크박스도 풀림
 					$(".check").click(function() {
 						if($("input[name='chk']:checked").length < $("input[name='chk']").length) {
 							$("#reviewSelectAll").prop("checked", false);
@@ -215,26 +209,26 @@
 					});
 				});
 				
-				/*
-				//선택클래스 삭제
+				
+				//선택리뷰 삭제
 				$(function() {
 					//삭제버튼 클릭 시 체크된 게시물들 삭제 상태로 변경
-					$("#dayclassDelete").on('click', function() {
+					$("#reviewDelete").on('click', function() {
 						$("input:checkbox[name='chk']").each(function() {
 							if($(this).is(":checked")) {
-								const delDayclass = {
-										dayclassNo: $(this).val()
+								const delReview = {
+										rvwNo: $(this).val()
 									};
 									
-									changeRows.push(delDayclass);
+									changeRows.push(delReview);
 							}
 						});
 						
 						console.log(changeRows);
 						
-						if(confirm("선택한 클래스를 삭제하시겠습니까?")) {
+						if(confirm("선택한 리뷰를 삭제하시겠습니까?")) {
 						$.ajax({
-							url: '/admin/saveDayclassList',
+							url: '/admin/saveReviewList',
 							type: 'post',
 							data: {
 								changeRows: JSON.stringify(changeRows),
@@ -247,42 +241,33 @@
 								htmlStr += `
 							
 								<tr>
-					        		<th class="dayclassList_T_05"></th>
-							        <th class="dayclassList_T_10">No.</th>
-							        <th class="dayclassList_T_25">클래스 이름</th>
-							        <th class="dayclassList_T_20">클래스 가격</th>
-							        <th class="dayclassList_T_15">운영시간</th>
-							        <th class="dayclassList_T_15">진행 상태</th>
-							        <th class="dayclassList_T_10">클래스 관리</th>
+					        		<th class="reviewList_T_05"></th>
+							        <th class="reviewList_T_10">No.</th>
+							        <th class="reviewList_T_05">타입</th>
+							        <th class="reviewList_T_15">작성자</th>
+							        <th class="reviewList_T_50">내용</th>
+							        <th class="reviewList_T_10">등록일</th>
+							        <th class="reviewList_T_05">별점</th>
 					      		</tr>
-					      	`;
+									      	`;
 								for(let i = 0; i < obj.pageItems.content.length; i++) {
 									htmlStr += `
 										<tr>
 											<td>
-												<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].dayclassNo}"
-												value="${obj.pageItems.content[i].dayclassNo}">
+												<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].rvwNo}"
+													value="${obj.pageItems.content[i].reviewNo}">
 											</td>
-											<td>${obj.pageItems.content[i].dayclassNo}</td>
-											<td id="td_dayclassName" name="dayclassName"
-												data-dayclass-name="${obj.pageItems.content[i].dayclassName}">
-												<a class="a_dayclassName"
-													href="/admin/dayclass/${obj.pageItems.content[i].dayclassNo}">${obj.pageItems.content[i].dayclassName}
-												</a>
-											</td>
-											<td>${(obj.pageItems.content[i].dayclassPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
-											<td>${obj.pageItems.content[i].dayclassTime}</td>
-											<td>${obj.pageItems.content[i].dayclassUseYn}</td>
-											<td>
-								        		<a id="dayclassMod"
-													href="/admin/dayclassUpdate/${obj.pageItems.content[i].dayclassNo}">수정
-												</a>
-								        	</td>
+											<td>${obj.pageItems.content[i].rvwNo}</td>
+											<td>${obj.pageItems.content[i].rvwType}</td>
+											<td>${obj.pageItems.content[i].rvwWriter}</td>
+											<td>${obj.pageItems.content[i].rvwContent}</td>
+											<td>${obj.pageItems.content[i].rvwRegdate == null ? '' : obj.pageItems.content[i].rvwRegdate.substr(0, 10)}</td>
+											<td>${obj.pageItems.content[i].rvwScore}</td>
 										</tr>
 									`;
 								}
 								
-								$("#dayclassList_T").html(htmlStr);
+								$("#reviewList_T").html(htmlStr);
 							},
 							error: function(e) {
 								console.log(e);
@@ -295,23 +280,23 @@
 						console.log(changeRows);
 					});
 
-				//상품리스트 페이징 처리
+				//리뷰리스트 페이징 처리
 				$(document).on("click", ".pagination a", function(e) {
 					e.preventDefault();
 					pageNum = $(this).attr("href");
-					dayclassListPaging(pageNum, $("#searchCondition").val());
+					reviewListPaging(pageNum, $("#searchCondition").val());
 				});
 				
 
 				}); //function 닫음
 				
 				
-				function dayclassListPaging(page, condition) {
+				function reviewListPaging(page, condition) {
 					console.log(page);
 					console.log(condition);
 
 						$.ajax({
-						url: '/admin/dayclassList',
+						url: '/admin/reviewList',
 						type: 'post',
 						data: {
 							page: page,
@@ -325,13 +310,13 @@
 							htmlStr += `
 							
 								<tr>
-					        		<th class="dayclassList_T_05"></th>
-							        <th class="dayclassList_T_10">No.</th>
-							        <th class="dayclassList_T_25">클래스 이름</th>
-							        <th class="dayclassList_T_20">클래스 가격</th>
-							        <th class="dayclassList_T_15">운영시간</th>
-							        <th class="dayclassList_T_15">진행 상태</th>
-							        <th class="dayclassList_T_10">클래스 관리</th>
+					        		<th class="reviewList_T_05"></th>
+							        <th class="reviewList_T_10">No.</th>
+							        <th class="reviewList_T_05">타입</th>
+							        <th class="reviewList_T_15">작성자</th>
+							        <th class="reviewList_T_50">내용</th>
+							        <th class="reviewList_T_10">등록일</th>
+							        <th class="reviewList_T_05">별점</th>
 					      		</tr>
 					      	`;
 							
@@ -340,29 +325,20 @@
 									
 									<tr>
 										<td>
-											<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].dayclassNo}"
-											value="${obj.pageItems.content[i].dayclassNo}">
+											<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].rvwNo}"
+												value="${obj.pageItems.content[i].reviewNo}">
 										</td>
-										<td>${obj.pageItems.content[i].dayclassNo}</td>
-										<td id="td_dayclassName" name="dayclassName"
-											data-dayclass-name="${obj.pageItems.content[i].dayclassName}">
-											<a class="a_dayclassName"
-												href="/admin/dayclass/${obj.pageItems.content[i].dayclassNo}">${obj.pageItems.content[i].dayclassName}
-											</a>
-										</td>
-										<td>${(obj.pageItems.content[i].dayclassPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
-										<td>${obj.pageItems.content[i].dayclassTime}</td>
-										<td>${obj.pageItems.content[i].dayclassUseYn}</td>
-										<td>
-							        		<a id="dayclassMod"
-												href="/admin/dayclassUpdate/${obj.pageItems.content[i].dayclassNo}">수정
-											</a>
-							        	</td>
+										<td>${obj.pageItems.content[i].rvwNo}</td>
+										<td>${obj.pageItems.content[i].rvwType}</td>
+										<td>${obj.pageItems.content[i].rvwWriter}</td>
+										<td>${obj.pageItems.content[i].rvwContent}</td>
+										<td>${obj.pageItems.content[i].rvwRegdate == null ? '' : obj.pageItems.content[i].rvwRegdate.substr(0, 10)}</td>
+										<td>${obj.pageItems.content[i].rvwScore}</td>
 									</tr>
 								`;
 							}
 							
-							$("#dayclassList_T").html(htmlStr);
+							$("#reviewList_T").html(htmlStr);
 							
 							htmlstr = "";
 						
@@ -419,7 +395,7 @@
 						}
 					});
 				} //function 닫음
-				*/
+				
 				
 			</script>
 		</th:block>
@@ -458,13 +434,13 @@
         <div id="div_reviewList_T">
 	        <table border="1" id="reviewList_T">
 	        	<tr>
-	        		<th class="dayclassList_T_05"></th>
-			        <th class="dayclassList_T_10">No.</th>
-			        <th class="dayclassList_T_10">타입</th>
-			        <th class="dayclassList_T_15">작성자</th>
-			        <th class="dayclassList_T_40">내용</th>
-			        <th class="dayclassList_T_10">등록일</th>
-			        <th class="dayclassList_T_10">별점</th>
+	        		<th class="reviewList_T_05"></th>
+			        <th class="reviewList_T_10">No.</th>
+			        <th class="reviewList_T_05">타입</th>
+			        <th class="reviewList_T_15">작성자</th>
+			        <th class="reviewList_T_50">내용</th>
+			        <th class="reviewList_T_10">등록일</th>
+			        <th class="reviewList_T_05">별점</th>
 	      		</tr>
 	      		<tr th:each="review: ${getPageReviewList}">
 	      			<td><input type="checkbox" class="check" name="chk" th:value="${review.rvwNo}"></td>
@@ -480,12 +456,11 @@
 		</div>
 		
 		<!-- 페이징 -->
-		<!--
 		<div class="paging">
-			<ul class="pagination" th:if="${pageDayclassList.totalElements > 0}"
-								   th:with="pageNumber = ${pageDayclassList.pageable.pageNumber},
-											pageSize = ${pageDayclassList.pageable.pageSize},
-											totalPages = ${pageDayclassList.totalPages},
+			<ul class="pagination" th:if="${getPageReviewList.totalElements > 0}"
+								   th:with="pageNumber = ${getPageReviewList.pageable.pageNumber},
+											pageSize = ${getPageReviewList.pageable.pageSize},
+											totalPages = ${getPageReviewList.totalPages},
 											startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
 											tempEndPage = ${startPage + pageSize - 1},
 											endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
@@ -500,7 +475,7 @@
 				</li>
 			</ul>
 		</div>
-		-->
+		
 		<!-- 삭제/등록버튼 -->
 	    <div id="reviewTotalBtn">
 	    	<input type="button" value="리뷰 삭제" id="reviewDelete">

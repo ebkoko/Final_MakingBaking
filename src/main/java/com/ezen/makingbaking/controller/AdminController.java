@@ -2,7 +2,6 @@ package com.ezen.makingbaking.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.common.FileUtils;
 import com.ezen.makingbaking.dto.DayclassDTO;
 import com.ezen.makingbaking.dto.ImgFileDTO;
@@ -40,7 +37,6 @@ import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.dto.ReviewDTO;
 import com.ezen.makingbaking.dto.UserDTO;
-import com.ezen.makingbaking.entity.CustomUserDetails;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
@@ -49,8 +45,6 @@ import com.ezen.makingbaking.entity.Reser;
 import com.ezen.makingbaking.entity.Review;
 import com.ezen.makingbaking.entity.User;
 import com.ezen.makingbaking.service.admin.AdminService;
-import com.ezen.makingbaking.service.order.OrderService;
-import com.ezen.makingbaking.service.reser.ReserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -62,12 +56,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AdminController {
 	@Autowired
 	private AdminService adminService;
-	
-	@Autowired
-	private OrderService orderService;
-	
-	@Autowired
-	private ReserService reserService;
 	
 	
 	//관리자 메인페이지
@@ -952,7 +940,7 @@ public class AdminController {
 	//회원 리스트
 	@GetMapping("/userList")
 	public ModelAndView getUserList(UserDTO userDTO,
-			@PageableDefault(page = 0, size = 10) Pageable pageable) {
+			@PageableDefault(page = 0, size = 5) Pageable pageable) {
 		User user = User.builder()
 						.userName(userDTO.getUserName())
 						.userId(userDTO.getUserId())
@@ -992,7 +980,7 @@ public class AdminController {
 	//회원리스트 - ajax로 처리한 페이징 글 목록 보여주기
 	@PostMapping("/userList")
 	public ResponseEntity<?> getUserPageList(UserDTO userDTO,
-			@PageableDefault(page = 0, size = 10) Pageable pageable) {
+			@PageableDefault(page = 0, size = 5) Pageable pageable) {
 		ResponseDTO<UserDTO> response = new ResponseDTO<>();
 		try {
 			User user = User.builder()
@@ -1025,7 +1013,7 @@ public class AdminController {
 	//관리자가 회원을 삭제하는 경우 ajax를 이용해 백단에 전송
 	@PostMapping("/saveUserList")
 	public ResponseEntity<?> saveUserList(@RequestParam("changeRows") String changeRows,
-			@PageableDefault(page = 0, size = 10) Pageable pageable) throws JsonMappingException, JsonProcessingException {
+			@PageableDefault(page = 0, size = 5) Pageable pageable) throws JsonMappingException, JsonProcessingException {
 		ResponseDTO<UserDTO> response = new ResponseDTO<>();
 		List<Map<String, Object>> changeRowsList = new ObjectMapper().readValue(changeRows, 
 											new TypeReference<List<Map<String, Object>>>() {});
@@ -1060,88 +1048,12 @@ public class AdminController {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
-///////////////////////////////////////////팝업해결중///////////////////////
-	//회원 리스트_리뷰팝업
-	@GetMapping("/userRvwList")
-	public ModelAndView getUserRvwList(ReviewDTO reviewDTO,
-			@PageableDefault(page = 0, size = 5) Pageable pageable) {
-		Page<Review> reviewList = adminService.getUserRvwList(reviewDTO.getRvwWriter(), pageable);
-		
-		Page<ReviewDTO> reviewListDTO = reviewList.map(review -> 
-								ReviewDTO.builder()
-										.rvwNo(review.getRvwNo())
-										.rvwReferNo(review.getRvwReferNo())
-										.rvwType(review.getRvwType())
-										.rvwContent(review.getRvwContent())
-										.rvwWriter(review.getRvwWriter())
-										.rvwRegdate(review.getRvwRegdate().toString())
-										.rvwScore(review.getRvwScore())
-										.build()
-										);
-		
-		
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("admin/userRvwList.html");
-		mv.addObject("getUserRvwList", reviewListDTO);
-		
-		if(reviewDTO.getSearchCondition() != null && !reviewDTO.getSearchCondition().equals("")) {
-			mv.addObject("searchCondition", reviewDTO.getSearchCondition());
-		}
-
-		return mv;
-	}
-
-
-	//회원 리스트_리뷰팝업 - ajax로 처리한 페이징 글 목록 보여주기
-	@PostMapping("/userRvwList")
-	public ResponseEntity<?> getUserRvwPageList(ReviewDTO reviewDTO,
-			@PageableDefault(page = 0, size = 5) Pageable pageable) {
-		ResponseDTO<ReviewDTO> response = new ResponseDTO<>();
-		try {
-			Review review = Review.builder()
-							.searchCondition(reviewDTO.getSearchCondition())
-							.searchKeyword(reviewDTO.getSearchKeyword())
-							.build();
-
-			Page<Review> pageReviewList = adminService.getUserRvwPageList(review, pageable);
-			
-			Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview -> 
-													            ReviewDTO.builder()
-													            .rvwNo(review.getRvwNo())
-																.rvwReferNo(review.getRvwReferNo())
-																.rvwType(review.getRvwType())
-																.rvwContent(review.getRvwContent())
-																.rvwWriter(review.getRvwWriter())
-																.rvwRegdate(review.getRvwRegdate().toString())
-																.rvwScore(review.getRvwScore())
-																.build()
-											   				);
-			response.setPageItems(pageReviewDTOList);
-			
-			return ResponseEntity.ok().body(response);
-			
-		} catch(Exception e) {
-			response.setErrorMessage(e.getMessage());
-			return ResponseEntity.badRequest().body(response);
-		}
-	}
 	
+//////////////////////////////user-팝업창//////////////////////////////
 	//회원상세보기
 	@GetMapping("/userInfoCheck/{userId}")
 	public ModelAndView getUserInfoCheck(@PathVariable String userId) {
 		User user = adminService.getUserInfoCheck(userId);
-
-		
-		/*UserDTO userDTO = UserDTO.builder()
-									.userId(user.getUserId())
-									.userName(user.getUserName())
-									.userBirth(user.getUserBirth())
-									.userGender(user.getUserGender())
-									.userTel(user.getUserTel())
-									.userAddr1(user.getUserAddr1())
-									.userAddr2(user.getUserAddr2())
-									.userAddr3(user.getUserAddr3())
-									.build();*/
 		
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/userInfoCheck.html");
@@ -1149,6 +1061,73 @@ public class AdminController {
 		
 		return mv;
 	}
+	
+	//회원 리스트_리뷰팝업
+//	@GetMapping("/userRvwList")
+//	public ModelAndView getUserRvwList(ReviewDTO reviewDTO,
+//			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+//		Page<Review> reviewList = adminService.getUserRvwList(reviewDTO.getRvwWriter(), pageable);
+//		
+//		Page<ReviewDTO> reviewListDTO = reviewList.map(review -> 
+//								ReviewDTO.builder()
+//										.rvwNo(review.getRvwNo())
+//										.rvwReferNo(review.getRvwReferNo())
+//										.rvwType(review.getRvwType())
+//										.rvwContent(review.getRvwContent())
+//										.rvwWriter(review.getRvwWriter())
+//										.rvwRegdate(review.getRvwRegdate().toString())
+//										.rvwScore(review.getRvwScore())
+//										.build()
+//										);
+//		
+//		
+//		ModelAndView mv = new ModelAndView();
+//		mv.setViewName("admin/userRvwList.html");
+//		mv.addObject("getUserRvwList", reviewListDTO);
+//		
+//		if(reviewDTO.getSearchCondition() != null && !reviewDTO.getSearchCondition().equals("")) {
+//			mv.addObject("searchCondition", reviewDTO.getSearchCondition());
+//		}
+//
+//		return mv;
+//	}
+//
+//
+//	//회원 리스트_리뷰팝업 - ajax로 처리한 페이징 글 목록 보여주기
+//	@PostMapping("/userRvwList")
+//	public ResponseEntity<?> getUserRvwPageList(ReviewDTO reviewDTO,
+//			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+//		ResponseDTO<ReviewDTO> response = new ResponseDTO<>();
+//		try {
+//			Review review = Review.builder()
+//							.searchCondition(reviewDTO.getSearchCondition())
+//							.searchKeyword(reviewDTO.getSearchKeyword())
+//							.build();
+//
+//			Page<Review> pageReviewList = adminService.getUserRvwPageList(review, pageable);
+//			
+//			Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview -> 
+//													            ReviewDTO.builder()
+//													            .rvwNo(review.getRvwNo())
+//																.rvwReferNo(review.getRvwReferNo())
+//																.rvwType(review.getRvwType())
+//																.rvwContent(review.getRvwContent())
+//																.rvwWriter(review.getRvwWriter())
+//																.rvwRegdate(review.getRvwRegdate().toString())
+//																.rvwScore(review.getRvwScore())
+//																.build()
+//											   				);
+//			response.setPageItems(pageReviewDTOList);
+//			
+//			return ResponseEntity.ok().body(response);
+//			
+//		} catch(Exception e) {
+//			response.setErrorMessage(e.getMessage());
+//			return ResponseEntity.badRequest().body(response);
+//		}
+//	}
+	
+
 	
 	
 //////////////////////////////주문(order) 및 예약(reser)관리//////////////////////////////
@@ -1303,7 +1282,7 @@ public class AdminController {
 	
 	
 //////////////////////////////review//////////////////////////////
-	//리뷰관리
+	//리뷰리스트
 	@GetMapping("/reviewList")
 	public ModelAndView getReviewList(ReviewDTO reviewDTO,
 			@PageableDefault(page = 0, size = 10) Pageable pageable) {
@@ -1344,19 +1323,81 @@ public class AdminController {
 		return mv;
 	}
 	
-	
-	
-	
-	
-	//임시보기
-	@GetMapping("/pre")
-	public ModelAndView preView() {
-		
-		ModelAndView mv = new ModelAndView();
-		
-		mv.setViewName("admin/userInfoCheck.html");
+	//리뷰 리스트 - ajax로 처리한 페이징 글 목록 보여주기
+	@PostMapping("/reviewList")
+	public ResponseEntity<?> getReviewPageList(ReviewDTO reviewDTO,
+			@PageableDefault(page = 0, size = 10) Pageable pageable) {
+		ResponseDTO<ReviewDTO> response = new ResponseDTO<>();
+		try {
+			Review review = Review.builder()
+								.searchCondition(reviewDTO.getSearchCondition())
+								.searchKeyword(reviewDTO.getSearchKeyword())
+								.build();
+			Page<Review> pageReviewList = adminService.getPageReviewList(review, pageable);
 			
-		return mv;
+			Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview -> 
+															            ReviewDTO.builder()
+																	            .rvwNo(pageReview.getRvwNo())
+																				.rvwReferNo(pageReview.getRvwReferNo())
+																				.rvwType(pageReview.getRvwType())
+																				.rvwContent(pageReview.getRvwContent())
+																				.rvwWriter(pageReview.getRvwWriter())
+																				.rvwRegdate(pageReview.getRvwRegdate() == null ?
+																						null :
+																						pageReview.getRvwRegdate().toString())
+																				.rvwScore(pageReview.getRvwScore())
+																				.build()
+											   				);
+			response.setPageItems(pageReviewDTOList);
+			
+			return ResponseEntity.ok().body(response);
+			
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+	
+	//관리자가 리뷰를 삭제하는 경우 ajax를 이용해 백단에 전송
+	@PostMapping("/saveReviewList")
+	public ResponseEntity<?> saveReviewList(@RequestParam("changeRows") String changeRows,
+			@PageableDefault(page = 0, size = 10) Pageable pageable) throws JsonMappingException, JsonProcessingException {
+		ResponseDTO<ReviewDTO> response = new ResponseDTO<>();
+		List<Map<String, Object>> changeRowsList = new ObjectMapper().readValue(changeRows, 
+											new TypeReference<List<Map<String, Object>>>() {});
+		
+		try {
+			adminService.saveReviewList(changeRowsList);
+			
+			Review review = Review.builder()
+							.searchCondition("")
+							.searchKeyword("")
+							.build();
+
+			Page<Review> pageReviewList = adminService.getPageReviewList(review, pageable);
+			
+			Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview ->
+																		ReviewDTO.builder()
+																				.rvwNo(pageReview.getRvwNo())
+																				.rvwReferNo(pageReview.getRvwReferNo())
+																				.rvwType(pageReview.getRvwType())
+																				.rvwContent(pageReview.getRvwContent())
+																				.rvwWriter(pageReview.getRvwWriter())
+																				.rvwRegdate(pageReview.getRvwRegdate() == null ?
+																						null :
+																						pageReview.getRvwRegdate().toString())
+																				.rvwScore(pageReview.getRvwScore())
+																				.build()
+			);
+			
+			response.setPageItems(pageReviewDTOList);
+			
+			
+			return ResponseEntity.ok().body(response);
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
 	}
 	
 }

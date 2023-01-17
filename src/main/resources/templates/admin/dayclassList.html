@@ -17,7 +17,7 @@
 					text-decoration: none;
 					color: inherit;
 				}
-				#td_dayclassName:hover {
+				.td_dayclassName:hover {
 					text-decoration: underline;
 					color: #28693F;
 					font-weight: bold;
@@ -95,12 +95,6 @@
 					border-bottom: 1.2px solid #28693F;
 					text-align: center;
 					height: 80px;
-				}
-				
-				/* 상품이름 a태그 */
-				#a_dayclassName {
-					text-decoration: none;
-					color: inherit;
 				}
  
 				/* 수정버튼 */
@@ -306,8 +300,7 @@
 												value="${obj.pageItems.content[i].dayclassNo}">
 											</td>
 											<td>${obj.pageItems.content[i].dayclassNo}</td>
-											<td id="td_dayclassName" name="dayclassName"
-												data-dayclass-name="${obj.pageItems.content[i].dayclassName}">
+											<td class="td_dayclassName" name="dayclassName" data-dayclass-name="${obj.pageItems.content[i].dayclassName}">
 												<a class="a_dayclassName"
 													href="/admin/dayclass/${obj.pageItems.content[i].dayclassNo}">${obj.pageItems.content[i].dayclassName}
 												</a>
@@ -386,8 +379,7 @@
 											value="${obj.pageItems.content[i].dayclassNo}">
 										</td>
 										<td>${obj.pageItems.content[i].dayclassNo}</td>
-										<td id="td_dayclassName" name="dayclassName"
-											data-dayclass-name="${obj.pageItems.content[i].dayclassName}">
+										<td class="td_dayclassName" name="dayclassName" data-dayclass-name="${obj.pageItems.content[i].dayclassName}">
 											<a class="a_dayclassName"
 												href="/admin/dayclass/${obj.pageItems.content[i].dayclassNo}">${obj.pageItems.content[i].dayclassName}
 											</a>
@@ -523,8 +515,8 @@
 	      			<td><input type="checkbox" class="check" name="chk" th:value="${dayclass.dayclassNo}"></td>
 		        	<td th:text="${dayclass.dayclassNo}"></td>
 		        	
-		        	<td id="td_dayclassName">
-						<a id="a_dayclassName" th:text="${dayclass.dayclassName}"
+		        	<td class="td_dayclassName">
+						<a class="a_dayclassName" th:text="${dayclass.dayclassName}"
 							th:href="@{/admin/dayclass/{dayclassNo} (dayclassNo=${dayclass.dayclassNo})}">
 						</a>
 					</td>

@@ -286,17 +286,17 @@ public class AdminServiceImpl implements AdminService {
 	public Page<User> getPageUserList(User user, Pageable pageable) {
 		if(user.getSearchKeyword() != null && !user.getSearchKeyword().equals("")) {
 			if(user.getSearchCondition().equals("ALL")) {
-				return userRepository.findByUserNameContainingOrUserId
+				return userRepository.findByUserNameContainingOrUserIdOrderByUserName
 						(user.getSearchKeyword(), user.getSearchKeyword(), pageable);
 			      } else if (user.getSearchCondition().equals("USERNAME")) {
-			         return userRepository.findByUserNameContaining(user.getSearchKeyword(), pageable);
+			         return userRepository.findByUserNameContainingOrderByUserName(user.getSearchKeyword(), pageable);
 			      } else if (user.getSearchCondition().equals("USERID")) {
-			    	  return userRepository.findByUserIdContaining(user.getSearchKeyword(), pageable);
+			    	  return userRepository.findByUserIdContainingOrderByUserName(user.getSearchKeyword(), pageable);
 			      } else {
-			    	  return userRepository.findAll(pageable);
+			    	  return userRepository.findAllByOrderByUserName(pageable);
 			      }
 		  } else {
-			  return userRepository.findAll(pageable);
+			  return userRepository.findAllByOrderByUserName(pageable);
 		  }
 	      
 	   }
@@ -313,67 +313,29 @@ public class AdminServiceImpl implements AdminService {
 		}
 		
 	}
-	/////////////////////해결중////////////////////////////////////////////////////////////////////////
-	@Override
-	public Page<Review> getUserRvwList(String rvwWriter, Pageable pageable) {
-		// TODO Auto-generated method stub
-		return reviewRepository.getUserRvwList(rvwWriter, pageable);
-	}
-
-
-	@Override
-	public Page<Review> getUserRvwPageList(Review review, Pageable pageable) {
-//		if(review.getSearchCondition().equals("item")) {
-//			return reviewRepository.findbyItemContaining(review.getSearchKeyword(), pageable);
-//		} else if(review.getSearchCondition().equals("class")) {
-//			return reviewRepository.findbyClassContaining(review.getSearchKeyword(), pageable);
-//		}
-		return null;
-	}
 	
-	
-//	@Override
-//	public User getUserRvwList(String userId) {
-//		return userRepository.findById(userId).get();
-//	}
-//	
-//	@Override
-//	public Page<Review> getPageReviewList(Review review, Pageable pageable) {
-//		if(review.getSearchKeyword() != null && !review.getSearchKeyword().equals("")) {
-//			if (review.getSearchCondition().equals("item")) {
-//				return reviewRepository.findByItemContaining(review.getSearchKeyword(), pageable);
-//			} else if (review.getSearchCondition().equals("class")) {
-//			    	  return reviewRepository.findByClassContaining(review.getSearchKeyword(), pageable);
-//			} else {
-//				return reviewRepository.findAll(pageable);
-//			      }
-//		  } else {
-//			  return reviewRepository.findAll(pageable);
-//		  }
-//	      
-//	   }
-//	
-//	
-//	
-//	
-//	
-//	@Override
-//	public Page<Review> getUserRvwList(String rvwWriter, Pageable pageable) {
-//		return reviewRepository.getUserRvwList(rvwWriter, pageable);
-//	}
-	
-	//회원상세보기
+	//회원상세보기-팝업창
 	@Override
 	public User getUserInfoCheck(String userId) {
 		return userRepository.getUserInfoCheck(userId);
 	}
 	
-	
-	
-	
-	
-	
-	
+	/////////////////////해결중////////////////////////////////////////////////////////////////////////
+	//각 회원의 리뷰-팝업창
+//	@Override
+//	public Page<Review> getUserRvwList(String rvwWriter, Pageable pageable) {
+//		return reviewRepository.getUserRvwList(rvwWriter, pageable);
+//	}
+
+
+//	@Override
+//	public Page<Review> getUserRvwPageList(Review review, Pageable pageable) {
+//		if(review.getSearchCondition().equals("item")) {
+//			return reviewRepository.findByItemContaining(review.getSearchKeyword(), pageable);
+//		} else if(review.getSearchCondition().equals("class")) {
+//			return reviewRepository.findByClassContaining(review.getSearchKeyword(), pageable);
+//		}
+//	}
 	
 	
 	
@@ -390,28 +352,28 @@ public class AdminServiceImpl implements AdminService {
 	public Page<Reser> getPageReserList(Reser reser, Pageable pageable) {
 		if(reser.getSearchKeyword() != null && !reser.getSearchKeyword().equals("")) {
 			if(reser.getSearchCondition().equals("ALL")) {
-				return reserRepository.findByReserNoOrPartiNameContainingOrClassNoOrPartiDateContainingOrPartiTimeContainingOrReserStatusContainingOrPartiStatus
-						(Long.parseLong(reser.getSearchKeyword()), reser.getSearchKeyword(), Integer.parseInt(reser.getSearchKeyword()), 
+				return reserRepository.findByReserDayclassListOrderByReserNoDesc
+						(reser.getSearchKeyword(), reser.getSearchKeyword(), Integer.parseInt(reser.getSearchKeyword()), 
 								reser.getSearchKeyword(), reser.getSearchKeyword(), reser.getSearchKeyword(), reser.getSearchKeyword(), pageable);
 			      } else if (reser.getSearchCondition().equals("RESERNO")) {
-			         return reserRepository.findByReserNo(Long.parseLong(reser.getSearchKeyword()), pageable);
+			         return reserRepository.findByReserNoContainingOrderByReserNoDesc(reser.getSearchKeyword(), pageable);
 			      } else if (reser.getSearchCondition().equals("PARTINAME")) {
-			    	  return reserRepository.findByPartiNameContaining(reser.getSearchKeyword(), pageable);
+			    	  return reserRepository.findByPartiNameContainingOrderByReserNoDesc(reser.getSearchKeyword(), pageable);
 			      } else if (reser.getSearchCondition().equals("CLASSNO")) {
-			    	  return reserRepository.findByClassNo(Integer.parseInt(reser.getSearchKeyword()), pageable);
+			    	  return reserRepository.findByClassNoOrderByReserNoDesc(Integer.parseInt(reser.getSearchKeyword()), pageable);
 			      } else if (reser.getSearchCondition().equals("PARTIDATE")) {
-				         return reserRepository.findByPartiDateContaining(reser.getSearchKeyword(), pageable);
+				         return reserRepository.findByPartiDateContainingOrderByReserNoDesc(reser.getSearchKeyword(), pageable);
 			      } else if (reser.getSearchCondition().equals("PARTITIME")) {
-			    	  return reserRepository.findByPartiTimeContaining(reser.getSearchKeyword(), pageable);
+			    	  return reserRepository.findByPartiTimeContainingOrderByReserNoDesc(reser.getSearchKeyword(), pageable);
 			      } else if (reser.getSearchCondition().equals("RESERSTATUS")) {
-			    	  return reserRepository.findByReserStatusContaining(reser.getSearchKeyword(), pageable);
+			    	  return reserRepository.findByReserStatusContainingOrderByReserNoDesc(reser.getSearchKeyword(), pageable);
 			      } else if (reser.getSearchCondition().equals("PARTISTATUS")) {
-			    	  return reserRepository.findByPartiStatusContaining(reser.getSearchKeyword(), pageable);
+			    	  return reserRepository.findByPartiStatusContainingOrderByReserNoDesc(reser.getSearchKeyword(), pageable);
 			      } else {
-			    	  return reserRepository.findAll(pageable);
+			    	  return reserRepository.findAllByOrderByReserNoDesc(pageable);
 			      }
 		  } else {
-			  return reserRepository.findAll(pageable);
+			  return reserRepository.findAllByOrderByReserNoDesc(pageable);
 		  }
 	      
 	   }
@@ -464,5 +426,17 @@ public class AdminServiceImpl implements AdminService {
 		  }
 	      
 	   }
+	
+	@Override
+	public void saveReviewList(List<Map<String, Object>> changeRowsList) {
+		for(int i = 0; i < changeRowsList.size(); i++) {
+			Review dreview = Review.builder()
+							.rvwNo(Integer.parseInt(String.valueOf(changeRowsList.get(i).get("rvwNo"))))
+							.build();
+			
+			reviewRepository.delete(dreview);
+			 
+		}
+	}
 	
 }

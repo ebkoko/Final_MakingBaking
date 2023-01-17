@@ -9,19 +9,35 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ezen.makingbaking.common.CamelHashMap;
+import com.ezen.makingbaking.entity.Order;
 import com.ezen.makingbaking.entity.Reser;
 
 public interface ReserRepository extends JpaRepository<Reser, Integer> {
 	
 	//관리자 예약 검색_선민
-	Page<Reser> findByReserNo(long searchKeyword, Pageable pageable); //예약번호
-	Page<Reser> findByPartiNameContaining(String searchKeyword, Pageable pageable); //예약자명
-	Page<Reser> findByClassNo(int searchKeyword, Pageable pageable); //예약한 클래스번호
-	Page<Reser> findByPartiDateContaining(String searchKeyword, Pageable pageable); //예약날짜
-	Page<Reser> findByPartiTimeContaining(String searchKeyword, Pageable pageable); //예약시간
-	Page<Reser> findByReserStatusContaining(String searchKeyword, Pageable pageable); //예약상태
-	Page<Reser> findByPartiStatusContaining(String searchKeyword, Pageable pageable); //참여현황
-	Page<Reser> findByReserNoOrPartiNameContainingOrClassNoOrPartiDateContainingOrPartiTimeContainingOrReserStatusContainingOrPartiStatus(long searchKeyword1, String searchKeyword2, int searchKeyword3, String searchKeyword4, String searchKeyword5, String searchKeyword6, String searchKeyword7, Pageable pageable);
+	Page<Reser> findAllByOrderByReserNoDesc(Pageable pageable);
+	@Query(value="select a from Reser a where cast(a.reserNo as string) like %:searchKeyword% order by a.reserNo desc")
+	Page<Reser> findByReserNoContainingOrderByReserNoDesc(@Param("searchKeyword") String searchKeyword, Pageable pageable); //예약번호
+	Page<Reser> findByPartiNameContainingOrderByReserNoDesc(String searchKeyword, Pageable pageable); //예약자명
+	Page<Reser> findByClassNoOrderByReserNoDesc(int searchKeyword, Pageable pageable); //예약한 클래스번호
+	Page<Reser> findByPartiDateContainingOrderByReserNoDesc(String searchKeyword, Pageable pageable); //예약날짜
+	Page<Reser> findByPartiTimeContainingOrderByReserNoDesc(String searchKeyword, Pageable pageable); //예약시간
+	Page<Reser> findByReserStatusContainingOrderByReserNoDesc(String searchKeyword, Pageable pageable); //예약상태
+	Page<Reser> findByPartiStatusContainingOrderByReserNoDesc(String searchKeyword, Pageable pageable); //참여현황
+	@Query(value="select a from Reser a"
+			+ " where cast(a.reserNo as string) like %:searchKeyword1%"
+			+ " or a.userId like %:searchKeyword2%"
+			+ " or a.partiName like %:searchKeyword3%"
+			+ " or a.classNo = :searchKeyword4"
+			+ " or a.partiDate like :searchKeyword5"
+			+ " or a.partiTime like :searchKeyword6"
+			+ " or a.reserStatus like :searchKeyword7"
+			+ " order by a.reserNo desc"
+			)
+	Page<Reser> findByReserDayclassListOrderByReserNoDesc
+	(@Param("searchKeyword1") String searchKeyword1, @Param("searchKeyword2") String searchKeyword2, @Param("searchKeyword3") int searchKeyword3,
+			@Param("searchKeyword4") String searchKeyword4, @Param("searchKeyword5") String searchKeyword5, 
+			@Param("searchKeyword6") String searchKeyword6, @Param("searchKeyword7") String searchKeyword7, Pageable pageable);
 	
 //	@Query(value="", nativeQuery=true)
 //	Page<Reser> findBySearchKeyoword(long searchKeyword1, String searchKeyword2, int searchKeyword3, Pageable pageable);
