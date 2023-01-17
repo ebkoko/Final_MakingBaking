@@ -245,7 +245,7 @@
 			          <th width="8%" id="th-score">별점</th>
 			          <th width="18%" id="th-date">작성일</th>			          
 			        </tr>
-			        <tr th:each="rvw: ${pageReviewList}" id="boxxWrapper">
+			        <tr th:each="rvw: ${pageReviewList}">
 			        	<td><input type="checkbox" class="check" name="chk" th:value="${rvw.rvwNo}"></td>
 			        	<td class="list-img">
 			        		<img th:src="@{${rvw.rvwType} == 'class' ? '/dayclass/' + ${rvw.fileName}
