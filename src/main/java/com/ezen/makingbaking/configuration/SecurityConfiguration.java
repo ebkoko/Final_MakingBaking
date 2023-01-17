@@ -34,10 +34,12 @@ public class SecurityConfiguration {
 		@Bean
 		public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 			
-			http.authorizeRequests().antMatchers("/css/**").permitAll()
+			http.authorizeRequests().antMatchers("/").permitAll()
+									.antMatchers("/css/**").permitAll()
 									.antMatchers("/js/**").permitAll()
 									.antMatchers("/images/**").permitAll()
 									.antMatchers("/upload/**").permitAll()
+									.antMatchers("/home/**").permitAll()
 									.antMatchers("/main/join").permitAll()
 									.antMatchers("/main/login").permitAll()
 									.antMatchers("/user/idcheck").permitAll()
@@ -62,6 +64,8 @@ public class SecurityConfiguration {
 									.antMatchers("/board/eventList/**").permitAll()
 									.antMatchers("/board/updateEventCnt/**").permitAll()
 									.antMatchers("/board/event/**").permitAll()
+									.antMatchers("/board/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+									.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
 									.anyRequest().authenticated();  /* 인증받은 사용자만 접근 가능하게 나중에 .anyRequest().authenticated();로 바꿔야함 */
 			
 			//로그인
