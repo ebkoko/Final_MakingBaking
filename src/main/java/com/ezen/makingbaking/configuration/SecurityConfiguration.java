@@ -41,7 +41,19 @@ public class SecurityConfiguration {
 									.antMatchers("/main/join").permitAll()
 									.antMatchers("/main/login").permitAll()
 									.antMatchers("/user/idcheck").permitAll()
+									.antMatchers("/home/main").permitAll()
+									.antMatchers("/main/main").permitAll()
 									.antMatchers("/user/loginProc").permitAll()
+									.antMatchers("/user/join").permitAll()
+									.antMatchers("/user/idcheck").permitAll()
+									.antMatchers("/user/findID").permitAll()
+									.antMatchers("/user/findPW").permitAll()
+									.antMatchers("/dayclass/onedayClass").permitAll()
+									.antMatchers("/dayclass/**").permitAll()
+									.antMatchers("/item/list").permitAll()
+									.antMatchers("/item/item").permitAll()
+									.antMatchers("/item/**").permitAll()
+									.antMatchers("/board/**").permitAll()
 									.anyRequest().authenticated();  /* 인증받은 사용자만 접근 가능하게 나중에 .anyRequest().authenticated();로 바꿔야함 */
 			
 			//로그인
