@@ -322,15 +322,14 @@ public class AdminServiceImpl implements AdminService {
 	
 	/////////////////////해결중////////////////////////////////////////////////////////////////////////
 	//각 회원의 리뷰-팝업창
-//	@Override
-//	public Page<Review> getUserRvwPageList(Review review, Pageable pageable) {
-//		if(review.getSearchCondition().equals("item")) {
-//			return reviewRepository.findByItemContaining(review.getSearchKeyword(), pageable);
-//		} else if(review.getSearchCondition().equals("class")) {
-//			return reviewRepository.findByClassContaining(review.getSearchKeyword(), pageable);
-//		}
-//	}
-//	
+	@Override
+	public Page<Review> getUserRvwPageList(Review review, Pageable pageable) {
+		if(review.getRvwType() != null && !review.getRvwType().equals(""))
+			return reviewRepository.findByRvwTypeAndRvwWriter(review.getRvwType(), review.getRvwWriter(), pageable);
+		else
+			return reviewRepository.findByRvwWriter(review.getRvwWriter(), pageable);
+	}
+	
 	
 	
 	

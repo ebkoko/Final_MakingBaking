@@ -8,10 +8,6 @@
 	<head>
 		<th:block layout:fragment="css">
 			<style>
-				#a_Title {
-					text-decoration: none;
-					color: inherit;
-				}
 				#AuserAdmin {
 					font-size: 40px;
 				}
@@ -92,6 +88,7 @@
  			</style>
 		</th:block>
 		<th:block layout:fragment="script">
+			<script th:src="@{/js/jquery-3.6.1.min.js}"></script>
 			<script th:inline="javascript">
 				$(function() {
 					//개인 리뷰리스트 페이징 처리
@@ -205,6 +202,10 @@
 						}
 					});
 				} //function 닫음
+				
+				$(function() {
+					$("#userRvwWriter").text( + '님의 리뷰');
+				});
 			</script>
 		</th:block>
 	</head>
@@ -213,7 +214,7 @@
 <body>
 	<div id="container" layout:fragment="content">
 	  	<div>
-	  		<a href="AuserList" id="a_Title"><h1 id="AuserAdmin">님의 리뷰</h1></a>
+	  		<h1 id="AuserAdmin"><p id="userRvwWriter" th:value="${getUserRvwPageList.rvwWriter}">님의 리뷰</p></h1>
 		</div>
 	    
 	    <div class="type_option"> 
@@ -234,7 +235,7 @@
 			        <th class="AuserList_T_15">작성일</th>
 			        <th class="AuserList_T_10">별점</th>
 	      		</tr>
-	      		<tr th:each="review: ${getUserRvwList}">
+	      		<tr th:each="review: ${getUserRvwPageList}">
 		        	<td th:text="${review.rvwNo}"></td>
 					<td th:text="${review.rvwType}"></td>
 					<td th:text="${review.rvwWriter}"></td>
@@ -247,10 +248,10 @@
 		
 		<!-- 페이징 -->
 		<div class="paging">
-			<ul class="pagination" th:if="${getUserRvwList.totalElements > 0}"
-								   th:with="pageNumber = ${getUserRvwList.pageable.pageNumber},
-											pageSize = ${getUserRvwList.pageable.pageSize},
-											totalPages = ${getUserRvwList.totalPages},
+			<ul class="pagination" th:if="${getUserRvwPageList.totalElements > 0}"
+								   th:with="pageNumber = ${getUserRvwPageList.pageable.pageNumber},
+											pageSize = ${getUserRvwPageList.pageable.pageSize},
+											totalPages = ${getUserRvwPageList.totalPages},
 											startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
 											tempEndPage = ${startPage + pageSize - 1},
 											endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">

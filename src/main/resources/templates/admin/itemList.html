@@ -507,7 +507,7 @@
 	      			<td><input type="checkbox" class="check" name="chk" th:value="${item.itemNo}"></td>
 		        	<td th:text="${item.itemNo}"></td>
 		        	
-		        	<td id="td_itemName">
+		        	<td class="td_itemName">
 						<a class="a_itemName" th:text="${item.itemName}"
 							th:href="@{/admin/item/{itemNo} (itemNo=${item.itemNo})}">
 						</a>
