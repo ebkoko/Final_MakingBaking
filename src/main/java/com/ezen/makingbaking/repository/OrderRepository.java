@@ -27,8 +27,8 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 			+ " where cast(a.orderNo as string) like %:searchKeyword1%"
 			+ " or a.userId like %:searchKeyword2%"
 			+ " or a.orderName like %:searchKeyword3%"
-			+ " or a.orderPayment like %:searchKeyword4%"
-			+ " or a.orderStatus like %:searchKeyword5%"
+			+ " or a.orderPayment like :searchKeyword4"
+			+ " or a.orderStatus like :searchKeyword5"  //양 % 삭제했는데, 배송중(D) 상태 검색한 경우, DW, DC나옴. 배송중이름 변경(DI)?????
 			+ " order by a.orderNo desc"
 			)
 	Page<Order> findByOrderItemListOrderByOrderNoDesc

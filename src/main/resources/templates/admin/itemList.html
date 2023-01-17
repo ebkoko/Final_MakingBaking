@@ -17,7 +17,7 @@
 					text-decoration: none;
 					color: inherit;
 				}
-				#td_itemName:hover {
+				.td_itemName:hover {
 					text-decoration: underline;
 					color: #28693F;
 					font-weight: bold;
@@ -291,8 +291,7 @@
 												value="${obj.pageItems.content[i].itemNo}">
 											</td>
 											<td>${obj.pageItems.content[i].itemNo}</td>
-											<td name="itemName" id="td_itemName"
-												data-item-name="${obj.pageItems.content[i].itemName}">
+											<td name="itemName" class="td_itemName" data-item-name="${obj.pageItems.content[i].itemName}">
 												<a  class="a_itemName"
 													href="/admin/item/${obj.pageItems.content[i].itemNo}">${obj.pageItems.content[i].itemName}
 												</a>
@@ -371,8 +370,7 @@
 											value="${obj.pageItems.content[i].itemNo}">
 										</td>
 										<td>${obj.pageItems.content[i].itemNo}</td>
-										<td name="itemName" id="td_itemName"
-											data-item-name="${obj.pageItems.content[i].itemName}">
+										<td name="itemName" class="td_itemName" data-item-name="${obj.pageItems.content[i].itemName}">
 												<a class="a_itemName"
 													href="/admin/item/${obj.pageItems.content[i].itemNo}">${obj.pageItems.content[i].itemName}
 												</a>

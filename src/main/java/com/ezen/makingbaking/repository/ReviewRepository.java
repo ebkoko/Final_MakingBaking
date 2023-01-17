@@ -37,8 +37,8 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 	Page<Review> getUserRvwList(@Param("rvwWriter") String rvwWriter, Pageable pageable);
 
 	//개인 리뷰팝업_선민
-//	Page<Review> findbyItemContaining(String searchKeyword, Pageable pageable); //item
-//	Page<Review> findbyClassContaining(String searchKeyword, Pageable pageable); //class
+//	Page<Review> findByItemContaining(@Param("rvwType") String rvwType, Pageable pageable); //item
+//	Page<Review> findByClassContaining(@Param("rvwType") String rvwType, Pageable pageable); //class
 	
 	//관리자 리뷰 검색_선민
 	Page<Review> findByRvwWriterContaining(String searchKeyword, Pageable pageable); //리뷰작성자

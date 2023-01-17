@@ -88,15 +88,7 @@
 					text-align: center;
 					height: 80px;
 				}
-				
-				/* 회원 이름 a태그 */
-				/*
-				#a_userName {
-					text-decoration: none;
-					color: inherit;
-				}
-				*/
-				
+
 				/* 회원 개인리뷰 버튼 */
 			    #adminUserReview {
 					width: 70px;
@@ -228,7 +220,7 @@
 			<script th:inline="javascript">
 				let changeRows = [];
 				let pageNum;
-				const pageUserList = /*[[${pageUserList}]]*/;
+				//const pageUserList = /*[[${pageUserList}]]*/;
 				
 				$(function() {
 					//검색창 검색버튼 클릭 시
@@ -470,12 +462,14 @@
 				//리뷰 팝업
 				$(function() {
 					$("#adminUserReview").click(function() {
-					reviewPopup();
+						e.preventDefault();
+						const userId = $(this).attr("data-user-id");
+					reviewPopup(userId);
 					})
 				});
 				
-				function reviewPopup() {
-					window.open("userRvwList?rvwWriter=hi", "getUserRvwListPop", 
+				function reviewPopup(userId) {
+					window.open("userRvwList?rvwWriter=" + userId, "getUserRvwListPop", 
 						"width=1000px, height=530px, top=150, left=200");
 				}
 			</script>
@@ -523,9 +517,8 @@
 					<td th:text="${user.userId}"></td>
 		        	<td th:text="${user.userRegdate eq null ? '' : #strings.substring(user.userRegdate, 0, 10)}"></td>
 		        	<td>
-		        		<a id="adminUserReview" th:text="Review" onclick="reviewPopup();"></a>
-						<a id="userQnA" th:text="QnA"
-							th:href="@{/admin/userRvwList?boardWriter={userId} (userId=${user.userId})}"></a>
+		        		<a id="adminUserReview" th:text="Review" th:data-user-id="${user.userId}"></a>
+						<a id="adminUserQnA" th:text="QnA" th:data-user-id="${user.userId}"></a>
 		        	</td>
 		     	 </tr>
 		    </table>

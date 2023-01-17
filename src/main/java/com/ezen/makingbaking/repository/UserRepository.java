@@ -61,10 +61,12 @@ public interface UserRepository extends JpaRepository<User, String> {
 	int updateUser(@Param("userId") User userId);
 	
 	//관리자 회원 검색_선민
-	Page<User> findByUserNameContaining(String searchKeyword, Pageable pageable); //이름
-	Page<User> findByUserIdContaining(String searchKeyword, Pageable pageable); //아이디
-	Page<User> findByUserNameContainingOrUserId(String searchKeyword1, String searchKeyword2, Pageable pageable);
+	Page<User> findAllByOrderByUserName(Pageable pageable);
+	Page<User> findByUserNameContainingOrderByUserName(String searchKeyword, Pageable pageable); //이름
+	Page<User> findByUserIdContainingOrderByUserName(String searchKeyword, Pageable pageable); //아이디
+	Page<User> findByUserNameContainingOrUserIdOrderByUserName(String searchKeyword1, String searchKeyword2, Pageable pageable);
 	
+	//회원리스트 회원상세정보-팝업_선민
 	@Query(value="SELECT * FROM T_MB_USER WHERE USER_ID = :userId", nativeQuery=true)
 	User getUserInfoCheck(@Param("userId") String userId);
 	

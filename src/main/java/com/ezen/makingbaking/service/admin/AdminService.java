@@ -53,26 +53,25 @@ public interface AdminService {
 	Page<User> getPageUserList(User user, Pageable pageable);
 	
 	void saveUserList(List<Map<String, Object>> changeRowsList);
-	
-	//user_팝업
-	Page<Review> getUserRvwList(String rvwWriter, Pageable pageable);
-	
-	Page<Review> getUserRvwPageList(Review review, Pageable pageable);
-
 	//user_회원상세보기
 	User getUserInfoCheck(String userId);
-	
-	
+	//user_리뷰팝업
+//	Page<Review> getUserRvwList(String rvwWriter, Pageable pageable);
+//	
+//	Page<Review> getUserRvwPageList(Review review, Pageable pageable);
 
+	
+	
+	
 	//주문 및 예약관리
 	//reser_dayclass
 	Page<Reser> getPageReserList(Reser reser, Pageable pageable);
-	
 	//order_item
 	Page<Order> getPageOrderList(Order order, Pageable pageable);
 	
 	
-	
 	//리뷰관리
 	Page<Review> getPageReviewList(Review review, Pageable pageable);
+	
+	void saveReviewList(List<Map<String, Object>> changeRowsList);
 }

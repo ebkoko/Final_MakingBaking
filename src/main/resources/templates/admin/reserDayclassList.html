@@ -15,6 +15,37 @@
 				#orderAndReserBtn  {
 					margin: 50px 0 0 0;
 				}
+				
+				/* 선택탭 */
+				#orderAndReserBtn {
+					margin-top: 20px;
+				}
+				#reserDayclass {
+					color: #4A4A4A;
+					font-weight: bold;
+					font-size: 25px;
+					margin-right: 50px;
+				}
+				#reserDayclass:hover {
+					text-decoration: underline;
+					text-decoration-color: #4A4A4A;
+					color: #4A4A4A;
+					font-weight: bold;
+					font-size: 25px;
+				}
+				#orderItemList {
+					color: #4A4A4A;
+					font-weight: bold;
+					font-size: 25px;
+				}
+				#orderItemList:hover {
+					text-decoration: underline;
+					text-decoration-color: #4A4A4A;
+					color: #4A4A4A;
+					font-weight: bold;
+					font-size: 25px;
+				}
+				
 				.a_reserNo {
 					text-decoration: none;
 					color: inherit;
@@ -326,9 +357,10 @@
 		<div>
   			<h1 id="orderAndReserAdmin">주문 및 예약 관리</h1>
 		</div>
+		
 		<div id="orderAndReserBtn">
-			<a href="reserDayclassList">원데이클래스 예약 내역</a>&ensp;&ensp;
-			<a href="orderItemList">상품 주문 내역</a>
+			<a href="reserDayclassList" id="reserDayclass">▶ 원데이클래스 예약 내역</a>
+			<a href="orderItemList" id="orderItemList">▶ 상품 주문 내역</a>
 		</div>
 		
 		<form id="searchForm" action="/admin/reserDayclassList" method="get">
@@ -349,8 +381,8 @@
 	            <select name="searchKeyword" id="selectSearch1" th:style="${searchCondition == 'PARTITIME' ? 'display: inline-block;' : 'display: none;'}"
 	            		th:disabled="${searchCondition == 'PARTITIME'} ? false : true">
 	            	<option>선택하세요.</option>
-	            	<option value="AM" th:selected="${searchKeyword} == 'AM'">AM</option>
-	              	<option value="PM" th:selected="${searchKeyword} == 'PM'">PM</option>
+	            	<option value="A" th:selected="${searchKeyword} == 'A'">AM</option>
+	              	<option value="P" th:selected="${searchKeyword} == 'P'">PM</option>
 	            </select>
 	            <select name="searchKeyword" id="selectSearch2" th:style="${searchCondition == 'RESERSTATUS' ? 'display: inline-block;' : 'display: none;'}"
 	            		th:disabled="${searchCondition == 'RESERSTATUS'} ? false : true">
