@@ -21,14 +21,14 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 	Page<Order> findByOrderNoContainingOrderByOrderNoDesc(@Param("searchKeyword") String searchKeyword, Pageable pageable); //주문번호
 	Page<Order> findByUserIdContainingOrderByOrderNoDesc(String searchKeyword, Pageable pageable); //회원아이디
 	Page<Order> findByOrderNameContainingOrderByOrderNoDesc(String searchKeyword, Pageable pageable); //주문자명
-	Page<Order> findByOrderPaymentContainingOrderByOrderNoDesc(String searchKeyword, Pageable pageable); //결제방법
-	Page<Order> findByOrderStatusContainingOrderByOrderNoDesc(String searchKeyword, Pageable pageable); //주문상태
+	Page<Order> findByOrderPaymentOrderByOrderNoDesc(String searchKeyword, Pageable pageable); //결제방법
+	Page<Order> findByOrderStatusOrderByOrderNoDesc(String searchKeyword, Pageable pageable); //주문상태
 	@Query(value="select a from Order a"
 			+ " where cast(a.orderNo as string) like %:searchKeyword1%"
 			+ " or a.userId like %:searchKeyword2%"
 			+ " or a.orderName like %:searchKeyword3%"
-			+ " or a.orderPayment like :searchKeyword4"
-			+ " or a.orderStatus like :searchKeyword5"  //양 % 삭제했는데, 배송중(D) 상태 검색한 경우, DW, DC나옴. 배송중이름 변경(DI)?????
+			+ " or a.orderPayment = :searchKeyword4"
+			+ " or a.orderStatus = :searchKeyword5"
 			+ " order by a.orderNo desc"
 			)
 	Page<Order> findByOrderItemListOrderByOrderNoDesc

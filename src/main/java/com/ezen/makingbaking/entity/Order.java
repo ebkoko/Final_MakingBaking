@@ -28,7 +28,7 @@ public class Order {	// 주문정보 테이블
 	private String userId;		// 주문회원 아이디
 	private LocalDateTime orderDate = LocalDateTime.now();	// 주문일
 	@Builder.Default
-	private String orderStatus = "MV";		// 주문상태(입금대기: MV, 결제완료: PE, 주문취소: OC, 결제취소: PC, 배송준비중: DR, 배송중: D, 배송완료: DC)
+	private String orderStatus = "MV";		// 주문상태(입금대기: MV, 결제완료: PE, 주문취소: OC, 결제취소: PC, 배송준비중: DW, 배송중: D, 배송완료: DC)
 	private String reciName;		// 수령인명
 	private String reciTel;		// 전화번호
 	private String shippingAddr1;	// 배송주소(우편번호)
