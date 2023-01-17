@@ -30,7 +30,6 @@
 		margin: 40px 0 0 35px;
 		
 	}
-	
 	#mid-container {
 	  width: 100%; height: fit-content;
 	  background-color: #fff;
@@ -38,7 +37,6 @@
 	}
 	
 	#list-table { width: 100%; border-collapse: collapse; }
-	
 	tr { height: 40px;}
 	
 	th { 

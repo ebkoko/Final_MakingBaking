@@ -183,7 +183,7 @@
 	    <!-- 메인 내용 -->
 	    <div class="mainContentWrapper">
 		    <div class="main-content">
-		      <h3>예약 확인</h3>
+		      <h2>예약 확인</h2>
 		      <span class="search">
 		        <select class="search-bar" name="reserCondition" id="reserCondition">
 		        	<option th:selected="${reserCondition == null || reserCondition == '' || reserCondition == 'ALL'}" value="ALL">전체</option>
@@ -213,7 +213,6 @@
 			        </div>
 			        <div class="box_right">
 			          <span class="box_right_detail"><a th:href="@{/mypage/getReserDetail/{reserNo} (reserNo=${reser.reserNo})}">예약 상세보기</a></span>
-			          <span class="box_right_detail_b"><a href="#">리뷰쓰기</a></span>
 			        </div>
 			      </div>
 		      </div>
