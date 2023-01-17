@@ -1,3 +1,19 @@
+			@font-face {
+			    font-family: 'GowunBatang-Regular';
+			    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunBatang-Regular.woff') format('woff');
+			    font-weight: normal; 
+			    font-style: normal;
+			}
+			.it_cDetatils_text {
+				font-family: 'GowunBatang-Regular';
+			}
+			.it_cintro_title {
+				font-family: 'GowunBatang-Regular';
+				color: #666666 ;
+				text-align: center;
+				font-style:italic;
+				font-size: 28px;	
+			}
 			.entire-wrap {
 		      width: 100%;
 		      height: 100%;
@@ -126,23 +142,14 @@
 		    }
 
 				
-		    /* 상품 설명*/
-		    .it_cintro_title {
-			  color: rgb(102, 102, 102);	 
-			  font-size: 20px;				
-			  text-align: center;
-			  font-style:italic;
-			}			
 			.it_cintro textarea{
 			  width: 100%;
-    		  height: 14em;   		  
-    		  
-    		  font-size: 18px;
+    		  font-size: 17px;
     		  border: none;
     		  resize: none;	
-    		  margin: 50px 0 50px 0;
+    		  margin: 40px 0 50px 0;
     		  text-align: center;
-    		  line-height:35px; 
+    		  line-height:40px; 
     		  overflow-y: hidden;
  		  
 			}

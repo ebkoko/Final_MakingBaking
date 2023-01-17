@@ -1,290 +1,290 @@
 <!DOCTYPE html>
 <html lang="ko"
-	  xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{layouts/layout}">
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{layouts/layout}">
 <head>
   <th:block layout:fragment="css">
     <link rel="stylesheet" th:href="@{/css/myPage/myPage.css}"/>
-	<link rel="stylesheet" th:href="@{/css/myPage/myPageRvw.css}"/>
+   <link rel="stylesheet" th:href="@{/css/myPage/myPageRvw.css}"/>
   </th:block>
   <th:block layout:fragment="script">
-	<script th:inline="javascript">
-		$(function() {	//==document.ready == dom객체(html태그들)가 다 로드됐을 때(html태그들 다 불러왔을 때)	
-			//이벤트들은 태그가 생성되고 매핑이 돼야하므로 dom객체가 다 로드된 후에 생성한다.
-			const pageReviewList = /*[[${pageReviewList}]]*/;
-			console.log(pageReviewList);
-			let changeRows = [];
-			let pageNum;
-				
-				
-			// 전체선택 버튼 클릭시
-			$("#selectAll").click(function() {
-				var chk = $("#selectAll").prop("checked");
-				if(chk) {
-					$("input[name='chk']").prop("checked", true);
-				} else {
-					$("input[name='chk']").prop("checked", false);
-				}
-			});
-			
-			
-			//삭제버튼 클릭 시 체크된 게시물들 삭제 상태로 변경
-			$("#reviewDelete").on('click', function() {
-				const pageNum = $(this).attr("data-page-num");
-						$("input:checkbox[name='chk']").each(function() {
-							if($(this).is(":checked")) {
-								const delReview = {
-										rvwNo: $(this).val()
-									};
-									
-									changeRows.push(delReview);
-							}
-						});
-					
-					
-					
-					if(confirm("선택한 상품을 삭제하시겠습니까?")) {
-						$.ajax({
-							url: '/mypage/deleteMyRvw',
-							type: 'post',
-							data: {
-								changeRows: JSON.stringify(changeRows),
-							},
-							success: function(obj) {
-								fnCallListAjax(pageNum);
-							},
-							error: function(e) {
-								console.log(e);
-							},
-						});
-						alert("삭제를 완료하였습니다.");
-					} else {
-						alert("삭제를 취소하였습니다.");
-					}
-					console.log(changeRows);
-				});
-				
-							
-			//
-			$(".present").on('click', function(e) {
-					$(e.target).css("color", "white");
-			});
-			
-			// 페이징
-			$(document).on("click", ".pagination_button a", function(e) {
-				e.preventDefault();
-				const page = $(this).attr("href");
-				$("#reviewDelete").attr("data-page-num", page);
-				fnCallListAjax(page);
-			});
-			
-		});
-		
-		//함수는 태그안에 이벤트로 호출할 때 미리 생성되어 있어야 하므로 dom객체가 로드되기전에 생성한다.
-		function fnCallListAjax(page) {
-			$.ajax({
-					url: '/mypage/myRvwList',
-					type: 'post',
-					data: {	
-						page: page					
-					},
-					success: function(obj) {
-						console.log(obj);
-						
-						let htmlstr = "";
-						
-									
-						for(let i=0; i<obj.pageItems.content.length; i++) {
-							htmlstr += `
-								<tr>
-									<td class="list-chkbox">
-										<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].rvwNo}"
-											value="${obj.pageItems.content[i].rvwNo}">
-									</td>
-									<td class="list-img">
-							`;
-						if(obj.pageItems.content[i].rvwType == 'class') {
-							htmlstr += `
-									<img src="/dayclass/${obj.pageItems.content[i].fileName}" width="90px" height="90px"></img></td>							
-							`;
-						} else {
-							htmlstr += `
-									<img src="/item/${obj.pageItems.content[i].fileName}" width="90px" height="90px"></img></td>						
-							`;
-						}		
-							htmlstr += `
-									<td class="list-category">${obj.pageItems.content[i].rvwType == 'class' ? '원데이클래스' : '제품구매'}</td>
-									<td class="list-content">${obj.pageItems.content[i].rvwContent}</td>
-									<td class="list-score">${obj.pageItems.content[i].rvwScore}</td>
-									<td class="list-date">${obj.pageItems.content[i].rvwRegdate.substring(0,10)}</td>
+   <script th:inline="javascript">
+      $(function() {   //==document.ready == dom객체(html태그들)가 다 로드됐을 때(html태그들 다 불러왔을 때)   
+         //이벤트들은 태그가 생성되고 매핑이 돼야하므로 dom객체가 다 로드된 후에 생성한다.
+         const pageReviewList = /*[[${pageReviewList}]]*/;
+         console.log(pageReviewList);
+         let changeRows = [];
+         let pageNum;
+            
+            
+         // 전체선택 버튼 클릭시
+         $("#selectAll").click(function() {
+            var chk = $("#selectAll").prop("checked");
+            if(chk) {
+               $("input[name='chk']").prop("checked", true);
+            } else {
+               $("input[name='chk']").prop("checked", false);
+            }
+         });
+         
+         
+         //삭제버튼 클릭 시 체크된 게시물들 삭제 상태로 변경
+         $("#reviewDelete").on('click', function() {
+            const pageNum = $(this).attr("data-page-num");
+                  $("input:checkbox[name='chk']").each(function() {
+                     if($(this).is(":checked")) {
+                        const delReview = {
+                              rvwNo: $(this).val()
+                           };
+                           
+                           changeRows.push(delReview);
+                     }
+                  });
+               
+               
+               
+               if(confirm("선택한 상품을 삭제하시겠습니까?")) {
+                  $.ajax({
+                     url: '/mypage/deleteMyRvw',
+                     type: 'post',
+                     data: {
+                        changeRows: JSON.stringify(changeRows),
+                     },
+                     success: function(obj) {
+                        fnCallListAjax(pageNum);
+                     },
+                     error: function(e) {
+                        console.log(e);
+                     },
+                  });
+                  alert("삭제를 완료하였습니다.");
+               } else {
+                  alert("삭제를 취소하였습니다.");
+               }
+               console.log(changeRows);
+            });
+            
+                     
+         //
+         $(".present").on('click', function(e) {
+               $(e.target).css("color", "white");
+         });
+         
+         // 페이징
+         $(document).on("click", ".pagination_button a", function(e) {
+            e.preventDefault();
+            const page = $(this).attr("href");
+            $("#reviewDelete").attr("data-page-num", page);
+            fnCallListAjax(page);
+         });
+         
+      });
+      
+      //함수는 태그안에 이벤트로 호출할 때 미리 생성되어 있어야 하므로 dom객체가 로드되기전에 생성한다.
+      function fnCallListAjax(page) {
+         $.ajax({
+               url: '/mypage/myRvwList',
+               type: 'post',
+               data: {   
+                  page: page               
+               },
+               success: function(obj) {
+                  console.log(obj);
+                  
+                  let htmlstr = "";
+                  
+                           
+                  for(let i=0; i<obj.pageItems.content.length; i++) {
+                     htmlstr += `
+                        <tr>
+                           <td class="list-chkbox">
+                              <input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].rvwNo}"
+                                 value="${obj.pageItems.content[i].rvwNo}">
+                           </td>
+                           <td class="list-img">
+                     `;
+                  if(obj.pageItems.content[i].rvwType == 'class') {
+                     htmlstr += `
+                           <img src="/dayclass/${obj.pageItems.content[i].fileName}" width="90px" height="90px"></img></td>                     
+                     `;
+                  } else {
+                     htmlstr += `
+                           <img src="/item/${obj.pageItems.content[i].fileName}" width="90px" height="90px"></img></td>                  
+                     `;
+                  }      
+                     htmlstr += `
+                           <td class="list-category">${obj.pageItems.content[i].rvwType == 'class' ? '원데이클래스' : '제품구매'}</td>
+                           <td class="list-content">${obj.pageItems.content[i].rvwContent}</td>
+                           <td class="list-score">${obj.pageItems.content[i].rvwScore}</td>
+                           <td class="list-date">${obj.pageItems.content[i].rvwRegdate.substring(0,10)}</td>
 
-								</tr>
-							`;
-						}
-						$("#list-table").children(":first").children().not(":first").remove();
-						$("#list-table").children(":first").append(htmlstr);
-						
-						$("#boxxWrapper").html(htmlstr);
-						
-						htmlstr = "";
-						
-						let pageNumber = obj.pageItems.pageable.pageNumber;
-						let pageSize = obj.pageItems.pageable.pageSize;
-						let totalPages = obj.pageItems.totalPages;
-						let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
-						let tempEndPage = startPage + pageSize - 1;
-						let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
-						
-					
-						
-						if(pageNumber > 0) {
-							htmlstr += `
-								<li class="pagination_button">
-									<a style="border: 0px;" href="${pageNumber - 1}">&#60;</a>
-								</li>
-							`;
-						}
-						
-						let realStart = totalPages - startPage < pageSize ? 
-											totalPages < pageSize ? 1 : totalPages - pageSize + 1 
-										: startPage;
-						
-						for(let i = realStart; i <= endPage; i++) {
-							if(pageNumber == i-1) {
-								htmlstr += `<li class="pagination_button">
-										   	   <a class="present" href="${i - 1}">${i}</a>
-									        </li>
-								`;
-							} else {
-								htmlstr += `<li class="pagination_button">
-										   	   <a href="${i - 1}">${i}</a>
-									        </li>
-								`;
-							}
-						}
-						
-						if(pageNumber < totalPages - 1) {
-							htmlstr += `<li class="pagination_button">
-									       <a style="border: 0px;" href="${pageNumber + 1}">&#62;</a>
-								        </li>
-							`;
-						}
-						
-						$(".pagination").html(htmlstr);
-						
-						
-					},
-					error: function(e) {
-						console.log(e);
-						
-					}
-				})
-				/*.done(function(result) {
-					$("#list-table").replaceWith(result);
-				});*/
-		}
-		
-	</script>
+                        </tr>
+                     `;
+                  }
+                  $("#list-table").children(":first").children().not(":first").remove();
+                  $("#list-table").children(":first").append(htmlstr);
+                  
+                  $("#boxxWrapper").html(htmlstr);
+                  
+                  htmlstr = "";
+                  
+                  let pageNumber = obj.pageItems.pageable.pageNumber;
+                  let pageSize = obj.pageItems.pageable.pageSize;
+                  let totalPages = obj.pageItems.totalPages;
+                  let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
+                  let tempEndPage = startPage + pageSize - 1;
+                  let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
+                  
+               
+                  
+                  if(pageNumber > 0) {
+                     htmlstr += `
+                        <li class="pagination_button">
+                           <a style="border: 0px;" href="${pageNumber - 1}">&#60;</a>
+                        </li>
+                     `;
+                  }
+                  
+                  let realStart = totalPages - startPage < pageSize ? 
+                                 totalPages < pageSize ? 1 : totalPages - pageSize + 1 
+                              : startPage;
+                  
+                  for(let i = realStart; i <= endPage; i++) {
+                     if(pageNumber == i-1) {
+                        htmlstr += `<li class="pagination_button">
+                                       <a class="present" href="${i - 1}">${i}</a>
+                                   </li>
+                        `;
+                     } else {
+                        htmlstr += `<li class="pagination_button">
+                                       <a href="${i - 1}">${i}</a>
+                                   </li>
+                        `;
+                     }
+                  }
+                  
+                  if(pageNumber < totalPages - 1) {
+                     htmlstr += `<li class="pagination_button">
+                                  <a style="border: 0px;" href="${pageNumber + 1}">&#62;</a>
+                                </li>
+                     `;
+                  }
+                  
+                  $(".pagination").html(htmlstr);
+                  
+                  
+               },
+               error: function(e) {
+                  console.log(e);
+                  
+               }
+            })
+            /*.done(function(result) {
+               $("#list-table").replaceWith(result);
+            });*/
+      }
+      
+   </script>
   </th:block>
 </head>
 <body>
   <div layout:fragment="content" style="height: 80vh;">
-  	<main class="centre">
-	    <!-- 사이드 바 -->
-	    <div class="left-nav-bar">
-	      <div class="mypage2">
-	        <h2><a href="/mypage/myPage">마이페이지<a></h2>
-	      </div>
-	      <div class="menu">
-	        <div class="sub-menu">
-	          <h3>My 쇼핑</h3>
-	          <ul class="menu-group">
-	            <li class="menu-name"><a th:href="@{/mypage/myPage}">주문확인</a></li>
-	            <li class="menu-name"><a th:href="@{/mypage/myReserList}">예약확인</a></li>	          
-	            <li class="menu-name"><a href="#">찜목록</a></li>
-	           
-	          </ul>
-	        </div>
-	        <div class="sub-menu">
-	          <ul class="menu-group">
-	            <h3>My 활동</h3>
-	            <li class="menu-name"><a th:href="@{/mypage/myRvwList}">나의 리뷰</a></li>
-	          </ul>
-	        </div>
-	        <div class="sub-menu">
-	          <ul class="menu-group">
-	            <h3>My 정보</h3>
-	            <li class="menu-name"><a th:href="@{/user/changeInfoPw}">개인정보확인</a></li>
-	            <li class="menu-name"><a th:href="@{/mypage/quit}">회원탈퇴</a></li>
-	          </ul>
-	        </div>
-	        <div class="sub-menu">
-	          <ul class="menu-group">
-	            <li style="list-style: none;"><a th:href="@{/mypage/qnaList}"><h3>나의 QnA</h3></a></li>
-	          </ul>
-	        </div>
-	      </div>
-	    </div>
-	    <div class="mainContentWrapper">
-			<div id="container">
-				<h2>나의 리뷰</h2>
-			    <div id="mid-container">
-			    <div style="display: flex;">
-				      <div id="selectbox">
-		                <label for="selectAll"><input type="checkbox" name="select" id="selectAll"><span> 전체선택</span></label>
-		              </div>
-		              <div id="itemTotalBtn">	
-				    	<input type="button" name="deleteBtn" value="선택삭제" id="reviewDelete" th:data-page-num="${pageReviewList.pageable.pageNumber}">
-				      </div>
-			    </div>
-			      <table id="list-table">
-			        <tr>
-			          <th width="4%" id="th-chkbox"></th>
-			          <th width="10%" id="th-img">상 품&ensp;&ensp;</th>
-			          <th width="15%" id="th-category">분&ensp;류</th>
-			          <th width="52%" id="th-content">내&ensp;&ensp;용</th>
-			          <th width="7%" id="th-score">별점</th>
-			          <th width="13%" id="th-date">작성일</th>			          
-			        </tr>
-			        <tr th:each="rvw: ${pageReviewList}">
-			        	<td><input type="checkbox" class="check" name="chk" th:value="${rvw.rvwNo}"></td>
-			        	<td class="list-img">
-			        		<img th:src="@{${rvw.rvwType} == 'class' ? '/dayclass/' + ${rvw.fileName}
-			        					    : '/item/' + ${rvw.fileName}}" width="90px" height="90px" ></td>
-			        	<td class="list-category" 
-			        		th:text="${rvw.rvwType eq 'class' ? '원데이클래스' : '제품구매'}"></td>
-						<td class="list-content" th:text="${rvw.rvwContent}"></td>
-						<td class="list-score" th:text="${rvw.rvwScore}"></td>
-						<td class="list-date" th:text="${rvw.rvwRegdate eq null ? '' : #strings.substring(rvw.rvwRegdate, 0, 10)}"></td>
-						
-					</tr>
-			      </table>
-			      <br/>
-				  <div style="text-align:center;" class="paging">
-					<ul class="pagination" style="display: flex; justify-content: center;" 
-									th:if="${pageReviewList.totalElements > 0}"
-									th:with="pageNumber = ${pageReviewList.pageable.pageNumber},
-											pageSize = ${pageReviewList.pageable.pageSize},
-											totalPages = ${pageReviewList.totalPages},
-											startPage =${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
-											tempEndPage = ${startPage + pageSize -1}, 
-											endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
-						<li class="pagination_button" th:if="${pageNumber > 0}">
-							<a style="border: 0px;" th:href="${pageNumber - 1}"><</a>
-						</li>
-						<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
-							<a th:href="${page - 1}" th:text="${page}"></a>
-						</li>
-						<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
-							<a style="border: 0px;" th:href="${pageNumber + 1}">></a>
-						</li>
-					 </ul>
-				  </div>
-			    </div>
-			</div>
-	    </div>
-  	</main>
+     <main class="centre">
+       <!-- 사이드 바 -->
+       <div class="left-nav-bar">
+         <div class="mypage2">
+           <h2><a href="/mypage/myPage">마이페이지<a></h2>
+         </div>
+         <div class="menu">
+           <div class="sub-menu">
+             <h3>My 쇼핑</h3>
+             <ul class="menu-group">
+               <li class="menu-name"><a th:href="@{/mypage/myPage}">주문확인</a></li>
+               <li class="menu-name"><a th:href="@{/mypage/myReserList}">예약확인</a></li>             
+               <li class="menu-name"><a href="#">찜목록</a></li>
+              
+             </ul>
+           </div>
+           <div class="sub-menu">
+             <ul class="menu-group">
+               <h3>My 활동</h3>
+               <li class="menu-name"><a th:href="@{/mypage/myRvwList}">나의 리뷰</a></li>
+             </ul>
+           </div>
+           <div class="sub-menu">
+             <ul class="menu-group">
+               <h3>My 정보</h3>
+               <li class="menu-name"><a th:href="@{/user/changeInfoPw}">개인정보확인</a></li>
+               <li class="menu-name"><a th:href="@{/mypage/quit}">회원탈퇴</a></li>
+             </ul>
+           </div>
+           <div class="sub-menu">
+             <ul class="menu-group">
+               <li style="list-style: none;"><a th:href="@{/mypage/qnaList}"><h3>나의 QnA</h3></a></li>
+             </ul>
+           </div>
+         </div>
+       </div>
+       <div class="mainContentWrapper">
+         <div id="container">
+            <h2>나의 리뷰</h2>
+             <div id="mid-container">
+             <div style="display: flex;">
+                  <div id="selectbox">
+                      <label for="selectAll"><input type="checkbox" name="select" id="selectAll"><span> 전체선택</span></label>
+                    </div>
+                    <div id="itemTotalBtn">   
+                   <input type="button" name="deleteBtn" value="선택삭제" id="reviewDelete" th:data-page-num="${pageReviewList.pageable.pageNumber}">
+                  </div>
+             </div>
+               <table id="list-table">
+                 <tr>
+                   <th width="4%" id="th-chkbox"></th>
+                   <th width="10%" id="th-img">상 품&ensp;&ensp;</th>
+                   <th width="15%" id="th-category">분&ensp;류</th>
+                   <th width="52%" id="th-content">내&ensp;&ensp;용</th>
+                   <th width="7%" id="th-score">별점</th>
+                   <th width="13%" id="th-date">작성일</th>                   
+                 </tr>
+                 <tr th:each="rvw: ${pageReviewList}">
+                    <td><input type="checkbox" class="check" name="chk" th:value="${rvw.rvwNo}"></td>
+                    <td class="list-img">
+                       <img th:src="@{${rvw.rvwType} == 'class' ? '/dayclass/' + ${rvw.fileName}
+                                    : '/item/' + ${rvw.fileName}}" width="90px" height="90px" ></td>
+                    <td class="list-category" 
+                       th:text="${rvw.rvwType eq 'class' ? '원데이클래스' : '제품구매'}"></td>
+                  <td class="list-content" th:text="${rvw.rvwContent}"></td>
+                  <td class="list-score" th:text="${rvw.rvwScore}"></td>
+                  <td class="list-date" th:text="${rvw.rvwRegdate eq null ? '' : #strings.substring(rvw.rvwRegdate, 0, 10)}"></td>
+                  
+               </tr>
+               </table>
+               <br/>
+              <div style="text-align:center;" class="paging">
+               <ul class="pagination" style="display: flex; justify-content: center;" 
+                           th:if="${pageReviewList.totalElements > 0}"
+                           th:with="pageNumber = ${pageReviewList.pageable.pageNumber},
+                                 pageSize = ${pageReviewList.pageable.pageSize},
+                                 totalPages = ${pageReviewList.totalPages},
+                                 startPage =${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+                                 tempEndPage = ${startPage + pageSize -1}, 
+                                 endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+                  <li class="pagination_button" th:if="${pageNumber > 0}">
+                     <a style="border: 0px;" th:href="${pageNumber - 1}"><</a>
+                  </li>
+                  <li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
+                     <a th:href="${page - 1}" th:text="${page}"></a>
+                  </li>
+                  <li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+                     <a style="border: 0px;" th:href="${pageNumber + 1}">></a>
+                  </li>
+                </ul>
+              </div>
+             </div>
+         </div>
+       </div>
+     </main>
   </div>
 </body>
 </html>

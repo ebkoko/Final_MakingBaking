@@ -244,12 +244,22 @@
 						reviewPagingAndOrder($(e.target).attr("href"), $("#it_rvw_array").val());
 					});
 					
-					// 
+					// 수업날짜 클릭시 리뷰창 나타내기
 					$("input[name='reviewOrderNo']").on("click", function() {
 						$(".rvwWriteSection").css("display", "block");
 						$("#rvwOrderNo").val($(this).val());
 					});
 					
+					// 클래스 후기 textarea반응형	
+					$('.it_cDetatils_text').each(function() {
+					    var offset = this.offsetHeight - this.clientHeight;
+					 
+					    var resizeTextarea = function(el) {
+					        $(el).css('height', 'auto').css('height', el.scrollHeight + offset);
+					    };
+					    
+					    resizeTextarea(this);
+					});
 				});
 				
 				// ??????????
