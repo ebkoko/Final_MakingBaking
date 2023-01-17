@@ -52,7 +52,7 @@ public class DayclassController {
 	private UserService userService;
 	
 	@GetMapping("/onedayClass")
-	public ModelAndView onedayClassView(@PageableDefault(page = 0, size = 6) Pageable pageable) {
+	public ModelAndView onedayClassView(@PageableDefault(page = 0, size = 20) Pageable pageable) {
 		Page<CamelHashMap> dayclassList = dayclassService.getOneDayclass(pageable);
 
 		//System.out.println(dayclassDTOList.getContent().get(0).getDayclassNo());
