@@ -368,14 +368,15 @@
 							
 							for(let i=0; i<obj.pageItems.content.length; i++) {
 								htmlStr += `
-									
 									<tr>
 										<td>
 											<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].userId}"
 											value="${obj.pageItems.content[i].userId}">
 										</td>
 										<td class="td_userName">
-											<a class="a_userName">${obj.pageItems.content[i].userName}</a>
+											<a class="a_userName"
+												data-user-id="${obj.pageItems.content[i].userId}">${obj.pageItems.content[i].userName}
+											</a>
 										</td>
 										<td>${obj.pageItems.content[i].userId}</td>
 										<td>${obj.pageItems.content[i].userRegdate == null ? '' : obj.pageItems.content[i].userRegdate.substr(0, 10)}</td>
@@ -452,7 +453,7 @@
 				
 				//회원상세 팝업
 				$(function() {
-					$(".a_userName").click(function(e) {
+					$(document).on("click", ".a_userName", function(e) {
 						e.preventDefault();
 						const userId = $(this).attr("data-user-id");
 					userInfoCheckPopup(userId);
