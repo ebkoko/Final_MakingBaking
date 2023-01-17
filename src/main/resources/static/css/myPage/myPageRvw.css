@@ -6,8 +6,7 @@
 	  text-decoration: none;
 	}
 	.centre{
-		display: flex;
-      
+	  display: flex;     
       height:100%;
       margin-left: 23rem;
 	}
@@ -19,8 +18,7 @@
 	}
 	#container {
 	  	width: 750px; 
-	  	margin: 0 0 100px 100px;
-	  
+	  	margin: 0 0 100px 0;
 		height: 92%;
 	}
 	

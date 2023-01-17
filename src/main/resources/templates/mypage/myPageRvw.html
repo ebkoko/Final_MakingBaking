@@ -10,30 +10,98 @@
   </th:block>
   <th:block layout:fragment="script">
 	<script th:inline="javascript">
-		$(function() {			
+		$(function() {	//==document.ready == dom객체(html태그들)가 다 로드됐을 때(html태그들 다 불러왔을 때)	
+			//이벤트들은 태그가 생성되고 매핑이 돼야하므로 dom객체가 다 로드된 후에 생성한다.
 			const pageReviewList = /*[[${pageReviewList}]]*/;
 			console.log(pageReviewList);
+			let changeRows = [];
+			let pageNum;
+				
+				
+			// 전체선택 버튼 클릭시
+			$("#selectAll").click(function() {
+				var chk = $("#selectAll").prop("checked");
+				if(chk) {
+					$("input[name='chk']").prop("checked", true);
+				} else {
+					$("input[name='chk']").prop("checked", false);
+				}
+			});
 			
+			
+			//삭제버튼 클릭 시 체크된 게시물들 삭제 상태로 변경
+			$("#reviewDelete").on('click', function() {
+				const pageNum = $(this).attr("data-page-num");
+						$("input:checkbox[name='chk']").each(function() {
+							if($(this).is(":checked")) {
+								const delReview = {
+										rvwNo: $(this).val()
+									};
+									
+									changeRows.push(delReview);
+							}
+						});
+					
+					
+					
+					if(confirm("선택한 상품을 삭제하시겠습니까?")) {
+						$.ajax({
+							url: '/mypage/deleteMyRvw',
+							type: 'post',
+							data: {
+								changeRows: JSON.stringify(changeRows),
+							},
+							success: function(obj) {
+								fnCallListAjax(pageNum);
+							},
+							error: function(e) {
+								console.log(e);
+							},
+						});
+						alert("삭제를 완료하였습니다.");
+					} else {
+						alert("삭제를 취소하였습니다.");
+					}
+					console.log(changeRows);
+				});
+				
+							
+			//
 			$(".present").on('click', function(e) {
 					$(e.target).css("color", "white");
 			});
 			
+			// 페이징
 			$(document).on("click", ".pagination_button a", function(e) {
 				e.preventDefault();
-				$.ajax({
+				const page = $(this).attr("href");
+				$("#reviewDelete").attr("data-page-num", page);
+				fnCallListAjax(page);
+			});
+			
+		});
+		
+		//함수는 태그안에 이벤트로 호출할 때 미리 생성되어 있어야 하므로 dom객체가 로드되기전에 생성한다.
+		function fnCallListAjax(page) {
+			$.ajax({
 					url: '/mypage/myRvwList',
 					type: 'post',
 					data: {	
-						page: $(this).attr("href")						
+						page: page					
 					},
 					success: function(obj) {
 						console.log(obj);
 						
 						let htmlstr = "";
 						
+									
 						for(let i=0; i<obj.pageItems.content.length; i++) {
 							htmlstr += `
 								<tr>
+									<td class="list-chkbox">
+										<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].rvwNo}"
+											value="${obj.pageItems.content[i].rvwNo}">
+									</td>
 									<td class="list-img">
 							`;
 						if(obj.pageItems.content[i].rvwType == 'class') {
@@ -115,9 +183,8 @@
 				/*.done(function(result) {
 					$("#list-table").replaceWith(result);
 				});*/
-			});
-			
-		});
+		}
+		
 	</script>
   </th:block>
 </head>
@@ -163,16 +230,23 @@
 			<div id="container">
 				<h2>나의 리뷰</h2>
 			    <div id="mid-container">
+			      <div id="selectbox">
+	                <label for="selectAll"><input type="checkbox" name="select" id="selectAll"> <span>전체선택</span></label>
+	              </div>
+	              <div id="itemTotalBtn">	
+			    	<input type="button" name="deleteBtn" value="삭제" id="reviewDelete" th:data-page-num="${pageReviewList.pageable.pageNumber}">
+			      </div>
 			      <table id="list-table">
 			        <tr>
-			          <th width="17%" id="th-img">이미지</th>
-			          <th width="20%" id="th-category">분류</th>
+			          <th width="5%" id="th-chkbox"></th>
+			          <th width="15%" id="th-img">이미지</th>
+			          <th width="16%" id="th-category">분류</th>
 			          <th width="40%" id="th-content">내용</th>
-			          <th width="10%" id="th-score">별점</th>
-			          <th width="17%" id="th-date">작성일</th>
-			          
+			          <th width="8%" id="th-score">별점</th>
+			          <th width="18%" id="th-date">작성일</th>			          
 			        </tr>
 			        <tr th:each="rvw: ${pageReviewList}" id="boxxWrapper">
+			        	<td><input type="checkbox" class="check" name="chk" th:value="${rvw.rvwNo}"></td>
 			        	<td class="list-img">
 			        		<img th:src="@{${rvw.rvwType} == 'class' ? '/dayclass/' + ${rvw.fileName}
 			        					    : '/item/' + ${rvw.fileName}}" width="90px" height="90px" ></td>
