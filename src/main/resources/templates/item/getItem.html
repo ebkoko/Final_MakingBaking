@@ -83,6 +83,16 @@
 					});
 					
 					
+					if(getItem.itemStock == 0 || getItem.itemStatus == 'S') {
+						$(".itemPrice").css("text-decoration", "line-through").css("text-decoration-color", "#B40431");
+						$(".itemPriceKrw").css("text-decoration", "line-through").css("text-decoration-color", "#B40431");
+						$(".itemStatus").text("일시품절").css("color", "#B40431");
+					} else if(getItem.itemStatus == 'N') {
+						$(".itemPrice").css("text-decoration", "line-through").css("text-decoration-color", "#B40431");
+						$(".itemPriceKrw").css("text-decoration", "line-through").css("text-decoration-color", "#B40431");
+						$(".itemStatus").text("판매중지").css("color", "#B40431");
+					}
+					
 					// 비회원이 장바구니 버튼 클릭시 로그인창 띄우기
 					$("#itemCartBtn").on("click", function() {
 						const isAuthenticated = $(".header > input[name='authenticate']").val();
@@ -313,7 +323,8 @@
 	                <p th:text="${item.itemMinName}" name="소제목"></p>
 	              </div>
 		          <div class="itbanner_explain_KRW">
-		            <span th:text="${#numbers.formatInteger(item.itemPrice, 3, 'COMMA')}" class="itemPrice"></span><span>원</span>
+		            <span th:text="${#numbers.formatInteger(item.itemPrice, 3, 'COMMA')}" class="itemPrice"></span><span class="itemPriceKrw">원</span>
+		            <span class="itemStatus"></span>
 		          </div> 
 		          <div class="it_explainList_div">
 		              <table class="it_explainList_T">
