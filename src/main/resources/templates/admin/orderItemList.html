@@ -106,28 +106,17 @@
 					height: 80px;
 				}
 				
-				/* 개인 주문취소 버튼 */
-			    .btnOrderCancel {
-					width: 90px;
-					height: 40px;
+				/* 변경버튼 */
+				#btnMod {
+					width:40px;
+					height:30px;
 					border: 1.2px solid #28693F;
 					background-color: white;
+					text-align: center;
 					color: #28693F;
+					display: inline-block;
 					cursor: pointer;
-					font-size: 15px;
-					font-weight: bold;
-			    }
-			    /* 개인 결제취소 버튼 */
-			    .btnPayCancel {
-					width: 90px;
-					height: 40px;
-					border: 1.2px solid #28693F;
-					background-color: white;
-					color: #28693F;
-					cursor: pointer;
-					font-size: 15px;
-					font-weight: bold;
-			    }
+				}
 			    
 			    /* 페이징처리 */
 			    .paging {
@@ -266,8 +255,28 @@
 										<td>${(obj.pageItems.content[i].orderTotalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
 										<td>${obj.pageItems.content[i].orderPayment}</td>
 										<td>${obj.pageItems.content[i].orderDate == null ? '' : obj.pageItems.content[i].orderDate.substr(0, 10)}</td>
-										<td>${obj.pageItems.content[i].orderStatus}</td>
-
+									`;
+									
+									if(obj.pageItems.content[i].orderStatus != 'PE') {
+										htmlStr += `
+											<td>
+											${obj.pageItems.content[i].orderStatus}
+										</td>
+										`;
+									} else {
+										htmlStr += `
+												<td>
+													<select>
+														<option value="PE">결제완료 (PE)</option>
+														<option value="DW">배송준비중 (DW)</option>
+										        		<option value="D">배송중 (D)</option>
+										        		<option value="DC">배송완료 (DC)</option>
+													</select>
+													<button type="button" id="btnMod">변경</button>
+												</td>
+										`;
+									}
+								htmlStr += `
 									</tr>
 								`;
 							}
@@ -405,23 +414,37 @@
 					<td th:text="${order.orderTotalPrice >= 1000 ? #numbers.formatInteger(order.orderTotalPrice , 3, 'COMMA') : order.orderTotalPrice}"></td>
 					<td th:text="${order.orderPayment}"></td>
 					<td th:text="${order.orderDate eq null ? '' : #strings.substring(order.orderDate, 0, 10)}"></td>
-					<td th:if="${order.orderStatus} != 'PE'" th:text="${order.orderStatus}">
-						<select th:if="${order.orderStatus} == 'PE'">
-							<option value="DW">배송준비중</option>
-			        		<option value="D">배송중</option>
-			        		<option value="DC">배송완료</option>
-						</select>
-					</td>
+					<td th:if="${order.orderStatus} != 'PE'" th:text="${order.orderStatus}"></td>
 					<td th:if="${order.orderStatus} == 'PE'">
 						<select>
-							<option value="DW">배송준비중</option>
-			        		<option value="D">배송중</option>
-			        		<option value="DC">배송완료</option>
+							<option value="PE">결제완료(PE)</option>
+							<option value="DW">배송준비중(DW)</option>
+			        		<option value="D">배송중(D)</option>
+			        		<option value="DC">배송완료(DC)</option>
 						</select>
+						<button type="button" id="btnMod">변경</button>
 					</td>
 		     	 </tr>
 		    </table>
 		</div>
+		<!--
+		<td th:if="${order.orderStatus} != 'PE'" th:text="${order.orderStatus}">
+			<select th:if="${order.orderStatus} == 'PE'">
+				<option value="PE">결제완료</option>
+				<option value="DW">배송준비중</option>
+        		<option value="D">배송중</option>
+        		<option value="DC">배송완료</option>
+			</select>
+		</td>
+		<td th:if="${order.orderStatus} == 'PE'">
+			<select>
+				<option value="PE">결제완료</option>
+				<option value="DW">배송준비중</option>
+        		<option value="D">배송중</option>
+        		<option value="DC">배송완료</option>
+			</select>
+			<button type="button" id="btnMod">변경</button>
+		</td>-->
 		
 		<!-- 페이징 -->
 		<div class="paging">

@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,7 @@ import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.dto.ReviewDTO;
 import com.ezen.makingbaking.dto.UserDTO;
+import com.ezen.makingbaking.entity.CustomUserDetails;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
@@ -1089,7 +1091,8 @@ public class AdminController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("admin/userRvwList.html");
 		mv.addObject("getUserRvwPageList", reviewListDTO);
-
+		mv.addObject("rvwType", reviewDTO.getRvwType());
+		
 		return mv;
 	}
 	
@@ -1204,6 +1207,78 @@ public class AdminController {
 			response.setErrorMessage(e.getMessage());
 			return ResponseEntity.badRequest().body(response);
 		}
+	}
+	//////////////////////////////////////////////////////해결중////////////////////////
+	//클래스 예약관리_참여현황 수정
+	@Transactional
+	@PutMapping("/updatePartiStatus")
+	public ResponseEntity<?> updatePartiStatus(ReserDTO reserDTO, @AuthenticationPrincipal CustomUserDetails customUser,
+			HttpServletRequest request) throws IOException { 
+		
+		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
+		
+		try {
+			Reser reser = Reser.builder()
+					.userId(customUser.getUsername())
+					.reserNo(reserDTO.getReserNo())
+					.reserDate(LocalDateTime.now())
+					.reserStatus(reserDTO.getReserStatus())
+					.partiName(reserDTO.getPartiName())
+					.partiTel(reserDTO.getPartiTel())
+					.partiTime(reserDTO.getPartiTime())
+					.classNo(reserDTO.getClassNo())
+					.reserPersonCnt(reserDTO.getReserPersonCnt())
+					.orderName(reserDTO.getOrderName())
+					.orderTel(reserDTO.getOrderTel())
+					.request(reserDTO.getRequest())
+					.reserPayment(reserDTO.getReserPayment())
+					.depositor(reserDTO.getDepositor())
+					.reserTotalPrice(reserDTO.getReserTotalPrice())
+					.partiDate(reserDTO.getPartiDate())
+					.classPrice(reserDTO.getClassPrice())
+					.partiStatus(reserDTO.getPartiStatus())
+					.build();
+					
+
+			adminService.updatePartiStatus(reser);
+			
+			ReserDTO returnPartiStatus = ReserDTO.builder()
+													.userId(reser.getUserId())	
+													.reserNo(reser.getReserNo())
+													.reserDate(reser.getReserDate() == null ?
+															null :
+																reser.getReserDate().toString())
+													.reserStatus(reser.getReserStatus())
+													.partiName(reser.getPartiName())
+													.partiTel(reser.getPartiTel())
+													.partiTime(reser.getPartiTime())
+													.classNo(reser.getClassNo())
+													.reserPersonCnt(reser.getReserPersonCnt())
+													.orderName(reser.getOrderName())
+													.orderTel(reser.getOrderTel())
+													.request(reser.getRequest())
+													.reserPayment(reser.getReserPayment())
+													.depositor(reser.getDepositor())
+													.reserTotalPrice(reser.getReserTotalPrice())
+													.partiDate(reser.getPartiDate())
+													.classPrice(reser.getClassPrice())
+													.partiStatus(reser.getPartiStatus())
+													.build();
+			
+			
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			
+			returnMap.put("updatePartiStatus", returnPartiStatus);
+			
+			responseDTO.setItem(returnMap);
+			
+			return ResponseEntity.ok().body(responseDTO);
+		} catch(Exception e) {
+			responseDTO.setErrorMessage(e.getMessage());
+			
+			return ResponseEntity.badRequest().body(responseDTO);
+		}
+		
 	}
 	
 	//주문 및 예약관리

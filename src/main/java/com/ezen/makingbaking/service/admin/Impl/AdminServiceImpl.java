@@ -320,11 +320,10 @@ public class AdminServiceImpl implements AdminService {
 		return userRepository.getUserInfoCheck(userId);
 	}
 	
-	/////////////////////해결중////////////////////////////////////////////////////////////////////////
 	//각 회원의 리뷰-팝업창
 	@Override
 	public Page<Review> getUserRvwPageList(Review review, Pageable pageable) {
-		if(review.getRvwType() != null && !review.getRvwType().equals(""))
+		if(review.getRvwType() != null && !review.getRvwType().equals("") && !review.getRvwType().equals("all"))
 			return reviewRepository.findByRvwTypeAndRvwWriter(review.getRvwType(), review.getRvwWriter(), pageable);
 		else
 			return reviewRepository.findByRvwWriter(review.getRvwWriter(), pageable);
@@ -370,6 +369,17 @@ public class AdminServiceImpl implements AdminService {
 		  }
 	      
 	   }
+	
+	//////////////참여현황 업데이트//////////////////
+	@Override
+	public Reser updatePartiStatus(Reser reser) {
+		reserRepository.save(reser);
+		reserRepository.flush();
+
+	    return reser;
+	   }
+	
+	
 	
 	//주문 및 예약관리
 	//order_itemList

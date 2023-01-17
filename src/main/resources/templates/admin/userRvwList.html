@@ -95,21 +95,26 @@
 					$(document).on("click", ".pagination a", function(e) {
 						e.preventDefault();
 						pageNum = $(this).attr("href");
-						userListPaging(pageNum, $("#searchCondition").val());
-					})
+						userListPaging(pageNum);
+					});
+					
+					$("#type_array").on("change", function() {
+						userListPaging(0);
+					});
 				});
 				
 				
-				function userListPaging(page, condition) {
+				function userListPaging(page) {
 					console.log(page);
-					console.log(condition);
-
+					
+					const userId = $("#userRvwWriter").text();
 						$.ajax({
-						url: '/admin/userRvwList?rvwWriter=hi',
+						url: '/admin/userRvwList',
 						type: 'post',
 						data: {
 							page: page,
-							searchCondition: condition
+							rvwType: $("#type_array").val(),
+							rvwWriter: userId
 						},
 						success: function(obj) {
 							console.log(obj);
@@ -132,10 +137,7 @@
 								htmlStr += `
 									
 									<tr>
-										<td>
-											<input type="checkbox" name="chk" id="chk${obj.pageItems.content[i].rvwNo}"
-											value="${obj.pageItems.content[i].rvwNo}">
-										</td>
+										<td>${obj.pageItems.content[i].rvwNo}</td>
 										<td>${obj.pageItems.content[i].rvwType}</td>
 										<td>${obj.pageItems.content[i].rvwWriter}</td>
 										<td>${obj.pageItems.content[i].rvwContent}</td>
@@ -202,10 +204,6 @@
 						}
 					});
 				} //function 닫음
-				
-				$(function() {
-					$("#userRvwWriter").text( + '님의 리뷰');
-				});
 			</script>
 		</th:block>
 	</head>
@@ -214,19 +212,20 @@
 <body>
 	<div id="container" layout:fragment="content">
 	  	<div>
-	  		<h1 id="AuserAdmin"><p id="userRvwWriter" th:value="${getUserRvwPageList.rvwWriter}">님의 리뷰</p></h1>
+	  		<h1 id="AuserAdmin"><span id="userRvwWriter" th:text="${#lists.size(getUserRvwPageList.content) > 0 ? getUserRvwPageList.content.get(0).rvwWriter : ''}"></span> 님의 리뷰</h1>
 		</div>
 	    
 	    <div class="type_option"> 
-	        <select name="type_array" id="type_array">	     
-	          <option value="item" th:selected="${searchCondition == 'item'}">item</option>
-	          <option value="class" th:selected="${searchCondition == 'class'}">class</option>
+	        <select name="type_array" id="type_array">
+	        	<option value="all" th:selected="${rvwType == '' || rvwType == null || rvwType == 'all'}">all</option>	     
+	          	<option value="item" th:selected="${rvwType == 'item'}">item</option>
+	          	<option value="class" th:selected="${rvwType == 'class'}">class</option>
 	        </select>
 	      </div>
 	
 		<!-- 회원 리스트 Table -->
 	    <div id="div_AuserList_T">
-	        <table border="1" id="AuserList_T">
+	        <table border="1" id="AuserList_T" th:if="${#lists.size(getUserRvwPageList.content)} > 0">
 	        	<tr>
 	        		<th class="AuserList_T_10">번호</th>
 			        <th class="AuserList_T_10">타입</th>
@@ -238,12 +237,14 @@
 	      		<tr th:each="review: ${getUserRvwPageList}">
 		        	<td th:text="${review.rvwNo}"></td>
 					<td th:text="${review.rvwType}"></td>
-					<td th:text="${review.rvwWriter}"></td>
+					<td th:text="${review.rvwWriter}" th:data-user-id="${review.rvwWriter}"></td>
 					<td th:text="${review.rvwContent}"></td>
 		        	<td th:text="${review.rvwRegdate eq null ? '' : #strings.substring(review.rvwRegdate, 0, 10)}"></td>
 		        	<td th:text="${review.rvwScore}"></td>
 		     	 </tr>
 		    </table>
+		    
+		    <p th:unless="${#lists.size(getUserRvwPageList.content)} > 0">작성한 리뷰가 없습니다.</p>
 		</div>
 		
 		<!-- 페이징 -->

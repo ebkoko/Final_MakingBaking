@@ -129,6 +129,18 @@
 					font-weight: bold;
 			    }
 			    
+			    /* 변경버튼 */
+				#btnMod {
+					width:40px;
+					height:30px;
+					border: 1.2px solid #28693F;
+					background-color: white;
+					text-align: center;
+					color: #28693F;
+					display: inline-block;
+					cursor: pointer;
+				}
+			    
 			    /* 페이징처리 */
 			    .paging {
 					text-align: center;
@@ -281,10 +293,31 @@
 										<td>${obj.pageItems.content[i].partiDate == null ? '' : obj.pageItems.content[i].partiDate.substr(0, 10)}</td>
 										<td>${obj.pageItems.content[i].partiTime}</td>
 										<td>${obj.pageItems.content[i].reserStatus}</td>
-										<td>${obj.pageItems.content[i].partiStatus}</td>
+									`;
+								
+									if(obj.pageItems.content[i].partiStatus != 'PS') {
+										htmlStr += `
+											<td>
+											${obj.pageItems.content[i].partiStatus}
+										</td>
+										`;
+									} else {
+										htmlStr += `
+												<td>
+													<select>
+														<option value="PS">진행예정 (PS)</option>
+										        		<option value="PC">진행완료 (PC)</option>
+										        		<option value="NS">노쇼 (NS)</option>
+													</select>
+													<button type="button" id="btnMod">변경</button>
+												</td>
+										`;
+									}
+								htmlStr += `
 									</tr>
 								`;
 							}
+							
 							
 							$("#reserList_T").html(htmlStr);
 							
@@ -423,12 +456,14 @@
 					<td th:text="${reser.partiDate}"></td>
 					<td th:text="${reser.partiTime}"></td>
 					<td th:text="${reser.reserStatus}"></td>
-					<td th:text="${reser.partiStatus}"></td>
+					<td th:if="${reser.partiStatus} != 'PS'" th:text="${reser.partiStatus}"></td>
+					<td th:if="${reser.partiStatus} == 'PS'">
 						<select>
-							<option value="DW">배송준비중</option>
-			        		<option value="D">배송중</option>
-			        		<option value="DC">배송완료</option>
+							<option value="PS">진행예정 (PS)</option>
+			        		<option value="PC">진행완료 (PC)</option>
+			        		<option value="NS">노쇼 (NS)</option>
 						</select>
+						<button type="button" id="btnMod">변경</button>
 					</td>
 		     	 </tr>
 		    </table>
