@@ -98,38 +98,36 @@
 						const isAuthenticated = $(".header > input[name='authenticate']").val();
 						if(isAuthenticated == "false") {
 							$('.login-form-container').toggleClass('active');
-						
-						}
-						
-						if(getItem.itemStock == 0 || getItem.itemStatus == 'S') {
-							alert("상품이 일시품절되었습니다.");
-							return;
-						} else if(getItem.itemStatus == 'N') {
-							alert("상품이 판매중지되었습니다.");
-							return;
-						}
-						
-						if(!cartClick) {
-							$.ajax({
-								url: '/cart/insertCart',
-								type: 'post',
-								data: { itemNo: $("#itemNo").val() },
-								success: function(obj) {
-									console.log(obj);
-									cartClick = true;
-									alert("장바구니에 상품이 추가되었습니다.");
-								}, error: function(e) {
-									console.log(e);
-								}
-							});							
 						} else {
-							alert("장바구니는 1초에 한 번씩 클릭 가능합니다.");	
-							console.log('noclick');
-							setTimeout(function() {
-								cartClick = false;
-							}, 1000);
+							if(getItem.itemStock == 0 || getItem.itemStatus == 'S') {
+								alert("상품이 일시품절되었습니다.");
+								return;
+							} else if(getItem.itemStatus == 'N') {
+								alert("상품이 판매중지되었습니다.");
+								return;
+							}
+							
+							if(!cartClick) {
+								$.ajax({
+									url: '/cart/insertCart',
+									type: 'post',
+									data: { itemNo: $("#itemNo").val() },
+									success: function(obj) {
+										console.log(obj);
+										cartClick = true;
+										alert("장바구니에 상품이 추가되었습니다.");
+									}, error: function(e) {
+										console.log(e);
+									}
+								});							
+							} else {
+								alert("장바구니는 1초에 한 번씩 클릭 가능합니다.");	
+								console.log('noclick');
+								setTimeout(function() {
+									cartClick = false;
+								}, 1000);
+							}							
 						}
-					
 					});
 					
 					
