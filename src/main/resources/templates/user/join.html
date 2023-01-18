@@ -47,6 +47,8 @@
 							}
 						})
 					});
+					
+					
 					$("#userId").on("change", function() {
 						checkId = false;
 						$("#IdCheck").attr("disabled", false);
@@ -275,7 +277,7 @@
 		      <form action="/user/join" id="joinForm" class="form" method="post">
 		        <h3>회원가입</h3>
 		        <div style="display: flex;">
-		          <input type="text" placeholder="아이디" class="box" id="userId" name="userId" th:value="${socialUser != null ? socialUser.userId : ''}" style="width: 70%;">
+		          <input type="text" placeholder="아이디" class="box" id="userId" name="userId" minlength="3" th:value="${socialUser != null ? socialUser.userId : ''}" style="width: 70%;">
 		          <button type="button" id="IdCheck" class="check">중복체크</button>
 		        </div>
 		

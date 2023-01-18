@@ -10,8 +10,7 @@
 			<input type="hidden" sec:authorize="isAnonymous()" name="authenticate" value=false>
 		    <div id="login-btn">
 			    <div sec:authorize="!hasAnyRole('ROLE_ADMIN', 'ROLE_USER')" th:remove="tag">
-			    	<button type="button" id="btn-login" class="login header-font">login</button>
-			    	<a th:href="@{/mypage/myPage}" id="mypage" class="mypage header-font">mypage</a>
+			    	<button type="button" id="btn-login" class="login header-font">로그인</button>
 			    </div>
 			    <div sec:authorize="hasRole('ROLE_USER')" th:remove="tag">
 			    	<a th:href="@{/cart/cartList}"><img th:src="@{/images/cart.png}" style="width: 45px; margin-top: 10px"></a>
