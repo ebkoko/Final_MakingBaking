@@ -302,7 +302,7 @@
 	          <option value="f" th:selected="${#authentication.principal.user.userGender} == 'f'">여자</option>
 	          <option value="n" th:selected="${#authentication.principal.user.userGender} == 'n'">선택 안함</option>
 	        </select>
-	        <input type="text" id="userTel" name="userTel" placeholder="전화번호 ex)01012345678" class="box" th:value="${#authentication.principal.user.userTel}">
+	        <input type="text" id="userTel" name="userTel" placeholder="전화번호 ex)01012345678" class="box" maxlength="11" th:value="${#authentication.principal.user.userTel}">
 	        <input type="text" id="userMail" name="userMail" placeholder="이메일 ex)xxx@xxx.com" th:value="${#authentication.principal.user.userMail}" class="box">
 	        <input id="post"  name="userAddr1" type="text" placeholder="우편번호" readonly onclick="findAddr()" th:value="${#authentication.principal.user.userAddr1}">
 	        <input id="addr" name="userAddr2" type="text" placeholder="주소" readonly th:value="${#authentication.principal.user.userAddr2}"> <br>

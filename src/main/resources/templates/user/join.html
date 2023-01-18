@@ -303,7 +303,7 @@
 		          <option value="f">여자</option>
 		          <option value="n">선택 안함</option>
 		        </select>
-		        <input type="text" id="userTel" name="userTel" placeholder="전화번호 ex)01012345678" class="box">
+		        <input type="text" id="userTel" name="userTel" placeholder="전화번호 ex)01012345678" class="box" maxlength="11">
 		        <input type="text" id="userMail" name="userMail" placeholder="이메일 ex)xxx@xxx.com" th:value="${socialUser != null ? socialUser.userMail : ''}" class="box">
 		        <input id="post"  name="userAddr1" type="text" value="우편번호" readonly onclick="findAddr()">
 		        <input id="addr" name="userAddr2" type="text" placeholder="주소" readonly> <br>
