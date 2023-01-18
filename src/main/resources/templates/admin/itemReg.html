@@ -159,8 +159,9 @@
 				
 				/* 상품등록 버튼 div */
 			    #div_itemRegBtn {
-					display: flex;
-					justify-content:center;
+					text-align:center;
+					margin: 50px auto;
+					margin-right: 70px;
 				}
 				/* 상품등록 버튼 */
 			    #itemRegBtn {
@@ -182,6 +183,27 @@
 					background-color: #28693F;
 					color: white;
 					font-weight: 550;
+				}
+				/* 목록으로 버튼 */
+			    #itemListBtn {
+					width: 150px;
+					height: 50px;
+					border: 1.2px solid #28693F;
+					border-radius: 4px;
+					background-color: white;
+					text-align: center;
+					display: inline-block;
+					color: #28693F;
+					font-size: 18px;
+					font-weight: 550;
+					letter-spacing:1px;
+					margin-right: 30px;
+			    }
+			    #itemListBtn:hover {
+					background-color: #28693F;
+					color: white;
+					font-weight: 550;
+					cursor: pointer;
 				}
 			</style>
 		</th:block>
@@ -503,6 +525,8 @@
       
       <!-- 상품등록 버튼 -->
       <div id="div_itemRegBtn">
+      	<!-- 목록으로 버튼 -->
+		<a href="/admin/itemList"><input type="button" value="목록으로" id="itemListBtn"></a>
       	<input type="submit" value="상품 등록" id="itemRegBtn">
       </div>
       </form>

@@ -1208,7 +1208,7 @@ public class AdminController {
 	//reser_dayclass 리스트
 	@GetMapping("/reserDayclassList")
 	public ModelAndView getReserDayclassList(ReserDTO reserDTO,
-			@PageableDefault(page = 0, size = 10) Pageable pageable) {
+			@PageableDefault(page = 0, size = 5) Pageable pageable) {
 		Reser reser = Reser.builder()
 							.searchCondition(reserDTO.getSearchCondition())
 							.searchKeyword(reserDTO.getSearchKeyword())
@@ -1247,7 +1247,7 @@ public class AdminController {
 	//클래스 예약 리스트 - ajax로 처리한 페이징 글 목록 보여주기
 	@PostMapping("/reserDayclassList")
 	public ResponseEntity<?> getReserDayclassPageList(ReserDTO reserDTO,
-			@PageableDefault(page = 0, size = 10) Pageable pageable) {
+			@PageableDefault(page = 0, size = 5) Pageable pageable) {
 		ResponseDTO<ReserDTO> response = new ResponseDTO<>();
 		try {
 			Reser reser = Reser.builder()
@@ -1288,6 +1288,7 @@ public class AdminController {
 		
 		try {
 			Reser reser = Reser.builder()
+					.userId(reserDTO.getUserId())
 					.reserNo(reserDTO.getReserNo())
 					.reserDate(LocalDateTime.now())
 					.reserStatus(reserDTO.getReserStatus())
@@ -1352,7 +1353,7 @@ public class AdminController {
 	//order_item 리스트
 	@GetMapping("/orderItemList")
 	public ModelAndView getOrderItemList(OrderDTO orderDTO,
-			@PageableDefault(page = 0, size = 10) Pageable pageable) {
+			@PageableDefault(page = 0, size = 5) Pageable pageable) {
 		Order order = Order.builder()
 							.searchCondition(orderDTO.getSearchCondition())
 							.searchKeyword(orderDTO.getSearchKeyword())
@@ -1392,7 +1393,7 @@ public class AdminController {
 	//상품 주문 리스트 - ajax로 처리한 페이징 글 목록 보여주기
 	@PostMapping("/orderItemList")
 	public ResponseEntity<?> getOrderItemPageList(OrderDTO orderDTO,
-			@PageableDefault(page = 0, size = 10) Pageable pageable) {
+			@PageableDefault(page = 0, size = 5) Pageable pageable) {
 		ResponseDTO<OrderDTO> response = new ResponseDTO<>();
 		try {
 			Order order = Order.builder()
