@@ -9,6 +9,9 @@
 	<head>
 		<th:block layout:fragment="css">
 			<style>
+				#container {
+					min-height: 549px;
+				}			
 				hr {
 					height: 1px;
 					background: black;
@@ -315,6 +318,7 @@
 				
 				// 상품리스트에서 삭제버튼 클릭했을 때
 				const fnDeleteItem = (cartNo, itemNo) => {
+					console.log(checkedList);
 					for(let i = 0; i < checkedList.length; i++) {
 						if(checkedList[i].itemNo == itemNo) {
 							checkedList.splice(i, 1);
@@ -414,7 +418,7 @@ itemCnt * detailPrice >= 1000 ? (itemCnt * detailPrice).toString().replace(/\B(?
 							
 							$("#cart_item").html(htmlStr);
 									
-							//location.reload();
+							location.reload();
 							
 						})
 						.fail(function(error) {
