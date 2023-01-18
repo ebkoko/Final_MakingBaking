@@ -150,7 +150,7 @@
 								data: {itemNo: $("#itemNo").val()},
 								success: function(obj) {
 									console.log(obj);
-									$("#itemLikeBtn").text("♡    " + obj.item.likeCnt);
+									$("#itemLikeBtn").text("🤍    " + obj.item.likeCnt);
 									$("#itemLikeBtn").val("N");
 								},
 								error: function(e) {
@@ -164,7 +164,7 @@
 								data: {itemNo: $("#itemNo").val()},
 								success: function(obj) {
 									console.log(obj);
-									$("#itemLikeBtn").text("♥    " + obj.item.likeCnt);
+									$("#itemLikeBtn").text("❤    " + obj.item.likeCnt);
 									$("#itemLikeBtn").val("Y");
 								},
 								error: function(e) {
@@ -354,7 +354,7 @@
 		      		<span><button type="button" id="itemCartBtn" value="itemCart">장바구니  
 		            </button></span>
 		            <span id="likeSpan"><button type="button" id="itemLikeBtn" 
-		            	th:value="${likeYn}" th:text="${likeYn == 'Y' ? '♥   ' : '♡   '} + ${likeCnt}"></button></span>
+		            	th:value="${likeYn}" th:text="${likeYn == 'Y' ? '❤   ' : '🤍   '} + ${likeCnt}"></button></span>
 	              </div>   
 		        </div>
 		       </div>
