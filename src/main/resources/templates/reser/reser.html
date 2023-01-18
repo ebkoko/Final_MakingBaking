@@ -326,6 +326,8 @@
 						$("#partiTel").val(partiTel);
 						$("#partiDate").val($(".detailDate").text());
 						$("#partiStatus").val("PS");
+						
+						$("#reserForm").submit();
 					});
 					
 					// 주문자와 동일 체크했을 때
@@ -592,7 +594,7 @@
 		                    <div id="depositorTitle">입금자명<span class="essential">&#42;</span>: <input type="text" name="depositor" id="depositor" placeholder="입금자명을 입력하세요.">&ensp;<span class="essentialMent">&#42; 는 필수항목입니다.</span></div>
 		                </div>
 		            </div>
-	            	<button type="submit" id="btnPayment">결제하기</button>
+	            	<button type="button" id="btnPayment">결제하기</button>
 	            </form>
 	        </div>
 		</div>

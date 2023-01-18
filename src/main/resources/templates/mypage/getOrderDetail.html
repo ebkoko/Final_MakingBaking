@@ -324,6 +324,9 @@
 									$(".orderStatus").text("주문취소");
 									$("#CancelOption").css("display", "none");
 									$("#moveList").show();
+									$(".deadlineMent").hide();
+									$(".deadline").hide();	
+									$(".deadlineTime").hide();	
 									
 									let htmlstr = "";
 									
@@ -374,6 +377,9 @@
 									$(".orderStatus").text("결제취소");
 									$("#CancelOption").css("display", "none");
 									$("#moveList").show();
+									$(".deadlineMent").hide();
+									$(".deadline").hide();									
+									$(".deadlineTime").hide();									
 									
 									let htmlstr = "";
 									
@@ -413,7 +419,7 @@
 	            <div id="top">
 	                <span class="orderNoMent">주문번호: </span><span class="realOrderNo" th:text="${order.orderNo}"></span><span class="orderStatus"></span>&ensp;
 	                <span class="cancelDateMent" th:if="${order.orderCancelDate != null}">취소일시: </span><span class="cancelDate" th:if="${order.orderCancelDate != null}" th:text="${#strings.substring(order.orderCancelDate, 0, 16)}"></span>
-	                <span class="deadlineMent" th:if="${order.orderStatus} == 'MV'">입금기한: </span><span class="deadline" th:if="${order.orderStatus} == 'MV'"></span><span th:if="${order.orderStatus} == 'MV'"> 오후 11시 59분 59초</span>
+	                <span class="deadlineMent" th:if="${order.orderStatus} == 'MV'">입금기한: </span><span class="deadline" th:if="${order.orderStatus} == 'MV'"></span><span class="deadlineTime" th:if="${order.orderStatus} == 'MV'"> 오후 11시 59분 59초</span>
 	            </div>
 	            <hr>
 	            <div id="list_title">

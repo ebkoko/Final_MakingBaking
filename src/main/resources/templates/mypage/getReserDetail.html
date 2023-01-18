@@ -286,6 +286,9 @@
 									$(".reserStatus").text("예약취소");
 									$("#CancelOption").css("display", "none");
 									$("#moveList").show();
+									$(".deadlineMent").hide();
+									$(".deadline").hide();	
+									$(".deadlineTime").hide();	
 									
 									let htmlstr = "";
 									
@@ -336,6 +339,9 @@
 									$(".reserStatus").text("결제취소");
 									$("#CancelOption").css("display", "none");
 									$("#moveList").show();
+									$(".deadlineMent").hide();
+									$(".deadline").hide();	
+									$(".deadlineTime").hide();	
 									
 									let htmlstr = "";
 									
@@ -374,7 +380,7 @@
 	            <div id="top">
 	                <span class="reserNoMent">예약번호: </span><span class="realReserNo" th:text="${reser.reserNo}"></span><span class="reserStatus"></span>&ensp;
 	                <span class="cancelDateMent" th:if="${reser.reserCancelDate != null}">취소일시: </span><span class="cancelDate" th:if="${reser.reserCancelDate != null}" th:text="${#strings.substring(reser.reserCancelDate, 0, 16)}"></span>
-	                <span class="deadlineMent" th:if="${reser.reserStatus} == 'MV'">입금기한: </span><span class="deadline" th:if="${reser.reserStatus} == 'MV'"></span><span th:if="${reser.reserStatus} == 'MV'"> 오후 11시 59분 59초</span>
+	                <span class="deadlineMent" th:if="${reser.reserStatus} == 'MV'">입금기한: </span><span class="deadline" th:if="${reser.reserStatus} == 'MV'"></span><span class="deadlineTime" th:if="${reser.reserStatus} == 'MV'"> 오후 11시 59분 59초</span>
 	            </div>
 	            <hr>
 	            <div id="list_title">
