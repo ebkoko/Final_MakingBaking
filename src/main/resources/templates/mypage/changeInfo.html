@@ -296,7 +296,7 @@
 	        </div>
 	
 	        <input type="text" id="userName" name="userName" placeholder="이름" class="box" th:value="${#authentication.principal.user.userName}">
-	        <input type="text" id="userBirth" name="userBirth" placeholder="생년월일 ex)19901010" class="box" th:value="${#authentication.principal.user.userBirth}">
+	        <input type="text" id="userBirth" name="userBirth" placeholder="생년월일 ex)19901010" class="box" maxlength="8" th:value="${#authentication.principal.user.userBirth}">
 	        <select id="userGender" name="userGender" class="box">
 	          <option value="m" th:selected="${#authentication.principal.user.userGender} == 'm'">남자</option>
 	          <option value="f" th:selected="${#authentication.principal.user.userGender} == 'f'">여자</option>
