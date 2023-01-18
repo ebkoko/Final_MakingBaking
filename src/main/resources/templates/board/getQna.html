@@ -51,12 +51,12 @@
 		      </div>
 	      </div>
 	      <div id="question-content">
-	        <p th:text="${getBoard.boardContent}"></p>
+	      	<textarea th:text="${getBoard.boardContent}" cols="30" rows="5" readonly></textarea>
 	      </div>
 	      <hr>
 	      <th:block th:if="${getBoard.boardReply}">
-		      <div id="answer-content">        
-		        <p id="answer-text" th:text="${getBoard.boardReply}"></p>
+		      <div id="answer-content">       
+		      	<textarea id="answer-text" th:text="${getBoard.boardReply}" cols="30" rows="10"></textarea> 
 		      </div>
 	      </th:block>
 	      <th:block th:unless="${getBoard.boardReply}">
