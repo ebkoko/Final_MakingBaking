@@ -61,7 +61,7 @@ html, body {
     font-weight: 600;
     text-align: center;
     height: 40px;
-    width: 6rem;
+    min-width: 6rem;
     height: 3rem;
 }
 .login:hover, .mypage:hover {
@@ -247,23 +247,41 @@ html, body {
       background: #303740;
       color: lightgray;
       width: 100%;
-      height: 250px;
+      height: 200px;
     }
-    .footer .footer-log img {
+    .footer_ct {
+	  text-align: center;
+	}
+/*    .footer .footer-log img {
       float: left;
-    }
+    }*/
+    .footer-log, .ft{
+		display:  inline-block;
+	}
+	.ft {
+		margin-top: -30px;
+	}
     #footer-p {
-      margin: 10px 10px 10px 7rem;
+      margin: 0px 10px 10px 7rem;
     }
     .ft-details {
       clear: both;
+      margin-top: 35px;
+      text-align: center;
     }
+    .ft_mid {
+		margin: -30px auto 0 0;
+	}
     .t {
       margin: 10px 0;
     }
     .s {
       margin: 10px 5rem;
     }
+    .ib {
+	  display:inline-block;
+	  margin-right: 5px;
+	}
     .left {
       width: 50%;
       float: left;
@@ -287,6 +305,11 @@ html, body {
     	float: left;
     	margin: 4px 6px 0 4rem;
     	color: rgb(238, 233, 233);
+	}
+	.insta3 {
+		cursor: pointer;
+		margin: 4px 1px 0 0;
+		color: rgb(238, 233, 233);
 	}
 
 #container {

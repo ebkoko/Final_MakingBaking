@@ -18,7 +18,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public Page<Board> getPageBoardList(Board board, Pageable pageable) {
-		return boardRepository.findByCateCode(board.getCateCode(), pageable);
+		return boardRepository.findByCateCodeOrderByBoardNoDesc(board.getCateCode(), pageable);
 	}
 
 	@Override
