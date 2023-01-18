@@ -545,36 +545,6 @@
 			         });
 				 });
 
-				//가격 천단위 콤마
-				/*
-				//let itemPrice = 0;
-				function inputNumberFormat(obj) {
-					itemPrice = obj.value.replace(",", "");
-					$("#itemPrice").val(itemPrice);
-					obj.value = comma(uncomma(obj.value));
-				};
-				function comma(str) {
-					str = String(str);
-					return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
-				};
-				function uncomma(str) {
-					str = String(str);
-					return str.replace(/[^\d]+/g, '');
-				}; */
-				/*
-				function inputNumberFormat(obj) {
-					  itemPrice = obj.value.replace(",", "");
-					  obj.value = comma(uncomma(obj.value));
-				  }
-				  function comma(str) {
-					  str = String(str);
-					  return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
-				  }
-				  function uncomma(str) {
-					  str = String(str);
-					  return str.replace(/[^\d]+/g, '');
-				  }*/
-				  
 				  
 				//가격 숫자만입력가능
 				$(function() {
@@ -699,7 +669,7 @@
 			              &ensp;&ensp;<input type="file" id="btnAtt" name="uploadFiles" multiple="multiple">
 			              <input type="file" id="changedFiles" name="changedFiles" style="display: none;" 
 			              	multiple="multiple">
-			              <p style="color: red; font-size: 0.9rem;">상품 영양정보를 변경하려면 이미지를 클릭하고, 영양정보를 다운로드하려면 이미지 파일명을 클릭하세요.</p>
+			              <p style="color: red; font-size: 0.9rem;">&ensp;&ensp;상품 영양정보를 변경하려면 이미지를 클릭하세요.</p>
 			              <div id="attZone">
 			              	<div th:each="imgFile : ${itemFileList}" style="display: inline-block; position: relative; 
 								width: 280px; height: 210px; margin: 5px; border: 1px solid #00f; z-index: 1;">

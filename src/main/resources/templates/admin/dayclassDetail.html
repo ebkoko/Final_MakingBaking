@@ -36,11 +36,6 @@
 				}
 				
 				
-				/* 운영시간 */
-				#dayclassTime {
-					height: 50px;
-					font-size: 15px;
-				}
 				
 				/* 진행상태 */
 				#dayclassUseYn {
@@ -93,6 +88,7 @@
 				/* 클래스 설명 */
 				#dayclassDetails {
 					width: 650px;
+					height: 300px;
 					font-size: 15px;
 					padding-top: 10px;
 					padding-bottom: 10px;
@@ -207,10 +203,6 @@
 			<input type="hidden" name="originFiles" id="originFiles">
 			<div id="div_dayclassDtl">
 				<table border="1" id="T_dayclassDtl">
-					<tr>
-			          <th id="dayclassTime_Th">운영시간</th>
-			          <td>&ensp;&ensp;<input type="text" name="dayclassTime" id="dayclassTime" th:value="${getDayclass.dayclassTime}" readonly></td>
-			        </tr>
 			        <tr>
 			          <th id="dayclassUseYn_Th">진행상태</th>
 			          <td>&ensp;&ensp;<input type="text" name="dayclassUseYn" id="dayclassUseYn" th:value="${getDayclass.dayclassUseYn}" readonly></td>

@@ -42,16 +42,6 @@
 					font-size: 25px;
 				}
 				
-				.a_reserNo {
-					text-decoration: none;
-					color: inherit;
-					cursor: pointer;
-				}
-				.td_reserNo:hover {
-					text-decoration: underline;
-					color: #28693F;
-					font-weight: bold;
-				}
 				/* 검색 div */
 				#reser_search {
 					margin: 80px auto;
@@ -106,29 +96,45 @@
 					height: 80px;
 				}
 				
-				/* 개인 예약취소 버튼 */
-			    #btnReserCancel {
-					width: 90px;
-					height: 40px;
-					border: 1.2px solid #28693F;
-					background-color: white;
-					color: #28693F;
+				#reserNo {
+					width:180px;
+					color: black;
+					text-align: center;
+					font-size: 18px;
+					text-decoration: none;
 					cursor: pointer;
-					font-size: 15px;
-					font-weight: bold;
-			    }
-			    /* 개인 결제취소 버튼 */
-			    #btnPayCancel {
-					width: 90px;
-					height: 40px;
-					border: 1.2px solid #28693F;
-					background-color: white;
+				}
+				#reserNo:hover {
+					text-decoration: underline;
 					color: #28693F;
-					cursor: pointer;
-					font-size: 15px;
 					font-weight: bold;
-			    }
-			    
+				}
+				#partiName {
+					width:180px;
+					text-align: center;
+					font-size: 18px;
+				}
+				#classNo {
+					width:120px;
+					text-align: center;
+					font-size: 18px;
+				}
+				#partiDate {
+					width:180px;
+					text-align: center;
+					font-size: 18px;
+				}
+				#partiTime {
+					width:180px;
+					text-align: center;
+					font-size: 18px;
+				}
+				#reserStatus {
+					width:180px;
+					text-align: center;
+					font-size: 18px;
+				}
+				
 			    /* 변경버튼 */
 				#btnMod {
 					width:40px;
@@ -250,6 +256,38 @@
 					});
 				});
 				
+				//변경버튼 클릭 시
+				function fnUpdatePartiStatus() {
+		           
+		            let formData = new FormData($("#updateForm")[0]);
+		           console.log($("#updateForm").serialize());
+		           $.ajax({
+		              url: '/admin/updatePartiStatus',
+		              type: 'put',
+		              data: $("#updateForm").serialize(),
+		              processData: false,
+		              contentType: false,
+		              success: function (obj) {
+		                 console.log(obj);
+		                 alert("참여현황이 수정되었습니다.");
+		                 $("#reserNo").text(obj.item.pageReserList.reserNo);
+		                 $("#partiName").text(obj.item.pageReserList.partiName);
+		                 $("#classNo").text(obj.item.pageReserList.classNo);
+		                 $("#partiDate").textl(obj.item.pageReserList.partiDate);
+		                 $("#partiTime").text(obj.item.pageReserList.partiTime);
+		                 $("#reserStatus").text(obj.item.pageReserList.reserStatus);
+		                 $("#partiStatus").text(obj.item.pageReserList.partiStatus);
+		              },
+		              error: function (e) {
+		                 console.log(e);
+		              },
+		              done: function(result) {
+						  console.log(result);
+					  }
+		           });
+				 }
+				
+				//페이징
 				function reserListPaging(page, condition) {
 					console.log(page);
 					console.log(condition);
@@ -281,10 +319,17 @@
 							
 							for(let i=0; i<obj.pageItems.content.length; i++) {
 								htmlStr += `
-									
+								
 									<tr>
-										<td class="td_reserNo">
-											<a class="a_reserNo"
+										<td>
+										
+										<a th:href="@{/mypage/getReserDetail/{reserNo} (reserNo=${reser.reserNo})}">
+											<input type="text" readonly name="partiName" id="reserNo" th:value="${reser.reserNo}">
+										</a>
+										
+										
+										
+											<a id="reserNo"
 											href="/mypage/getReserDetail/${obj.pageItems.content[i].reserNo}">${obj.pageItems.content[i].reserNo}
 											</a>
 										</td>
@@ -377,35 +422,7 @@
 					});
 				} //function 닫음
 				
-				function fnUpdatePartiStatus() {
-		           
-		            let formData = new FormData($("#updateForm")[0]);
-		           
-		           $.ajax({
-		              url: '/admin/updatePartiStatus',
-		              type: 'put',
-		              data: formData,
-		              processData: false,
-		              contentType: false,
-		              success: function (obj) {
-		                 console.log(obj);
-		                 alert("참여현황이 수정되었습니다.");
-		                 $("#reserNo").val(obj.item.pageReserList.boardNo);
-		                 $("#partiName").val(obj.item.pageReserList.partiName);
-		                 $("#classNo").text(obj.item.pageReserList.classNo);
-		                 $("#partiDate").val(obj.item.pageReserList.partiDate);
-		                 $("#partiTime").text(obj.item.pageReserList.partiTime);
-		                 $("#reserStatus").val(obj.item.pageReserList.reserStatus);
-		                 $("#partiStatus").val(obj.item.pageReserList.partiStatus);
-		              },
-		              error: function (e) {
-		                 console.log(e);
-		              },
-		              done: function(result) {
-						  console.log(result);
-					  }
-		           });
-				 }
+				
 
 			</script>
 		</th:block>
@@ -478,19 +495,19 @@
 				        <th class="reserList_T_15">참여현황</th>
 		      		</tr>
 		      		<tr th:each="reser: ${pageReserList}">
-			        	<td class="td_reserNo">
-							<a class="a_reserNo" th:text="${reser.reserNo}"
-								th:href="@{/mypage/getReserDetail/{reserNo} (reserNo=${reser.reserNo})}">
+			        	<td>
+							<a th:href="@{/mypage/getReserDetail/{reserNo} (reserNo=${reser.reserNo})}">
+								<input type="text" readonly name="partiName" id="reserNo" th:value="${reser.reserNo}">
 							</a>
 						</td>
-						<td th:text="${reser.partiName}"></td>
-						<td th:text="${reser.classNo}"></td>
-						<td th:text="${reser.partiDate}"></td>
-						<td th:text="${reser.partiTime}"></td>
-						<td th:text="${reser.reserStatus}"></td>
+						<td><input type="text" readonly name="partiName" id="partiName" th:value="${reser.partiName}"></td>
+						<td><input type="text" readonly name="classNo" id="classNo" th:value="${reser.classNo}"></td>
+						<td><input type="text" readonly name="partiDate" id="partiDate" th:value="${reser.partiDate}"></td>
+						<td><input type="text" readonly name="partiTime" id="partiTime" th:value="${reser.partiTime}"></td>
+						<td><input type="text" readonly name="reserStatus" id="reserStatus" th:value="${reser.reserStatus}"></td>
 						<td th:if="${reser.partiStatus} != 'PS'" th:text="${reser.partiStatus}"></td>
 						<td th:if="${reser.partiStatus} == 'PS'">
-							<select>
+							<select name="partiStatus" id="partiStatus">
 								<option value="PS">진행예정 (PS)</option>
 				        		<option value="PC">진행완료 (PC)</option>
 				        		<option value="NS">노쇼 (NS)</option>

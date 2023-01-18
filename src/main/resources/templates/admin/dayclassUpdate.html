@@ -35,14 +35,6 @@
 					border-left: hidden;
 				}
 				
-				/* 운영시간 */
-				#dayclassTime_Th {
-					height: 50px;
-				}
-				#dayclassTime {
-					border: 1px solid black;
-				}
-				
 				/* 진행상태 */
 				#dayclassUseYn_Th {
 					height:50px;
@@ -101,6 +93,7 @@
 				/* 설명 */
 				#dayclassDetails {
 					width: 650px;
+					height: 300px;
 					font-size: 15px;
 					padding-top: 10px;
 					padding-bottom: 10px;
@@ -343,12 +336,6 @@
 		            $(div).remove();
 		         }
 		         
-		         function fnFileDown(dayclassNo, fileNo) {
-		            window.location="/admin/fileDown.do?dayclassNo=" //BoardController.java에 fileDonw.do 만들어주기
-		                  + dayclassNo + "&fileNo=" + fileNo;
-		         }
-		         
-		         
 		         function fnUpdateItem() {
 					dt = new DataTransfer();
 		               
@@ -459,36 +446,6 @@
 							}
 			         });
 				 });
-
-				//가격 천단위 콤마
-				/*
-				//let itemPrice = 0;
-				function inputNumberFormat(obj) {
-					itemPrice = obj.value.replace(",", "");
-					$("#itemPrice").val(itemPrice);
-					obj.value = comma(uncomma(obj.value));
-				};
-				function comma(str) {
-					str = String(str);
-					return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
-				};
-				function uncomma(str) {
-					str = String(str);
-					return str.replace(/[^\d]+/g, '');
-				}; */
-				/*
-				function inputNumberFormat(obj) {
-					  itemPrice = obj.value.replace(",", "");
-					  obj.value = comma(uncomma(obj.value));
-				  }
-				  function comma(str) {
-					  str = String(str);
-					  return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
-				  }
-				  function uncomma(str) {
-					  str = String(str);
-					  return str.replace(/[^\d]+/g, '');
-				  }*/
 				  
 				
 				//소요시간 숫자만 입력가능
@@ -531,23 +488,13 @@
 			<input type="hidden" name="originFiles" id="originFiles">
 			<div id="div_dayclassUpdate">
 				<table border="1" id="T_dayclassUpdate">
-					<tr>
-						<th id="dayclassTime_Th">운영시간</th>
-						<td>&ensp;&ensp;
-				            <select name="dayclassTime" id="dayclassTime">
-								<option value="A" th:selected="${searchCondition == 'A'}">오전</option>
-								<option value="P" th:selected="${searchCondition == 'P'}">오후</option>
-								<option value="B" th:selected="${searchCondition == 'B'}">오전/오후</option>
-				            </select>
-						</td>
-			        </tr>
 			        <tr>
 						<th id="dayclassUseYn_Th">진행상태</th>
 						<td>&ensp;&ensp;
 				            <select name="dayclassUseYn" id="dayclassUseYn">
-								<option value="Y" th:selected="${searchCondition == 'Y'}">진행중</option>
-								<option value="S" th:selected="${searchCondition == 'S'}">진행예정</option>
-								<option value="N" th:selected="${searchCondition == 'N'}">진행완료</option>
+								<option value="Y" th:selected="${searchCondition == 'Y'}">진행중(Y)</option>
+								<option value="S" th:selected="${searchCondition == 'S'}">진행예정(S)</option>
+								<option value="N" th:selected="${searchCondition == 'N'}">진행완료(N)</option>
 				            </select>
 			          	</td>
 			        </tr>
@@ -558,7 +505,7 @@
 			              &ensp;&ensp;<input type="file" id="btnAtt" name="uploadFiles" multiple="multiple">
 			              <input type="file" id="changedFiles" name="changedFiles" style="display: none;" 
 			              	multiple="multiple">
-			              <p style="color: red; font-size: 0.9rem;">클래스 대표이미지를 변경하려면 이미지를 클릭하고, 다운로드하려면 이미지의 파일명을 클릭하세요.</p>
+			              <p style="color: red; font-size: 0.9rem;">&ensp;&ensp;클래스 대표이미지를 변경하려면 이미지를 클릭하세요.</p>
 			              <div id="attZone">
 			              	<div th:each="imgFile : ${dayclassFileList}" style="display: inline-block; position: relative; 
 								width: 280px; height: 210px; margin: 5px; border: 1px solid #00f; z-index: 1;">

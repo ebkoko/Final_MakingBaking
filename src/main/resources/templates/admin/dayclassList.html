@@ -72,9 +72,6 @@
 					height: 35px;
 				}
 				
-				.dayclassList_T_05 {
-					 width: 5%
-				}
 				.dayclassList_T_10 {
 					 width: 10%
 				}
@@ -83,9 +80,6 @@
 				}
 				.dayclassList_T_20 {
 					 width: 20%
-				}
-				.dayclassList_T_25 {
-					 width: 25%
 				}
 				.dayclassList_T_30 {
 					 width: 30%
@@ -200,26 +194,15 @@
 				$(function() {
 					//검색창(상품카테, 판매상태)
 					$("#searchCondition").on("change", function() {
-						if($(this).val() == 'DAYCLASSTIME') {
+						if ($(this).val() == 'DAYCLASSUSEYN') {
 							$("#inputSearch").hide();
-							$("#selectSearch2").hide();
 							$("#selectSearch1").show();
 							$("#inputSearch").attr("disabled", true);
-							$("#selectSearch2").attr("disabled", true);
 							$("#selectSearch1").attr("disabled", false);
-						} else if($(this).val() == 'DAYCLASSUSEYN') {
-							$("#inputSearch").hide();
-							$("#selectSearch1").hide();
-							$("#selectSearch2").show();
-							$("#inputSearch").attr("disabled", true);
-							$("#selectSearch2").attr("disabled", false);
-							$("#selectSearch1").attr("disabled", true);
-						} else if($(this).val() != 'DAYCLASSTIME' && $(this).val() != 'DAYCLASSUSEYN') {
+						} else if($(this).val() != 'DAYCLASSUSEYN') {
 							$("#inputSearch").show();
 							$("#selectSearch1").hide();
-							$("#selectSearch2").hide();
 							$("#inputSearch").attr("disabled", false);
-							$("#selectSearch2").attr("disabled", true);
 							$("#selectSearch1").attr("disabled", true);
 						}
 					});
@@ -283,13 +266,12 @@
 								htmlStr += `
 							
 								<tr>
-					        		<th class="dayclassList_T_05"></th>
+					        		<th class="dayclassList_T_10"></th>
 							        <th class="dayclassList_T_10">No.</th>
-							        <th class="dayclassList_T_25">클래스 이름</th>
+							        <th class="dayclassList_T_30">클래스 이름</th>
 							        <th class="dayclassList_T_20">클래스 가격</th>
-							        <th class="dayclassList_T_15">운영시간</th>
 							        <th class="dayclassList_T_15">진행 상태</th>
-							        <th class="dayclassList_T_10">클래스 관리</th>
+							        <th class="dayclassList_T_15">클래스 관리</th>
 					      		</tr>
 					      	`;
 								for(let i = 0; i < obj.pageItems.content.length; i++) {
@@ -306,7 +288,6 @@
 												</a>
 											</td>
 											<td>${(obj.pageItems.content[i].dayclassPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
-											<td>${obj.pageItems.content[i].dayclassTime}</td>
 											<td>${obj.pageItems.content[i].dayclassUseYn}</td>
 											<td>
 								        		<a id="dayclassMod"
@@ -360,13 +341,12 @@
 							htmlStr += `
 							
 								<tr>
-					        		<th class="dayclassList_T_05"></th>
+					        		<th class="dayclassList_T_10"></th>
 							        <th class="dayclassList_T_10">No.</th>
-							        <th class="dayclassList_T_25">클래스 이름</th>
+							        <th class="dayclassList_T_30">클래스 이름</th>
 							        <th class="dayclassList_T_20">클래스 가격</th>
-							        <th class="dayclassList_T_15">운영시간</th>
 							        <th class="dayclassList_T_15">진행 상태</th>
-							        <th class="dayclassList_T_10">클래스 관리</th>
+							        <th class="dayclassList_T_15">클래스 관리</th>
 					      		</tr>
 					      	`;
 							
@@ -385,7 +365,6 @@
 											</a>
 										</td>
 										<td>${(obj.pageItems.content[i].dayclassPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
-										<td>${obj.pageItems.content[i].dayclassTime}</td>
 										<td>${obj.pageItems.content[i].dayclassUseYn}</td>
 										<td>
 							        		<a id="dayclassMod"
@@ -470,19 +449,12 @@
 				<select name="searchCondition" id="searchCondition">
 					<option value="ALL" th:selected="${searchCondition == 'ALL' || searchCondition == '' || searchCondition == null}">전체</option>
 					<option value="DAYCLASSNAME" th:selected="${searchCondition} == 'DAYCLASSNAME'">이름</option>
-					<option value="DAYCLASSTIME" th:selected="${searchCondition} == 'DAYCLASSTIME'">운영시간</option>
 					<option value="DAYCLASSUSEYN" th:selected="${searchCondition} == 'DAYCLASSUSEYN'">진행상태</option>
 	            </select>
 	            <input type="text" name="searchKeyword" th:value="${searchKeyword}" id="inputSearch" 
-	            	th:style="${ searchCondition != 'DAYCLASSTIME' && searchCondition != 'DAYCLASSUSEYN'  ? 'display: inline-block;' : 'display: none;'}"
-	            	th:disabled="${ searchCondition != 'DAYCLASSTIME' && searchCondition != 'DAYCLASSUSEYN'} ? false : true">
-	            <select name="searchKeyword" id="selectSearch1" th:style="${searchCondition == 'DAYCLASSTIME' ? 'display: inline-block;' : 'display: none;'}"
-	            		th:disabled="${searchCondition == 'DAYCLASSTIME'} ? false : true">
-	            	<option>선택하세요.</option>
-	            	<option value="A" th:selected="${searchKeyword} == 'A'">AM</option>
-	              	<option value="P" th:selected="${searchKeyword} == 'P'">PM</option>
-	            </select>
-	            <select name="searchKeyword" id="selectSearch2" th:style="${searchCondition == 'DAYCLASSUSEYN' ? 'display: inline-block;' : 'display: none;'}"
+	            	th:style="${ searchCondition != 'DAYCLASSUSEYN'  ? 'display: inline-block;' : 'display: none;'}"
+	            	th:disabled="${ searchCondition != 'DAYCLASSUSEYN'} ? false : true">
+	            <select name="searchKeyword" id="selectSearch1" th:style="${searchCondition == 'DAYCLASSUSEYN' ? 'display: inline-block;' : 'display: none;'}"
 	            		th:disabled="${searchCondition == 'DAYCLASSUSEYN'} ? false : true">
 	            <option>선택하세요.</option>
 	            	<option value="Y" th:selected="${searchKeyword} == 'Y'">진행중(Y)</option>
@@ -503,13 +475,12 @@
         <div id="div_dayclassList_T">
 	        <table border="1" id="dayclassList_T">
 	        	<tr>
-	        		<th class="dayclassList_T_05"></th>
+	        		<th class="dayclassList_T_10"></th>
 			        <th class="dayclassList_T_10">No.</th>
-			        <th class="dayclassList_T_25">클래스 이름</th>
+			        <th class="dayclassList_T_30">클래스 이름</th>
 			        <th class="dayclassList_T_20">클래스 가격</th>
-			        <th class="dayclassList_T_15">운영시간</th>
 			        <th class="dayclassList_T_15">진행 상태</th>
-			        <th class="dayclassList_T_10">클래스 관리</th>
+			        <th class="dayclassList_T_15">클래스 관리</th>
 	      		</tr>
 	      		<tr th:each="dayclass: ${pageDayclassList}">
 	      			<td><input type="checkbox" class="check" name="chk" th:value="${dayclass.dayclassNo}"></td>
@@ -521,7 +492,6 @@
 						</a>
 					</td>
 		        	<td th:text="${dayclass.dayclassPrice >= 1000 ? #numbers.formatInteger(dayclass.dayclassPrice , 3, 'COMMA') : dayclass.dayclassPrice}"></td>
-		        	<td th:text="${dayclass.dayclassTime}"></td>
 		        	<td th:text="${dayclass.dayclassUseYn}"></td>
 		        	<td>
 		        		<a id="dayclassMod" th:text="수정"

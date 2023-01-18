@@ -24,7 +24,6 @@
 					color: #28693F;
 					font-weight: bold;
 				}
-				
 				/* 테이블 */
 				#AuserList_T {
 					width: 1200px;
@@ -46,8 +45,8 @@
 				.AuserList_T_15 {
 					 width: 15%;
 				}
-				.AuserList_T_40 {
-					 width: 40%;
+				.AuserList_T_50 {
+					 width: 50%;
 				}
 				.AuserList_T_25 {
 					 width: 25%;
@@ -140,7 +139,6 @@
 								for(let i=0; i<obj.pageItems.content.length; i++) {
 									htmlStr += `
 										<tr>
-							        		<th class="AuserList_T_10">번호</th>
 									        <th class="AuserList_T_10">작성자</th>
 									        <th class="AuserList_T_40">제목</th>
 									        <th class="AuserList_T_15">작성일</th>
@@ -151,11 +149,10 @@
 									
 									htmlStr += `
 										<tr>
-											<td>${obj.pageItems.content[i].boardNo}</td>
 											<td>${obj.pageItems.content[i].boardWriter}</td>
 											<td>${obj.pageItems.content[i].boardTitle}</td>
 											<td>${obj.pageItems.content[i].boardRegdate == null ? '' : obj.pageItems.content[i].boardRegdate.substr(0, 10)}</td>
-											<td>${obj.pageItems.content[i].boardReply}</td>
+											<td>${obj.pageItems.content[i].boardReply == null ? '답변대기' : '답변완료'}</td>
 											<td>${obj.pageItems.content[i].boardCnt}</td>
 										</tr>
 									`;
@@ -232,8 +229,8 @@
 	    <div class="type_option"> 
 	        <select name="type_array" id="type_array">
 	        	<option value="all" th:selected="${cateCode == '' || cateCode == null || cateCode == 'all'}">all</option>	     
-	          	<option value="2" th:selected="${cateCode == '2'}">item</option>
 	          	<option value="1" th:selected="${cateCode == '1'}">class</option>
+	          	<option value="2" th:selected="${cateCode == '2'}">item</option>
 	        </select>
 	      </div>
 	
@@ -241,24 +238,22 @@
 	    <div id="div_AuserList_T">
 	        <table border="1" id="AuserList_T" th:if="${#lists.size(getUserQnAPageList.content)} > 0">
 	        	<tr>
-	        		<th class="AuserList_T_10">번호</th>
 			        <th class="AuserList_T_10">작성자</th>
-			        <th class="AuserList_T_40">제목</th>
+			        <th class="AuserList_T_50">제목</th>
 			        <th class="AuserList_T_15">작성일</th>
 			        <th class="AuserList_T_15">답변여부</th>
 			        <th class="AuserList_T_10">조회수</th>
 	      		</tr>
 	      		<tr th:each="board: ${getUserQnAPageList}">
-		        	<td th:text="${board.boardNo}"></td>
 					<td th:text="${board.boardWriter}" th:data-user-id="${board.boardWriter}"></td>
 					<td th:text="${board.boardTitle}"></td>
 					<td th:text="${board.boardRegdate eq null ? '' : #strings.substring(board.boardRegdate, 0, 10)}"></td>
-					<td th:text="${board.boardReply}"></td>
+					<td th:text="${board.boardReply eq null ? '답변대기' : '답변완료'}"></td>
 		        	<td th:text="${board.boardCnt}"></td>
 		     	 </tr>
 		    </table>
 		    
-		    <p id="nText" th:unless="${#lists.size(getUserQnAPageList.content)} > 0">작성한 QnA가 없습니다.</p>
+		    <p th:unless="${#lists.size(getUserQnAPageList.content)} > 0"><span id="nText">작성한 QnA가 없습니다.</span></p>
 		</div>
 		
 		<!-- 페이징 -->
