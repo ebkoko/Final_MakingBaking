@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ezen.makingbaking.entity.Board;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
@@ -16,6 +17,7 @@ import com.ezen.makingbaking.entity.Order;
 import com.ezen.makingbaking.entity.Reser;
 import com.ezen.makingbaking.entity.Review;
 import com.ezen.makingbaking.entity.User;
+import com.ezen.makingbaking.repository.BoardRepository;
 import com.ezen.makingbaking.repository.DayclassRepository;
 import com.ezen.makingbaking.repository.ImgFileRepository;
 import com.ezen.makingbaking.repository.ItemRepository;
@@ -48,6 +50,9 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Autowired
 	private ReviewRepository reviewRepository;
+	
+	@Autowired
+	private BoardRepository boardRepository;
 	
 
 	//item
@@ -329,6 +334,16 @@ public class AdminServiceImpl implements AdminService {
 			return reviewRepository.findByRvwWriter(review.getRvwWriter(), pageable);
 	}
 	
+	//각 회원의 QnA-팝업창
+	@Override
+	public Page<Board> getUserQnAPageList(Board board, Pageable pageable) {
+		System.out.println("board.getBoardWriter()==========================" + board.getBoardWriter());
+		if(board.getCateCode() == 1 || board.getCateCode() == 2)
+			return boardRepository.findByCateCodeAndBoardWriter(board.getCateCode(), board.getBoardWriter(), pageable);
+		else
+			return boardRepository.findByBoardWriter(board.getBoardWriter(), pageable);
+	}
+	
 	
 	
 	
@@ -375,7 +390,8 @@ public class AdminServiceImpl implements AdminService {
 	public Reser updatePartiStatus(Reser reser) {
 		reserRepository.save(reser);
 		reserRepository.flush();
-
+		
+		System.out.println("reser=====================" + reser);
 	    return reser;
 	   }
 	

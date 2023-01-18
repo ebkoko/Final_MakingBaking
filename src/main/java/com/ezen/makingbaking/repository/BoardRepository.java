@@ -14,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.ezen.makingbaking.common.CamelHashMap;
 import com.ezen.makingbaking.entity.Board;
+import com.ezen.makingbaking.entity.Review;
 
 @Transactional
 public interface BoardRepository extends JpaRepository<Board, Integer> {
@@ -158,5 +159,10 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
 	@Modifying
 	@Query(value="DELETE FROM T_MB_ITEM_LIKE WHERE USER_ID = :userId AND ITEM_NO = :likeNo", nativeQuery=true)
 	void itemUnlike(@Param("likeNo") int likeNo, @Param("userId") String userId);
+	
+	//개인 리뷰팝업_선민
+	Page<Board> findByCateCodeAndBoardWriter(@Param("cateCod") int cateCode, @Param("boardWirter") String boardWriter, Pageable pageable); //item, class
+	Page<Board> findByBoardWriter(@Param("boardWriter") String boardWriter, Pageable pageable);
+
 	
 }

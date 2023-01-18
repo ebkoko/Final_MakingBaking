@@ -17,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ezen.makingbaking.common.FileUtils;
+import com.ezen.makingbaking.dto.BoardDTO;
 import com.ezen.makingbaking.dto.DayclassDTO;
 import com.ezen.makingbaking.dto.ImgFileDTO;
 import com.ezen.makingbaking.dto.ItemDTO;
@@ -38,7 +38,7 @@ import com.ezen.makingbaking.dto.ReserDTO;
 import com.ezen.makingbaking.dto.ResponseDTO;
 import com.ezen.makingbaking.dto.ReviewDTO;
 import com.ezen.makingbaking.dto.UserDTO;
-import com.ezen.makingbaking.entity.CustomUserDetails;
+import com.ezen.makingbaking.entity.Board;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
@@ -942,7 +942,7 @@ public class AdminController {
 	//회원 리스트
 	@GetMapping("/userList")
 	public ModelAndView getUserList(UserDTO userDTO,
-			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+			@PageableDefault(page = 0, size = 10) Pageable pageable) {
 		User user = User.builder()
 						.userName(userDTO.getUserName())
 						.userId(userDTO.getUserId())
@@ -982,7 +982,7 @@ public class AdminController {
 	//회원리스트 - ajax로 처리한 페이징 글 목록 보여주기
 	@PostMapping("/userList")
 	public ResponseEntity<?> getUserPageList(UserDTO userDTO,
-			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+			@PageableDefault(page = 0, size = 10) Pageable pageable) {
 		ResponseDTO<UserDTO> response = new ResponseDTO<>();
 		try {
 			User user = User.builder()
@@ -1015,7 +1015,7 @@ public class AdminController {
 	//관리자가 회원을 삭제하는 경우 ajax를 이용해 백단에 전송
 	@PostMapping("/saveUserList")
 	public ResponseEntity<?> saveUserList(@RequestParam("changeRows") String changeRows,
-			@PageableDefault(page = 0, size = 5) Pageable pageable) throws JsonMappingException, JsonProcessingException {
+			@PageableDefault(page = 0, size = 10) Pageable pageable) throws JsonMappingException, JsonProcessingException {
 		ResponseDTO<UserDTO> response = new ResponseDTO<>();
 		List<Map<String, Object>> changeRowsList = new ObjectMapper().readValue(changeRows, 
 											new TypeReference<List<Map<String, Object>>>() {});
@@ -1130,6 +1130,75 @@ public class AdminController {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
+	//////////////////////////////QnA팝업
+	//회원 리스트_QnA팝업
+	@GetMapping("/userQnAList")
+	public ModelAndView getUserQnAList(BoardDTO boardDTO,
+			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+		Board boardParam = Board.builder()
+							  .boardWriter(boardDTO.getBoardWriter())
+							  .cateCode(boardDTO.getCateCode())
+							  .build();
+		
+		Page<Board> qnaList = adminService.getUserQnAPageList(boardParam, pageable);
+		
+		Page<BoardDTO> qnaListDTO = qnaList.map(qna -> 
+													BoardDTO.builder()
+															.boardTitle(qna.getBoardTitle())
+															.boardWriter(qna.getBoardWriter())
+															.boardReply(qna.getBoardReply())
+															.boardRegdate(qna.getBoardRegdate() == null?
+	 	                                                               null :
+	 	                                                            	  qna.getBoardRegdate().toString())
+															.boardCnt(qna.getBoardCnt())
+															.cateCode(qna.getCateCode())
+															.build()
+													);
+		
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("admin/userQnAList.html");
+		mv.addObject("getUserQnAPageList", qnaListDTO);
+		
+		return mv;
+	}
+		
+	//회원 리스트_QnA팝업 - ajax로 처리한 페이징 글 목록 보여주기
+	@PostMapping("/userQnAList")
+	public ResponseEntity<?> getUserQnAPageList(BoardDTO boardDTO,
+			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+		System.out.println("boardDTO.getCateCode()==================================" + boardDTO.getCateCode());
+		ResponseDTO<BoardDTO> response = new ResponseDTO<>();
+		try {
+			Board boardParam = Board.builder()
+					  .boardWriter(boardDTO.getBoardWriter())
+					  .cateCode(boardDTO.getCateCode())
+					  .build();
+
+			Page<Board> pageUserQnAList = adminService.getUserQnAPageList(boardParam, pageable);
+			
+			Page<BoardDTO> pageUserQnADTOList = pageUserQnAList.map(pageQnA -> 
+																		BoardDTO.builder()
+																		.boardTitle(pageQnA.getBoardTitle())
+																		.boardWriter(pageQnA.getBoardWriter())
+																		.boardReply(pageQnA.getBoardReply())
+																		.boardRegdate(pageQnA.getBoardRegdate() == null?
+				 	                                                               null :
+				 	                                                            	  pageQnA.getBoardRegdate().toString())
+																		.boardCnt(pageQnA.getBoardCnt())
+																		.cateCode(pageQnA.getCateCode())
+																		.build()
+
+											   				);
+			response.setPageItems(pageUserQnADTOList);
+			
+			return ResponseEntity.ok().body(response);
+			
+		} catch(Exception e) {
+			response.setErrorMessage(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
 
 
 
@@ -1212,14 +1281,13 @@ public class AdminController {
 	//클래스 예약관리_참여현황 수정
 	@Transactional
 	@PutMapping("/updatePartiStatus")
-	public ResponseEntity<?> updatePartiStatus(ReserDTO reserDTO, @AuthenticationPrincipal CustomUserDetails customUser,
+	public ResponseEntity<?> updatePartiStatus(ReserDTO reserDTO,
 			HttpServletRequest request) throws IOException { 
-		
+		System.out.println("reserDTO==============" + reserDTO.toString());
 		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
 		
 		try {
 			Reser reser = Reser.builder()
-					.userId(customUser.getUsername())
 					.reserNo(reserDTO.getReserNo())
 					.reserDate(LocalDateTime.now())
 					.reserStatus(reserDTO.getReserStatus())
@@ -1242,8 +1310,7 @@ public class AdminController {
 
 			adminService.updatePartiStatus(reser);
 			
-			ReserDTO returnPartiStatus = ReserDTO.builder()
-													.userId(reser.getUserId())	
+			ReserDTO returnPartiStatus = ReserDTO.builder()	
 													.reserNo(reser.getReserNo())
 													.reserDate(reser.getReserDate() == null ?
 															null :

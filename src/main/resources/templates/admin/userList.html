@@ -249,7 +249,7 @@
 				});
 				
 				
-				//선택상품 삭제
+				//선택회원 삭제
 				$(function() {
 					//삭제버튼 클릭 시 체크된 게시물들 삭제 상태로 변경
 					$("#userDelete").on('click', function() {
@@ -267,7 +267,7 @@
 						
 						if(confirm("선택한 회원을 삭제하시겠습니까?")) {
 						$.ajax({
-							url: '/admin/userList',
+							url: '/admin/saveUserList',
 							type: 'post',
 							data: {
 								changeRows: JSON.stringify(changeRows),
@@ -300,11 +300,13 @@
 											<td>${obj.pageItems.content[i].userId}</td>
 											<td>${obj.pageItems.content[i].userRegdate == null ? '' : obj.pageItems.content[i].userRegdate.substr(0, 10)}</td>
 											<td>
-								        		<a id="adminUserReview"
-													href="@{/admin/userRvwList?rvwWriter=" + ${obj.pageItems.content[i].userId}}">Review
+								        		<a id="adminUserReview${i}" name="adminUserReview"
+													href="@{/admin/userRvwList?rvwWriter=" + ${obj.pageItems.content[i].userId}}"
+													data-user-id="${obj.pageItems.content[i].userId}">Review
 												</a>
-												<a id="userQnA"
-													href="@{/admin/userRvwList?boardWriter=" + ${obj.pageItems.content[i].userId}}">QnA
+												<a id="adminUserQnA${i}" name="adminUserQnA"
+													href="@{/admin/userRvwList?boardWriter=" + ${obj.pageItems.content[i].userId}}"
+													data-user-id="${obj.pageItems.content[i].userId}">QnA
 												</a>
 								        	</td>
 										</tr>
@@ -334,7 +336,13 @@
 					$(document).on("click", "a[name='adminUserReview']", function(e) {
 						e.preventDefault();
 						window.open("/admin/userRvwList?rvwWriter=" + $(this).attr("data-user-id"), "getUserRvwListPop", 
-						"width=907px, height=530px, top=150, left=200");
+						"width=980px, height=530px, top=150, left=200");
+					})
+					
+					$(document).on("click", "a[name='adminUserQnA']", function(e) {
+						e.preventDefault();
+						window.open("/admin/userQnAList?boardWriter=" + $(this).attr("data-user-id"), "getUserQnAListPop", 
+						"width=980px, height=530px, top=150, left=200");
 					})
 				}); //function 닫음
 				
@@ -386,7 +394,8 @@
 												data-user-id="${obj.pageItems.content[i].userId}">Review
 											</a>
 											<a id="adminUserQnA${i}" name="adminUserQnA"
-												href="@{/admin/userRvwList?boardWriter=" + ${obj.pageItems.content[i].userId}}">QnA
+												href="@{/admin/userRvwList?boardWriter=" + ${obj.pageItems.content[i].userId}}"
+												data-user-id="${obj.pageItems.content[i].userId}">QnA
 											</a>
 							        	</td>
 									</tr>
@@ -462,7 +471,7 @@
 				
 				function userInfoCheckPopup(userId) {
 					window.open("userInfoCheck/" + userId, "getUserInfoCheck", 
-						"width=450px, height=570px, top=100, left=200");
+						"width=450px, height=640px, top=70, left=200");
 				}
 				
 				//리뷰 팝업
@@ -476,6 +485,20 @@
 				
 				function reviewPopup(userId) {
 					window.open("/admin/userRvwList?rvwWriter=" + userId, "getUserRvwListPop", 
+						"width=1000px, height=530px, top=150, left=200");
+				}
+				
+				//QnA 팝업
+				$(function() {
+					$("#adminUserQnA").click(function() {
+						e.preventDefault();
+						const userId = $(this).attr("data-user-id");
+					qnaPopup(userId);
+					})
+				});
+				
+				function qnaPopup(userId) {
+					window.open("/admin/userQnAList?boardWriter=" + userId, "getUserQnAListPop", 
 						"width=1000px, height=530px, top=150, left=200");
 				}
 			</script>
@@ -554,8 +577,9 @@
 		<!-- 탈퇴/메일전송/MMS전송 버튼 -->
 	    <div id="userTotalBtn">
 	    	<input type="button" value="회원 탈퇴" id="userDelete">
+	    	<!--
 	    	<a href="#"><input type="button" value="메일 전송" id="sendMail"></a>
-	    	<a href="#"><input type="button" value="MMS 전송" id="sendMMS"></a>
+	    	<a href="#"><input type="button" value="MMS 전송" id="sendMMS"></a>-->
 		</div>
 	</div>
 </body>

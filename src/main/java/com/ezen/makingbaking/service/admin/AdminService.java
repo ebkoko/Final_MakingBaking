@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.ezen.makingbaking.entity.Board;
 import com.ezen.makingbaking.entity.Dayclass;
 import com.ezen.makingbaking.entity.ImgFile;
 import com.ezen.makingbaking.entity.Item;
@@ -57,6 +58,8 @@ public interface AdminService {
 	User getUserInfoCheck(String userId);
 	//user_리뷰팝업	
 	Page<Review> getUserRvwPageList(Review review, Pageable pageable);
+	//user_QnA팝업	
+	Page<Board> getUserQnAPageList(Board board, Pageable pageable);
 
 	
 	

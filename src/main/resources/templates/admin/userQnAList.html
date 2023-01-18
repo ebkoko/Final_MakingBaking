@@ -11,6 +11,7 @@
 				#AuserAdmin {
 					font-size: 40px;
 				}
+				
 				/* 셀렉트박스 */
 				#type_array {
 					width: 150px;
@@ -120,44 +121,46 @@
 					
 					const userId = $("#userRvwWriter").text();
 						$.ajax({
-						url: '/admin/userRvwList',
+						url: '/admin/userQnAList',
 						type: 'post',
 						data: {
 							page: page,
-							rvwType: $("#type_array").val(),
-							rvwWriter: userId
+							boardWriter: userId,
+							cateCode: $("#type_array").val()
 						},
 						success: function(obj) {
 							console.log(obj);
 							
 							let htmlStr = "";
 							
-							htmlStr += `
 							
-								<tr>
-					        		<th class="AuserList_T_10">번호</th>
-							        <th class="AuserList_T_10">타입</th>
-							        <th class="AuserList_T_15">작성자</th>
-							        <th class="AuserList_T_40">내용</th>
-							        <th class="AuserList_T_15">작성일</th>
-							        <th class="AuserList_T_10">별점</th>
-					      		</tr>
-					      	`;
-							
-							for(let i=0; i<obj.pageItems.content.length; i++) {
-								htmlStr += `
+					      	if(obj.pageItems.content.length == 0) {
+								  htmlStr += `<p>작성된 QnA가 없습니다.</p>`;
+							} else {
+								for(let i=0; i<obj.pageItems.content.length; i++) {
+									htmlStr += `
+										<tr>
+							        		<th class="AuserList_T_10">번호</th>
+									        <th class="AuserList_T_10">작성자</th>
+									        <th class="AuserList_T_40">제목</th>
+									        <th class="AuserList_T_15">작성일</th>
+									        <th class="AuserList_T_15">답변여부</th>
+									        <th class="AuserList_T_10">조회수</th>
+							      		</tr>
+							      	`; 
 									
-									<tr>
-										<td>${obj.pageItems.content[i].rvwNo}</td>
-										<td>${obj.pageItems.content[i].rvwType}</td>
-										<td>${obj.pageItems.content[i].rvwWriter}</td>
-										<td>${obj.pageItems.content[i].rvwContent}</td>
-										<td>${obj.pageItems.content[i].rvwRegdate == null ? '' : obj.pageItems.content[i].rvwRegdate.substr(0, 10)}</td>
-										<td>${obj.pageItems.content[i].rvwScore}</td>
-									</tr>
-								`;
+									htmlStr += `
+										<tr>
+											<td>${obj.pageItems.content[i].boardNo}</td>
+											<td>${obj.pageItems.content[i].boardWriter}</td>
+											<td>${obj.pageItems.content[i].boardTitle}</td>
+											<td>${obj.pageItems.content[i].boardRegdate == null ? '' : obj.pageItems.content[i].boardRegdate.substr(0, 10)}</td>
+											<td>${obj.pageItems.content[i].boardReply}</td>
+											<td>${obj.pageItems.content[i].boardCnt}</td>
+										</tr>
+									`;
+								}
 							}
-							
 							$("#AuserList_T").html(htmlStr);
 							
 							htmlstr = "";
@@ -223,47 +226,47 @@
 <body>
 	<div id="container" layout:fragment="content">
 	  	<div>
-	  		<h1 id="AuserAdmin"><span id="userRvwWriter" th:text="${#lists.size(getUserRvwPageList.content) > 0 ? getUserRvwPageList.content.get(0).rvwWriter : ''}"></span> 님의 리뷰</h1>
+	  		<h1 id="AuserAdmin"><span id="userRvwWriter" th:text="${#lists.size(getUserQnAPageList.content) > 0 ? getUserQnAPageList.content.get(0).boardWriter : ''}"></span> 님의 QnA</h1>
 		</div>
 	    
 	    <div class="type_option"> 
 	        <select name="type_array" id="type_array">
-	        	<option value="all" th:selected="${rvwType == '' || rvwType == null || rvwType == 'all'}">all</option>	     
-	          	<option value="class" th:selected="${rvwType == 'class'}">class</option>
-	          	<option value="item" th:selected="${rvwType == 'item'}">item</option>
+	        	<option value="all" th:selected="${cateCode == '' || cateCode == null || cateCode == 'all'}">all</option>	     
+	          	<option value="2" th:selected="${cateCode == '2'}">item</option>
+	          	<option value="1" th:selected="${cateCode == '1'}">class</option>
 	        </select>
 	      </div>
 	
 		<!-- 회원 리스트 Table -->
 	    <div id="div_AuserList_T">
-	        <table border="1" id="AuserList_T" th:if="${#lists.size(getUserRvwPageList.content)} > 0">
+	        <table border="1" id="AuserList_T" th:if="${#lists.size(getUserQnAPageList.content)} > 0">
 	        	<tr>
 	        		<th class="AuserList_T_10">번호</th>
-			        <th class="AuserList_T_10">타입</th>
-			        <th class="AuserList_T_15">작성자</th>
-			        <th class="AuserList_T_40">내용</th>
+			        <th class="AuserList_T_10">작성자</th>
+			        <th class="AuserList_T_40">제목</th>
 			        <th class="AuserList_T_15">작성일</th>
-			        <th class="AuserList_T_10">별점</th>
+			        <th class="AuserList_T_15">답변여부</th>
+			        <th class="AuserList_T_10">조회수</th>
 	      		</tr>
-	      		<tr th:each="review: ${getUserRvwPageList}">
-		        	<td th:text="${review.rvwNo}"></td>
-					<td th:text="${review.rvwType}"></td>
-					<td th:text="${review.rvwWriter}" th:data-user-id="${review.rvwWriter}"></td>
-					<td th:text="${review.rvwContent}"></td>
-		        	<td th:text="${review.rvwRegdate eq null ? '' : #strings.substring(review.rvwRegdate, 0, 10)}"></td>
-		        	<td th:text="${review.rvwScore}"></td>
+	      		<tr th:each="board: ${getUserQnAPageList}">
+		        	<td th:text="${board.boardNo}"></td>
+					<td th:text="${board.boardWriter}" th:data-user-id="${board.boardWriter}"></td>
+					<td th:text="${board.boardTitle}"></td>
+					<td th:text="${board.boardRegdate eq null ? '' : #strings.substring(board.boardRegdate, 0, 10)}"></td>
+					<td th:text="${board.boardReply}"></td>
+		        	<td th:text="${board.boardCnt}"></td>
 		     	 </tr>
 		    </table>
 		    
-		    <p id="nText" th:unless="${#lists.size(getUserRvwPageList.content)} > 0">작성한 리뷰가 없습니다.</p>
+		    <p id="nText" th:unless="${#lists.size(getUserQnAPageList.content)} > 0">작성한 QnA가 없습니다.</p>
 		</div>
 		
 		<!-- 페이징 -->
 		<div class="paging">
-			<ul class="pagination" th:if="${getUserRvwPageList.totalElements > 0}"
-								   th:with="pageNumber = ${getUserRvwPageList.pageable.pageNumber},
-											pageSize = ${getUserRvwPageList.pageable.pageSize},
-											totalPages = ${getUserRvwPageList.totalPages},
+			<ul class="pagination" th:if="${getUserQnAPageList.totalElements > 0}"
+								   th:with="pageNumber = ${getUserQnAPageList.pageable.pageNumber},
+											pageSize = ${getUserQnAPageList.pageable.pageSize},
+											totalPages = ${getUserQnAPageList.totalPages},
 											startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
 											tempEndPage = ${startPage + pageSize - 1},
 											endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
