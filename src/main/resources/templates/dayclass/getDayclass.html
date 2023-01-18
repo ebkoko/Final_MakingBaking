@@ -280,7 +280,7 @@
 								data: {dayclassNo: $("#dayclassNo").val()},
 								success: function(obj) {
 									console.log(obj);
-									$("#dayclassLikeBtn").text("♡    " + obj.item.likeCnt);
+									$("#dayclassLikeBtn").text("🤍    " + obj.item.likeCnt);
 									$("#dayclassLikeBtn").val("N");
 								},
 								error: function(e) {
@@ -295,7 +295,7 @@
 								data: {dayclassNo: $("#dayclassNo").val()},
 								success: function(obj) {
 									console.log(obj);
-									$("#dayclassLikeBtn").text("♥    " + obj.item.likeCnt);
+									$("#dayclassLikeBtn").text("❤    " + obj.item.likeCnt);
 									$("#dayclassLikeBtn").val("Y");
 								},
 								error: function(e) {
@@ -518,7 +518,7 @@
 	                <span><button type="button" id="moveRsrvtBtn" value="dayclassRsrvt">예약하기  
 	                </button></span>
 	                <span id="likeSpan"><button type="button" id="dayclassLikeBtn" 
-	                	th:value="${likeYn}" th:text="${likeYn == 'Y' ? '♥   ' : '♡   '} + ${likeCnt}"></button></span>
+	                	th:value="${likeYn}" th:text="${likeYn == 'Y' ? '❤   ' : '🤍   '} + ${likeCnt}"></button></span>
 	              </div>
 		         </div>  
 	            </div>  
