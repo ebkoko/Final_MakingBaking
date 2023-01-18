@@ -376,6 +376,37 @@
 						}
 					});
 				} //function 닫음
+				
+				function fnUpdatePartiStatus() {
+		           
+		            let formData = new FormData($("#updateForm")[0]);
+		           
+		           $.ajax({
+		              url: '/admin/updatePartiStatus',
+		              type: 'put',
+		              data: formData,
+		              processData: false,
+		              contentType: false,
+		              success: function (obj) {
+		                 console.log(obj);
+		                 alert("참여현황이 수정되었습니다.");
+		                 $("#reserNo").val(obj.item.pageReserList.boardNo);
+		                 $("#partiName").val(obj.item.pageReserList.partiName);
+		                 $("#classNo").text(obj.item.pageReserList.classNo);
+		                 $("#partiDate").val(obj.item.pageReserList.partiDate);
+		                 $("#partiTime").text(obj.item.pageReserList.partiTime);
+		                 $("#reserStatus").val(obj.item.pageReserList.reserStatus);
+		                 $("#partiStatus").val(obj.item.pageReserList.partiStatus);
+		              },
+		              error: function (e) {
+		                 console.log(e);
+		              },
+		              done: function(result) {
+						  console.log(result);
+					  }
+		           });
+				 }
+
 			</script>
 		</th:block>
 	</head>
@@ -435,38 +466,40 @@
 	    
 		<!-- 원데이클래스 예약 리스트 Table -->
 	    <div id="div_reserList_T">
-	        <table border="1" id="reserList_T">
-	        	<tr>
-	        		<th class="reserList_T_15">예약번호</th>
-			        <th class="reserList_T_15">예약자</th>
-			        <th class="reserList_T_10">클래스번호</th>
-			        <th class="reserList_T_15">예약날짜</th>
-			        <th class="reserList_T_15">예약시간</th>
-			        <th class="reserList_T_15">예약상태</th>
-			        <th class="reserList_T_15">참여현황</th>
-	      		</tr>
-	      		<tr th:each="reser: ${pageReserList}">
-		        	<td class="td_reserNo">
-						<a class="a_reserNo" th:text="${reser.reserNo}"
-							th:href="@{/mypage/getReserDetail/{reserNo} (reserNo=${reser.reserNo})}">
-						</a>
-					</td>
-					<td th:text="${reser.partiName}"></td>
-					<td th:text="${reser.classNo}"></td>
-					<td th:text="${reser.partiDate}"></td>
-					<td th:text="${reser.partiTime}"></td>
-					<td th:text="${reser.reserStatus}"></td>
-					<td th:if="${reser.partiStatus} != 'PS'" th:text="${reser.partiStatus}"></td>
-					<td th:if="${reser.partiStatus} == 'PS'">
-						<select>
-							<option value="PS">진행예정 (PS)</option>
-			        		<option value="PC">진행완료 (PC)</option>
-			        		<option value="NS">노쇼 (NS)</option>
-						</select>
-						<button type="button" id="btnMod">변경</button>
-					</td>
-		     	 </tr>
-		    </table>
+	    	<form id="updateForm">
+		        <table border="1" id="reserList_T">
+		        	<tr>
+		        		<th class="reserList_T_15">예약번호</th>
+				        <th class="reserList_T_15">예약자</th>
+				        <th class="reserList_T_10">클래스번호</th>
+				        <th class="reserList_T_15">예약날짜</th>
+				        <th class="reserList_T_15">예약시간</th>
+				        <th class="reserList_T_15">예약상태</th>
+				        <th class="reserList_T_15">참여현황</th>
+		      		</tr>
+		      		<tr th:each="reser: ${pageReserList}">
+			        	<td class="td_reserNo">
+							<a class="a_reserNo" th:text="${reser.reserNo}"
+								th:href="@{/mypage/getReserDetail/{reserNo} (reserNo=${reser.reserNo})}">
+							</a>
+						</td>
+						<td th:text="${reser.partiName}"></td>
+						<td th:text="${reser.classNo}"></td>
+						<td th:text="${reser.partiDate}"></td>
+						<td th:text="${reser.partiTime}"></td>
+						<td th:text="${reser.reserStatus}"></td>
+						<td th:if="${reser.partiStatus} != 'PS'" th:text="${reser.partiStatus}"></td>
+						<td th:if="${reser.partiStatus} == 'PS'">
+							<select>
+								<option value="PS">진행예정 (PS)</option>
+				        		<option value="PC">진행완료 (PC)</option>
+				        		<option value="NS">노쇼 (NS)</option>
+							</select>
+							<button type="button" id="btnMod" onclick="fnUpdatePartiStatus()">변경</button>
+						</td>
+			     	 </tr>
+			    </table>
+		    </form>
 		</div>
 		
 		<!-- 페이징 -->
