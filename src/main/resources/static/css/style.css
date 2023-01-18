@@ -250,16 +250,14 @@ html, body {
       height: 200px;
     }
     .footer_ct {
-	  text-align: center;
+	  display: flex;
+	  justify-content: center;
 	}
 /*    .footer .footer-log img {
       float: left;
     }*/
-    .footer-log, .ft{
-		display:  inline-block;
-	}
 	.ft {
-		margin-top: -30px;
+		margin-top: 34px;
 	}
     #footer-p {
       margin: 0px 10px 10px 7rem;
@@ -271,6 +269,7 @@ html, body {
     }
     .ft_mid {
 		margin: -30px auto 0 0;
+		letter-spacing: 1px;
 	}
     .t {
       margin: 10px 0;
