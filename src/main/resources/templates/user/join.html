@@ -137,15 +137,23 @@
 						}
 					});
 					//이메일 유효성
-					$("#userMail").on("change", function() {
+					if($("#userMail").val() == "" || $("#userMail").val() == null) {
+						$("#userMail").on("change", function() {
+							if(!userMail($("#userMail").val())) {
+								mail = false;
+								$("#userMail").focus();
+							} else {
+								mail = true;
+							}
+						});
+					} else {
 						if(!userMail($("#userMail").val())) {
 							mail = false;
 							$("#userMail").focus();
 						} else {
 							mail = true;
 						}
-					});
-					
+					}
 					
 					function Strength(password) {
 				        let i = 0;
@@ -298,7 +306,7 @@
 		        </div>
 		
 		        <input type="text" id="userName" name="userName" placeholder="이름" class="box">
-		        <input type="text" id="userBirth" name="userBirth" placeholder="생년월일 ex)19901010" class="box">
+		        <input type="text" id="userBirth" name="userBirth" placeholder="생년월일 ex)19901010" class="box" maxlength="8">
 		        <select id="userGender" name="userGender" class="box">
 		          <option selected disabled>성별</option>
 		          <option value="m">남자</option>
