@@ -43,6 +43,7 @@ public class BoardController {
 				
 		Board board = Board.builder()
 						   .cateCode(cateCode)
+						   .boardNo(boardDTO.getBoardNo())
 						   .build();
 		
 		List<Board> faqList = boardService.getFaqList(board);
@@ -87,12 +88,13 @@ public class BoardController {
 	
 	// qna - ajax로 처리한 페이징 글 목록 보여주기
 	@PostMapping("/qnaList/{cateCode}")
-	public ResponseEntity<?> getQnaPageList(@PathVariable("cateCode") int cateCode,
+	public ResponseEntity<?> getQnaPageList(BoardDTO boardDTO, @PathVariable("cateCode") int cateCode,
 			@PageableDefault(page=0, size=10) Pageable pageable) {
 		ResponseDTO<BoardDTO> response = new ResponseDTO<>();
 		try {
 			Board board = Board.builder()
 							   .cateCode(cateCode)
+							   .boardNo(boardDTO.getBoardNo())
 							   .build();
 			Page<Board> pageBoardList = boardService.getPageBoardList(board, pageable);
 			

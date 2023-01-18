@@ -18,7 +18,7 @@ import com.ezen.makingbaking.entity.Board;
 @Transactional
 public interface BoardRepository extends JpaRepository<Board, Integer> {
 	// 카테고리 코드로 리스트 검색
-	Page<Board> findByCateCode(int cateCode, Pageable pageable);
+	Page<Board> findByCateCodeOrderByBoardNoDesc(int cateCode, Pageable pageable);
 
 	@Modifying
 	@Query(value="UPDATE T_MB_BOARD SET BOARD_CNT = BOARD_CNT + 1 WHERE BOARD_NO = :boardNo", nativeQuery=true)
