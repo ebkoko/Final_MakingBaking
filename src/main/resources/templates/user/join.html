@@ -305,19 +305,19 @@
 		          <p id="pwRecheck" style="font-size: 12px; font-weight: bolder; margin-left: 5px; text-align: left;"></p>
 		        </div>
 		
-		        <input type="text" id="userName" name="userName" placeholder="이름" class="box">
+		        <input type="text" id="userName" name="userName" placeholder="이름" class="box" required>
 		        <input type="text" id="userBirth" name="userBirth" placeholder="생년월일 ex)19901010" class="box" maxlength="8">
-		        <select id="userGender" name="userGender" class="box">
-		          <option selected disabled>성별</option>
+		        <select id="userGender" name="userGender" class="box" required>
+		          <option value="" selected disabled>성별</option>
 		          <option value="m">남자</option>
 		          <option value="f">여자</option>
 		          <option value="n">선택 안함</option>
 		        </select>
 		        <input type="text" id="userTel" name="userTel" placeholder="전화번호 ex)01012345678" class="box" maxlength="11">
 		        <input type="text" id="userMail" name="userMail" placeholder="이메일 ex)xxx@xxx.com" th:value="${socialUser != null ? socialUser.userMail : ''}" class="box">
-		        <input id="post"  name="userAddr1" type="text" value="우편번호" readonly onclick="findAddr()">
-		        <input id="addr" name="userAddr2" type="text" placeholder="주소" readonly> <br>
-		        <input id="userAddr3" name="userAddr3" type="text" placeholder="상세주소">
+		        <input id="post"  name="userAddr1" type="text" value="우편번호" readonly onclick="findAddr()" required>
+		        <input id="addr" name="userAddr2" type="text" placeholder="주소" readonly required>
+		        <input id="userAddr3" name="userAddr3" type="text" placeholder="상세주소" required>
 		        <input type="submit" value="가입하기" class="btn2 size">
 		      </form>
 		    </div>
