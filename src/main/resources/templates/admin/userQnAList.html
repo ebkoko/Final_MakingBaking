@@ -118,7 +118,7 @@
 				function userListPaging(page) {
 					console.log(page);
 					
-					const userId = $("#userRvwWriter").text();
+					const userId = $("#userQnAWriter").text();
 						$.ajax({
 						url: '/admin/userQnAList',
 						type: 'post',
@@ -134,7 +134,7 @@
 							
 							
 					      	if(obj.pageItems.content.length == 0) {
-								  htmlStr += `<p>작성된 QnA가 없습니다.</p>`;
+								  htmlStr += `<p><span id="nText">작성된 QnA가 없습니다.</span></p>`;
 							} else {
 								htmlStr += `
 										<tr>
@@ -226,7 +226,7 @@
 <body>
 	<div id="container" layout:fragment="content">
 	  	<div>
-	  		<h1 id="AuserAdmin"><span id="userRvwWriter" th:text="${#lists.size(getUserQnAPageList.content) > 0 ? getUserQnAPageList.content.get(0).boardWriter : getUserQnAPageList.content.get(0).boardWriter}"></span> 님의 QnA</h1>
+	  		<h1 id="AuserAdmin"><span id="userQnAWriter" th:text="${#lists.size(getUserQnAPageList.content) > 0 ? getUserQnAPageList.content.get(0).boardWriter : ''}"></span> 님의 QnA</h1>
 		</div>
 	    
 	    <div class="type_option"> 
