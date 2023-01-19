@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layouts/layout}">
+	  
+	<!-- head 영역 시작 -->
+	<!-- 개별적으로 사용할 css, js 링크를 걸기 위해서 남겨둠 -->
+	<head>
+		<th:block layout:fragment="css">
+			<style>
+			    #orderAndReserAdmin {
+					font-size: 40px;
+				}
+				#orderAndReserBtn  {
+					margin: 50px 0 0 0;
+				}
+				
+				/* 선택탭 */
+				#orderAndReserBtn {
+					margin-top: 20px;
+				}
+				#reserDayclass {
+					color: #4A4A4A;
+					font-weight: bold;
+					font-size: 25px;
+					margin-right: 50px;
+				}
+				#reserDayclass:hover {
+					color: #28693F;
+					font-weight: bold;
+					font-size: 25px;
+				}
+				#orderItemList {
+					color: #4A4A4A;
+					font-weight: bold;
+					font-size: 25px;
+				}
+				#orderItemList:hover {
+					color: #28693F;
+					font-weight: bold;
+					font-size: 25px;
+				}
+				
+				.a_orderNo {
+					text-decoration: none;
+					color: inherit;
+					cursor: pointer;
+				}
+				.td_orderNo:hover {
+					text-decoration: underline;
+					color: #28693F;
+					font-weight: bold;
+				}
+				/* 검색 div */
+				#order_search {
+					margin: 80px auto;
+				}
+				/* 검색창 */
+				#inputSearch {
+					width: 250px;
+					height: 30px;
+					border: 1.2px solid #28693F;
+					display: inline-block;
+				}
+				/* 검색 버튼 */
+				#btnSearch {
+					width: 80px;
+					height: 35px;
+					border: 1.2px solid #28693F;
+					background-color: white;
+					text-align: center;
+					color: #28693F;
+					font-size: 16px;
+					font-weight: 550;
+					letter-spacing:1px;
+					display: inline-block;
+					cursor: pointer;
+				}
+				
+				/* 테이블 */
+				#orderList_T {
+					width: 1200px;
+					border: 1.2px solid #28693F;
+					border-collapse: collapse;
+					border-left: hidden;
+					border-right: hidden;
+					border-top:hidden;
+				}
+				#orderList_T th {
+					background: #28693F;
+					color: white;
+					height: 35px;
+				}
+
+				.orderList_T_10 {
+					 width: 10%;
+				}
+				.orderList_T_15 {
+					 width: 15%;
+				}
+				
+				#orderList_T td {
+					border-bottom: 1.2px solid #28693F;
+					text-align: center;
+					height: 80px;
+				}
+				
+				/* 변경버튼 */
+				#btnMod {
+					width:40px;
+					height:30px;
+					border: 1.2px solid #28693F;
+					background-color: white;
+					text-align: center;
+					color: #28693F;
+					display: inline-block;
+					cursor: pointer;
+				}
+			    
+			    /* 페이징처리 */
+			    .paging {
+					text-align: center;
+					margin-top: 50px;
+				}
+			    .pagination {
+			      display: flex;
+			      justify-content: center;
+			      align-items: center;
+			      margin-bottom: 20px;
+			    }    
+			    .paging a{
+				  display: block;
+				  margin: 0 3px;
+				  border: 1px solid #ccc;
+				  width: 40px;
+				  height: 40px;
+				  line-height: 35px;
+				  text-align: center;
+			      color: #8c8c8c;
+			      font-size: 25px;
+			      font-weight: 600;
+			    }
+			    .paging a:hover {
+			      color: #28693F;
+			    }
+			    .paging a:focus {
+					background:#28693F;
+					color: white;
+				}
+				.paging .pagination .pagination_button a.present {
+					border-color: #28693F;
+					background: #28693F;
+					color: white;
+				}
+			</style>
+		</th:block>
+		<th:block layout:fragment="script">
+			<script th:inline="javascript">
+				let changeRows = [];
+				let pageNum;
+				
+				$(function() {
+					//검색창(상품카테, 판매상태)
+					$("#searchCondition").on("change", function() {
+						if($(this).val() == 'ORDERPAYMENT') {
+							$("#inputSearch").hide();
+							$("#selectSearch2").hide();
+							$("#selectSearch1").show();
+							$("#inputSearch").attr("disabled", true);
+							$("#selectSearch2").attr("disabled", true);
+							$("#selectSearch1").attr("disabled", false);
+						} else if($(this).val() == 'ORDERSTATUS') {
+							$("#inputSearch").hide();
+							$("#selectSearch1").hide();
+							$("#selectSearch2").show();
+							$("#inputSearch").attr("disabled", true);
+							$("#selectSearch2").attr("disabled", false);
+							$("#selectSearch1").attr("disabled", true);
+						} else if($(this).val() != 'ORDERPAYMENT' && $(this).val() != 'ORDERSTATUS') {
+							$("#inputSearch").show();
+							$("#selectSearch1").hide();
+							$("#selectSearch2").hide();
+							$("#inputSearch").attr("disabled", false);
+							$("#selectSearch2").attr("disabled", true);
+							$("#selectSearch1").attr("disabled", true);
+						}
+					});
+					
+					//검색창 검색버튼 클릭 시
+					$("#btnSearch").on('click',function() {
+						//$("input[name='page']").val(0);
+						$("#searchForm").submit();
+					});
+					
+					// 전체선택 버튼 클릭했을 때
+					$("#dayclassSelectAll").click(function() {
+						var chk = $("#dayclassSelectAll").prop("checked");
+						if(chk) {
+							$("input[name='chk']").prop("checked", true);
+						} else {
+							$("input[name='chk']").prop("checked", false);
+						}
+					});
+					
+					
+					//상품 주문 리스트 페이징 처리
+					$(document).on("click", ".pagination a", function(e) {
+						e.preventDefault();
+						pageNum = $(this).attr("href");
+						orderListPaging(pageNum, $("#searchCondition").val());
+					});
+				});
+				
+				function orderListPaging(page, condition) {
+					console.log(page);
+					console.log(condition);
+
+						$.ajax({
+						url: '/admin/orderItemList',
+						type: 'post',
+						data: {
+							page: page,
+							searchCondition: condition
+						},
+						success: function(obj) {
+							console.log(obj);
+							
+							let htmlStr = "";
+							
+							htmlStr += `
+							
+								<tr>
+							        <th class="orderList_T_15">주문번호</th>
+							        <th class="orderList_T_15">회원아이디</th>
+							        <th class="orderList_T_10">주문자명</th>
+							        <th class="orderList_T_15">주문 총금액</th>
+							        <th class="orderList_T_15">결제방법</th>
+							        <th class="orderList_T_15">주문일</th>
+							        <th class="orderList_T_15">주문상태</th>
+					      		</tr>
+					      	`;
+							
+							for(let i=0; i<obj.pageItems.content.length; i++) {
+								htmlStr += `
+									
+									<tr>
+										<td class="td_orderNo">
+											<a class="a_orderNo"
+											href="/mypage/getOrderDetail/${obj.pageItems.content[i].orderNo}">${obj.pageItems.content[i].orderNo}
+											</a>
+										</td>
+										<td>${obj.pageItems.content[i].userId}</td>
+										<td>${obj.pageItems.content[i].orderName}</td>
+										<td>${(obj.pageItems.content[i].orderTotalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+										<td>${obj.pageItems.content[i].orderPayment}</td>
+										<td>${obj.pageItems.content[i].orderDate == null ? '' : obj.pageItems.content[i].orderDate.substr(0, 10)}</td>
+									`;
+									
+									if(obj.pageItems.content[i].orderStatus != 'PE') {
+										htmlStr += `
+											<td>
+											${obj.pageItems.content[i].orderStatus}
+										</td>
+										`;
+									} else {
+										htmlStr += `
+												<td>
+													<select>
+														<option value="PE">결제완료 (PE)</option>
+														<option value="DW">배송준비중 (DW)</option>
+										        		<option value="D">배송중 (D)</option>
+										        		<option value="DC">배송완료 (DC)</option>
+													</select>
+													<button type="button" id="btnMod">변경</button>
+												</td>
+										`;
+									}
+								htmlStr += `
+									</tr>
+								`;
+							}
+							
+							$("#orderList_T").html(htmlStr);
+							
+							htmlstr = "";
+						
+							let pageNumber = obj.pageItems.pageable.pageNumber;
+							let pageSize = obj.pageItems.pageable.pageSize;
+							let totalPages = obj.pageItems.totalPages;
+							let startPage = Math.floor((pageNumber / pageSize) * pageSize + 1);
+							let tempEndPage = startPage + pageSize -1;
+							let endPage = tempEndPage > totalPages ? totalPages : tempEndPage;
+							console.log(pageNumber);
+							console.log(pageSize);
+							console.log(totalPages);
+							console.log(startPage);
+							console.log(tempEndPage);
+							console.log(endPage);
+							
+							if(pageNumber > 0) {
+								htmlstr += `
+									<li class="pagination_button">
+										<a style="border: 0px;" href="${pageNumber - 1}">&#60;</a>
+									</li>
+								`;
+							}
+							
+							let realStart = totalPages - startPage < pageSize ? 
+												totalPages < pageSize ? 1 : totalPages - pageSize + 1 
+											: startPage;
+							
+							for(let i = realStart; i <= endPage; i++) {
+								if(pageNumber == i-1) {
+									htmlstr += `<li class="pagination_button">
+											   	   <a class="present" href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								} else {
+									htmlstr += `<li class="pagination_button">
+											   	   <a href="${i - 1}">${i}</a>
+										        </li>
+									`;
+								}
+							}
+							
+							if(pageNumber < totalPages - 1) {
+								htmlstr += `<li class="pagination_button">
+										       <a style="border: 0px;" href="${pageNumber + 1}">&#62;</a>
+									        </li>
+								`;
+							}
+							
+							$(".pagination").html(htmlstr);
+							
+						}, error: function(e) {
+							console.log(e);
+						}
+					});
+				} //function 닫음
+				
+			</script>
+		</th:block>
+	</head>
+	<!-- head 영역 끝 -->
+	
+<body>
+	<div id="container" layout:fragment="content">
+		<div>
+  			<h1 id="orderAndReserAdmin">주문 및 예약 관리</h1>
+		</div>
+		
+		 <div id="orderAndReserBtn">
+			<a href="reserDayclassList" id="reserDayclass">▶ 원데이클래스 예약 내역</a>
+			<a href="orderItemList" id="orderItemList">▶ 상품 주문 내역</a>
+		</div>
+		
+		<form id="searchForm" action="/admin/orderItemList" method="get">
+	    	<div id="order_search">
+				<select name="searchCondition" id="searchCondition">
+					<option value="ALL" th:selected="${searchCondition == 'ALL' || searchCondition == '' || searchCondition == null}">전체</option>
+					<option value="ORDERNO" th:selected="${searchCondition} == 'ORDERNO'">주문번호</option>
+					<option value="USERID" th:selected="${searchCondition} == 'USERID'">회원아이디</option>
+					<option value="ORDERNAME" th:selected="${searchCondition} == 'ORDERNAME'">주문자명</option>
+					<option value="ORDERPAYMENT" th:selected="${searchCondition} == 'ORDERPAYMENT'">결제방법</option>
+					<option value="ORDERSTATUS" th:selected="${searchCondition} == 'ORDERSTATUS'">주문상태</option>
+	            </select>
+	            <input type="text" name="searchKeyword" th:value="${searchKeyword}" id="inputSearch" 
+	            	th:style="${ searchCondition != 'ORDERPAYMENT' && searchCondition != 'ORDERSTATUS' ? 'display: inline-block;' : 'display: none;'}"
+	            	th:disabled="${ searchCondition != 'ORDERPAYMENT' && searchCondition != 'ORDERSTATUS'} ? false : true">
+	            <select name="searchKeyword" id="selectSearch1" th:style="${searchCondition == 'ORDERPAYMENT' ? 'display: inline-block;' : 'display: none;'}"
+	            		th:disabled="${searchCondition == 'ORDERPAYMENT'} ? false : true">
+	            	<option>선택하세요.</option>
+	            	<option value="무통장입금" th:selected="${searchKeyword} == '무통장입금'">무통장입금</option>
+	              	<option value="카카오페이" th:selected="${searchKeyword} == '카카오페이'">카카오페이</option>
+	            </select>
+	            <select name="searchKeyword" id="selectSearch2" th:style="${searchCondition == 'ORDERSTATUS' ? 'display: inline-block;' : 'display: none;'}"
+	            		th:disabled="${searchCondition == 'ORDERSTATUS'} ? false : true">
+	            <option>선택하세요.</option>
+	            	<option value="MV" th:selected="${searchKeyword} == 'MV'">입금대기(MV)</option>
+	              	<option value="PE" th:selected="${searchKeyword} == 'PE'">결제완료(PE)</option>
+	              	<option value="OC" th:selected="${searchKeyword} == 'OC'">주문취소(OC)</option>
+	              	<option value="PC" th:selected="${searchKeyword} == 'PC'">결제취소(PC)</option>
+	              	<option value="DW" th:selected="${searchKeyword} == 'DW'">배송준비중(DW)</option>
+	              	<option value="D" th:selected="${searchKeyword} == 'D'">배송중(D)</option>
+	              	<option value="DC" th:selected="${searchKeyword} == 'DC'">배송완료(DC)</option>
+	            </select>
+	            
+				<button type="button" id="btnSearch">검색</button>
+	        </div>
+	    </form >
+	    
+	    
+		<!-- 원데이클래스 예약 리스트 Table -->
+	    <div id="div_orderList_T">
+	        <table border="1" id="orderList_T">
+	        	<tr>
+			        <th class="orderList_T_15">주문번호</th>
+			        <th class="orderList_T_15">회원아이디</th>
+			        <th class="orderList_T_10">주문자명</th>
+			        <th class="orderList_T_15">주문 총금액</th>
+			        <th class="orderList_T_15">결제방법</th>
+			        <th class="orderList_T_15">주문일</th>
+			        <th class="orderList_T_15">주문상태</th>
+	      		</tr>
+	      		<tr th:each="order: ${getOrderList}">
+		        	<td class="td_orderNo">
+						<a class="a_orderNo" th:text="${order.orderNo}"
+							th:href="@{/mypage/getOrderDetail/{orderNo} (orderNo=${order.orderNo})}">
+						</a>
+					</td>
+					<td th:text="${order.userId}"></td>
+					<td th:text="${order.orderName}"></td>
+					<td th:text="${order.orderTotalPrice >= 1000 ? #numbers.formatInteger(order.orderTotalPrice , 3, 'COMMA') : order.orderTotalPrice}"></td>
+					<td th:text="${order.orderPayment}"></td>
+					<td th:text="${order.orderDate eq null ? '' : #strings.substring(order.orderDate, 0, 10)}"></td>
+					<td th:if="${order.orderStatus} != 'PE'" th:text="${order.orderStatus}"></td>
+					<td th:if="${order.orderStatus} == 'PE'">
+						<select>
+							<option value="PE">결제완료(PE)</option>
+							<option value="DW">배송준비중(DW)</option>
+			        		<option value="D">배송중(D)</option>
+			        		<option value="DC">배송완료(DC)</option>
+						</select>
+						<button type="button" id="btnMod">변경</button>
+					</td>
+		     	 </tr>
+		    </table>
+		</div>
+		<!--
+		<td th:if="${order.orderStatus} != 'PE'" th:text="${order.orderStatus}">
+			<select th:if="${order.orderStatus} == 'PE'">
+				<option value="PE">결제완료</option>
+				<option value="DW">배송준비중</option>
+        		<option value="D">배송중</option>
+        		<option value="DC">배송완료</option>
+			</select>
+		</td>
+		<td th:if="${order.orderStatus} == 'PE'">
+			<select>
+				<option value="PE">결제완료</option>
+				<option value="DW">배송준비중</option>
+        		<option value="D">배송중</option>
+        		<option value="DC">배송완료</option>
+			</select>
+			<button type="button" id="btnMod">변경</button>
+		</td>-->
+		
+		<!-- 페이징 -->
+		<div class="paging">
+			<ul class="pagination" th:if="${getOrderList.totalElements > 0}"
+								   th:with="pageNumber = ${getOrderList.pageable.pageNumber},
+											pageSize = ${getOrderList.pageable.pageSize},
+											totalPages = ${getOrderList.totalPages},
+											startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+											tempEndPage = ${startPage + pageSize - 1},
+											endPage = ${tempEndPage > totalPages ? totalPages : tempEndPage}">
+				<li class="pagination_button" th:if="${pageNumber > 0}">
+					<a style="border: 0px;" th:href="${pageNumber - 1}">&#60;</a>
+				</li>
+				<li class="pagination_button" th:each="page : ${#numbers.sequence(totalPages - startPage < pageSize ? (totalPages < pageSize ? 1 :totalPages - pageSize + 1) : startPage, endPage)}">
+					<a th:href="${page - 1}" th:text="${page}"></a>
+				</li>
+				<li class="pagination_button" th:if="${pageNumber < totalPages - 1}">
+					<a style="border: 0px;" th:href="${pageNumber + 1}">&#62;</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</body>
+</html>
