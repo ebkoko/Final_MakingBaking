@@ -172,4 +172,11 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 			+ "			ITEM_STATUS = :itemStatus"
 			+ "		WHERE ITEM_NO = :itemNo", nativeQuery=true)
 	void updateOrderItemSt(@Param("itemNo") int itemNo, @Param("cartItemCnt") int cartItemCnt, @Param("itemStatus") char itemStatus);
+	
+	//상품리스트 주문상태 업데이트_선민
+    @Modifying
+    @Query(value="UPDATE T_MB_ORDER"
+    		+ "		SET ORDER_STATUS = :orderStatus"
+    		+ "		WHERE ORDER_NO = :orderNo", nativeQuery=true)
+    void updateOrderStatus(@Param("orderNo") long orderNo, @Param("orderStatus") String orderStatus);
 }

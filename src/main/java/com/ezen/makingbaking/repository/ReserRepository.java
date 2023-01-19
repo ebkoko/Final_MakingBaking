@@ -184,6 +184,7 @@ public interface ReserRepository extends JpaRepository<Reser, Integer> {
 					+ ") AA", nativeQuery=true)
 	Page<CamelHashMap> findAllReserByReserCondition(@Param("userId") String userId, @Param("reserCondition") String reserCondition, Pageable pageable);
     
+    //예약리스트 참여현황 업데이트_선민
     @Modifying
     @Query(value="UPDATE T_MB_RESER"
     		+ "		SET PARTI_STATUS = :partiStatus"

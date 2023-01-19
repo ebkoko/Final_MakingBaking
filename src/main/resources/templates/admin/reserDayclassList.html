@@ -242,17 +242,6 @@
 						$("#searchForm").submit();
 					});
 					
-					// 전체선택 버튼 클릭했을 때
-					$("#dayclassSelectAll").click(function() {
-						var chk = $("#dayclassSelectAll").prop("checked");
-						if(chk) {
-							$("input[name='chk']").prop("checked", true);
-						} else {
-							$("input[name='chk']").prop("checked", false);
-						}
-					});
-					
-					
 					//예약리스트 페이징 처리
 					$(document).on("click", ".pagination a", function(e) {
 						e.preventDefault();
@@ -332,7 +321,7 @@
 									<tr>
 							        	<td>
 											<a href="/mypage/getReserDetail/${obj.pageItems.content[i].reserNo}">
-												<input type="text" readonly name="partiName" class="reserNo" id="reserNo${i}" value="${obj.pageItems.content[i].reserNo}">
+												<input type="text" readonly name="reserNo" class="reserNo" id="reserNo${i}" value="${obj.pageItems.content[i].reserNo}">
 											</a>
 										</td>
 										<td><input type="text" readonly name="partiName" class="partiName" id="partiName${i}" value="${obj.pageItems.content[i].partiName}"></td>
