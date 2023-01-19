@@ -591,10 +591,11 @@
 				 </form>
 	            
 	            
-	            <hr th:if="${!#lists.isEmpty(reviewChkList)}" sec:authorize="isAuthenticated()" class="dayclass_hr" id="dayclass_hr2">
-	            <div th:if="${!#lists.isEmpty(reviewChkList)}" sec:authorize="isAuthenticated()" class="c_rvw" id="classReview">
+	            <hr  class="dayclass_hr" id="dayclass_hr2">
+	            <div  class="c_rvw" id="classReview">
+	            
 	              <h3 class="c_rvw_title" >클래스 후기</h3>
-	              <div class="c_rvw_write">
+	              <div th:if=${!#lists.isEmpty(reviewChkList)} class="c_rvw_write">
 	              	<div class="rvw_write_member">
 	              		<form class="rvw_write_form" action="/dayclass/insertClassRvw" method="post" >
 	              			<div class="rvw_reserInfo">
@@ -613,22 +614,24 @@
 	              			<input type="hidden" id="rvwContent" name="rvwContent">
 	              			<input type="hidden" id="rvwReserNo" name="rvwReserNo">
 	              			<div class="rvwWriteSection" style="display: none;">
-		              			<fieldset>
-								<input type="radio" name="rvwScore" value="5" class="rvwScore" id="rate1"><label
-									for="rate1">★</label>
-								<input type="radio" name="rvwScore" value="4" class="rvwScore" id="rate2"><label
-									for="rate2">★</label>
-								<input type="radio" name="rvwScore" value="3" class="rvwScore" id="rate3"><label
-									for="rate3">★</label>
-								<input type="radio" name="rvwScore" value="2" class="rvwScore" id="rate4"><label
-									for="rate4">★</label>
-								<input type="radio" name="rvwScore" value="1" class="rvwScore" id="rate5"><label
-									for="rate5">★</label>							
-								</fieldset>
-								<div class="textLength" >
-							      <p class="textCount">0자</p>
-							      <p class="textTotal">/150자</p>
-								</div>  
+	              				<div class="star-wrapper">
+		              				<fieldset>
+										<input type="radio" name="rvwScore" value="5" class="rvwScore" id="rate1"><label
+											for="rate1">★</label>
+										<input type="radio" name="rvwScore" value="4" class="rvwScore" id="rate2"><label
+											for="rate2">★</label>
+										<input type="radio" name="rvwScore" value="3" class="rvwScore" id="rate3"><label
+											for="rate3">★</label>
+										<input type="radio" name="rvwScore" value="2" class="rvwScore" id="rate4"><label
+											for="rate4">★</label>
+										<input type="radio" name="rvwScore" value="1" class="rvwScore" id="rate5"><label
+											for="rate5">★</label>							
+									</fieldset>
+									<div class="textLength" >
+								      <p class="textCount">0자</p>
+								      <p class="textTotal">/150자</p>
+									</div>  
+	              				</div>
 								<textarea class="rvwContentText" id="rvwContentText" name="rvwContentText" placeholder=" 클래스 리뷰를 작성해주세요."></textarea>
 							 	<div class="writeBtn_div"> 
 		              			  <button class="rvw_writeBtn" id="rvw_writeBtn" type="button">등록</button>
@@ -637,8 +640,9 @@
 	              		</form>
 	              	
 	              	</div>
+	              	</div>
 	              	
-	              	<hr class="dayclass_hr" >
+	          
 	                <div class="rvw_wirte_detail" id="classReviewList">
 	                  <div class="rvw_option"> 
 	                    <select name="rvw_array" id="rvw_array">	     
@@ -699,7 +703,7 @@
 	                  </span>
 	                </div>
 	                
-	              </div>
+	              
 	            </div>
 
 	          

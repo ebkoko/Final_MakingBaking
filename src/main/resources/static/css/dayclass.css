@@ -285,7 +285,7 @@
 			
 			/* 예약자 후기작성 */
 			.rvw_reserInfo {
-				margin: 20px auto;
+				margin: 20px 0 20px 0;
 				color:#666666 ;
 			}
 			
@@ -318,11 +318,7 @@
 				
 		    /* 후기 작성  */
 		    .c_rvw{
-			  margin:50px 0 100px 0;
-			 
-			}
-		    .rvw_write_member{
-			  margin-bottom: 100px;
+			  margin:50px 0 100px 0;		 
 			}
 		    .rvwWriteSection fieldset{
 			  display: inline-block;
@@ -353,9 +349,12 @@
     		  border: 1px solid #666666 ;
     		  resize: none;		 
 			}
+			.star-wrapper {
+				display:flex;
+				justify-content: space-between;
+			}
 			.textLength {
 			  display:flex;
-			  float: right;
 			  margin-top:70px;
 			  font-size: 14px;
 			  color: #666666 ;
@@ -363,9 +362,11 @@
 			textarea::placeholder {
   			  font-size: 1.1em;
 			}
+			.writeBtn_div{
+				text-align: right;
+			}
 			.rvw_writeBtn {
-			  margin-top:10px;
-			  float: right;
+			  margin-top:10px;			  
 			  width: 95px;
  			  height: 30px;
   			  border-radius: 4px;
@@ -388,7 +389,7 @@
 			
 			/* 후기 목록 */
 		    .rvw_wirte_detail {
-		   	  margin-top:100px;
+		   	  margin-top:20px;
 		    }
 		    .rvw_option {
 		      margin-bottom:15px;
