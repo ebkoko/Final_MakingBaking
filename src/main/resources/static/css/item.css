@@ -197,7 +197,7 @@
 
 			/* 구매자 후기작성 */
 			.rvw_orderInfo {
-				margin: 20px auto;
+				margin: 20px 0 20px 0;
 				color:rgb(102, 102, 102);
 			}			
 			.rvw_orderNo {
@@ -227,10 +227,7 @@
    			  font-size: 18px;
 			}	
 			
-		    /* 후기 작성  */
-		    .it_rvw_write_member{
-			  margin-bottom: 100px;
-			}
+		    /* 후기 작성  */		 
 		    .rvwWriteSection fieldset{
 			  display: inline-block;
     		  direction: rtl;
@@ -259,7 +256,11 @@
     		  height: 6.3em;
     		  border: 1px solid rgb(102, 102, 102);
     		  resize: none;		 
-			}				
+			}		
+			.star-wrapper {
+				display:flex;
+				justify-content: space-between;
+			}		
 			.textLength {
 			  display:flex;
 			  float: right;
@@ -270,10 +271,11 @@
 			textarea::placeholder {
   			  font-size: 1.1em;  			 
 			}	
-
+			.writeBtn_div{
+				text-align: right;
+			}
 			.it_rvw_writeBtn {
-			  margin-top:10px;
-			  float: right;
+			  margin-top:10px;		
 			  width: 95px;
  			  height: 30px;
   			  border-radius: 4px;

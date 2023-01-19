@@ -365,7 +365,8 @@
 	      <section class="it_menu">
 	        <div class="itmenu">
 	          <ul >
-	            <li><a class="m_intro_a">상품설명</a></li>
+	            <li><a th:href="@{#itemIntro}"
+	              class="m_intro_a">상품설명</a></li>
 	            <li><a th:href="@{#item_hr1}" 
 	              class="m_apply_a">상세정보</a></li>
 	            <li><a th:href="@{#item_hr2}" 
@@ -392,15 +393,15 @@
     
 	            </div>
 	          
-	            <hr th:if="${!#lists.isEmpty(reviewChkList)}" sec:authorize="isAuthenticated()" id="item_hr2" class="item_hr">
-	            <div th:if="${!#lists.isEmpty(reviewChkList)}" sec:authorize="isAuthenticated()" class="it_rvw" id="itemReview">	 
-	              <h3 class="it_rvw_title" >상품후기</h3>             
-	              <div class="it_rvw_write">
+	            <hr id="item_hr2" class="item_hr">
+	           	 
+	              <h3 class="it_rvw_title" >상품후기</h3>    
+				   <div th:if="${!#lists.isEmpty(reviewChkList)}" class="it_rvw" id="itemReview">        
 	              	<div class="it_rvw_write_member">	   	            
 	              		<form class="it_rvw_write_form" action="/item/insertItemRvw" method="post">	              			             			
 						 	<div class="rvw_orderInfo">
 	              			
-	              			<p id="orderStatusText"></p>
+	              				<p id="orderStatusText"></p>
 	              			
 	              			</div>
 						 	<div class="rvw_orderNo" th:each="reviewChk : ${reviewChkList}">
@@ -414,21 +415,23 @@
 	             			<input type="hidden" id="rvwContent" name="rvwContent">
 	             			<input type="hidden" id="rvwOrderNo" name="rvwOrderNo">
 	             			<div class="rvwWriteSection" style="display: none;">    			
-		              			<fieldset>
-								<input type="radio" name="rvwScore" value="5" class="rvwScore" id="rate1"><label
-									for="rate1">★</label>
-								<input type="radio" name="rvwScore" value="4" class="rvwScore" id="rate2"><label
-									for="rate2">★</label>
-								<input type="radio" name="rvwScore" value="3" class="rvwScore" id="rate3"><label
-									for="rate3">★</label>
-								<input type="radio" name="rvwScore" value="2" class="rvwScore" id="rate4"><label
-									for="rate4">★</label>
-								<input type="radio" name="rvwScore" value="1" class="rvwScore" id="rate5"><label
-									for="rate5">★</label>
-								</fieldset>	    			
-								<div class="textLength" >
-							      <p class="textCount">0자</p>
-							      <p class="textTotal">/150자</p>
+		              			<div class="star-wrapper">
+			              			<fieldset>
+										<input type="radio" name="rvwScore" value="5" class="rvwScore" id="rate1"><label
+											for="rate1">★</label>
+										<input type="radio" name="rvwScore" value="4" class="rvwScore" id="rate2"><label
+											for="rate2">★</label>
+										<input type="radio" name="rvwScore" value="3" class="rvwScore" id="rate3"><label
+											for="rate3">★</label>
+										<input type="radio" name="rvwScore" value="2" class="rvwScore" id="rate4"><label
+											for="rate4">★</label>
+										<input type="radio" name="rvwScore" value="1" class="rvwScore" id="rate5"><label
+											for="rate5">★</label>
+									</fieldset>	    			
+									<div class="textLength" >
+								      <p class="textCount">0자</p>
+								      <p class="textTotal">/150자</p>
+								 	</div>
 							 	</div>
 		              			<textarea class="rvwContentText" id="rvwContentText" placeholder=" 로그인 후 후기를 리뷰해주세요."></textarea>	              			
 		              			<div class="writeBtn_div"> 
@@ -437,8 +440,8 @@
 	             			</div>
 	              		</form>
 	              	</div>
-	              	
-	              	<hr id="item_hr2" class="item_hr">
+				   </div>
+	        
 	              		<div class="it_rvw_wirte_detail" id="classReviewList">
 		                <div id="itemReviewList">
 		                  <div class="it_rvw_option"> 
@@ -500,7 +503,7 @@
 							</ul> 		
 	                    </div>
 	                  </span>	                
-	              </div>
+	              
 	            </div>
 	          </div>
 	          <hr id="item_hr3" class="item_hr">
