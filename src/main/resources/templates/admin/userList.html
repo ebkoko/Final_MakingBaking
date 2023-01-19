@@ -28,13 +28,19 @@
 				}
 				/* 검색 div */
 				#user_search {
+					display: flex;
 					margin: 80px auto;
+				}
+				#searchCondition {
+					height: 35px;
+					border: 1px solid #28693F;
 				}
 				/* 검색창 */
 				#inputSearch {
 					width: 250px;
-					height: 30px;
-					border: 1.2px solid #28693F;
+					height: 35px;
+					border: 1px solid #28693F;
+					margin: auto 10px;
 					display: inline-block;
 				}
 				/* 검색 버튼 */
@@ -518,7 +524,7 @@
 					<option value="USERNAME" th:selected="${searchCondition} == 'USERNAME'">이름</option>
 					<option value="USERID" th:selected="${searchCondition} == 'USERID'">아이디</option>
 	            </select>
-	            <input type="text" name="searchKeyword" id="inputSearch" th:value="${searchKeyword}">
+            	<input type="text" name="searchKeyword" id="inputSearch" th:value="${searchKeyword}">
 				<button type="button" id="btnSearch">검색</button>
 	        </div>
 	    </form>
