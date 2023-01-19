@@ -324,6 +324,7 @@
 							checkedList.splice(i, 1);
 						}
 					}
+					console.log(checkedList);
 					
 					$.ajax({
 							url: '/cart/cart',
@@ -348,6 +349,7 @@
 								
 								$("#selectAll").prop("checked", false);
 								$("input[name='select_item']").prop("checked", false);
+								checkedList = [];
 								
 								htmlStr += `
 									<div class="item1">
@@ -392,6 +394,8 @@ itemCnt * detailPrice >= 1000 ? (itemCnt * detailPrice).toString().replace(/\B(?
 							}
 							
 							console.log(getCartList);
+							console.log("checkedList======");
+							console.log(checkedList);
 							
 							let ttip = 0;
 							let delF = 0;
@@ -418,7 +422,7 @@ itemCnt * detailPrice >= 1000 ? (itemCnt * detailPrice).toString().replace(/\B(?
 							
 							$("#cart_item").html(htmlStr);
 									
-							location.reload();
+							//location.reload();
 							
 						})
 						.fail(function(error) {
