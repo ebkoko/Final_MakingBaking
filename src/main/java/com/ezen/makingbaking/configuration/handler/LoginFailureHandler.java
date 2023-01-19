@@ -29,7 +29,7 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler{
 		
 		errorMessage = URLEncoder.encode(errorMessage, "UTF-8");
 		
-		setDefaultFailureUrl("/main/login?error=true&errorMsg=" + errorMessage);
+		setDefaultFailureUrl("/main/main?error=true&errorMsg=" + errorMessage);
 		
 		super.onAuthenticationFailure(request, response, exception);
 	}

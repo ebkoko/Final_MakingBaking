@@ -27,37 +27,15 @@ $(function() {
 	const urlParams = url.searchParams;
 	
 	if(urlParams.get("error")) {
+		$("#btn-login").click();
 		alert(urlParams.get("errorMsg"));
+		location.href="/main/main/msg=joinSuccess";
 	}
 	
 	if(urlParams.get("loginPage")) {
 		$('.login-form-container').toggleClass('active');
 	}
-		/*
-	$("#btnLogin").on("click", function() {
-		console.log($("#loginForm").serialize());
-		$.ajax({
-			url: '/main/login',
-			type: 'post',
-			data: $("#loginForm").serialize(),//name=val
-			success: function(obj) {
-				console.log(obj);
-				if(obj.item.msg == "idFail") {
-					alert("존재하지 않는 아이디입니다.");
-					return;
-				} else if(obj.item.msg == "pwFail") {
-					alert("비밀번호가 틀렸습니다.");
-					return;
-				}
-				
-				window.location.href="/";
-			},
-			error: function(e) {
-				console.log(e);
-			}
-		})
-	});
-	*/
+	
 	// 비회원 클릭시 뜨는 창
 	$("#mypage").on("click", function(e) {
 		const isAuthenticated = $(".header > input[name='authenticate']").val();
