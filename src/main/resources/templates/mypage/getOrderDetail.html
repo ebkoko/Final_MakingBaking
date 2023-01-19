@@ -334,7 +334,8 @@
 										<span class="cancelDateMent" style="color: black; font-weight: 400;">취소일시: </span>
 										<span class="cancelDate" style="color: black; font-weight: 400;">${obj.item.getOrder.orderCancelDate.substring(0, 10)} ${obj.item.getOrder.orderCancelDate.substring(11, 16)}</span>
 									`;
-									$("#top").children(":last").append(htmlstr);
+									
+									$("#top").append(htmlstr);
 								}, error: function(e) {
 									console.log(e);
 								}
@@ -387,7 +388,7 @@
 										<span class="cancelDateMent" style="color: black; font-weight: 400;">취소일시: </span>
 										<span class="cancelDate" style="color: black; font-weight: 400;">${obj.canceled_at.substring(0, 10)} ${obj.canceled_at.substring(11, 16)}</span>
 									`;
-									$("#top").children(":last").append(htmlstr);
+									$("#top").append(htmlstr);
 								}, error: function(e) {
 									console.log(e);
 								}

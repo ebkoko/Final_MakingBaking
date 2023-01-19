@@ -284,8 +284,7 @@
 								success: function(obj) {
 									console.log(obj);
 									$(".reserStatus").text("예약취소");
-									$("#CancelOption").css("display", "none");
-									$("#moveList").show();
+									$("#btnReserCancel").hide();
 									$(".deadlineMent").hide();
 									$(".deadline").hide();	
 									$(".deadlineTime").hide();	
@@ -296,7 +295,7 @@
 										<span class="cancelDateMent" style="color: black; font-weight: 400;">취소일시: </span>
 										<span class="cancelDate" style="color: black; font-weight: 400;">${obj.item.getReser.reserCancelDate.substring(0, 10)} ${obj.item.getReser.reserCancelDate.substring(11, 16)}</span>
 									`;
-									$("#top").children(":last").append(htmlstr);
+									$("#top").append(htmlstr);
 								}, error: function(e) {
 									console.log(e);
 								}
@@ -337,8 +336,7 @@
 								success: function(obj) {
 									console.log(obj);
 									$(".reserStatus").text("결제취소");
-									$("#CancelOption").css("display", "none");
-									$("#moveList").show();
+									$("#btnPayCancel").hide();
 									$(".deadlineMent").hide();
 									$(".deadline").hide();	
 									$(".deadlineTime").hide();	
@@ -349,7 +347,7 @@
 										<span class="cancelDateMent" style="color: black; font-weight: 400;">취소일시: </span>
 										<span class="cancelDate" style="color: black; font-weight: 400;">${obj.canceled_at.substring(0, 10)} ${obj.canceled_at.substring(11, 16)}</span>
 									`;
-									$("#top").children(":last").append(htmlstr);
+									$("#top").append(htmlstr);
 								}, error: function(e) {
 									console.log(e);
 								}
@@ -460,20 +458,11 @@
 	                </div>             
 	            </div>
 	            <hr>		            
-	            <div id="CancelOption" th:if="${reser.cancelEnable == 'P'}">
+	            <div id="CancelOption">
 	            	<button type="button" id="btnMoveList" sec:authorize="hasRole('ROLE_ADMIN')" onclick="fnBtnMoveAdminList()">목록으로</button>&emsp;
 	            	<button type="button" id="btnMoveList" sec:authorize="hasRole('ROLE_USER')" onclick="fnBtnMoveList()">목록으로</button>&emsp;
-                    <input type="button" name="CancelOption" id="btnReserCancel" value="예약취소" th:if="${reser.reserStatus == 'MV'}">
-                    <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${reser.reserStatus == 'PE'}">
-	            </div>
-	            <div id="moveList" th:style="${reser.reserStatus == 'PC' || reser.reserStatus == 'RC' ? 'display: flex; 
-					justify-content: center;	
-				    margin-top: 100px;
-				    margin-bottom: 10px;
-					width: 100%;
-					height: 25px;' : 'display: none;'}">
-	            	<button type="button" id="btnMoveList" sec:authorize="hasRole('ROLE_ADMIN')" onclick="fnBtnMoveAdminList()">목록으로</button>
-	            	<button type="button" id="btnMoveList" sec:authorize="hasRole('ROLE_USER')" onclick="fnBtnMoveList()">목록으로</button>
+                    <input type="button" name="CancelOption" id="btnReserCancel" value="예약취소" th:if="${reser.cancelEnable == 'P' && reser.reserStatus == 'MV'}">
+                    <input type="button" name="CancelOption" id="btnPayCancel" value="결제취소" th:if="${reser.cancelEnable == 'P' && reser.reserStatus == 'PE'}">
 	            </div>
 	        </div>
 		</div>
