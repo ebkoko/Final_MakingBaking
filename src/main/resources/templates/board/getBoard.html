@@ -50,7 +50,7 @@
 		        <h3 th:text="${getBoard.boardTitle}"></h3>
 		      </div>
 		      <div id="board-content">
-		        <textarea th:text="${getBoard.boardContent}" cols="30" rows="20"></textarea>
+		        <textarea th:text="${getBoard.boardContent}" cols="30" rows="20" readonly></textarea>
 		      </div>
 		      <div id="btn-container">
 		      	<div id="left-btn" th:if="${getBoard.cateCode == 3}">
