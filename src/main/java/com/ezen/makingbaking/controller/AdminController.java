@@ -1277,7 +1277,7 @@ public class AdminController {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
-	//////////////////////////////////////////////////////해결중////////////////////////
+
 	//클래스 예약관리_참여현황 수정
 	@PutMapping("/updatePartiStatus")
 	public ResponseEntity<?> updatePartiStatus(ReserDTO reserDTO,
@@ -1406,6 +1406,61 @@ public class AdminController {
 			response.setErrorMessage(e.getMessage());
 			return ResponseEntity.badRequest().body(response);
 		}
+	}
+	
+	//상품 주문관리_주문상태 수정
+	@PutMapping("/updateOrderStatus")
+	public ResponseEntity<?> updateOrderStatus(OrderDTO orderDTO,
+			HttpServletRequest request) throws IOException { 
+		System.out.println("orderDTO==============" + orderDTO.toString());
+		ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
+		
+		try {
+			Order order = Order.builder()
+					.orderNo(orderDTO.getOrderNo())
+					.orderStatus(orderDTO.getOrderStatus())
+					.build();
+					
+
+			adminService.updateOrderStatus(order);
+			
+			OrderDTO returnOrderStatus = OrderDTO.builder()
+												.userId(order.getUserId())
+												.orderNo(order.getOrderNo())
+												.orderDate(order.getOrderDate() == null ?
+														null :
+															order.getOrderDate().toString())
+												.orderStatus(order.getOrderStatus())
+												.orderName(order.getOrderName())
+												.orderTel(order.getOrderTel())
+												.shippingAddr1(order.getShippingAddr1())
+												.shippingAddr2(order.getShippingAddr2())
+												.shippingAddr3(order.getShippingAddr3())
+												.orderDeliFee(order.getOrderDeliFee())
+												.orderTotalPrice(order.getOrderTotalPrice())
+												.orderPayment(order.getOrderPayment())
+												.reciName(order.getReciName())
+												.reciTel(order.getReciTel())
+												.orderMail(order.getOrderMail())
+												.orderMessage(order.getOrderMessage())
+												.depositor(order.getDepositor())
+												.orderTotalPayPrice(order.getOrderTotalPayPrice())
+												.build();
+			
+			
+			Map<String, Object> returnMap = new HashMap<String, Object>();
+			
+			returnMap.put("updateOrderStatus", returnOrderStatus);
+			
+			responseDTO.setItem(returnMap);
+			
+			return ResponseEntity.ok().body(responseDTO);
+		} catch(Exception e) {
+			responseDTO.setErrorMessage(e.getMessage());
+			
+			return ResponseEntity.badRequest().body(responseDTO);
+		}
+		
 	}
 	
 	

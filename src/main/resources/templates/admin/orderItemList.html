@@ -42,16 +42,6 @@
 					font-size: 25px;
 				}
 				
-				.a_orderNo {
-					text-decoration: none;
-					color: inherit;
-					cursor: pointer;
-				}
-				.td_orderNo:hover {
-					text-decoration: underline;
-					color: #28693F;
-					font-weight: bold;
-				}
 				/* 검색 div */
 				#order_search {
 					margin: 80px auto;
@@ -92,7 +82,7 @@
 					color: white;
 					height: 35px;
 				}
-
+				
 				.orderList_T_10 {
 					 width: 10%;
 				}
@@ -106,16 +96,60 @@
 					height: 80px;
 				}
 				
-				/* 변경버튼 */
-				#btnMod {
-					width:40px;
+				.orderNo {
+					width:180px;
+					color: black;
+					text-align: center;
+					font-size: 18px;
+					text-decoration: none;
+					cursor: pointer;
+				}
+				.orderNo:hover {
+					text-decoration: underline;
+					color: #28693F;
+					font-weight: bold;
+				}
+				.userId {
+					width:180px;
+					text-align: center;
+					font-size: 18px;
+				}
+				.orderName {
+					width:120px;
+					text-align: center;
+					font-size: 18px;
+				}
+				.orderTotalPrice {
+					width:180px;
+					text-align: center;
+					font-size: 18px;
+				}
+				.orderPayment {
+					width:180px;
+					text-align: center;
+					font-size: 18px;
+				}
+				.orderDate {
+					width:180px;
+					text-align: center;
+					font-size: 18px;
+				}
+				
+				.orderStatus {
+					border: 1px solid black;
+				}
+			    /* 변경버튼 */
+				.btnMod {
+					width:80px;
 					height:30px;
 					border: 1.2px solid #28693F;
 					background-color: white;
 					text-align: center;
 					color: #28693F;
+					font-weight: bold;
 					display: inline-block;
 					cursor: pointer;
+					margin-top: 8px;
 				}
 			    
 			    /* 페이징처리 */
@@ -189,29 +223,55 @@
 					
 					//검색창 검색버튼 클릭 시
 					$("#btnSearch").on('click',function() {
-						//$("input[name='page']").val(0);
+						$("input[name='page']").val(0);
 						$("#searchForm").submit();
 					});
 					
-					// 전체선택 버튼 클릭했을 때
-					$("#dayclassSelectAll").click(function() {
-						var chk = $("#dayclassSelectAll").prop("checked");
-						if(chk) {
-							$("input[name='chk']").prop("checked", true);
-						} else {
-							$("input[name='chk']").prop("checked", false);
-						}
-					});
-					
-					
-					//상품 주문 리스트 페이징 처리
+					//예약리스트 페이징 처리
 					$(document).on("click", ".pagination a", function(e) {
 						e.preventDefault();
 						pageNum = $(this).attr("href");
 						orderListPaging(pageNum, $("#searchCondition").val());
 					});
+					
+					$(document).on("click", "button[name='btnMod']" , function(e) {
+						console.log($(e.target));
+						fnUpdateOrderStatus($(e.target).attr("data-current-index"));
+					});
 				});
 				
+				//변경버튼 클릭 시
+				function fnUpdateOrderStatus(num) {
+		           
+		            let formData = new FormData($("#updateForm")[0]);
+		            formData.append("orderNo", $("#orderNo" + num).val());
+		            formData.append("orderStatus", $("#orderStatus" + num).val());
+		           console.log($("#orderNo" + num).val());
+		           console.log($("#orderStatus" + num).val());
+		           $.ajax({
+		              url: '/admin/updateOrderStatus',
+		              type: 'put',
+		              data: {
+						  orderNo: $("#orderNo" + num).val(),
+						  orderStatus: $("#orderStatus" + num).val()
+					  },
+		              success: function (obj) {
+		                 console.log(obj);
+		                 alert("주문상태가 수정되었습니다.");
+		                 $("#orderStatus" + num).parent().text(obj.item.updateOrderStatus.orderStatus);
+		                 $("#orderStatus" + num).remove();
+		                 $("#btnMod" + num).remove();
+		                 
+		                 //val(obj.item.updatePartiStatus.partiStatus);
+		                 
+		              },
+		              error: function (e) {
+		                 console.log(e);
+		              }
+		           });
+				 }
+				
+				//페이징
 				function orderListPaging(page, condition) {
 					console.log(page);
 					console.log(condition);
@@ -231,7 +291,7 @@
 							htmlStr += `
 							
 								<tr>
-							        <th class="orderList_T_15">주문번호</th>
+					        		<th class="orderList_T_15">주문번호</th>
 							        <th class="orderList_T_15">회원아이디</th>
 							        <th class="orderList_T_10">주문자명</th>
 							        <th class="orderList_T_15">주문 총금액</th>
@@ -243,20 +303,19 @@
 							
 							for(let i=0; i<obj.pageItems.content.length; i++) {
 								htmlStr += `
-									
 									<tr>
-										<td class="td_orderNo">
-											<a class="a_orderNo"
-											href="/mypage/getOrderDetail/${obj.pageItems.content[i].orderNo}">${obj.pageItems.content[i].orderNo}
+							        	<td>
+											<a href="/mypage/getOrderDetail/${obj.pageItems.content[i].orderNo}">
+												<input type="text" readonly name="orderNo" class="orderNo" id="orderNo${i}" value="${obj.pageItems.content[i].orderNo}">
 											</a>
 										</td>
-										<td>${obj.pageItems.content[i].userId}</td>
-										<td>${obj.pageItems.content[i].orderName}</td>
-										<td>${(obj.pageItems.content[i].orderTotalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
-										<td>${obj.pageItems.content[i].orderPayment}</td>
-										<td>${obj.pageItems.content[i].orderDate == null ? '' : obj.pageItems.content[i].orderDate.substr(0, 10)}</td>
+										<td><input type="text" readonly name="userId" class="userId" id="userId${i}" value="${obj.pageItems.content[i].userId}"></td>
+										<td><input type="text" readonly name="orderName" class="orderName" id="orderName${i}" value="${obj.pageItems.content[i].orderName}"></td>
+										<td><input type="text" readonly name="orderTotalPrice" class="orderTotalPrice" id="orderTotalPrice${i}" value="${(obj.pageItems.content[i].orderTotalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}"></td>
+										<td><input type="text" readonly name="orderPayment" class="orderPayment" id="orderPayment${i}" value="${obj.pageItems.content[i].orderPayment}"></td>
+										<td><input type="text" readonly name="orderDate" class="orderDate" id="orderDate${i}" value="${obj.pageItems.content[i].orderDate == null ? '' : obj.pageItems.content[i].orderDate.substr(0, 10)}"></td>
 									`;
-									
+								
 									if(obj.pageItems.content[i].orderStatus != 'PE') {
 										htmlStr += `
 											<td>
@@ -266,13 +325,13 @@
 									} else {
 										htmlStr += `
 												<td>
-													<select>
-														<option value="PE">결제완료 (PE)</option>
-														<option value="DW">배송준비중 (DW)</option>
-										        		<option value="D">배송중 (D)</option>
-										        		<option value="DC">배송완료 (DC)</option>
+													<select id="orderStatus${i}" class="orderStatus">
+														<option value="PE">결제완료(PE)</option>
+														<option value="DW">배송준비중(DW)</option>
+										        		<option value="D">배송중(D)</option>
+										        		<option value="DC">배송완료(DC)</option>
 													</select>
-													<button type="button" id="btnMod">변경</button>
+													<button type="button" class="btnMod" id="btnMod{i}" data-current-index=${i} name="btnMod">변경</button>
 												</td>
 										`;
 									}
@@ -280,6 +339,7 @@
 									</tr>
 								`;
 							}
+							
 							
 							$("#orderList_T").html(htmlStr);
 							
@@ -339,6 +399,8 @@
 					});
 				} //function 닫음
 				
+				
+
 			</script>
 		</th:block>
 	</head>
@@ -350,7 +412,7 @@
   			<h1 id="orderAndReserAdmin">주문 및 예약 관리</h1>
 		</div>
 		
-		 <div id="orderAndReserBtn">
+		<div id="orderAndReserBtn">
 			<a href="reserDayclassList" id="reserDayclass">▶ 원데이클래스 예약 내역</a>
 			<a href="orderItemList" id="orderItemList">▶ 상품 주문 내역</a>
 		</div>
@@ -385,7 +447,6 @@
 	              	<option value="D" th:selected="${searchKeyword} == 'D'">배송중(D)</option>
 	              	<option value="DC" th:selected="${searchKeyword} == 'DC'">배송완료(DC)</option>
 	            </select>
-	            
 				<button type="button" id="btnSearch">검색</button>
 	        </div>
 	    </form >
@@ -393,58 +454,42 @@
 	    
 		<!-- 원데이클래스 예약 리스트 Table -->
 	    <div id="div_orderList_T">
-	        <table border="1" id="orderList_T">
-	        	<tr>
-			        <th class="orderList_T_15">주문번호</th>
-			        <th class="orderList_T_15">회원아이디</th>
-			        <th class="orderList_T_10">주문자명</th>
-			        <th class="orderList_T_15">주문 총금액</th>
-			        <th class="orderList_T_15">결제방법</th>
-			        <th class="orderList_T_15">주문일</th>
-			        <th class="orderList_T_15">주문상태</th>
-	      		</tr>
-	      		<tr th:each="order: ${getOrderList}">
-		        	<td class="td_orderNo">
-						<a class="a_orderNo" th:text="${order.orderNo}"
-							th:href="@{/mypage/getOrderDetail/{orderNo} (orderNo=${order.orderNo})}">
-						</a>
-					</td>
-					<td th:text="${order.userId}"></td>
-					<td th:text="${order.orderName}"></td>
-					<td th:text="${order.orderTotalPrice >= 1000 ? #numbers.formatInteger(order.orderTotalPrice , 3, 'COMMA') : order.orderTotalPrice}"></td>
-					<td th:text="${order.orderPayment}"></td>
-					<td th:text="${order.orderDate eq null ? '' : #strings.substring(order.orderDate, 0, 10)}"></td>
-					<td th:if="${order.orderStatus} != 'PE'" th:text="${order.orderStatus}"></td>
-					<td th:if="${order.orderStatus} == 'PE'">
-						<select>
-							<option value="PE">결제완료(PE)</option>
-							<option value="DW">배송준비중(DW)</option>
-			        		<option value="D">배송중(D)</option>
-			        		<option value="DC">배송완료(DC)</option>
-						</select>
-						<button type="button" id="btnMod">변경</button>
-					</td>
-		     	 </tr>
-		    </table>
+	    	<form id="updateForm">
+		        <table border="1" id="orderList_T">
+		        	<tr>
+		        		<th class="orderList_T_15">주문번호</th>
+				        <th class="orderList_T_15">회원아이디</th>
+				        <th class="orderList_T_10">주문자명</th>
+				        <th class="orderList_T_15">주문 총금액</th>
+				        <th class="orderList_T_15">결제방법</th>
+				        <th class="orderList_T_15">주문일</th>
+				        <th class="orderList_T_15">주문상태</th>
+		      		</tr>
+		      		<tr th:each="order: ${getOrderList}">
+			        	<td>
+							<a th:href="@{/mypage/getOrderDetail/{orderNo} (orderNo=${order.orderNo})}">
+								<input type="text" readonly name="orderNo" class="orderNo" th:id="'orderNo' + ${orderStat.index}" th:value="${order.orderNo}">
+							</a>
+						</td>
+						<td><input type="text" readonly name="userId" class="userId" th:id="'userId' + ${orderStat.index}" th:value="${order.userId}"></td>
+						<td><input type="text" readonly name="orderName" class="orderName" th:id="'orderName' + ${orderStat.index}" th:value="${order.orderName}"></td>
+						<td><input type="text" readonly name="orderTotalPrice" class="orderTotalPrice" th:id="'orderTotalPrice' + ${orderStat.index}" th:value="${order.orderTotalPrice>= 1000 ? #numbers.formatInteger(order.orderTotalPrice , 3, 'COMMA') : order.orderTotalPrice}"></td>
+						<td><input type="text" readonly name="orderPayment" class="orderPayment" th:id="'orderPayment' + ${orderStat.index}" th:value="${order.orderPayment}"></td>
+						<td><input type="text" readonly name="orderDate" class="orderDate" th:id="'orderDate' + ${orderStat.index}" th:value="${order.orderDate eq null ? '' : #strings.substring(order.orderDate, 0, 10)}"></td>
+						<td th:if="${order.orderStatus} != 'PE'" th:text="${order.orderStatus}"></td>
+						<td th:if="${order.orderStatus} == 'PE'">
+							<select name="orderStatus" class="orderStatus" th:id="'orderStatus' + ${orderStat.index}">
+								<option value="PE">결제완료(PE)</option>
+								<option value="DW">배송준비중(DW)</option>
+				        		<option value="D">배송중(D)</option>
+				        		<option value="DC">배송완료(DC)</option>
+							</select>
+							<button type="button" class="btnMod" th:id="'btnMod' + ${orderStat.index}" th:data-current-index="${orderStat.index}" name="btnMod">변경</button>
+						</td>
+			     	 </tr>
+			    </table>
+		    </form>
 		</div>
-		<!--
-		<td th:if="${order.orderStatus} != 'PE'" th:text="${order.orderStatus}">
-			<select th:if="${order.orderStatus} == 'PE'">
-				<option value="PE">결제완료</option>
-				<option value="DW">배송준비중</option>
-        		<option value="D">배송중</option>
-        		<option value="DC">배송완료</option>
-			</select>
-		</td>
-		<td th:if="${order.orderStatus} == 'PE'">
-			<select>
-				<option value="PE">결제완료</option>
-				<option value="DW">배송준비중</option>
-        		<option value="D">배송중</option>
-        		<option value="DC">배송완료</option>
-			</select>
-			<button type="button" id="btnMod">변경</button>
-		</td>-->
 		
 		<!-- 페이징 -->
 		<div class="paging">

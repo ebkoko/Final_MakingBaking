@@ -70,7 +70,7 @@ public interface AdminService {
 	void updatePartiStatus(Reser reser);/////////////////////////////참여현황 업데이트
 	//order_item
 	Page<Order> getPageOrderList(Order order, Pageable pageable);
-	
+	void updateOrderStatus(Order order);/////////////////////////////주문상태 업데이트
 	
 	//리뷰관리
 	Page<Review> getPageReviewList(Review review, Pageable pageable);

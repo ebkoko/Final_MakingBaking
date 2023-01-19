@@ -421,6 +421,13 @@ public class AdminServiceImpl implements AdminService {
 		  }
 	      
 	   }
+	
+		//////////////주문상태 업데이트//////////////////
+		@Override
+		public void updateOrderStatus(Order order) {
+		orderRepository.updateOrderStatus(order.getOrderNo(), order.getOrderStatus());
+		System.out.println("order=====================" + order);
+		}
 
 
 	//리뷰관리
