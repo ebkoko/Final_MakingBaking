@@ -509,7 +509,7 @@
 	              <div class="banner_explain_details">
 	                <span><img src="/images/class_day.png" width="17px">&ensp;원데이 클래스&ensp;</span>  
 	                <span><img src="/images/class_time.png" width="16.5px" th:text="${dayclass.dayclassDurationTime}">시간</span>
-	                <span><img src="/images/class_location.png" width="18px" th:text="${#strings.substring(dayclass.dayclassAddress, 0, 6)}">서울 서초구</span>
+	                <span><img src="/images/class_location.png" width="18px" th:text="${#strings.substring(dayclass.dayclassAddress, 0, 6)}"></span>
 	              </div>
 	              <div class="banner_explain_KRW">
 	                <span>KRW&nbsp;</span><span th:text="${#numbers.formatInteger(dayclass.dayclassPrice, 3, 'COMMA')}" class="dayclassPrice"></span>
