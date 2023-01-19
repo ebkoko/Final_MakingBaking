@@ -61,13 +61,13 @@ public class AdminController {
 	
 	
 	//관리자 메인페이지
-	@GetMapping("/main")
+	@GetMapping("/adminMain")
 	public ModelAndView adminMain() {
 		
 		ModelAndView mv = new ModelAndView();
 		
-		mv.setViewName("admin/main.html");
-			
+		mv.setViewName("admin/adminMain.html");
+		
 		return mv;
 	}
 	

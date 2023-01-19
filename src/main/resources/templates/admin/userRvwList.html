@@ -132,32 +132,35 @@
 							
 							let htmlStr = "";
 							
-							htmlStr += `
-							
-								<tr>
-					        		<th class="AuserList_T_10">번호</th>
-							        <th class="AuserList_T_10">타입</th>
-							        <th class="AuserList_T_15">작성자</th>
-							        <th class="AuserList_T_40">내용</th>
-							        <th class="AuserList_T_15">작성일</th>
-							        <th class="AuserList_T_10">별점</th>
-					      		</tr>
-					      	`;
-							
-							for(let i=0; i<obj.pageItems.content.length; i++) {
+							if(obj.pageItems.content.length == 0) {
+								  htmlStr += `<p><span id="nText">작성된 Review가 없습니다.</span></p>`;
+							} else {
 								htmlStr += `
-									
-									<tr>
-										<td>${obj.pageItems.content[i].rvwNo}</td>
-										<td>${obj.pageItems.content[i].rvwType}</td>
-										<td>${obj.pageItems.content[i].rvwWriter}</td>
-										<td>${obj.pageItems.content[i].rvwContent}</td>
-										<td>${obj.pageItems.content[i].rvwRegdate == null ? '' : obj.pageItems.content[i].rvwRegdate.substr(0, 10)}</td>
-										<td>${obj.pageItems.content[i].rvwScore}</td>
-									</tr>
-								`;
-							}
 							
+										<tr>
+							        		<th class="AuserList_T_10">번호</th>
+									        <th class="AuserList_T_10">타입</th>
+									        <th class="AuserList_T_15">작성자</th>
+									        <th class="AuserList_T_40">내용</th>
+									        <th class="AuserList_T_15">작성일</th>
+									        <th class="AuserList_T_10">별점</th>
+							      		</tr>
+					      		`;
+							
+								for(let i=0; i<obj.pageItems.content.length; i++) {
+									htmlStr += `
+										
+										<tr>
+											<td>${obj.pageItems.content[i].rvwNo}</td>
+											<td>${obj.pageItems.content[i].rvwType}</td>
+											<td>${obj.pageItems.content[i].rvwWriter}</td>
+											<td>${obj.pageItems.content[i].rvwContent}</td>
+											<td>${obj.pageItems.content[i].rvwRegdate == null ? '' : obj.pageItems.content[i].rvwRegdate.substr(0, 10)}</td>
+											<td>${obj.pageItems.content[i].rvwScore}</td>
+										</tr>
+									`;
+								}
+							}
 							$("#AuserList_T").html(htmlStr);
 							
 							htmlstr = "";
@@ -223,8 +226,8 @@
 <body>
 	<div id="container" layout:fragment="content">
 	  	<div>
-	  		<h1 id="AuserAdmin"><span id="userRvwWriter" th:text="${#lists.size(getUserRvwPageList.content) > 0 ? getUserRvwPageList.content.get(0).rvwWriter : ''}"></span> 님의 리뷰</h1>
-		</div>
+	  		<h1 id="AuserAdmin"><span id="userRvwWriter" th:text="${#lists.size(getUserRvwPageList.content) > 0 ? getUserRvwPageList.content.get(0).rvwWriter : ''}"></span> 님의 Review</h1>
+	  	</div>
 	    
 	    <div class="type_option"> 
 	        <select name="type_array" id="type_array">
@@ -255,7 +258,7 @@
 		     	 </tr>
 		    </table>
 		    
-		    <p id="nText" th:unless="${#lists.size(getUserRvwPageList.content)} > 0">작성한 리뷰가 없습니다.</p>
+		    <p th:unless="${#lists.size(getUserRvwPageList.content)} > 0"><span id="nText">작성한 Review가 없습니다.</span></p>
 		</div>
 		
 		<!-- 페이징 -->
