@@ -226,7 +226,7 @@
 <body>
 	<div id="container" layout:fragment="content">
 	  	<div>
-	  		<h1 id="AuserAdmin"><span id="userQnAWriter" th:text="${#lists.size(getUserQnAPageList.content) > 0 ? getUserQnAPageList.content.get(0).boardWriter : ''}"></span> 님의 QnA</h1>
+	  		<h1 id="AuserAdmin"><span id="userQnAWriter" th:text="${#lists.size(getUserQnAPageList.content) > 0 ? getUserQnAPageList.content.get(0).boardWriter + '님의 ': ''}"></span>QnA</h1>
 		</div>
 	    
 	    <div class="type_option"> 
