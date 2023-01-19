@@ -134,7 +134,11 @@
 					text-align: center;
 					font-size: 18px;
 				}
-				
+				.orderStatusOrigin {
+					width:180px;
+					text-align: center;
+					font-size: 18px;
+				}
 				.orderStatus {
 					border: 1px solid black;
 				}
@@ -316,7 +320,7 @@
 										<td><input type="text" readonly name="orderDate" class="orderDate" id="orderDate${i}" value="${obj.pageItems.content[i].orderDate == null ? '' : obj.pageItems.content[i].orderDate.substr(0, 10)}"></td>
 									`;
 								
-									if(obj.pageItems.content[i].orderStatus != 'PE') {
+									if(obj.pageItems.content[i].orderStatus != 'PE' && obj.pageItems.content[i].orderStatus != 'MV') {
 										htmlStr += `
 											<td>
 											${obj.pageItems.content[i].orderStatus}
@@ -476,8 +480,8 @@
 						<td><input type="text" readonly name="orderTotalPrice" class="orderTotalPrice" th:id="'orderTotalPrice' + ${orderStat.index}" th:value="${order.orderTotalPrice>= 1000 ? #numbers.formatInteger(order.orderTotalPrice , 3, 'COMMA') : order.orderTotalPrice}"></td>
 						<td><input type="text" readonly name="orderPayment" class="orderPayment" th:id="'orderPayment' + ${orderStat.index}" th:value="${order.orderPayment}"></td>
 						<td><input type="text" readonly name="orderDate" class="orderDate" th:id="'orderDate' + ${orderStat.index}" th:value="${order.orderDate eq null ? '' : #strings.substring(order.orderDate, 0, 10)}"></td>
-						<td th:if="${order.orderStatus} != 'PE'" th:text="${order.orderStatus}"></td>
-						<td th:if="${order.orderStatus} == 'PE'">
+						<td th:if="${order.orderStatus != 'PE' && order.orderStatus != 'MV'}" th:text="${order.orderStatus}"></td>
+						<td th:if="${order.orderStatus == 'PE' || order.orderStatus == 'MV'}">
 							<select name="orderStatus" class="orderStatus" th:id="'orderStatus' + ${orderStat.index}">
 								<option value="PE">결제완료(PE)</option>
 								<option value="DW">배송준비중(DW)</option>
