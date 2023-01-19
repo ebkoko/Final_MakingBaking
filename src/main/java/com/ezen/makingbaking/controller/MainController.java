@@ -88,12 +88,6 @@ public class MainController {
 		}
 	}
 	
-//	@RequestMapping("/logout")
-//	public void logout(HttpSession session, HttpServletResponse response) throws IOException {		
-//		session.invalidate();
-//		response.sendRedirect("/");
-//	}
-	
 	
 	
 }

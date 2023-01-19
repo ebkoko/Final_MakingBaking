@@ -11,9 +11,10 @@
 			<script th:src="@{https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js}"></script>
 			
 			<script th:inline="javascript">
-				$(function() {
+				$(function() {					
 					if($("#quitMsg").val() == "Y") {
 						alert("탈퇴가 되었습니다.");
+						locaion.href = "/main/main";
 					}
 					/* console.log($("#btn-login"));
 					console.log($("#msg").val()); */
