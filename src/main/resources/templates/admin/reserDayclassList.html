@@ -254,36 +254,41 @@
 						pageNum = $(this).attr("href");
 						reserListPaging(pageNum, $("#searchCondition").val());
 					});
+					
+					$(document).on("click", "button[name='btnMod']" , function(e) {
+						console.log($(e.target));
+						fnUpdatePartiStatus($(e.target).attr("data-current-index"));
+					});
 				});
 				
 				//변경버튼 클릭 시
-				function fnUpdatePartiStatus() {
+				function fnUpdatePartiStatus(num) {
 		           
 		            let formData = new FormData($("#updateForm")[0]);
-		           console.log($("#updateForm").serialize());
+		            formData.append("reserNo", $("#reserNo" + num).val());
+		            formData.append("partiStatus", $("#partiStatus" + num).val());
+		           console.log($("#reserNo" + num).val());
+		           console.log($("#partiStatus" + num).val());
 		           $.ajax({
 		              url: '/admin/updatePartiStatus',
 		              type: 'put',
-		              data: $("#updateForm").serialize(),
-		              processData: false,
-		              contentType: false,
+		              data: {
+						  reserNo: $("#reserNo" + num).val(),
+						  partiStatus: $("#partiStatus" + num).val()
+					  },
 		              success: function (obj) {
 		                 console.log(obj);
 		                 alert("참여현황이 수정되었습니다.");
-		                 $("#reserNo").text(obj.item.pageReserList.reserNo);
-		                 $("#partiName").text(obj.item.pageReserList.partiName);
-		                 $("#classNo").text(obj.item.pageReserList.classNo);
-		                 $("#partiDate").textl(obj.item.pageReserList.partiDate);
-		                 $("#partiTime").text(obj.item.pageReserList.partiTime);
-		                 $("#reserStatus").text(obj.item.pageReserList.reserStatus);
-		                 $("#partiStatus").text(obj.item.pageReserList.partiStatus);
+		                 $("#partiStatus" + num).parent().text(obj.item.updatePartiStatus.partiStatus);
+		                 $("#partiStatus" + num).remove();
+		                 $("#btnMod" + num).remove();
+		                 
+		                 //val(obj.item.pageReserList.partiStatus);
+		                 
 		              },
 		              error: function (e) {
 		                 console.log(e);
-		              },
-		              done: function(result) {
-						  console.log(result);
-					  }
+		              }
 		           });
 				 }
 				
@@ -319,25 +324,17 @@
 							
 							for(let i=0; i<obj.pageItems.content.length; i++) {
 								htmlStr += `
-								
 									<tr>
-										<td>
-										
-										<a th:href="@{/mypage/getReserDetail/{reserNo} (reserNo=${reser.reserNo})}">
-											<input type="text" readonly name="partiName" id="reserNo" th:value="${reser.reserNo}">
-										</a>
-										
-										
-										
-											<a id="reserNo"
-											href="/mypage/getReserDetail/${obj.pageItems.content[i].reserNo}">${obj.pageItems.content[i].reserNo}
+							        	<td>
+											<a href="/mypage/getReserDetail/${obj.pageItems.content[i].reserNo}">
+												<input type="text" readonly name="partiName" id="reserNo${i}" value="${obj.pageItems.content[i].reserNo}">
 											</a>
 										</td>
-										<td>${obj.pageItems.content[i].partiName}</td>
-										<td>${obj.pageItems.content[i].classNo}</td>
-										<td>${obj.pageItems.content[i].partiDate == null ? '' : obj.pageItems.content[i].partiDate.substr(0, 10)}</td>
-										<td>${obj.pageItems.content[i].partiTime}</td>
-										<td>${obj.pageItems.content[i].reserStatus}</td>
+										<td><input type="text" readonly name="partiName" id="partiName${i}" value="${obj.pageItems.content[i].partiName}"></td>
+										<td><input type="text" readonly name="classNo" id="classNo${i}" value="${obj.pageItems.content[i].classNo}"></td>
+										<td><input type="text" readonly name="partiDate" id="partiDate${i}" value="${obj.pageItems.content[i].partiDate}"></td>
+										<td><input type="text" readonly name="partiTime" id="partiTime${i}" value="${obj.pageItems.content[i].partiTime}"></td>
+										<td><input type="text" readonly name="reserStatus" id="reserStatus${i}" value="${obj.pageItems.content[i].reserStatus}"></td>
 									`;
 								
 									if(obj.pageItems.content[i].partiStatus != 'PS') {
@@ -349,12 +346,12 @@
 									} else {
 										htmlStr += `
 												<td>
-													<select>
+													<select id="partiStatus${i}">
 														<option value="PS">진행예정 (PS)</option>
 										        		<option value="PC">진행완료 (PC)</option>
 										        		<option value="NS">노쇼 (NS)</option>
 													</select>
-													<button type="button" id="btnMod">변경</button>
+													<button type="button" id="btnMod{i}" data-current-index=${i} name="btnMod">변경</button>
 												</td>
 										`;
 									}
@@ -497,22 +494,22 @@
 		      		<tr th:each="reser: ${pageReserList}">
 			        	<td>
 							<a th:href="@{/mypage/getReserDetail/{reserNo} (reserNo=${reser.reserNo})}">
-								<input type="text" readonly name="partiName" id="reserNo" th:value="${reser.reserNo}">
+								<input type="text" readonly name="reserNo" th:id="'reserNo' + ${reserStat.index}" th:value="${reser.reserNo}">
 							</a>
 						</td>
-						<td><input type="text" readonly name="partiName" id="partiName" th:value="${reser.partiName}"></td>
-						<td><input type="text" readonly name="classNo" id="classNo" th:value="${reser.classNo}"></td>
-						<td><input type="text" readonly name="partiDate" id="partiDate" th:value="${reser.partiDate}"></td>
-						<td><input type="text" readonly name="partiTime" id="partiTime" th:value="${reser.partiTime}"></td>
-						<td><input type="text" readonly name="reserStatus" id="reserStatus" th:value="${reser.reserStatus}"></td>
+						<td><input type="text" readonly name="partiName" th:id="'partiName' + ${reserStat.index}" th:value="${reser.partiName}"></td>
+						<td><input type="text" readonly name="classNo" th:id="'classNo' + ${reserStat.index}" th:value="${reser.classNo}"></td>
+						<td><input type="text" readonly name="partiDate" th:id="'partiDate' + ${reserStat.index}" th:value="${reser.partiDate}"></td>
+						<td><input type="text" readonly name="partiTime" th:id="'partiTime' + ${reserStat.index}" th:value="${reser.partiTime}"></td>
+						<td><input type="text" readonly name="reserStatus" th:id="'reserStatus' + ${reserStat.index}" th:value="${reser.reserStatus}"></td>
 						<td th:if="${reser.partiStatus} != 'PS'" th:text="${reser.partiStatus}"></td>
 						<td th:if="${reser.partiStatus} == 'PS'">
-							<select name="partiStatus" id="partiStatus">
+							<select name="partiStatus" th:id="'partiStatus' + ${reserStat.index}">
 								<option value="PS">진행예정 (PS)</option>
 				        		<option value="PC">진행완료 (PC)</option>
 				        		<option value="NS">노쇼 (NS)</option>
 							</select>
-							<button type="button" id="btnMod" onclick="fnUpdatePartiStatus()">변경</button>
+							<button type="button" th:id="'btnMod' + ${reserStat.index}" th:data-current-index="${reserStat.index}" name="btnMod">변경</button>
 						</td>
 			     	 </tr>
 			    </table>

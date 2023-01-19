@@ -1067,7 +1067,7 @@ public class AdminController {
 	//회원 리스트_리뷰팝업
 	@GetMapping("/userRvwList")
 	public ModelAndView getUserRvwList(ReviewDTO reviewDTO,
-			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+			@PageableDefault(page = 0, size = 3) Pageable pageable) {
 		Review reviewParam = Review.builder()
 							  .rvwWriter(reviewDTO.getRvwWriter())
 							  .rvwType(reviewDTO.getRvwType())
@@ -1099,7 +1099,7 @@ public class AdminController {
 	//회원 리스트_리뷰팝업 - ajax로 처리한 페이징 글 목록 보여주기
 	@PostMapping("/userRvwList")
 	public ResponseEntity<?> getUserRvwPageList(ReviewDTO reviewDTO,
-			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+			@PageableDefault(page = 0, size = 3) Pageable pageable) {
 		ResponseDTO<ReviewDTO> response = new ResponseDTO<>();
 		try {
 			Review reviewParam = Review.builder()
@@ -1134,7 +1134,7 @@ public class AdminController {
 	//회원 리스트_QnA팝업
 	@GetMapping("/userQnAList")
 	public ModelAndView getUserQnAList(BoardDTO boardDTO,
-			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+			@PageableDefault(page = 0, size = 3) Pageable pageable) {
 		Board boardParam = Board.builder()
 							  .boardWriter(boardDTO.getBoardWriter())
 							  .cateCode(boardDTO.getCateCode())
@@ -1166,7 +1166,7 @@ public class AdminController {
 	//회원 리스트_QnA팝업 - ajax로 처리한 페이징 글 목록 보여주기
 	@PostMapping("/userQnAList")
 	public ResponseEntity<?> getUserQnAPageList(BoardDTO boardDTO,
-			@PageableDefault(page = 0, size = 5) Pageable pageable) {
+			@PageableDefault(page = 0, size = 3) Pageable pageable) {
 		System.out.println("boardDTO.getCateCode()==================================" + boardDTO.getCateCode());
 		ResponseDTO<BoardDTO> response = new ResponseDTO<>();
 		try {
@@ -1279,7 +1279,6 @@ public class AdminController {
 	}
 	//////////////////////////////////////////////////////해결중////////////////////////
 	//클래스 예약관리_참여현황 수정
-	@Transactional
 	@PutMapping("/updatePartiStatus")
 	public ResponseEntity<?> updatePartiStatus(ReserDTO reserDTO,
 			HttpServletRequest request) throws IOException { 
@@ -1288,23 +1287,7 @@ public class AdminController {
 		
 		try {
 			Reser reser = Reser.builder()
-					.userId(reserDTO.getUserId())
 					.reserNo(reserDTO.getReserNo())
-					.reserDate(LocalDateTime.now())
-					.reserStatus(reserDTO.getReserStatus())
-					.partiName(reserDTO.getPartiName())
-					.partiTel(reserDTO.getPartiTel())
-					.partiTime(reserDTO.getPartiTime())
-					.classNo(reserDTO.getClassNo())
-					.reserPersonCnt(reserDTO.getReserPersonCnt())
-					.orderName(reserDTO.getOrderName())
-					.orderTel(reserDTO.getOrderTel())
-					.request(reserDTO.getRequest())
-					.reserPayment(reserDTO.getReserPayment())
-					.depositor(reserDTO.getDepositor())
-					.reserTotalPrice(reserDTO.getReserTotalPrice())
-					.partiDate(reserDTO.getPartiDate())
-					.classPrice(reserDTO.getClassPrice())
 					.partiStatus(reserDTO.getPartiStatus())
 					.build();
 					
