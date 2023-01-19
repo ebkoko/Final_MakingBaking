@@ -67,7 +67,7 @@ public interface AdminService {
 	//주문 및 예약관리
 	//reser_dayclass
 	Page<Reser> getPageReserList(Reser reser, Pageable pageable);
-	Reser updatePartiStatus(Reser reser);/////////////////////////////참여현황 업데이트
+	void updatePartiStatus(Reser reser);/////////////////////////////참여현황 업데이트
 	//order_item
 	Page<Order> getPageOrderList(Order order, Pageable pageable);
 	

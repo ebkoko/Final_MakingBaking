@@ -337,7 +337,7 @@ public class AdminServiceImpl implements AdminService {
 	//각 회원의 QnA-팝업창
 	@Override
 	public Page<Board> getUserQnAPageList(Board board, Pageable pageable) {
-		System.out.println("board.getBoardWriter()==========================" + board.getBoardWriter());
+		System.out.println("board.getCateCode()==========================" + board.getCateCode());
 		if(board.getCateCode() == 1 || board.getCateCode() == 2)
 			return boardRepository.findByCateCodeAndBoardWriter(board.getCateCode(), board.getBoardWriter(), pageable);
 		else
@@ -387,12 +387,9 @@ public class AdminServiceImpl implements AdminService {
 	
 	//////////////참여현황 업데이트//////////////////
 	@Override
-	public Reser updatePartiStatus(Reser reser) {
-		reserRepository.save(reser);
-		reserRepository.flush();
-		
+	public void updatePartiStatus(Reser reser) {
+		reserRepository.updatePartiStatus(reser.getReserNo(), reser.getPartiStatus());
 		System.out.println("reser=====================" + reser);
-	    return reser;
 	   }
 	
 	

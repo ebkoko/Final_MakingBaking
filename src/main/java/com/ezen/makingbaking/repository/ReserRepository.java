@@ -2,16 +2,19 @@ package com.ezen.makingbaking.repository;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ezen.makingbaking.common.CamelHashMap;
-import com.ezen.makingbaking.entity.Order;
 import com.ezen.makingbaking.entity.Reser;
 
+@Transactional
 public interface ReserRepository extends JpaRepository<Reser, Integer> {
 	
 	//관리자 예약 검색_선민
@@ -180,4 +183,10 @@ public interface ReserRepository extends JpaRepository<Reser, Integer> {
 					+ "        ORDER BY A.RESER_DATE DESC"
 					+ ") AA", nativeQuery=true)
 	Page<CamelHashMap> findAllReserByReserCondition(@Param("userId") String userId, @Param("reserCondition") String reserCondition, Pageable pageable);
+    
+    @Modifying
+    @Query(value="UPDATE T_MB_RESER"
+    		+ "		SET PARTI_STATUS = :partiStatus"
+    		+ "		WHERE RESER_NO = :reserNo", nativeQuery=true)
+    void updatePartiStatus(@Param("reserNo") long reserNo, @Param("partiStatus") String partiStatus);
 }
