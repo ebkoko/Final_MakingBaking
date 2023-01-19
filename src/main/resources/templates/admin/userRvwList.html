@@ -226,7 +226,7 @@
 <body>
 	<div id="container" layout:fragment="content">
 	  	<div>
-	  		<h1 id="AuserAdmin"><span id="userRvwWriter" th:text="${#lists.size(getUserRvwPageList.content) > 0 ? getUserRvwPageList.content.get(0).rvwWriter : ''}"></span> 님의 Review</h1>
+	  		<h1 id="AuserAdmin"><span id="userRvwWriter" th:text="${#lists.size(getUserRvwPageList.content) > 0 ? getUserRvwPageList.content.get(0).rvwWriter + '님의 ' : ''}"></span>Review</h1>
 	  	</div>
 	    
 	    <div class="type_option"> 
