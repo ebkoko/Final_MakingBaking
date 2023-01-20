@@ -271,6 +271,7 @@
 						console.log(changeRows);
 						
 						if(confirm("선택한 상품을 삭제하시겠습니까?")) {
+							console.log(pageNum);
 						$.ajax({
 							url: '/admin/saveItemList',
 							type: 'post',
@@ -307,7 +308,7 @@
 													href="/admin/item/${obj.pageItems.content[i].itemNo}">${obj.pageItems.content[i].itemName}
 												</a>
 											</td>
-											<td>${obj.pageItems.content[i].itemPrice > 100 ? obj.pageItems.content[i].itemPricetoString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : obj.pageItems.content[i].itemPrice}</td>
+											<td> ${(obj.pageItems.content[i].itemPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
 											<td>${obj.pageItems.content[i].itemRegdate == null ? '' : obj.pageItems.content[i].itemRegdate.substr(0, 10)}</td>
 											<td>${obj.pageItems.content[i].itemStatus}</td>
 											<td>

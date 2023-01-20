@@ -18,7 +18,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
     	Authentication authentication) throws ServletException, IOException {
             String redirectUrl = request.getHeader("REFERER");
             
-            if(redirectUrl.contains("msg")) {
+            if(redirectUrl.contains("msg") || redirectUrl.contains("loginPage")) {
             	redirectUrl = "/main/main";
             }
             

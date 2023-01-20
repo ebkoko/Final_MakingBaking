@@ -355,7 +355,7 @@
 														<option value="PS">진행예정 (PS)</option>
 										        		<option value="PC">진행완료 (PC)</option>
 										        		<option value="NS">노쇼 (NS)</option>
-										        		<option value="NS">예약/결제취소(CC)</option>
+										        		<option value="CC">예약/결제취소(CC)</option>
 													</select>
 													<button type="button" class="btnMod" id="btnMod{i}" data-current-index=${i} name="btnMod">변경</button>
 												</td>
@@ -478,7 +478,7 @@
 	            	<option value="PS" th:selected="${searchKeyword} == 'PS'">진행예정(PS)</option>
 	              	<option value="PC" th:selected="${searchKeyword} == 'PC'">진행완료(PC)</option>
 	              	<option value="NS" th:selected="${searchKeyword} == 'NS'">노쇼(NS)</option>
-	              	<option value="NS" th:selected="${searchKeyword} == 'CC'">예약/결제취소(CC)</option>
+	              	<option value="CC" th:selected="${searchKeyword} == 'CC'">예약/결제취소(CC)</option>
 	            </select>
 	            
 				<button type="button" id="btnSearch">검색</button>

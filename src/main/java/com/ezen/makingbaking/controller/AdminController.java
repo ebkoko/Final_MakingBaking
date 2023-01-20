@@ -486,7 +486,7 @@ public class AdminController {
 	//관리자가 상품을 삭제하는 경우 ajax를 이용해 백단에 전송
 	@PostMapping("/saveItemList")
 	public ResponseEntity<?> saveItemList(@RequestParam("changeRows") String changeRows,
-			@PageableDefault(page = 0, size = 5) Pageable pageable) throws JsonMappingException, JsonProcessingException {
+			@PageableDefault(page = 0, size = 10) Pageable pageable) throws JsonMappingException, JsonProcessingException {
 		ResponseDTO<ItemDTO> response = new ResponseDTO<>();
 		List<Map<String, Object>> changeRowsList = new ObjectMapper().readValue(changeRows, 
 											new TypeReference<List<Map<String, Object>>>() {});
@@ -1553,24 +1553,24 @@ public class AdminController {
 			adminService.saveReviewList(changeRowsList);
 			
 			Review review = Review.builder()
-							.searchCondition("")
-							.searchKeyword("")
-							.build();
+										.searchCondition("")
+										.searchKeyword("")
+										.build();
 
 			Page<Review> pageReviewList = adminService.getPageReviewList(review, pageable);
 			
 			Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview ->
 																		ReviewDTO.builder()
-																				.rvwNo(pageReview.getRvwNo())
-																				.rvwReferNo(pageReview.getRvwReferNo())
-																				.rvwType(pageReview.getRvwType())
-																				.rvwContent(pageReview.getRvwContent())
-																				.rvwWriter(pageReview.getRvwWriter())
-																				.rvwRegdate(pageReview.getRvwRegdate() == null ?
-																						null :
-																						pageReview.getRvwRegdate().toString())
-																				.rvwScore(pageReview.getRvwScore())
-																				.build()
+																			.rvwNo(pageReview.getRvwNo())
+																			.rvwReferNo(pageReview.getRvwReferNo())
+																			.rvwType(pageReview.getRvwType())
+																			.rvwContent(pageReview.getRvwContent())
+																			.rvwWriter(pageReview.getRvwWriter())
+																			.rvwRegdate(pageReview.getRvwRegdate() == null ?
+																					null :
+																					pageReview.getRvwRegdate().toString())
+																			.rvwScore(pageReview.getRvwScore())
+																			.build()
 			);
 			
 			response.setPageItems(pageReviewDTOList);

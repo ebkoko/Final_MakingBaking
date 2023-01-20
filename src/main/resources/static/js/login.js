@@ -33,6 +33,11 @@ $(function() {
 	}
 	
 	if(urlParams.get("loginPage")) {
+		$("#btn-login").click();
+		return false;
+	}
+	
+	if(urlParams.get("loginPage")) {
 		$('.login-form-container').toggleClass('active');
 	}
 	

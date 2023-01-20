@@ -115,7 +115,7 @@ public class UserController {
 	
 	@PostMapping("/idcheck")
 	public ResponseEntity<?> idCheck(UserDTO userDTO) {
-		ResponseDTO<Map<String, String>> responseDTO = new ResponseDTO<>();
+		ResponseDTO<Map<String, String>> responseDTO = new ResponseDTO<>();  
 		Map<String, String> returnMap = new HashMap<String, String>();
 		
 			try {
