@@ -1558,7 +1558,7 @@ public class AdminController {
 										.build();
 
 			Page<Review> pageReviewList = adminService.getPageReviewList(review, pageable);
-			
+			System.out.println(pageReviewList);
 			Page<ReviewDTO> pageReviewDTOList = pageReviewList.map(pageReview ->
 																		ReviewDTO.builder()
 																			.rvwNo(pageReview.getRvwNo())
