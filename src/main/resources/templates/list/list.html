@@ -35,7 +35,7 @@
 							            <div class="card">
 							              <img src="/item/${obj.pageItems.content[i].fileName}" alt="NoImg" class="card_img">
 							            </div>`
-							            if(obj.pageItems.content[i].itemStatus == 'S'){
+							            if(obj.pageItems.content[i].itemStatus == 'S' || obj.pageItems.content[i].itemStock == 0){
 											htmlStr +=
 											`
 											<div class="sold_out">
@@ -129,7 +129,7 @@
 		        <div class="card">
 		          <img th:src="@{'/item/' + ${item.fileName}}" alt="NoImg" class="card_img">
 		        </div>
-		          <div th:if="${item.itemStatus} == 'S'" class="sold_out">
+		          <div th:if="${item.itemStatus == 'S' || item.itemStock == 0}" class="sold_out">
 		              <p>임시품절</p>
 	              </div>
 	              <div th:if="${item.itemStatus} == 'N'" class="no_item">
