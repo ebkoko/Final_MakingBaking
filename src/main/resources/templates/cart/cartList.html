@@ -359,15 +359,15 @@
 					                    <div class="itemView">
 					                        <img class="item_Img" src="${'/item/' + result.items[i].fileName}">
 					                        <div class="item_Detail">
-					                            <div class="detailName"><a href="/item/item/${result.items[i].itemNo}">${result.items[i].itemName}</a>
+					                            <div class="detailName"><a style="font-weight: 600;" href="/item/item/${result.items[i].itemNo}">${result.items[i].itemName}</a>
 					                            `;
 					           if(result.items[i].itemStatus == 'S') {
 								   htmlStr += `
-								   				<span style="color: red;">품절</span>								   
+								   				<span style="color: #B40431; font-weight: 600;">품절</span>								   
 								   `;
 							   } else if(result.items[i].itemStatus == 'N') {
 								   htmlStr += `
-								   				<span style="color: red;">판매중지</span>
+								   				<span style="color: #B40431; font-weight: 600;">판매중지</span>
 								   `;
 							   }
 							   
